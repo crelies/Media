@@ -38,7 +38,7 @@ public extension Album {
 
     var photos: [Photo] {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
+        let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
         let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
