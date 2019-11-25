@@ -23,13 +23,7 @@ public extension Photo {
     var subtypes: [PhotoSubtype] {
         var types: [PhotoSubtype] = []
 
-        // photoDepthEffect: 10.2
-        // photoScreenshot: 9
-
-        if #available(iOS 9, *) {
-            // TODO:
-        } else if #available(iOS 10.2, *) {
-            // TODO:
+        if #available(iOS 10.2, OSX 10.11, tvOS 9, *) {
             switch phAsset.mediaSubtypes {
             case [.photoDepthEffect, .photoScreenshot, .photoHDR, .photoPanorama]:
                 types.append(contentsOf: [.depthEffect, .screenshot, .hdr, .panorama])
@@ -52,6 +46,26 @@ public extension Photo {
 
             case [.photoDepthEffect]:
                 types.append(.depthEffect)
+            case [.photoScreenshot]:
+                types.append(.screenshot)
+            case [.photoHDR]:
+                types.append(.hdr)
+            case [.photoPanorama]:
+                types.append(.panorama)
+            default: ()
+            }
+        } else {
+            switch phAsset.mediaSubtypes {
+            case [.photoScreenshot, .photoHDR, .photoPanorama]:
+                types.append(contentsOf: [.screenshot, .hdr, .panorama])
+
+            case [.photoScreenshot, .photoHDR]:
+                types.append(contentsOf: [.screenshot, .hdr])
+            case [.photoScreenshot, .photoPanorama]:
+                types.append(contentsOf: [.screenshot, .panorama])
+            case [.photoHDR, .photoPanorama]:
+                types.append(contentsOf: [.hdr, .panorama])
+
             case [.photoScreenshot]:
                 types.append(.screenshot)
             case [.photoHDR]:
@@ -109,7 +123,7 @@ public extension Photo {
         return photos
     }
 
-    @available(iOS 9, *)
+    @available(iOS 9, OSX 10.11, tvOS 9, *)
     static var screenshot: [Photo] {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue)
@@ -124,7 +138,7 @@ public extension Photo {
         return photos
     }
 
-    @available(iOS 10.2, *)
+    @available(iOS 10.2, OSX 10.11, tvOS 9, *)
     static var depthEffect: [Photo] {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoDepthEffect.rawValue)
@@ -175,6 +189,11 @@ public extension Photo {
 
 public extension Photo {
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+        
         var placeholderForCreatedAsset: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)

@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-@available(iOS 9.1, *)
+@available(iOS 9.1, OSX 10.11, tvOS 9, *)
 public struct LivePhoto: AbstractMedia {
     public let phAsset: PHAsset
 
@@ -21,7 +21,7 @@ public struct LivePhoto: AbstractMedia {
     }
 }
 
-@available(iOS 9.1, *)
+@available(iOS 9.1, OSX 10.11, tvOS 9, *)
 public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
@@ -33,6 +33,12 @@ public extension LivePhoto {
                                                   contentMode: contentMode,
                                                   options: options)
         { livePhoto, info in
+            if let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber {
+                if imageResultIsDegraded.boolValue {
+                    return
+                }
+            }
+
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let livePhoto = livePhoto {
@@ -44,7 +50,7 @@ public extension LivePhoto {
     }
 }
 
-@available(iOS 9.1, *)
+@available(iOS 9.1, OSX 10.11, tvOS 9, *)
 public extension LivePhoto {
     static func with(identifier: String) -> LivePhoto? {
         let options = PHFetchOptions()
@@ -63,7 +69,7 @@ public extension LivePhoto {
     }
 }
 
-@available(iOS 9.1, *)
+@available(iOS 9.1, OSX 10.11, tvOS 9, *)
 public extension LivePhoto {
     // TODO:
     func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {

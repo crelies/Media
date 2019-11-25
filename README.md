@@ -23,6 +23,10 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `Media.requestPermission { result in }`
 
+- `Media.isAccessAllowed`
+
+- `Media.currentPermission`
+
 ### Albums
 
 - `Albums.all`

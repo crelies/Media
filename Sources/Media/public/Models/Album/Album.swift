@@ -38,8 +38,13 @@ public extension Album {
 
     var photos: [Photo] {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
-        options.predicate = predicate
+        if #available(iOS 9.1, *) {
+            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
+            options.predicate = predicate
+        } else {
+            let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
+            options.predicate = predicate
+        }
 
         let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
         var photos: [Photo] = []
@@ -64,7 +69,7 @@ public extension Album {
         return videos
     }
 
-    @available(iOS 9.1, *)
+    @available(iOS 9.1, OSX 10.11, tvOS 9, *)
     var livePhotos: [LivePhoto] {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
@@ -114,6 +119,11 @@ public extension Album {
 
 public extension Album {
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+        
         PHPhotoLibrary.shared().performChanges({
             PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title)
         }, completionHandler: { isSuccess, error in
@@ -126,6 +136,11 @@ public extension Album {
     }
 
     func delete(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         PHPhotoLibrary.shared().performChanges({
             let assetCollections: NSArray = [self.phAssetCollection]
             PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollections)
@@ -177,6 +192,11 @@ public extension Album {
 
 public extension Album {
     func add<T: AbstractMedia>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         guard !allMedia.contains(where: { $0.identifier == media.identifier }) else {
             completion(.success(()))
             return
@@ -196,6 +216,11 @@ public extension Album {
     }
 
     func delete<T: AbstractMedia>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         guard allMedia.contains(where: { $0.identifier == media.identifier }) else {
             completion(.success(()))
             return

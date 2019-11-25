@@ -15,6 +15,14 @@ public typealias MediaSubtype = PHAssetMediaSubtype
 public typealias Cancellable = () -> Void
 
 public struct Media {
+    public static var isAccessAllowed: Bool {
+        Media.currentPermission == .authorized
+    }
+
+    public static var currentPermission: PHAuthorizationStatus {
+        return PHPhotoLibrary.authorizationStatus()
+    }
+
     public static func requestPermission(_ completion: @escaping (Result<Void, PermissionError>) -> Void) {
         PHPhotoLibrary.requestAuthorization { authorizationStatus in
             switch authorizationStatus {
