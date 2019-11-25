@@ -21,6 +21,11 @@ extension AbstractMedia {
     public var identifier: String { phAsset.localIdentifier }
 
     public func delete(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         PHPhotoLibrary.shared().performChanges({
             let phAssets: NSArray = [self.phAsset]
             PHAssetChangeRequest.deleteAssets(phAssets)

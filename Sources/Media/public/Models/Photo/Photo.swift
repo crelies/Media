@@ -239,6 +239,11 @@ public extension Photo {
             change(&contentEditingInput)
 
             if let editingInput = contentEditingInput {
+                guard Media.isAccessAllowed else {
+                    completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+                    return
+                }
+
                 let output = PHContentEditingOutput(contentEditingInput: editingInput)
 
                 PHPhotoLibrary.shared().performChanges({
