@@ -123,7 +123,12 @@ public extension Album {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
         }
-        
+
+        guard Album.with(title: title) == nil else {
+            completion(.failure(AlbumError.albumWithTitleExists))
+            return
+        }
+
         PHPhotoLibrary.shared().performChanges({
             PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title)
         }, completionHandler: { isSuccess, error in
