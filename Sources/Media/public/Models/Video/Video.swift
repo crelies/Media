@@ -153,8 +153,7 @@ public extension Video {
 
         return ImagePicker(sourceType: .camera, mediaTypes: [.movie]) { value in
             guard case let ImagePickerValue.tookVideo(mediaURL) = value else {
-                // TODO:
-                completion(.failure(PhotosError.unknown))
+                completion(.failure(ImagePickerError.unsupportedValue))
                 return
             }
             completion(.success(mediaURL))

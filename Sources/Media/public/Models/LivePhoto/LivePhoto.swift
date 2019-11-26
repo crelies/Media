@@ -139,8 +139,7 @@ public extension LivePhoto {
 
         return ImagePicker(sourceType: .camera, mediaTypes: [.livePhoto]) { value in
             guard case let ImagePickerValue.tookLivePhoto(imageURL) = value else {
-                // TODO:
-                completion(.failure(PhotosError.unknown))
+                completion(.failure(ImagePickerError.unsupportedValue))
                 return
             }
             completion(.success(imageURL))

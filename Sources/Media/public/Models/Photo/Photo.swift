@@ -302,8 +302,7 @@ public extension Photo {
 
         return ImagePicker(sourceType: .camera, mediaTypes: [.image]) { value in
             guard case let ImagePickerValue.tookPhoto(imageURL) = value else {
-                // TODO:
-                completion(.failure(PhotosError.unknown))
+                completion(.failure(ImagePickerError.unsupportedValue))
                 return
             }
             completion(.success(imageURL))
