@@ -159,5 +159,10 @@ public extension Video {
             completion(.success(mediaURL))
         }
     }
+
+    // TODO: UIVideoEditorController
+    static func editor() -> some View {
+        EmptyView()
+    }
 }
 #endif

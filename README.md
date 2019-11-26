@@ -27,6 +27,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `Media.currentPermission`
 
+- **SwiftUI only**: `Media.browser { result in }` (*some View*)
+
 ### Albums
 
 - `Albums.all`
@@ -148,3 +150,5 @@ Get started by adding the `Media` Swift package to your project and by importing
 - `video.delete { result in }`
 
 - **SwiftUI only**: `Video.camera { result in }` (*some View*)
+
+- **SwiftUI only**: `Video.editor` (*some View*)

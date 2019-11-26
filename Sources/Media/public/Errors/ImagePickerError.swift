@@ -6,5 +6,6 @@
 //
 
 public enum ImagePickerError: Error {
+    case noBrowsingSourceTypeAvailable
     case unsupportedValue
 }
