@@ -160,6 +160,21 @@ public extension Video {
         }
     }
 
+    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+        var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            sourceType = .photoLibrary
+        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+            sourceType = .savedPhotosAlbum
+        } else {
+            throw ImagePickerError.noBrowsingSourceTypeAvailable
+        }
+
+        return ImagePicker(sourceType: sourceType, mediaTypes: [.movie]) { value in
+            // TODO:
+        }
+    }
+
     // TODO: UIVideoEditorController
     static func editor() -> some View {
         EmptyView()
