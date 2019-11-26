@@ -137,7 +137,7 @@ public extension LivePhoto {
             throw CameraError.noCameraAvailable
         }
 
-        return ImagePicker(sourceType: .camera, mediaTypes: [.livePhoto]) { value in
+        return ImagePicker(sourceType: .camera, mediaTypes: [.image, .livePhoto]) { value in
             guard case let ImagePickerValue.tookLivePhoto(imageURL) = value else {
                 completion(.failure(ImagePickerError.unsupportedValue))
                 return
