@@ -145,5 +145,20 @@ public extension LivePhoto {
             completion(.success(imageURL))
         }
     }
+
+    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+        var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            sourceType = .photoLibrary
+        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+            sourceType = .savedPhotosAlbum
+        } else {
+            throw ImagePickerError.noBrowsingSourceTypeAvailable
+        }
+
+        return ImagePicker(sourceType: sourceType, mediaTypes: [.image, .livePhoto]) { value in
+            // TODO:
+        }
+    }
 }
 #endif
