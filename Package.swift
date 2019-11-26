@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Media",
     platforms: [
-        .iOS(.v9),
+        .iOS("9.1"),
         .macOS(.v10_11),
         .tvOS(.v9)
     ],

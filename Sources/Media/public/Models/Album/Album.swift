@@ -69,7 +69,6 @@ public extension Album {
         return videos
     }
 
-    @available(iOS 9.1, OSX 10.11, tvOS 9, *)
     var livePhotos: [LivePhoto] {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)

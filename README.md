@@ -71,11 +71,15 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `Audios.all`
 
-### Audio
+#### Audio
 
 - `Audio.with(identifier:) - > Audio? (check for existence if you want)`
 
 - `audio.delete { result in }`
+
+### Camera
+
+- **SwiftUI only**: `Camera.view { result in }` (*some View*)
 
 ### LivePhotos
 
@@ -85,11 +89,15 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `livePhoto.displayRepresentation(targetSize:contentMode) { result in }`
 
+- `LivePhoto.save(URL) { result in }`
+
 - `LivePhoto.with(identifier:) -> LivePhoto? (check for existence if you want)`
 
 - `livePhoto.delete { result in }`
 
 - TODO: livePhoto.edit
+
+- **SwiftUI only**: `LivePhoto.camera { result in }` (*some View*)
 
 ### Photo
 
@@ -105,6 +113,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `photo.data { result in }`
 
+- `Photo.save(URL) { result in }`
+
 - `Photo.save(UIImage) { result in }`
 
 - `Photo.with(identifier:) -> Photo? (check for existence if you want)`
@@ -112,6 +122,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 - `photo.delete { result in }`
 
 - TODO: photo.edit
+
+- **SwiftUI only**: `Photo.camera { result in }` (*some View*)
 
 ### Videos
 
@@ -127,8 +139,12 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `video.playerItem { result in }`
 
+- `Video.save(URL) { result in }`
+
 - `Video.with(identifier:) -> Video? (check for existence if you want)`
 
 - TODO: video.edit
 
 - `video.delete { result in }`
+
+- **SwiftUI only**: `Video.camera { result in }` (*some View*)

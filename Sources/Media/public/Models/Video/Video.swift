@@ -81,6 +81,32 @@ public extension Video {
 }
 
 public extension Video {
+    // TODO: determine file type
+    static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
+        var placeholderForCreatedAsset: PHObjectPlaceholder?
+        PHPhotoLibrary.shared().performChanges({
+            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+            if let placeholder = creationRequest?.placeholderForCreatedAsset {
+                placeholderForCreatedAsset = placeholder
+            }
+        }, completionHandler: { isSuccess, error in
+            if !isSuccess {
+                completion(.failure(error ?? PhotosError.unknown))
+            } else {
+                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let video = Self.with(identifier: localIdentifier) {
+                    completion(.success(video))
+                } else {
+                    completion(.failure(PhotosError.unknown))
+                }
+            }
+        })
+    }
+
     // TODO:
     func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
         let options = PHContentEditingInputRequestOptions()
@@ -114,3 +140,25 @@ public extension Video {
         }
     }
 }
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+@available (iOS 13, OSX 10.15, *)
+public extension Video {
+    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            throw CameraError.noCameraAvailable
+        }
+
+        return ImagePicker(sourceType: .camera, mediaTypes: [.movie]) { value in
+            guard case let ImagePickerValue.tookVideo(mediaURL) = value else {
+                // TODO:
+                completion(.failure(PhotosError.unknown))
+                return
+            }
+            completion(.success(mediaURL))
+        }
+    }
+}
+#endif

@@ -8,7 +8,6 @@
 import Foundation
 import Photos
 
-@available(iOS 9.1, OSX 10.11, tvOS 9, *)
 public struct LivePhotos {
     public static var all: [LivePhoto] {
         let options = PHFetchOptions()

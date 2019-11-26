@@ -123,7 +123,6 @@ public extension Photo {
         return photos
     }
 
-    @available(iOS 9, OSX 10.11, tvOS 9, *)
     static var screenshot: [Photo] {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue)
@@ -188,6 +187,32 @@ public extension Photo {
 }
 
 public extension Photo {
+    // TODO: determine file type
+    static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
+        var placeholderForCreatedAsset: PHObjectPlaceholder?
+        PHPhotoLibrary.shared().performChanges({
+            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+            if let placeholder = creationRequest?.placeholderForCreatedAsset {
+                placeholderForCreatedAsset = placeholder
+            }
+        }, completionHandler: { isSuccess, error in
+            if !isSuccess {
+                completion(.failure(error ?? PhotosError.unknown))
+            } else {
+                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let photo = Self.with(identifier: localIdentifier) {
+                    completion(.success(photo))
+                } else {
+                    completion(.failure(PhotosError.unknown))
+                }
+            }
+        })
+    }
+
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -264,3 +289,25 @@ public extension Photo {
         }
     }
 }
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+@available (iOS 13, OSX 10.15, *)
+public extension Photo {
+    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            throw CameraError.noCameraAvailable
+        }
+
+        return ImagePicker(sourceType: .camera, mediaTypes: [.image]) { value in
+            guard case let ImagePickerValue.tookPhoto(imageURL) = value else {
+                // TODO:
+                completion(.failure(PhotosError.unknown))
+                return
+            }
+            completion(.success(imageURL))
+        }
+    }
+}
+#endif
