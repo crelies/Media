@@ -31,21 +31,23 @@ public extension LivePhoto {
                                                   contentMode: contentMode,
                                                   options: options)
         { livePhoto, info in
-            if let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber, imageResultIsDegraded.boolValue {
-                guard let livePhoto = livePhoto else {
-                    completion(.failure(PhotosError.unknown))
-                    return
-                }
-
-                let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .low, livePhoto: livePhoto)
-                completion(.success(displayRepresentation))
-            }
-
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let livePhoto = livePhoto {
-                let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
-                completion(.success(displayRepresentation))
+                let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
+                switch imageResultIsDegraded?.boolValue {
+                    case .none:
+                        let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
+                        completion(.success(displayRepresentation))
+                    case .some(let booleanValue):
+                        if booleanValue {
+                            let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .low, livePhoto: livePhoto)
+                            completion(.success(displayRepresentation))
+                        } else {
+                            let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
+                            completion(.success(displayRepresentation))
+                        }
+                }
             } else {
                 completion(.failure(PhotosError.unknown))
             }
@@ -168,6 +170,11 @@ public extension LivePhoto {
             }
             completion(.success(livePhoto))
         }
+    }
+
+    @available(iOS 13, *)
+    func view(size: CGSize) -> some View {
+        LivePhotoView(livePhoto: self, size: size)
     }
 }
 #endif
