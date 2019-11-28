@@ -146,6 +146,10 @@ import SwiftUI
 
 @available (iOS 13, OSX 10.15, *)
 public extension Video {
+    var view: some View {
+        VideoView(video: self)
+    }
+
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             throw CameraError.noCameraAvailable

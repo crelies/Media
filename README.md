@@ -103,6 +103,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - **SwiftUI only**: `LivePhoto.browser { result in }` (*some View*)
 
+- **SwiftUI only**: `livePhoto.view(size:)` (*some View*)
+
 ### Photo
 
 - `Photo.all (includes livePhotos)`
@@ -131,6 +133,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - **SwiftUI only**: `Photo.browser { result in }` (*some View*)
 
+- **SwiftUI only**: `photo.view { image in image.resizable().aspectRatio(contentMode: .fit) }` (*some View*)
+
 ### Videos
 
 - `Videos.all`
@@ -158,3 +162,5 @@ Get started by adding the `Media` Swift package to your project and by importing
 - **SwiftUI only**: `Video.editor` (*some View*)
 
 - **SwiftUI only**: `Video.browser { result in }` (*some View*)
+
+- **SwiftUI only**: `video.view` (*some View*)
