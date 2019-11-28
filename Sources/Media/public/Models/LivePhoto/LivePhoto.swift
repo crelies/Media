@@ -23,7 +23,7 @@ public struct LivePhoto: AbstractMedia {
 public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
-                               _ completion: @escaping (Result<PHLivePhoto, Error>) -> Void) {
+                               _ completion: @escaping (Result<LivePhoto.DisplayRepresentation, Error>) -> Void) {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
         PHImageManager.default().requestLivePhoto(for: phAsset,
@@ -31,16 +31,21 @@ public extension LivePhoto {
                                                   contentMode: contentMode,
                                                   options: options)
         { livePhoto, info in
-            if let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber {
-                if imageResultIsDegraded.boolValue {
+            if let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber, imageResultIsDegraded.boolValue {
+                guard let livePhoto = livePhoto else {
+                    completion(.failure(PhotosError.unknown))
                     return
                 }
+
+                let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .low, livePhoto: livePhoto)
+                completion(.success(displayRepresentation))
             }
 
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let livePhoto = livePhoto {
-                completion(.success(livePhoto))
+                let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
+                completion(.success(displayRepresentation))
             } else {
                 completion(.failure(PhotosError.unknown))
             }
