@@ -327,5 +327,9 @@ public extension Photo {
             completion(.success(photo))
         }
     }
+
+    func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
+        PhotoView(photo: self, imageView: imageView)
+    }
 }
 #endif

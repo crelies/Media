@@ -17,7 +17,7 @@ struct LivePhotoView: View {
     let size: CGSize
 
     var body: some View {
-        if phLivePhoto == nil {
+        if phLivePhoto == nil && error == nil {
             self.livePhoto.displayRepresentation(targetSize: self.size) { result in
                 switch result {
                 case .success(let livePhotoDisplayRepresentation):
