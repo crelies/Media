@@ -1,5 +1,5 @@
 //
-//  ImagePicker+Coordinator.swift
+//  MediaPicker+Coordinator.swift
 //  
 //
 //  Created by Christian Elies on 26.11.19.
@@ -10,12 +10,12 @@ import Photos
 import UIKit
 
 @available(iOS 13, OSX 10.15, tvOS 13, *)
-extension ImagePicker {
+extension MediaPicker {
     final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let imagePicker: ImagePicker
+        let mediaPicker: MediaPicker
 
-        init(imagePicker: ImagePicker) {
-            self.imagePicker = imagePicker
+        init(mediaPicker: MediaPicker) {
+            self.mediaPicker = mediaPicker
         }
 
         /*
@@ -40,8 +40,8 @@ extension ImagePicker {
                     return
                 }
 
-                let imagePickerValue: ImagePickerValue = .tookPhoto(url: imageURL)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .tookPhoto(url: imageURL)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             case (.camera, .livePhoto):
@@ -50,8 +50,8 @@ extension ImagePicker {
                     return
                 }
 
-                let imagePickerValue: ImagePickerValue = .tookLivePhoto(url: imageURL)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .tookLivePhoto(url: imageURL)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             case (.camera, .movie):
@@ -60,8 +60,8 @@ extension ImagePicker {
                     return
                 }
 
-                let imagePickerValue: ImagePickerValue = .tookVideo(url: mediaURL)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .tookVideo(url: mediaURL)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             case (.photoLibrary, .image), (.savedPhotosAlbum, .image):
@@ -71,8 +71,8 @@ extension ImagePicker {
                 }
 
                 let photo = Photo(phAsset: phAsset)
-                let imagePickerValue: ImagePickerValue = .selectedPhoto(photo)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .selectedPhoto(photo)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             case (.photoLibrary, .livePhoto), (.savedPhotosAlbum, .livePhoto):
@@ -82,8 +82,8 @@ extension ImagePicker {
                 }
 
                 let livePhoto = LivePhoto(phAsset: phAsset)
-                let imagePickerValue: ImagePickerValue = .selectedLivePhoto(livePhoto)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .selectedLivePhoto(livePhoto)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             case (.photoLibrary, .movie), (.savedPhotosAlbum, .movie):
@@ -93,8 +93,8 @@ extension ImagePicker {
                 }
 
                 let video = Video(phAsset: phAsset)
-                let imagePickerValue: ImagePickerValue = .selectedVideo(video)
-                imagePicker.onSelection(imagePickerValue)
+                let mediaPickerValue: MediaPickerValue = .selectedVideo(video)
+                mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
             default:

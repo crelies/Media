@@ -18,7 +18,7 @@ public struct Camera {
 
         let availableMediaTypes = try (UIImagePickerController.availableMediaTypes(for: .camera) ?? []).map { try UIImagePickerController.MediaType(string: $0) }
 
-        return ImagePicker(sourceType: .camera, mediaTypes: availableMediaTypes) { value in
+        return MediaPicker(sourceType: .camera, mediaTypes: availableMediaTypes) { value in
             switch value {
             case .tookPhoto(let url), .tookLivePhoto(let url), .tookVideo(let url):
                 completion(.success(url))

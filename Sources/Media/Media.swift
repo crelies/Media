@@ -53,10 +53,10 @@ public extension Media {
         } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
             sourceType = .savedPhotosAlbum
         } else {
-            throw ImagePickerError.noBrowsingSourceTypeAvailable
+            throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
-        return ImagePicker(sourceType: sourceType, mediaTypes: []) { value in
+        return MediaPicker(sourceType: sourceType, mediaTypes: []) { value in
             // TODO:
         }
     }

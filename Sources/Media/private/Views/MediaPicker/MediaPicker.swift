@@ -1,5 +1,5 @@
 //
-//  ImagePicker.swift
+//  MediaPicker.swift
 //  
 //
 //  Created by Christian Elies on 26.11.19.
@@ -12,12 +12,12 @@ import Photos
 import SwiftUI
 
 @available(iOS 13, OSX 10.15, tvOS 13, *)
-struct ImagePicker: UIViewControllerRepresentable {
+struct MediaPicker: UIViewControllerRepresentable {
     let sourceType: UIImagePickerController.SourceType
     let mediaTypes: [UIImagePickerController.MediaType]
-    let onSelection: (ImagePickerValue) -> Void
+    let onSelection: (MediaPickerValue) -> Void
 
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPicker>) -> UIImagePickerController {
         let imagePickerViewController = UIImagePickerController()
 
         if !mediaTypes.isEmpty {
@@ -33,19 +33,19 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(imagePicker: self)
+        Coordinator(mediaPicker: self)
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<MediaPicker>) {
 
     }
 }
 
 #if DEBUG
 @available(iOS 13, OSX 10.15, tvOS 13, *)
-struct ImagePicker_Previews: PreviewProvider {
+struct MediaPicker_Previews: PreviewProvider {
     static var previews: some View {
-        ImagePicker(sourceType: .savedPhotosAlbum, mediaTypes: []) { value in
+        MediaPicker(sourceType: .savedPhotosAlbum, mediaTypes: []) { value in
 
         }
     }

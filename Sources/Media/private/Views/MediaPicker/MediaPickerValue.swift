@@ -1,5 +1,5 @@
 //
-//  ImagePickerValue.swift
+//  MediaPickerValue.swift
 //  
 //
 //  Created by Christian Elies on 26.11.19.
@@ -8,7 +8,7 @@
 #if canImport(SwiftUI)
 import Foundation
 
-enum ImagePickerValue {
+enum MediaPickerValue {
     case tookPhoto(url: URL)
     case tookLivePhoto(url: URL)
     case tookVideo(url: URL)

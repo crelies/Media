@@ -144,9 +144,9 @@ public extension LivePhoto {
             throw CameraError.noCameraAvailable
         }
 
-        return ImagePicker(sourceType: .camera, mediaTypes: [.image, .livePhoto]) { value in
-            guard case let ImagePickerValue.tookLivePhoto(imageURL) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: .camera, mediaTypes: [.image, .livePhoto]) { value in
+            guard case let MediaPickerValue.tookLivePhoto(imageURL) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(imageURL))
@@ -160,12 +160,12 @@ public extension LivePhoto {
         } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
             sourceType = .savedPhotosAlbum
         } else {
-            throw ImagePickerError.noBrowsingSourceTypeAvailable
+            throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
-        return ImagePicker(sourceType: sourceType, mediaTypes: [.image, .livePhoto]) { value in
-            guard case let ImagePickerValue.selectedLivePhoto(livePhoto) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: sourceType, mediaTypes: [.image, .livePhoto]) { value in
+            guard case let MediaPickerValue.selectedLivePhoto(livePhoto) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(livePhoto))

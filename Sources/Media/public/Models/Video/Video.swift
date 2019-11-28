@@ -155,9 +155,9 @@ public extension Video {
             throw CameraError.noCameraAvailable
         }
 
-        return ImagePicker(sourceType: .camera, mediaTypes: [.movie]) { value in
-            guard case let ImagePickerValue.tookVideo(mediaURL) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: .camera, mediaTypes: [.movie]) { value in
+            guard case let MediaPickerValue.tookVideo(mediaURL) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(mediaURL))
@@ -171,12 +171,12 @@ public extension Video {
         } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
             sourceType = .savedPhotosAlbum
         } else {
-            throw ImagePickerError.noBrowsingSourceTypeAvailable
+            throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
-        return ImagePicker(sourceType: sourceType, mediaTypes: [.movie]) { value in
-            guard case let ImagePickerValue.selectedVideo(video) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: sourceType, mediaTypes: [.movie]) { value in
+            guard case let MediaPickerValue.selectedVideo(video) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(video))

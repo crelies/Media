@@ -300,9 +300,9 @@ public extension Photo {
             throw CameraError.noCameraAvailable
         }
 
-        return ImagePicker(sourceType: .camera, mediaTypes: [.image]) { value in
-            guard case let ImagePickerValue.tookPhoto(imageURL) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: .camera, mediaTypes: [.image]) { value in
+            guard case let MediaPickerValue.tookPhoto(imageURL) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(imageURL))
@@ -316,12 +316,12 @@ public extension Photo {
         } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
             sourceType = .savedPhotosAlbum
         } else {
-            throw ImagePickerError.noBrowsingSourceTypeAvailable
+            throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
-        return ImagePicker(sourceType: sourceType, mediaTypes: [.image]) { value in
-            guard case let ImagePickerValue.selectedPhoto(photo) = value else {
-                completion(.failure(ImagePickerError.unsupportedValue))
+        return MediaPicker(sourceType: sourceType, mediaTypes: [.image]) { value in
+            guard case let MediaPickerValue.selectedPhoto(photo) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
             completion(.success(photo))
