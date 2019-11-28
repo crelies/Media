@@ -105,17 +105,19 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - **SwiftUI only**: `livePhoto.view(size:)` (*some View*)
 
-### Photo
+### (Media.)Photos
 
-- `Photo.all (includes livePhotos)`
+- `Photos.all (includes livePhotos)`
 
-- `Photo.panorama`
+- `Photos.panorama`
 
-- `Photo.hdr`
+- `Photos.hdr`
 
-- `Photo.screenshot`
+- `Photos.screenshot`
 
-- `Photo.depthEffect`
+- `Photos.depthEffect`
+
+#### Photo
 
 - `photo.data { result in }`
 
