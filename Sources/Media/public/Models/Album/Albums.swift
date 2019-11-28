@@ -21,7 +21,7 @@ public struct Albums {
             let album = Album(phAssetCollection: collection)
             albums.append(album)
         }
-        return albums
+        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
 
     public static var user: [Album] {
@@ -37,7 +37,7 @@ public struct Albums {
                 albums.append(album)
             }
         }
-        return albums
+        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
 
     public static var smart: [Album] {
@@ -53,7 +53,7 @@ public struct Albums {
                 albums.append(album)
             }
         }
-        return albums
+        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
 
     public static var cloud: [Album] {
@@ -69,6 +69,6 @@ public struct Albums {
                 albums.append(album)
             }
         }
-        return albums
+        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
 }

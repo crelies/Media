@@ -83,6 +83,7 @@ public extension Photo {
 public extension Photo {
     static var all: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -97,6 +98,7 @@ public extension Photo {
 
     static var panorama: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoPanorama.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -111,6 +113,7 @@ public extension Photo {
 
     static var hdr: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoHDR.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -125,6 +128,7 @@ public extension Photo {
 
     static var screenshot: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -140,6 +144,7 @@ public extension Photo {
     @available(iOS 10.2, OSX 10.11, tvOS 9, *)
     static var depthEffect: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoDepthEffect.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)

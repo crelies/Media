@@ -11,6 +11,7 @@ import Photos
 public struct LivePhotos {
     public static var all: [LivePhoto] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)

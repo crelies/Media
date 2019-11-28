@@ -11,6 +11,7 @@ import Photos
 public struct Videos {
     public static var all: [Video] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -25,6 +26,7 @@ public struct Videos {
 
     public static var streams: [Video] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoStreamed.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -39,6 +41,7 @@ public struct Videos {
 
     public static var highFrameRates: [Video] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoHighFrameRate.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)
@@ -53,6 +56,7 @@ public struct Videos {
 
     public static var timelapses: [Video] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoTimelapse.rawValue)
         options.predicate = predicate
         let result = PHAsset.fetchAssets(with: options)

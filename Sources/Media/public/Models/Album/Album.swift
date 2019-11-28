@@ -24,6 +24,7 @@ public struct Album {
 public extension Album {
     var audios: [Audio] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = predicate
 
@@ -38,6 +39,7 @@ public extension Album {
 
     var photos: [Photo] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         if #available(iOS 9.1, *) {
             let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
             options.predicate = predicate
@@ -57,6 +59,7 @@ public extension Album {
 
     var videos: [Video] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         options.predicate = predicate
 
@@ -71,6 +74,7 @@ public extension Album {
 
     var livePhotos: [LivePhoto] {
         let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
@@ -84,7 +88,9 @@ public extension Album {
     }
 
     var allMedia: [AbstractMedia] {
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: nil)
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
         var media: [AbstractMedia] = []
         result.enumerateObjects { asset, _, _ in
             switch asset.mediaType {
