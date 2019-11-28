@@ -309,7 +309,7 @@ public extension Photo {
         }
     }
 
-    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
         var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             sourceType = .photoLibrary
@@ -320,7 +320,11 @@ public extension Photo {
         }
 
         return ImagePicker(sourceType: sourceType, mediaTypes: [.image]) { value in
-            // TODO:
+            guard case let ImagePickerValue.selectedPhoto(photo) = value else {
+                completion(.failure(ImagePickerError.unsupportedValue))
+                return
+            }
+            completion(.success(photo))
         }
     }
 }

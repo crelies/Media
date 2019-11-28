@@ -146,7 +146,7 @@ public extension LivePhoto {
         }
     }
 
-    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {
         var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             sourceType = .photoLibrary
@@ -157,7 +157,11 @@ public extension LivePhoto {
         }
 
         return ImagePicker(sourceType: sourceType, mediaTypes: [.image, .livePhoto]) { value in
-            // TODO:
+            guard case let ImagePickerValue.selectedLivePhoto(livePhoto) = value else {
+                completion(.failure(ImagePickerError.unsupportedValue))
+                return
+            }
+            completion(.success(livePhoto))
         }
     }
 }

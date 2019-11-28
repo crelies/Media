@@ -160,7 +160,7 @@ public extension Video {
         }
     }
 
-    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
         var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             sourceType = .photoLibrary
@@ -171,7 +171,11 @@ public extension Video {
         }
 
         return ImagePicker(sourceType: sourceType, mediaTypes: [.movie]) { value in
-            // TODO:
+            guard case let ImagePickerValue.selectedVideo(video) = value else {
+                completion(.failure(ImagePickerError.unsupportedValue))
+                return
+            }
+            completion(.success(video))
         }
     }
 
