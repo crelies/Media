@@ -139,6 +139,24 @@ public extension Video {
             self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
         }
     }
+
+    func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
+        PHPhotoLibrary.shared().performChanges({
+            let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
+            assetChangeRequest.isFavorite = favorite
+        }) { isSuccess, error in
+            if !isSuccess {
+                completion(.failure(error ?? PhotosError.unknown))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 }
 
 #if canImport(SwiftUI)
