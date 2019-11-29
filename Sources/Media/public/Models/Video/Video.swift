@@ -61,6 +61,25 @@ public extension Video {
             }
         }
     }
+
+    func avAsset(_ completion: @escaping (Result<AVAsset, Error>) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
+
+        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { asset, _, info in
+            if let error = info?[PHImageErrorKey] as? Error {
+                completion(.failure(error))
+            } else if let asset = asset {
+                completion(.success(asset))
+            } else {
+                completion(.failure(PhotosError.unknown))
+            }
+        }
+    }
+
+    func url(_ completion: (Result<URL, Error>) -> Void) {
+
+    }
 }
 
 public extension Video {
