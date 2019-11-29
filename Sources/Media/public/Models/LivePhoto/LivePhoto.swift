@@ -14,6 +14,7 @@ public struct LivePhoto: AbstractMedia {
 
     public let type: MediaType = .image
     public var subtype: MediaSubtype { .photoLive }
+    public var isFavorite: Bool { phAsset.isFavorite }
 
     init(phAsset: PHAsset) {
         self.phAsset = phAsset

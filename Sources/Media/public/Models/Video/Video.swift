@@ -13,6 +13,7 @@ public struct Video: AbstractMedia {
     public let phAsset: PHAsset
 
     public let type: MediaType = .video
+    public var isFavorite: Bool { phAsset.isFavorite }
 
     init(phAsset: PHAsset) {
         self.phAsset = phAsset

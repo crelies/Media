@@ -13,6 +13,7 @@ public struct Photo: AbstractMedia {
     public let phAsset: PHAsset
 
     public let type: MediaType = .image
+    public var isFavorite: Bool { phAsset.isFavorite }
 
     init(phAsset: PHAsset) {
         self.phAsset = phAsset
