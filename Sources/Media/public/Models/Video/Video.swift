@@ -88,15 +88,22 @@ public extension Video {
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
-                exportSession.outputURL = destination.outputURL
-                exportSession.outputFileType = destination.outputFileType
-                exportSession.exportAsynchronously {
-                    switch exportSession.status {
-                    case .completed:
-                        completion(.success(()))
-                    case .failed:
-                        completion(.failure(exportSession.error ?? PhotosError.unknown))
-                    default: ()
+                exportSession.determineCompatibleFileTypes { compatibleFileTypes in
+                    guard compatibleFileTypes.contains(destination.outputFileType) else {
+                        completion(.failure(VideoError.unsupportedFileType))
+                        return
+                    }
+
+                    exportSession.outputURL = destination.outputURL
+                    exportSession.outputFileType = destination.outputFileType
+                    exportSession.exportAsynchronously {
+                        switch exportSession.status {
+                        case .completed:
+                            completion(.success(()))
+                        case .failed:
+                            completion(.failure(exportSession.error ?? PhotosError.unknown))
+                        default: ()
+                        }
                     }
                 }
             } else {
