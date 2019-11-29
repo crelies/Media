@@ -6,7 +6,7 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import Foundation
+import AVFoundation
 import Photos
 
 public struct Video: AbstractMedia {
@@ -77,8 +77,32 @@ public extension Video {
         }
     }
 
-    func url(_ completion: (Result<URL, Error>) -> Void) {
+    func export(to destination: Video.ExportDestination, quality: Video.ExportQuality, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
 
+        PHImageManager.default().requestExportSession(forVideo: phAsset,
+                                                      options: options,
+                                                      exportPreset: quality.avAssetExportPreset)
+        { exportSession, info in
+            if let error = info?[PHImageErrorKey] as? Error {
+                completion(.failure(error))
+            } else if let exportSession = exportSession {
+                exportSession.outputURL = destination.outputURL
+                exportSession.outputFileType = destination.outputFileType
+                exportSession.exportAsynchronously {
+                    switch exportSession.status {
+                    case .completed:
+                        completion(.success(()))
+                    case .failed:
+                        completion(.failure(exportSession.error ?? PhotosError.unknown))
+                    default: ()
+                    }
+                }
+            } else {
+                completion(.failure(PhotosError.unknown))
+            }
+        }
     }
 }
 

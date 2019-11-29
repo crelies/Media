@@ -157,6 +157,10 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `video.playerItem { result in }`
 
+- `video.avAsset { result in }`
+
+- `video.export(to:quality:) { result in }`
+
 - `Video.save(URL) { result in }`
 
 - `Video.with(identifier:) -> Video? (check for existence if you want)`
