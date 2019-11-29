@@ -9,7 +9,7 @@ import Photos
 
 extension LivePhoto {
     public struct DisplayRepresentation {
-        public let quality: LivePhoto.Quality
+        public let quality: Media.Quality
         public let livePhoto: PHLivePhoto
     }
 }

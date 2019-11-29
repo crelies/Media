@@ -112,6 +112,40 @@ public extension Photo {
             }
         }
     }
+
+    func uiImage(targetSize: CGSize,
+                 contentMode: PHImageContentMode,
+                 _ completion: @escaping (Result<Photo.DisplayRepresentation, Error>) -> Void) {
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+
+        PHImageManager.default().requestImage(for: phAsset,
+                                              targetSize: targetSize,
+                                              contentMode: contentMode,
+                                              options: options)
+        { image, info in
+            if let error = info?[PHImageErrorKey] as? Error {
+                completion(.failure(error))
+            } else if let image = image {
+                let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
+                switch imageResultIsDegraded?.boolValue {
+                    case .none:
+                        let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .high)
+                        completion(.success(displayRepresentation))
+                    case .some(let booleanValue):
+                        if booleanValue {
+                            let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .low)
+                            completion(.success(displayRepresentation))
+                        } else {
+                            let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .high)
+                            completion(.success(displayRepresentation))
+                        }
+                }
+            } else {
+                completion(.failure(PhotosError.unknown))
+            }
+        }
+    }
 }
 
 public extension Photo {

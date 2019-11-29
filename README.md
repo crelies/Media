@@ -123,6 +123,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `photo.data { result in }`
 
+- `photo.uiImage(targetSize:contentMode:) { result in }`
+
 - `Photo.save(URL) { result in }`
 
 - `Photo.save(UIImage) { result in }`
