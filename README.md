@@ -159,7 +159,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `video.avAsset { result in }`
 
-- `video.export(to:quality:) { result in }`
+- `video.export(options, progress: { progress in }) { result in }`
 
 - `Video.save(URL) { result in }`
 

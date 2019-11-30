@@ -1,5 +1,5 @@
 //
-//  Video+ExportDestination.swift
+//  Video+ExportOptions.swift
 //  
 //
 //  Created by Christian Elies on 29.11.19.
@@ -8,11 +8,12 @@
 import AVFoundation
 
 extension Video {
-    public struct ExportDestination {
+    public struct ExportOptions {
         public let outputURL: URL
-        let outputFileType: AVFileType
+        let fileType: Video.FileType
+        let quality: Video.ExportQuality
 
-        public init(url: URL, fileType: Video.FileType) throws {
+        public init(url: URL, fileType: Video.FileType, quality: Video.ExportQuality) throws {
             var url = url
 
             switch url.pathExtension {
@@ -24,7 +25,8 @@ extension Video {
             }
 
             self.outputURL = url
-            self.outputFileType = fileType.avFileType
+            self.fileType = fileType
+            self.quality = quality
         }
     }
 }

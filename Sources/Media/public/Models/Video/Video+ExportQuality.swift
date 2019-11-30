@@ -11,7 +11,7 @@ extension Video {
     public enum ExportQuality {
         case low
         case medium
-        case high
+        case highest
         case q640x480
         case q960x540
         case q1280x720
@@ -26,7 +26,7 @@ extension Video {
                 return AVAssetExportPresetLowQuality
             case .medium:
                 return AVAssetExportPresetMediumQuality
-            case .high:
+            case .highest:
                 return AVAssetExportPresetHighestQuality
             case .q640x480:
                 return AVAssetExportPreset640x480

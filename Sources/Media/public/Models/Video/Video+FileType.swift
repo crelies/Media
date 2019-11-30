@@ -12,8 +12,6 @@ extension Video {
         case mov
         case mp4
         case m4v
-        case mobile3GPP
-        case mobile3GPP2
     }
 }
 
@@ -26,10 +24,6 @@ extension Video.FileType {
             return "mp4"
         case .m4v:
             return "m4v"
-        case .mobile3GPP:
-            return "3gpp"
-        case .mobile3GPP2:
-            return "3gp2"
         }
     }
 
@@ -41,10 +35,6 @@ extension Video.FileType {
             return AVFileType.mp4
         case .m4v:
             return AVFileType.m4v
-        case .mobile3GPP:
-            return AVFileType.mobile3GPP
-        case .mobile3GPP2:
-            return AVFileType.mobile3GPP2
         }
     }
 }

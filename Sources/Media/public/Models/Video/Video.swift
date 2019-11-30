@@ -77,30 +77,45 @@ public extension Video {
         }
     }
 
-    func export(to destination: Video.ExportDestination, quality: Video.ExportQuality, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        let options = PHVideoRequestOptions()
-        options.isNetworkAccessAllowed = true
+    func export(_ exportOptions: Video.ExportOptions, progress: @escaping (Video.ExportProgress) -> Void, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        let requestOptions = PHVideoRequestOptions()
+        requestOptions.isNetworkAccessAllowed = true
 
         PHImageManager.default().requestExportSession(forVideo: phAsset,
-                                                      options: options,
-                                                      exportPreset: quality.avAssetExportPreset)
+                                                      options: requestOptions,
+                                                      exportPreset: exportOptions.quality.avAssetExportPreset)
         { exportSession, info in
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
                 exportSession.determineCompatibleFileTypes { compatibleFileTypes in
-                    guard compatibleFileTypes.contains(destination.outputFileType) else {
+                    guard compatibleFileTypes.contains(exportOptions.fileType.avFileType) else {
                         completion(.failure(VideoError.unsupportedFileType))
                         return
                     }
 
-                    exportSession.outputURL = destination.outputURL
-                    exportSession.outputFileType = destination.outputFileType
+                    exportSession.outputURL = exportOptions.outputURL
+                    exportSession.outputFileType = exportOptions.fileType.avFileType
+
+                    let timer = Timer(timeInterval: 1, repeats: true) { timer in
+                        guard exportSession.progress < 1 else {
+                            let exportProgress: ExportProgress = .completed
+                            progress(exportProgress)
+                            timer.invalidate()
+                            return
+                        }
+                        let exportProgress: ExportProgress = .pending(value: exportSession.progress)
+                        progress(exportProgress)
+                    }
+                    RunLoop.main.add(timer, forMode: .common)
+
                     exportSession.exportAsynchronously {
                         switch exportSession.status {
                         case .completed:
+                            timer.invalidate()
                             completion(.success(()))
                         case .failed:
+                            timer.invalidate()
                             completion(.failure(exportSession.error ?? PhotosError.unknown))
                         default: ()
                         }
