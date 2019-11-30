@@ -5,7 +5,6 @@
 //  Created by Christian Elies on 22.11.19.
 //
 
-import Foundation
 import Photos
 
 public struct Videos {

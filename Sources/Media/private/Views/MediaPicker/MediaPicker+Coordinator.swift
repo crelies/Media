@@ -9,7 +9,7 @@
 import Photos
 import UIKit
 
-@available(iOS 13, OSX 10.15, tvOS 13, *)
+@available(iOS 13, OSX 10.15, *)
 extension MediaPicker {
     final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         let mediaPicker: MediaPicker

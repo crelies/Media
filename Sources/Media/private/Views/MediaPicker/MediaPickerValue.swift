@@ -8,6 +8,7 @@
 #if canImport(SwiftUI)
 import Foundation
 
+@available(iOS 13, OSX 10.15, *)
 enum MediaPickerValue {
     case tookPhoto(url: URL)
     case tookLivePhoto(url: URL)

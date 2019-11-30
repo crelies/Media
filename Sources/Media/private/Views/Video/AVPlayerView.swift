@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-import AVFoundation
+#if canImport(SwiftUI)
 import AVKit
 import SwiftUI
 
@@ -24,3 +24,4 @@ struct AVPlayerView: UIViewControllerRepresentable {
 
     }
 }
+#endif

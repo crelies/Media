@@ -7,6 +7,7 @@
 
 import Photos
 
+@available(iOS 9, *)
 extension LivePhoto {
     public struct DisplayRepresentation {
         public let quality: Media.Quality

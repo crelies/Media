@@ -6,9 +6,9 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import Foundation
 import Photos
 
+@available(iOS 9, OSX 10.11, *)
 public struct LivePhoto: AbstractMedia {
     public let phAsset: PHAsset
 
@@ -21,6 +21,7 @@ public struct LivePhoto: AbstractMedia {
     }
 }
 
+@available(iOS 9, *)
 public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
@@ -56,6 +57,7 @@ public extension LivePhoto {
     }
 }
 
+@available(iOS 9, OSX 10.11, *)
 public extension LivePhoto {
     // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
@@ -100,6 +102,7 @@ public extension LivePhoto {
     }
 }
 
+@available(iOS 9, OSX 10.11, *)
 public extension LivePhoto {
     // TODO:
     func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
@@ -156,7 +159,7 @@ public extension LivePhoto {
 #if canImport(SwiftUI)
 import SwiftUI
 
-@available (iOS 13, OSX 10.15, *)
+@available(iOS 13, *)
 public extension LivePhoto {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
@@ -172,6 +175,13 @@ public extension LivePhoto {
         }
     }
 
+    func view(size: CGSize) -> some View {
+        LivePhotoView(livePhoto: self, size: size)
+    }
+}
+
+@available (iOS 13, OSX 10.15, *)
+public extension LivePhoto {
     static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {
         var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
@@ -189,11 +199,6 @@ public extension LivePhoto {
             }
             completion(.success(livePhoto))
         }
-    }
-
-    @available(iOS 13, *)
-    func view(size: CGSize) -> some View {
-        LivePhotoView(livePhoto: self, size: size)
     }
 }
 #endif

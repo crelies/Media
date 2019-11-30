@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 @available(iOS 13, OSX 10.15, tvOS 13, *)
@@ -41,3 +42,4 @@ struct PhotoView<ImageView: View>: View {
         self.imageView = imageView
     }
 }
+#endif

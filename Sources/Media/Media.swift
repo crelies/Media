@@ -6,13 +6,7 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import Foundation
 import Photos
-import UIKit
-
-public typealias MediaType = PHAssetMediaType
-public typealias MediaSubtype = PHAssetMediaSubtype
-public typealias Cancellable = () -> Void
 
 public struct Media {
     public static var isAccessAllowed: Bool {
@@ -57,7 +51,7 @@ public extension Media {
         }
 
         return MediaPicker(sourceType: sourceType, mediaTypes: []) { value in
-            // TODO:
+            // TODO: please implement me
         }
     }
 }

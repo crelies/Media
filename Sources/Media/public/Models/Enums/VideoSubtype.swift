@@ -6,8 +6,6 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import Foundation
-
 public enum VideoSubtype: CaseIterable {
     case streamed
     case highFrameRate

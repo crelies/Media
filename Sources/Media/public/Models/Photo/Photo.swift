@@ -7,7 +7,6 @@
 //
 
 import Photos
-import UIKit
 
 public struct Photo: AbstractMedia {
     public let phAsset: PHAsset

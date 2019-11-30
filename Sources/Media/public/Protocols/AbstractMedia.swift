@@ -6,7 +6,6 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import Foundation
 import Photos
 
 public protocol AbstractMedia {

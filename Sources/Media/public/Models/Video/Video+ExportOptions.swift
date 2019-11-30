@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 29.11.19.
 //
 
-import AVFoundation
+import Foundation
 
 extension Video {
     public struct ExportOptions {

@@ -6,8 +6,8 @@
 //
 
 #if canImport(SwiftUI)
-import UIKit
 import SwiftUI
+import UIKit
 
 @available(iOS 13, OSX 10.15, *)
 public struct Camera {

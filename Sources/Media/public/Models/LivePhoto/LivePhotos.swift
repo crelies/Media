@@ -5,9 +5,9 @@
 //  Created by Christian Elies on 22.11.19.
 //
 
-import Foundation
 import Photos
 
+@available(iOS 9, OSX 10.11, *)
 public struct LivePhotos {
     public static var all: [LivePhoto] {
         let options = PHFetchOptions()

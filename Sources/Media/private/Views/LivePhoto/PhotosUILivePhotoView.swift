@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
+#if canImport(SwiftUI)
 import PhotosUI
 import SwiftUI
 
@@ -22,3 +23,4 @@ struct PhotosUILivePhotoView: UIViewRepresentable {
 
     }
 }
+#endif

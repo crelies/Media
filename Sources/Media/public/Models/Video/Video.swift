@@ -6,7 +6,6 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-import AVFoundation
 import Photos
 
 public struct Video: AbstractMedia {
@@ -228,24 +227,10 @@ public extension Video {
 #if canImport(SwiftUI)
 import SwiftUI
 
-@available (iOS 13, OSX 10.15, *)
+@available (iOS 13, OSX 10.15, tvOS 13, *)
 public extension Video {
     var view: some View {
         VideoView(video: self)
-    }
-
-    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            throw CameraError.noCameraAvailable
-        }
-
-        return MediaPicker(sourceType: .camera, mediaTypes: [.movie]) { value in
-            guard case let MediaPickerValue.tookVideo(mediaURL) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(mediaURL))
-        }
     }
 
     static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
@@ -264,6 +249,23 @@ public extension Video {
                 return
             }
             completion(.success(video))
+        }
+    }
+}
+
+@available (iOS 13, OSX 10.15, *)
+public extension Video {
+    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            throw CameraError.noCameraAvailable
+        }
+
+        return MediaPicker(sourceType: .camera, mediaTypes: [.movie]) { value in
+            guard case let MediaPickerValue.tookVideo(mediaURL) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
+                return
+            }
+            completion(.success(mediaURL))
         }
     }
 
