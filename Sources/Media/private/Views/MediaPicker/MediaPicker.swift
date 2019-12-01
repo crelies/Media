@@ -19,8 +19,17 @@ struct MediaPicker: UIViewControllerRepresentable {
     func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPicker>) -> UIImagePickerController {
         let imagePickerViewController = UIImagePickerController()
 
-        if !mediaTypes.isEmpty {
-            imagePickerViewController.mediaTypes = mediaTypes.map { ($0.cfString as String) }
+        if !mediaTypes.isEmpty, let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: sourceType), !availableMediaTypes.isEmpty {
+            let imagePickerViewControllerMediaTypes: [String] = mediaTypes.compactMap { mediaType in
+                let mediaTypeString = mediaType.cfString as String
+                guard availableMediaTypes.contains(mediaTypeString) else {
+                    return nil
+                }
+                return mediaTypeString
+            }
+            if !imagePickerViewControllerMediaTypes.isEmpty {
+                imagePickerViewController.mediaTypes = availableMediaTypes
+            }
         } else if let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: sourceType), !availableMediaTypes.isEmpty {
             imagePickerViewController.mediaTypes = availableMediaTypes
         }
