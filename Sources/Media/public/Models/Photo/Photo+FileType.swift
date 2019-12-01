@@ -7,6 +7,7 @@
 
 import AVFoundation
 
+@available(iOS 11, OSX 10.11, tvOS 11, *)
 extension Photo {
     public enum FileType: CaseIterable {
         case avci
@@ -17,6 +18,7 @@ extension Photo {
     }
 }
 
+@available(iOS 11, OSX 10.11, tvOS 11, *)
 extension Photo.FileType {
     var pathExtensions: [String] {
         switch self {

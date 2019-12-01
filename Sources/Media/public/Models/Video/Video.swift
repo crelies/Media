@@ -75,6 +75,7 @@ public extension Video {
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
+                // TODO: improve
                 exportSession.determineCompatibleFileTypes { compatibleFileTypes in
                     guard compatibleFileTypes.contains(exportOptions.fileType.avFileType) else {
                         completion(.failure(VideoError.unsupportedFileType))
@@ -84,25 +85,33 @@ public extension Video {
                     exportSession.outputURL = exportOptions.outputURL
                     exportSession.outputFileType = exportOptions.fileType.avFileType
 
-                    let timer = Timer(timeInterval: 1, repeats: true) { timer in
-                        guard exportSession.progress < 1 else {
-                            let exportProgress: ExportProgress = .completed
-                            progress(exportProgress)
-                            timer.invalidate()
-                            return
+                    var timer: Timer?
+                    if #available(iOS 10.0, *) {
+                        timer = Timer(timeInterval: 1, repeats: true) { timer in
+                            self.handleProgressTimerFired(exportSession: exportSession,
+                                                          timer: timer,
+                                                          progress: progress)
                         }
-                        let exportProgress: ExportProgress = .pending(value: exportSession.progress)
-                        progress(exportProgress)
+                    } else {
+                        let timerWrapper = TimerWrapper(timeInterval: 1, repeats: true) { timer in
+                            self.handleProgressTimerFired(exportSession: exportSession,
+                                                          timer: timer,
+                                                          progress: progress)
+                        }
+                        timer = timerWrapper.timer
                     }
-                    RunLoop.main.add(timer, forMode: .common)
+
+                    if let timer = timer {
+                        RunLoop.main.add(timer, forMode: .common)
+                    }
 
                     exportSession.exportAsynchronously {
                         switch exportSession.status {
                         case .completed:
-                            timer.invalidate()
+                            timer?.invalidate()
                             completion(.success(()))
                         case .failed:
-                            timer.invalidate()
+                            timer?.invalidate()
                             completion(.failure(exportSession.error ?? PhotosError.unknown))
                         default: ()
                         }
@@ -150,7 +159,7 @@ public extension Video {
         default: ()
         }
 
-        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, completion)
+        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, completion)
     }
 
     // TODO:
@@ -193,6 +202,21 @@ public extension Video {
         }
 
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
+    }
+}
+
+extension Video {
+    private func handleProgressTimerFired(exportSession: AVAssetExportSession,
+                                          timer: Timer,
+                                          progress: @escaping (Video.ExportProgress) -> Void) {
+        guard exportSession.progress < 1 else {
+            let exportProgress: ExportProgress = .completed
+            progress(exportProgress)
+            timer.invalidate()
+            return
+        }
+        let exportProgress: ExportProgress = .pending(value: exportSession.progress)
+        progress(exportProgress)
     }
 }
 

@@ -123,6 +123,7 @@ public extension Photo {
 }
 
 public extension Photo {
+    @available(iOS 11, OSX 10.11, tvOS 11, *)
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -141,7 +142,7 @@ public extension Photo {
         default: ()
         }
 
-        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
+        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
                                completion)
     }
 
@@ -151,7 +152,7 @@ public extension Photo {
             return
         }
 
-        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
+        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
                                completion)
     }
 

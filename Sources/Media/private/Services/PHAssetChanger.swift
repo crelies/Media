@@ -8,8 +8,8 @@
 import Photos
 
 struct PHAssetChanger {
-    static func request<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
-                                          _ completion: @escaping (Result<T, Error>) -> Void) {
+    static func createRequest<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
+                                                _ completion: @escaping (Result<T, Error>) -> Void) {
         var placeholderForCreatedAsset: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = request()

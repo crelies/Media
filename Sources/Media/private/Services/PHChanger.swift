@@ -8,7 +8,7 @@
 import Photos
 
 struct PHChanger {
-    static func request(_ request: @escaping () -> PHChangeRequest?,
+    static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
                         _ completion: @escaping (Result<Void, Error>) -> Void) {
         PHPhotoLibrary.shared().performChanges({
             _ = request()

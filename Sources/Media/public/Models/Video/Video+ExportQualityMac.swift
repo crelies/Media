@@ -8,7 +8,7 @@
 import AVFoundation
 
 // TODO: currently not used
-#if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst) && os(macOS)
 @available(OSX 10.8, *)
 extension Video {
     public enum ExportQualityMac {

@@ -17,8 +17,10 @@ extension Video {
         case q1280x720
         case q1920x1080
         case q3840x2160
-        case hevc1920x1080
-        case hevc3840x2160
+        // >= iOS 11
+//        case hevc1920x1080
+        // >= iOS 11
+//        case hevc3840x2160
 
         var avAssetExportPreset: String {
             switch self {
@@ -38,10 +40,10 @@ extension Video {
                 return AVAssetExportPreset1920x1080
             case .q3840x2160:
                 return AVAssetExportPreset3840x2160
-            case .hevc1920x1080:
-                return AVAssetExportPresetHEVC1920x1080
-            case .hevc3840x2160:
-                return AVAssetExportPresetHEVC3840x2160
+//            case .hevc1920x1080:
+//                return AVAssetExportPresetHEVC1920x1080
+//            case .hevc3840x2160:
+//                return AVAssetExportPresetHEVC3840x2160
             }
         }
     }
