@@ -13,7 +13,7 @@ public struct Audios {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = predicate
-        let audios = PHAssetFetcher.fetchAssets(Audio.self, options: options)
+        let audios = PHAssetFetcher.fetchAssets(options: options) as [Audio]
         return audios
     }
 }

@@ -14,7 +14,7 @@ extension Media {
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
             options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(Photo.self, options: options)
+            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
             return photos
         }
 
@@ -23,7 +23,7 @@ extension Media {
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoPanorama.rawValue)
             options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(Photo.self, options: options)
+            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
             return photos
         }
 
@@ -32,7 +32,7 @@ extension Media {
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoHDR.rawValue)
             options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(Photo.self, options: options)
+            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
             return photos
         }
 
@@ -41,7 +41,7 @@ extension Media {
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue)
             options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(Photo.self, options: options)
+            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
             return photos
         }
 
@@ -51,7 +51,7 @@ extension Media {
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoDepthEffect.rawValue)
             options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(Photo.self, options: options)
+            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
             return photos
         }
     }

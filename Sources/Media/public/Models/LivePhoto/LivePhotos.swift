@@ -15,7 +15,7 @@ public struct LivePhotos {
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
-        let livePhotos = PHAssetFetcher.fetchAssets(LivePhoto.self, options: options)
+        let livePhotos = PHAssetFetcher.fetchAssets(options: options) as [LivePhoto]
         return livePhotos
     }
 }

@@ -74,12 +74,12 @@ public extension LivePhoto {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
-        let livePhoto = PHAssetFetcher.fetchAsset(LivePhoto.self, options: options) { asset in
+        let livePhoto = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .image && asset.mediaSubtypes.contains(.photoLive) {
                 return true
             }
             return false
-        }
+        } as LivePhoto?
         return livePhoto
     }
 }

@@ -8,38 +8,36 @@
 import Photos
 
 struct PHAssetFetcher {
-    static func fetchAssets<T: MediaProtocol>(_ type: T.Type,
-                                              options: PHFetchOptions) -> [T] {
+    static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) -> [T] {
         let result = PHAsset.fetchAssets(with: options)
 
         var items: [T] = []
         result.enumerateObjects { asset, _, _ in
-            let item = type.init(phAsset: asset)
+            let item = T.init(phAsset: asset)
             items.append(item)
         }
         return items
     }
 
-    static func fetchAssets<T: MediaProtocol>(ofType type: T.Type, in assetCollection: PHAssetCollection, options: PHFetchOptions) -> [T] {
+    static func fetchAssets<T: MediaProtocol>(in assetCollection: PHAssetCollection, options: PHFetchOptions) -> [T] {
         let result = PHAsset.fetchAssets(in: assetCollection, options: options)
 
         var items: [T] = []
         result.enumerateObjects { asset, _, _ in
-            let item = type.init(phAsset: asset)
+            let item = T.init(phAsset: asset)
             items.append(item)
         }
         return items
     }
 
-    static func fetchAsset<T: MediaProtocol>(_ type: T.Type,
-                                             options: PHFetchOptions,
+    static func fetchAsset<T: MediaProtocol>(options: PHFetchOptions,
                                              filter: @escaping (PHAsset) -> Bool = { _ in true }) -> T? {
         let result = PHAsset.fetchAssets(with: options)
 
         var item: T?
         result.enumerateObjects { asset, _, stop in
             if filter(asset) {
-                item = type.init(phAsset: asset)
+                item = T.init(phAsset: asset)
                 stop.pointee = true
             }
         }

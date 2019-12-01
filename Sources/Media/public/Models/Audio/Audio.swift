@@ -24,12 +24,12 @@ public extension Audio {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.audio.rawValue)
         options.predicate = predicate
 
-        let audio = PHAssetFetcher.fetchAsset(Audio.self, options: options) { asset in
+        let audio = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .audio {
                 return true
             }
             return false
-        }
+        } as Audio?
         return audio
     }
 }

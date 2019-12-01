@@ -121,12 +121,12 @@ public extension Video {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.video.rawValue)
         options.predicate = predicate
 
-        let video = PHAssetFetcher.fetchAsset(Video.self, options: options) { asset in
+        let video = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .video {
                 return true
             }
             return false
-        }
+        } as Video?
         return video
     }
 }

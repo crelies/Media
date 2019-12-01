@@ -26,7 +26,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = predicate
 
-        let audios = PHAssetFetcher.fetchAssets(ofType: Audio.self, in: phAssetCollection, options: options)
+        let audios = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Audio]
         return audios
     }
 
@@ -41,7 +41,7 @@ public extension Album {
             options.predicate = predicate
         }
 
-        let photos = PHAssetFetcher.fetchAssets(ofType: Photo.self, in: phAssetCollection, options: options)
+        let photos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Photo]
         return photos
     }
 
@@ -51,7 +51,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         options.predicate = predicate
 
-        let videos = PHAssetFetcher.fetchAssets(ofType: Video.self, in: phAssetCollection, options: options)
+        let videos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Video]
         return videos
     }
 
@@ -61,7 +61,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
-        let livePhotos = PHAssetFetcher.fetchAssets(ofType: LivePhoto.self, in: phAssetCollection, options: options)
+        let livePhotos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [LivePhoto]
         return livePhotos
     }
 

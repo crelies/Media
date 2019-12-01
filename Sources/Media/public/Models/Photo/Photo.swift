@@ -188,12 +188,12 @@ public extension Photo {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.image.rawValue)
         options.predicate = predicate
 
-        let photo = PHAssetFetcher.fetchAsset(Photo.self, options: options) { asset in
+        let photo = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .image {
                 return true
             }
             return false
-        }
+        } as Photo?
         return photo
     }
 }
