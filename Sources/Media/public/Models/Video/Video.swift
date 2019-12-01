@@ -195,7 +195,7 @@ public extension Video {
     }
 
     static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
-        try ViewCreator.browser(for: Video.self, mediaTypes: [.movie], completion)
+        try ViewCreator.browser(mediaTypes: [.movie], completion)
     }
 }
 

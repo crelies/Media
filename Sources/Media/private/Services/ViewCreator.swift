@@ -25,8 +25,7 @@ struct ViewCreator {
         }
     }
 
-    static func browser<T: MediaProtocol>(for type: T.Type,
-                                          mediaTypes: [UIImagePickerController.MediaType],
+    static func browser<T: MediaProtocol>(mediaTypes: [UIImagePickerController.MediaType],
                                           _ completion: @escaping (Result<T, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
             throw MediaPickerError.noBrowsingSourceTypeAvailable
@@ -37,7 +36,7 @@ struct ViewCreator {
                 completion(.failure(MediaPickerError.unsupportedValue))
                 return
             }
-            let media = type.init(phAsset: phAsset)
+            let media = T.init(phAsset: phAsset)
             completion(.success(media))
         }
     }

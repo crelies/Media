@@ -146,7 +146,7 @@ public extension LivePhoto {
 @available (iOS 13, OSX 10.15, *)
 public extension LivePhoto {
     static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {
-        try ViewCreator.browser(for: LivePhoto.self, mediaTypes: [.image, .livePhoto], completion)
+        try ViewCreator.browser(mediaTypes: [.image, .livePhoto], completion)
     }
 }
 #endif

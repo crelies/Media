@@ -243,7 +243,7 @@ public extension Photo {
     }
 
     static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
-        try ViewCreator.browser(for: Photo.self, mediaTypes: [.image], completion)
+        try ViewCreator.browser(mediaTypes: [.image], completion)
     }
 
     func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
