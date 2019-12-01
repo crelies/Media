@@ -15,6 +15,7 @@ public protocol AbstractMedia {
 
     init(phAsset: PHAsset)
 
+    static func with(identifier: String) -> Self?
     func delete(completion: @escaping (Result<Void, Error>) -> Void)
 }
 

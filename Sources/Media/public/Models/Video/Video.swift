@@ -151,23 +151,7 @@ public extension Video {
             return
         }
 
-        var placeholderForCreatedAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
-            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
-            if let placeholder = creationRequest?.placeholderForCreatedAsset {
-                placeholderForCreatedAsset = placeholder
-            }
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let video = Self.with(identifier: localIdentifier) {
-                    completion(.success(video))
-                } else {
-                    completion(.failure(PhotosError.unknown))
-                }
-            }
-        })
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, forType: Video.self, completion)
     }
 
     // TODO:

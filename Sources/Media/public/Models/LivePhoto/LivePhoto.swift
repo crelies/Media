@@ -66,23 +66,7 @@ public extension LivePhoto {
             return
         }
 
-        var placeholderForCreatedAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
-            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
-            if let placeholder = creationRequest?.placeholderForCreatedAsset {
-                placeholderForCreatedAsset = placeholder
-            }
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let livePhoto = Self.with(identifier: localIdentifier) {
-                    completion(.success(livePhoto))
-                } else {
-                    completion(.failure(PhotosError.unknown))
-                }
-            }
-        })
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, forType: LivePhoto.self, completion)
     }
 
     static func with(identifier: String) -> LivePhoto? {

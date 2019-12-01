@@ -190,24 +190,10 @@ public extension Photo {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
         }
-        
-        var placeholderForCreatedAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
-            let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-            if let placeholder = creationRequest.placeholderForCreatedAsset {
-                placeholderForCreatedAsset = placeholder
-            }
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let photo = Self.with(identifier: localIdentifier) {
-                    completion(.success(photo))
-                } else {
-                    completion(.failure(PhotosError.unknown))
-                }
-            }
-        })
+
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAsset(from: image) },
+                               forType: Photo.self,
+                               completion)
     }
 
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
