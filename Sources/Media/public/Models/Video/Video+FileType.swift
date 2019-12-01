@@ -16,16 +16,7 @@ extension Video {
 }
 
 extension Video.FileType {
-    var pathExtension: String {
-        switch self {
-        case .mov:
-            return "mov"
-        case .mp4:
-            return "mp4"
-        case .m4v:
-            return "m4v"
-        }
-    }
+    var pathExtension: String { String(describing: self) }
 
     var avFileType: AVFileType {
         switch self {

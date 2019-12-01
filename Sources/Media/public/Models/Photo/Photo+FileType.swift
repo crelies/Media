@@ -20,16 +20,12 @@ extension Photo {
 extension Photo.FileType {
     var pathExtensions: [String] {
         switch self {
-            case .avci:
-                return ["avci"]
-            case .heic:
-                return ["heic"]
-            case .heif:
-                return ["heif"]
+        case .avci, .heic, .heif:
+                return [String(describing: self)]
             case .jpg:
-                return ["jpg", "jpeg"]
+                return [String(describing: self), "jpeg"]
             case .tif:
-                return ["tiff", "tif"]
+                return ["tiff", String(describing: self)]
         }
     }
 
