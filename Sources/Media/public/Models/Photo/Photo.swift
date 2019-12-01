@@ -275,31 +275,11 @@ import SwiftUI
 @available (iOS 13, OSX 10.15, *)
 public extension Photo {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            throw CameraError.noCameraAvailable
-        }
-
-        return MediaPicker(sourceType: .camera, mediaTypes: [.image]) { value in
-            guard case let MediaPickerValue.tookPhoto(imageURL) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(imageURL))
-        }
+        try ViewCreator.camera(for: [.image], completion)
     }
 
     static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
-        guard let sourceType = UIImagePickerController.availableSourceType else {
-            throw MediaPickerError.noBrowsingSourceTypeAvailable
-        }
-
-        return MediaPicker(sourceType: sourceType, mediaTypes: [.image]) { value in
-            guard case let MediaPickerValue.selectedPhoto(photo) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(photo))
-        }
+        try ViewCreator.browser(for: Photo.self, mediaTypes: [.image], completion)
     }
 
     func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {

@@ -6,15 +6,11 @@
 //
 
 #if canImport(SwiftUI)
-import Foundation
+import Photos
 
 @available(iOS 13, OSX 10.15, *)
 enum MediaPickerValue {
-    case tookPhoto(url: URL)
-    case tookLivePhoto(url: URL)
-    case tookVideo(url: URL)
-    case selectedPhoto(_ photo: Photo)
-    case selectedLivePhoto(_ livePhoto: LivePhoto)
-    case selectedVideo(_ video: Video)
+    case tookMedia(url: URL)
+    case selectedMedia(phAsset: PHAsset)
 }
 #endif

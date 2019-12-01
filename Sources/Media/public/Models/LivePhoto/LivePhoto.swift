@@ -151,17 +151,7 @@ import SwiftUI
 @available(iOS 13, *)
 public extension LivePhoto {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            throw CameraError.noCameraAvailable
-        }
-
-        return MediaPicker(sourceType: .camera, mediaTypes: [.image, .livePhoto]) { value in
-            guard case let MediaPickerValue.tookLivePhoto(imageURL) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(imageURL))
-        }
+        try ViewCreator.camera(for: [.image, .livePhoto], completion)
     }
 
     func view(size: CGSize) -> some View {
@@ -172,17 +162,7 @@ public extension LivePhoto {
 @available (iOS 13, OSX 10.15, *)
 public extension LivePhoto {
     static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {
-        guard let sourceType = UIImagePickerController.availableSourceType else {
-            throw MediaPickerError.noBrowsingSourceTypeAvailable
-        }
-
-        return MediaPicker(sourceType: sourceType, mediaTypes: [.image, .livePhoto]) { value in
-            guard case let MediaPickerValue.selectedLivePhoto(livePhoto) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(livePhoto))
-        }
+        try ViewCreator.browser(for: LivePhoto.self, mediaTypes: [.image, .livePhoto], completion)
     }
 }
 #endif

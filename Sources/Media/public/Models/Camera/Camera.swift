@@ -20,7 +20,7 @@ public struct Camera {
 
         return MediaPicker(sourceType: .camera, mediaTypes: availableMediaTypes) { value in
             switch value {
-            case .tookPhoto(let url), .tookLivePhoto(let url), .tookVideo(let url):
+            case .tookMedia(let url):
                 completion(.success(url))
             default: ()
             }

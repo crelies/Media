@@ -223,34 +223,14 @@ public extension Video {
     }
 
     static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
-        guard let sourceType = UIImagePickerController.availableSourceType else {
-            throw MediaPickerError.noBrowsingSourceTypeAvailable
-        }
-
-        return MediaPicker(sourceType: sourceType, mediaTypes: [.movie]) { value in
-            guard case let MediaPickerValue.selectedVideo(video) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(video))
-        }
+        try ViewCreator.browser(for: Video.self, mediaTypes: [.movie], completion)
     }
 }
 
 @available (iOS 13, OSX 10.15, *)
 public extension Video {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            throw CameraError.noCameraAvailable
-        }
-
-        return MediaPicker(sourceType: .camera, mediaTypes: [.movie]) { value in
-            guard case let MediaPickerValue.tookVideo(mediaURL) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
-                return
-            }
-            completion(.success(mediaURL))
-        }
+        try ViewCreator.camera(for: [.movie], completion)
     }
 
     // TODO: UIVideoEditorController
