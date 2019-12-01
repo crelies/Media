@@ -26,12 +26,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = predicate
 
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var audios: [Audio] = []
-        result.enumerateObjects { asset, _, _ in
-            let audio = Audio(phAsset: asset)
-            audios.append(audio)
-        }
+        let audios = PHAssetFetcher.fetchAssets(ofType: Audio.self, in: phAssetCollection, options: options)
         return audios
     }
 
@@ -46,12 +41,7 @@ public extension Album {
             options.predicate = predicate
         }
 
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var photos: [Photo] = []
-        result.enumerateObjects { asset, _, _ in
-            let photo = Photo(phAsset: asset)
-            photos.append(photo)
-        }
+        let photos = PHAssetFetcher.fetchAssets(ofType: Photo.self, in: phAssetCollection, options: options)
         return photos
     }
 
@@ -61,12 +51,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         options.predicate = predicate
 
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var videos: [Video] = []
-        result.enumerateObjects { asset, _, _ in
-            let video = Video(phAsset: asset)
-            videos.append(video)
-        }
+        let videos = PHAssetFetcher.fetchAssets(ofType: Video.self, in: phAssetCollection, options: options)
         return videos
     }
 
@@ -76,12 +61,7 @@ public extension Album {
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var livePhotos: [LivePhoto] = []
-        result.enumerateObjects { asset, _, _ in
-            let livePhoto = LivePhoto(phAsset: asset)
-            livePhotos.append(livePhoto)
-        }
+        let livePhotos = PHAssetFetcher.fetchAssets(ofType: LivePhoto.self, in: phAssetCollection, options: options)
         return livePhotos
     }
 

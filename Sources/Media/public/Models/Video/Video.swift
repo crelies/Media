@@ -14,7 +14,7 @@ public struct Video: AbstractMedia {
     public let type: MediaType = .video
     public var isFavorite: Bool { phAsset.isFavorite }
 
-    init(phAsset: PHAsset) {
+    public init(phAsset: PHAsset) {
         self.phAsset = phAsset
     }
 }
@@ -133,13 +133,11 @@ public extension Video {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.video.rawValue)
         options.predicate = predicate
 
-        var video: Video?
-        let result = PHAsset.fetchAssets(with: options)
-        result.enumerateObjects { asset, _, stop in
+        let video = PHAssetFetcher.fetchAsset(Video.self, options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .video {
-                video = Video(phAsset: asset)
-                stop.pointee = true
+                return true
             }
+            return false
         }
         return video
     }
@@ -270,8 +268,8 @@ public extension Video {
     }
 
     // TODO: UIVideoEditorController
-    static func editor() -> some View {
-        EmptyView()
-    }
+//    static func editor() -> some View {
+//        EmptyView()
+//    }
 }
 #endif

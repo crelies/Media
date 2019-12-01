@@ -14,13 +14,8 @@ public struct LivePhotos {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
-        let result = PHAsset.fetchAssets(with: options)
 
-        var livePhotos: [LivePhoto] = []
-        result.enumerateObjects { asset, _, _ in
-            let livePhoto = LivePhoto(phAsset: asset)
-            livePhotos.append(livePhoto)
-        }
+        let livePhotos = PHAssetFetcher.fetchAssets(LivePhoto.self, options: options)
         return livePhotos
     }
 }

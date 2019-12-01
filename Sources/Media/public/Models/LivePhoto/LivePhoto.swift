@@ -16,7 +16,7 @@ public struct LivePhoto: AbstractMedia {
     public var subtype: MediaSubtype { .photoLive }
     public var isFavorite: Bool { phAsset.isFavorite }
 
-    init(phAsset: PHAsset) {
+    public init(phAsset: PHAsset) {
         self.phAsset = phAsset
     }
 }
@@ -90,13 +90,11 @@ public extension LivePhoto {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
-        var livePhoto: LivePhoto?
-        let result = PHAsset.fetchAssets(with: options)
-        result.enumerateObjects { asset, _, stop in
+        let livePhoto = PHAssetFetcher.fetchAsset(LivePhoto.self, options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .image && asset.mediaSubtypes.contains(.photoLive) {
-                livePhoto = LivePhoto(phAsset: asset)
-                stop.pointee = true
+                return true
             }
+            return false
         }
         return livePhoto
     }

@@ -13,7 +13,7 @@ public struct Audio: AbstractMedia {
 
     public let type: MediaType = .audio
 
-    init(phAsset: PHAsset) {
+    public init(phAsset: PHAsset) {
         self.phAsset = phAsset
     }
 }
@@ -24,13 +24,11 @@ public extension Audio {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.audio.rawValue)
         options.predicate = predicate
 
-        var audio: Audio?
-        let result = PHAsset.fetchAssets(with: options)
-        result.enumerateObjects { asset, _, stop in
+        let audio = PHAssetFetcher.fetchAsset(Audio.self, options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .audio {
-                audio = Audio(phAsset: asset)
-                stop.pointee = true
+                return true
             }
+            return false
         }
         return audio
     }

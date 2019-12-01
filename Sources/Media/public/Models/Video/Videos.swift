@@ -13,13 +13,7 @@ public struct Videos {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         options.predicate = predicate
-        let result = PHAsset.fetchAssets(with: options)
-
-        var videos: [Video] = []
-        result.enumerateObjects { asset, _, _ in
-            let video = Video(phAsset: asset)
-            videos.append(video)
-        }
+        let videos = PHAssetFetcher.fetchAssets(Video.self, options: options)
         return videos
     }
 
@@ -28,13 +22,7 @@ public struct Videos {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoStreamed.rawValue)
         options.predicate = predicate
-        let result = PHAsset.fetchAssets(with: options)
-
-        var videos: [Video] = []
-        result.enumerateObjects { asset, _, _ in
-            let video = Video(phAsset: asset)
-            videos.append(video)
-        }
+        let videos = PHAssetFetcher.fetchAssets(Video.self, options: options)
         return videos
     }
 
@@ -43,13 +31,7 @@ public struct Videos {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoHighFrameRate.rawValue)
         options.predicate = predicate
-        let result = PHAsset.fetchAssets(with: options)
-
-        var videos: [Video] = []
-        result.enumerateObjects { asset, _, _ in
-            let video = Video(phAsset: asset)
-            videos.append(video)
-        }
+        let videos = PHAssetFetcher.fetchAssets(Video.self, options: options)
         return videos
     }
 
@@ -58,13 +40,7 @@ public struct Videos {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoTimelapse.rawValue)
         options.predicate = predicate
-        let result = PHAsset.fetchAssets(with: options)
-
-        var videos: [Video] = []
-        result.enumerateObjects { asset, _, _ in
-            let video = Video(phAsset: asset)
-            videos.append(video)
-        }
+        let videos = PHAssetFetcher.fetchAssets(Video.self, options: options)
         return videos
     }
 }

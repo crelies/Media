@@ -14,7 +14,7 @@ public struct Photo: AbstractMedia {
     public let type: MediaType = .image
     public var isFavorite: Bool { phAsset.isFavorite }
 
-    init(phAsset: PHAsset) {
+    public init(phAsset: PHAsset) {
         self.phAsset = phAsset
     }
 }
@@ -222,13 +222,11 @@ public extension Photo {
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.image.rawValue)
         options.predicate = predicate
 
-        var photo: Photo?
-        let result = PHAsset.fetchAssets(with: options)
-        result.enumerateObjects { asset, _, stop in
+        let photo = PHAssetFetcher.fetchAsset(Photo.self, options: options) { asset in
             if asset.localIdentifier == identifier && asset.mediaType == .image {
-                photo = Photo(phAsset: asset)
-                stop.pointee = true
+                return true
             }
+            return false
         }
         return photo
     }

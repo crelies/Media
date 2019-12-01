@@ -13,6 +13,8 @@ public protocol AbstractMedia {
     var identifier: String { get }
     var type: MediaType { get }
 
+    init(phAsset: PHAsset)
+
     func delete(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
