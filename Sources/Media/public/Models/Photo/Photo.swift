@@ -148,11 +148,22 @@ public extension Photo {
 }
 
 public extension Photo {
-    // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
+        }
+
+        let supportedPathExtensions = Set(Photo.FileType.allCases.map { $0.pathExtensions }.flatMap {$0 })
+
+        switch url.pathExtension {
+        case \.isEmpty:
+            completion(.failure(PhotoError.missingPathExtension))
+            return
+        case .unsupportedPathExtension(supportedPathExtensions: supportedPathExtensions):
+            completion(.failure(PhotoError.unsupportedPathExtension))
+            return
+        default: ()
         }
 
         var placeholderForCreatedAsset: PHObjectPlaceholder?

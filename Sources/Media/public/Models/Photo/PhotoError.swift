@@ -7,4 +7,6 @@
 
 public enum PhotoError: Error {
     case missingFullSizeImageURL
+    case missingPathExtension
+    case unsupportedPathExtension
 }
