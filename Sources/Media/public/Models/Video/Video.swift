@@ -209,16 +209,7 @@ public extension Video {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
-            let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
-            assetChangeRequest.isFavorite = favorite
-        }) { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        }
+        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 }
 
