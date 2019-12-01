@@ -132,11 +132,22 @@ public extension Video {
 }
 
 public extension Video {
-    // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
+        }
+
+        let supportedPathExtensions = Set(Video.FileType.allCases.map { $0.pathExtension })
+
+        switch url.pathExtension {
+        case \.isEmpty:
+            completion(.failure(VideoError.missingPathExtension))
+            return
+        case .unsupportedPathExtension(supportedPathExtensions: supportedPathExtensions):
+            completion(.failure(VideoError.unsupportedPathExtension))
+            return
+        default: ()
         }
 
         PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, completion)

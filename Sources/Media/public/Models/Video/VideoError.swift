@@ -6,5 +6,7 @@
 //
 
 public enum VideoError: Error {
+    case missingPathExtension
     case unsupportedFileType
+    case unsupportedPathExtension
 }

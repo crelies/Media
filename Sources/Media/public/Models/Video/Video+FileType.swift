@@ -8,7 +8,7 @@
 import AVFoundation
 
 extension Video {
-    public enum FileType {
+    public enum FileType: CaseIterable {
         case mov
         case mp4
         case m4v
