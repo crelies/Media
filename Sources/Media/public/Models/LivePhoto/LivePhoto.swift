@@ -37,7 +37,7 @@ public extension LivePhoto {
     }
 }
 
-@available(tvOS, unavailable)
+#if !os(tvOS)
 public extension LivePhoto {
     // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
@@ -49,6 +49,7 @@ public extension LivePhoto {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
 }
+#endif
 
 #endif
 
@@ -119,9 +120,8 @@ public extension LivePhoto {
 #if canImport(SwiftUI)
 import SwiftUI
 
-#if !os(macOS) && !os(tvOS)
+#if !os(macOS) && !targetEnvironment(macCatalyst) && !os(tvOS)
 @available(iOS 13, *)
-@available(macCatalyst, unavailable)
 public extension LivePhoto {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         try ViewCreator.camera(for: [.image, .livePhoto], completion)
