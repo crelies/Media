@@ -127,7 +127,9 @@ public extension LivePhoto {
         try ViewCreator.camera(for: [.image, .livePhoto], completion)
     }
 }
+#endif
 
+#if !os(macOS) && !os(tvOS)
 @available(iOS 13, macOS 10.15, *)
 public extension LivePhoto {
     static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {

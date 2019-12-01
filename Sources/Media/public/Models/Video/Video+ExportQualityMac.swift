@@ -8,7 +8,7 @@
 import AVFoundation
 
 // TODO: currently not used
-#if os(macOS) || targetEnvironment(macCatalyst)
+#if os(macOS)
 extension Video {
     public enum ExportQualityMac {
         case cellular
