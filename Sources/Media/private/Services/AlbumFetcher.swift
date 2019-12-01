@@ -11,7 +11,7 @@ struct AlbumFetcher {
     static func fetchAlbums(with type: PHAssetCollectionType,
                             subtype: PHAssetCollectionSubtype,
                             options: PHFetchOptions,
-                            filter: @escaping (PHAssetCollection) -> Bool = { _ true }) -> [Album] {
+                            filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> [Album] {
         let result = PHAssetCollection.fetchAssetCollections(with: type,
                                                              subtype: subtype,
                                                              options: options)
@@ -28,7 +28,7 @@ struct AlbumFetcher {
     static func fetchAlbum(with type: PHAssetCollectionType,
                            subtype: PHAssetCollectionSubtype,
                            options: PHFetchOptions,
-                           filter: @escaping (PHAssetCollection) -> Bool = { _ true }) -> Album? {
+                           filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> Album? {
         let result = PHAssetCollection.fetchAssetCollections(with: type,
                                                              subtype: subtype,
                                                              options: options)
