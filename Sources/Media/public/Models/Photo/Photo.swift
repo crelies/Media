@@ -161,7 +161,6 @@ public extension Photo {
         }
 
         PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
-                               forType: Photo.self,
                                completion)
     }
 
@@ -172,7 +171,6 @@ public extension Photo {
         }
 
         PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAsset(from: image) },
-                               forType: Photo.self,
                                completion)
     }
 

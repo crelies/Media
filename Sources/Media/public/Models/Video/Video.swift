@@ -139,7 +139,7 @@ public extension Video {
             return
         }
 
-        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, forType: Video.self, completion)
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, completion)
     }
 
     // TODO:

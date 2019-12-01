@@ -66,7 +66,7 @@ public extension LivePhoto {
             return
         }
 
-        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, forType: LivePhoto.self, completion)
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
 
     static func with(identifier: String) -> LivePhoto? {
