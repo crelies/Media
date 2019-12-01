@@ -117,26 +117,7 @@ public extension Photo {
                                               contentMode: contentMode,
                                               options: options)
         { image, info in
-            if let error = info?[PHImageErrorKey] as? Error {
-                completion(.failure(error))
-            } else if let image = image {
-                let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
-                switch imageResultIsDegraded?.boolValue {
-                    case .none:
-                        let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .high)
-                        completion(.success(displayRepresentation))
-                    case .some(let booleanValue):
-                        if booleanValue {
-                            let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .low)
-                            completion(.success(displayRepresentation))
-                        } else {
-                            let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .high)
-                            completion(.success(displayRepresentation))
-                        }
-                }
-            } else {
-                completion(.failure(PhotosError.unknown))
-            }
+            PHImageManager.handlePotentialDegradedResult((image, info), completion)
         }
     }
 }
@@ -160,7 +141,7 @@ public extension Photo {
         default: ()
         }
 
-        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
+        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
                                completion)
     }
 
@@ -170,7 +151,7 @@ public extension Photo {
             return
         }
 
-        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAsset(from: image) },
+        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
                                completion)
     }
 

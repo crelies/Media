@@ -93,15 +93,7 @@ public extension Album {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title)
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        })
+        PHChanger.request({ PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title) }, completion)
     }
 
     func delete(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -110,16 +102,11 @@ public extension Album {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        PHChanger.request({
             let assetCollections: NSArray = [self.phAssetCollection]
             PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollections)
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        })
+            return nil
+        }, completion)
     }
 }
 
@@ -163,17 +150,12 @@ public extension Album {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        PHChanger.request({
             let addAssetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
             let assets: NSArray = [media.phAsset]
             addAssetRequest?.addAssets(assets)
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        })
+            return addAssetRequest
+        }, completion)
     }
 
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -187,16 +169,11 @@ public extension Album {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        PHChanger.request({
             let assetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
             let assets: NSArray = [media.phAsset]
             assetRequest?.removeAssets(assets)
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        })
+            return assetRequest
+        }, completion)
     }
 }

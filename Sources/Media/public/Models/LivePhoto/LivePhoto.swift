@@ -33,26 +33,7 @@ public extension LivePhoto {
                                                   contentMode: contentMode,
                                                   options: options)
         { livePhoto, info in
-            if let error = info?[PHImageErrorKey] as? Error {
-                completion(.failure(error))
-            } else if let livePhoto = livePhoto {
-                let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
-                switch imageResultIsDegraded?.boolValue {
-                    case .none:
-                        let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .high)
-                        completion(.success(displayRepresentation))
-                    case .some(let booleanValue):
-                        if booleanValue {
-                            let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .low)
-                            completion(.success(displayRepresentation))
-                        } else {
-                            let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .high)
-                            completion(.success(displayRepresentation))
-                        }
-                }
-            } else {
-                completion(.failure(PhotosError.unknown))
-            }
+            PHImageManager.handlePotentialDegradedResult((livePhoto, info), completion)
         }
     }
 }
@@ -66,7 +47,7 @@ public extension LivePhoto {
             return
         }
 
-        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
+        PHAssetChanger.request({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
 
     static func with(identifier: String) -> LivePhoto? {
