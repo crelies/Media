@@ -6,6 +6,9 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+#if canImport(UIKit)
+import UIKit
+#endif
 import Photos
 
 public struct Photo: MediaProtocol {
@@ -225,28 +228,3 @@ public extension Photo {
         }
     }*/
 }
-
-#if canImport(SwiftUI) && !os(macOS)
-import SwiftUI
-
-#if !os(tvOS)
-@available (iOS 13, macOS 10.15, *)
-public extension Photo {
-    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
-        try ViewCreator.camera(for: [.image], completion)
-    }
-
-    static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
-        try ViewCreator.browser(mediaTypes: [.image], completion)
-    }
-}
-#endif
-
-@available (iOS 13, macOS 10.15, tvOS 13, *)
-public extension Photo {
-    func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
-        PhotoView(photo: self, imageView: imageView)
-    }
-}
-
-#endif
