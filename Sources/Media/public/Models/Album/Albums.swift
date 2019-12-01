@@ -12,29 +12,18 @@ public struct Albums {
     public static var all: [Album] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
-        let result = PHAssetCollection.fetchAssetCollections(with: .album,
-                                                             subtype: .any,
-                                                             options: options)
-        var albums: [Album] = []
-        result.enumerateObjects { collection, _, _ in
-            let album = Album(phAssetCollection: collection)
-            albums.append(album)
-        }
+        let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options)
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
 
     public static var user: [Album] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
-        let result = PHAssetCollection.fetchAssetCollections(with: .album,
-                                                             subtype: .any,
-                                                             options: options)
-        var albums: [Album] = []
-        result.enumerateObjects { collection, _, _ in
+        let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { collection in
             if AlbumType.user.subtypes.contains(collection.assetCollectionSubtype) {
-                let album = Album(phAssetCollection: collection)
-                albums.append(album)
+                return true
             }
+            return false
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
@@ -42,15 +31,11 @@ public struct Albums {
     public static var smart: [Album] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
-        let result = PHAssetCollection.fetchAssetCollections(with: .smartAlbum,
-                                                             subtype: .any,
-                                                             options: options)
-        var albums: [Album] = []
-        result.enumerateObjects { collection, _, _ in
+        let albums = AlbumFetcher.fetchAlbums(with: .smartAlbum, subtype: .any, options: options) { collection in
             if AlbumType.smart.subtypes.contains(collection.assetCollectionSubtype) {
-                let album = Album(phAssetCollection: collection)
-                albums.append(album)
+                return true
             }
+            return false
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
@@ -58,15 +43,11 @@ public struct Albums {
     public static var cloud: [Album] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
-        let result = PHAssetCollection.fetchAssetCollections(with: .album,
-                                                             subtype: .any,
-                                                             options: options)
-        var albums: [Album] = []
-        result.enumerateObjects { collection, _, _ in
+        let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { collection in
             if AlbumType.cloud.subtypes.contains(collection.assetCollectionSubtype) {
-                let album = Album(phAssetCollection: collection)
-                albums.append(album)
+                return true
             }
+            return false
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
