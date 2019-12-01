@@ -28,15 +28,10 @@ extension MediaProtocol {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        PHChanger.request({
             let phAssets: NSArray = [self.phAsset]
             PHAssetChangeRequest.deleteAssets(phAssets)
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                completion(.success(()))
-            }
-        })
+            return nil
+        }, completion)
     }
 }

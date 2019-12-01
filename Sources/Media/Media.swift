@@ -40,13 +40,17 @@ import SwiftUI
 
 @available(iOS 13, OSX 10.15, *)
 public extension Media {
-    static func browser(_ completion: @escaping (Result<Void, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<PHAsset, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
             throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
         return MediaPicker(sourceType: sourceType, mediaTypes: []) { value in
-            // TODO: please implement me
+            guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
+                completion(.failure(MediaPickerError.unsupportedValue))
+                return
+            }
+            completion(.success(phAsset))
         }
     }
 }
