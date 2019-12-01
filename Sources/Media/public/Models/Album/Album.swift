@@ -71,30 +71,11 @@ public extension Album {
         let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
         var media: [AbstractMedia] = []
         result.enumerateObjects { asset, _, _ in
-            switch asset.mediaType {
-            case .audio:
-                let audio = Audio(phAsset: asset)
-                media.append(audio)
-            case .image:
-                if #available(iOS 9.1, *) {
-                    switch asset.mediaSubtypes {
-                    case [.photoLive]:
-                        let livePhoto = LivePhoto(phAsset: asset)
-                        media.append(livePhoto)
-                    default:
-                        let photo = Photo(phAsset: asset)
-                        media.append(photo)
-                    }
-                } else {
-                    let photo = Photo(phAsset: asset)
-                    media.append(photo)
-                }
-            case .video:
-                let video = Video(phAsset: asset)
-                media.append(video)
-            case .unknown: ()
-            @unknown default: ()
+            guard let mediaType = asset.abstractMediaType else {
+                return
             }
+            let item = mediaType.init(phAsset: asset)
+            media.append(item)
         }
         return media
     }
