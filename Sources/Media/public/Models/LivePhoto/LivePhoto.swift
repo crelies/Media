@@ -25,7 +25,7 @@ public struct LivePhoto: MediaProtocol {
 public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
-                               _ completion: @escaping (Result<LivePhoto.DisplayRepresentation, Error>) -> Void) {
+                               _ completion: @escaping (Result<Media.DisplayRepresentation<PHLivePhoto>, Error>) -> Void) {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
         PHImageManager.default().requestLivePhoto(for: phAsset,
@@ -39,14 +39,14 @@ public extension LivePhoto {
                 let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
                 switch imageResultIsDegraded?.boolValue {
                     case .none:
-                        let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
+                        let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .high)
                         completion(.success(displayRepresentation))
                     case .some(let booleanValue):
                         if booleanValue {
-                            let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .low, livePhoto: livePhoto)
+                            let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .low)
                             completion(.success(displayRepresentation))
                         } else {
-                            let displayRepresentation = LivePhoto.DisplayRepresentation(quality: .high, livePhoto: livePhoto)
+                            let displayRepresentation = Media.DisplayRepresentation(value: livePhoto, quality: .high)
                             completion(.success(displayRepresentation))
                         }
                 }

@@ -25,7 +25,7 @@ struct LivePhotoView: View {
                     guard livePhotoDisplayRepresentation.quality == .high else {
                         return
                     }
-                    self.phLivePhoto = livePhotoDisplayRepresentation.livePhoto
+                    self.phLivePhoto = livePhotoDisplayRepresentation.value
                 case .failure(let error):
                     self.error = error
                 }

@@ -86,13 +86,7 @@ public extension Photo {
         options.isNetworkAccessAllowed = true
         if #available(iOS 13, *) {
             PHImageManager.default().requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
-                if let error = info?[PHImageErrorKey] as? Error {
-                    completion(.failure(error))
-                } else if let data = data {
-                    completion(.success(data))
-                } else {
-                    completion(.failure(PhotosError.unknown))
-                }
+                PHImageManager.handleResult(result: (data, info), completion)
             })
         } else {
             // Fallback on earlier versions
@@ -114,7 +108,7 @@ public extension Photo {
 
     func uiImage(targetSize: CGSize,
                  contentMode: PHImageContentMode,
-                 _ completion: @escaping (Result<Photo.DisplayRepresentation, Error>) -> Void) {
+                 _ completion: @escaping (Result<Media.DisplayRepresentation<UIImage>, Error>) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -129,14 +123,14 @@ public extension Photo {
                 let imageResultIsDegraded = info?[PHImageResultIsDegradedKey] as? NSNumber
                 switch imageResultIsDegraded?.boolValue {
                     case .none:
-                        let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .high)
+                        let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .high)
                         completion(.success(displayRepresentation))
                     case .some(let booleanValue):
                         if booleanValue {
-                            let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .low)
+                            let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .low)
                             completion(.success(displayRepresentation))
                         } else {
-                            let displayRepresentation = Photo.DisplayRepresentation(uiImage: image, quality: .high)
+                            let displayRepresentation = Media.DisplayRepresentation(value: image, quality: .high)
                             completion(.success(displayRepresentation))
                         }
                 }
@@ -166,23 +160,9 @@ public extension Photo {
         default: ()
         }
 
-        var placeholderForCreatedAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
-            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
-            if let placeholder = creationRequest?.placeholderForCreatedAsset {
-                placeholderForCreatedAsset = placeholder
-            }
-        }, completionHandler: { isSuccess, error in
-            if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
-            } else {
-                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let photo = Self.with(identifier: localIdentifier) {
-                    completion(.success(photo))
-                } else {
-                    completion(.failure(PhotosError.unknown))
-                }
-            }
-        })
+        PHAssetChanger.request(request: { PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
+                               forType: Photo.self,
+                               completion)
     }
 
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
