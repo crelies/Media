@@ -121,6 +121,7 @@ import SwiftUI
 
 #if !os(macOS) && !os(tvOS)
 @available(iOS 13, *)
+@available(macCatalyst, unavailable)
 public extension LivePhoto {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         try ViewCreator.camera(for: [.image, .livePhoto], completion)

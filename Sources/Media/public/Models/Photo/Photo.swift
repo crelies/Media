@@ -132,7 +132,7 @@ public extension Photo {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Photo {
-    @available(iOS 11, tvOS 11, *)
+    @available(iOS 11, macOS 10.15, tvOS 11, *)
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
