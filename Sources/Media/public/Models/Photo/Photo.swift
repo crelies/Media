@@ -278,12 +278,7 @@ public extension Photo {
     }
 
     static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
-        var sourceType: UIImagePickerController.SourceType = .savedPhotosAlbum
-        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            sourceType = .photoLibrary
-        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
-            sourceType = .savedPhotosAlbum
-        } else {
+        guard let sourceType = UIImagePickerController.availableSourceType else {
             throw MediaPickerError.noBrowsingSourceTypeAvailable
         }
 
