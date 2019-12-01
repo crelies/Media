@@ -15,14 +15,10 @@ extension PHAsset {
         case .audio:
             type = Audio.self
         case .image:
-            if #available(iOS 9.1, *) {
-                switch mediaSubtypes {
-                case [.photoLive]:
-                    type = LivePhoto.self
-                default:
-                    type = Photo.self
-                }
-            } else {
+            switch mediaSubtypes {
+            case [.photoLive]:
+                type = LivePhoto.self
+            default:
                 type = Photo.self
             }
         case .video:

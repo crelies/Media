@@ -21,13 +21,9 @@ extension PhotoSubtype {
         case .hdr:
             return .photoHDR
         case .screenshot:
-            if #available(iOS 9, *) {
-                return .photoScreenshot
-            } else {
-                return nil
-            }
+            return .photoScreenshot
         case .depthEffect:
-            if #available(iOS 10.2, *) {
+            if #available(iOS 10.2, macOS 10.13, tvOS 10.1, *) {
                 return .photoDepthEffect
             } else {
                 return nil

@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: macOS 10.13
+@available(macOS 10.15, *)
 struct PHChanger {
     static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
                         _ completion: @escaping (Result<Void, Error>) -> Void) {

@@ -23,7 +23,7 @@ public extension Photo {
     var subtypes: [PhotoSubtype] {
         var types: [PhotoSubtype] = []
 
-        if #available(iOS 10.2, OSX 10.11, tvOS 9, *) {
+        if #available(iOS 10.2, macOS 10.11, tvOS 10.1, *) {
             switch phAsset.mediaSubtypes {
             case [.photoDepthEffect, .photoScreenshot, .photoHDR, .photoPanorama]:
                 types.append(contentsOf: [.depthEffect, .screenshot, .hdr, .panorama])
@@ -80,11 +80,12 @@ public extension Photo {
     }
 }
 
+#if !os(macOS)
 public extension Photo {
     func data(_ completion: @escaping (Result<Data, Error>) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        if #available(iOS 13, *) {
+        if #available(iOS 13, macOS 10.15, tvOS 13, *) {
             PHImageManager.default().requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
                 PHImageManager.handleResult(result: (data, info), completion)
             })
@@ -105,7 +106,12 @@ public extension Photo {
             }
         }
     }
+}
+#endif
 
+#if canImport(UIKit)
+@available(macOS 10.15, *)
+public extension Photo {
     func uiImage(targetSize: CGSize,
                  contentMode: PHImageContentMode,
                  _ completion: @escaping (Result<Media.DisplayRepresentation<UIImage>, Error>) -> Void) {
@@ -121,9 +127,12 @@ public extension Photo {
         }
     }
 }
+#endif
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Photo {
-    @available(iOS 11, OSX 10.11, tvOS 11, *)
+    @available(iOS 11, tvOS 11, *)
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -146,6 +155,7 @@ public extension Photo {
                                completion)
     }
 
+    #if canImport(UIKit)
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -155,6 +165,7 @@ public extension Photo {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
                                completion)
     }
+    #endif
 
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -182,7 +193,7 @@ public extension Photo {
 
 public extension Photo {
     // TODO:
-    func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
+    /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
         let options = PHContentEditingInputRequestOptions()
         let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
             var contentEditingInput = contentEditingInput
@@ -212,13 +223,14 @@ public extension Photo {
         return {
             self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
         }
-    }
+    }*/
 }
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && !os(macOS)
 import SwiftUI
 
-@available (iOS 13, OSX 10.15, *)
+#if !os(tvOS)
+@available (iOS 13, macOS 10.15, *)
 public extension Photo {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         try ViewCreator.camera(for: [.image], completion)
@@ -227,9 +239,14 @@ public extension Photo {
     static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
         try ViewCreator.browser(mediaTypes: [.image], completion)
     }
+}
+#endif
 
+@available (iOS 13, macOS 10.15, tvOS 13, *)
+public extension Photo {
     func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
         PhotoView(photo: self, imageView: imageView)
     }
 }
+
 #endif

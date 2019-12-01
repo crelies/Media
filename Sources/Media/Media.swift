@@ -35,10 +35,10 @@ public struct Media {
     }
 }
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 import SwiftUI
 
-@available(iOS 13, OSX 10.15, *)
+@available(iOS 13, macOS 10.15, *)
 public extension Media {
     static func browser(_ completion: @escaping (Result<PHAsset, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {

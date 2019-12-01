@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 import CoreServices
 import UIKit
 
@@ -28,14 +29,15 @@ extension UIImagePickerController {
         init(string: String) throws {
             switch string as CFString {
             case CFString.image:
-                self = MediaType.image
+                self = UIImagePickerController.MediaType.image
             case CFString.livePhoto:
-                self = MediaType.livePhoto
+                self = UIImagePickerController.MediaType.livePhoto
             case CFString.movie:
-                self = MediaType.movie
+                self = UIImagePickerController.MediaType.movie
             default:
-                throw MediaTypeError.unsupportedString
+                throw UIImagePickerController.MediaTypeError.unsupportedString
             }
         }
     }
 }
+#endif

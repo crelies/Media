@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 extension Media {
     public struct Photos {
         public static var all: [Photo] {
@@ -45,7 +47,7 @@ extension Media {
             return photos
         }
 
-        @available(iOS 10.2, OSX 10.11, tvOS 9, *)
+        @available(iOS 10.2, macOS 10.15, tvOS 10.1, *)
         public static var depthEffect: [Photo] {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]

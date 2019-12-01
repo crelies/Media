@@ -22,20 +22,18 @@ enum AlbumType {
         case .smart:
             var subtypes: [PHAssetCollectionSubtype] = []
 
-            if #available(iOS 9, *) {
-                subtypes.append(.smartAlbumScreenshots)
-                subtypes.append(.smartAlbumSelfPortraits)
-            }
+            subtypes.append(.smartAlbumScreenshots)
+            subtypes.append(.smartAlbumSelfPortraits)
 
-            if #available(iOS 10.2, *) {
+            if #available(iOS 10.2, macOS 10.13, tvOS 10.1, *) {
                 subtypes.append(.smartAlbumDepthEffect)
             }
 
-            if #available(iOS 10.3, *) {
+            if #available(iOS 10.3, macOS 10.13, tvOS 10.2, *) {
                 subtypes.append(.smartAlbumLivePhotos)
             }
 
-            if #available(iOS 11, *) {
+            if #available(iOS 11, macOS 10.15, tvOS 11, *) {
                 subtypes.append(.smartAlbumAnimated)
                 subtypes.append(.smartAlbumLongExposures)
             }

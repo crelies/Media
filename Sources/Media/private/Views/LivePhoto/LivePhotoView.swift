@@ -5,11 +5,11 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && !os(macOS) && !targetEnvironment(macCatalyst)
 import Photos
 import SwiftUI
 
-@available(iOS 13, *)
+@available(iOS 13, tvOS 13, *)
 struct LivePhotoView: View {
     @State private var phLivePhoto: PHLivePhoto?
     @State private var error: Error?

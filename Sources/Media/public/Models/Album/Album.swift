@@ -33,13 +33,8 @@ public extension Album {
     var photos: [Photo] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        if #available(iOS 9.1, *) {
-            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
-            options.predicate = predicate
-        } else {
-            let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
-            options.predicate = predicate
-        }
+        let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
+        options.predicate = predicate
 
         let photos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Photo]
         return photos
@@ -81,6 +76,8 @@ public extension Album {
     }
 }
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Album {
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -110,6 +107,8 @@ public extension Album {
     }
 }
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Album {
     static func with(identifier: String) -> Album? {
         let options = PHFetchOptions()
@@ -138,6 +137,8 @@ public extension Album {
     }
 }
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Album {
     func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {

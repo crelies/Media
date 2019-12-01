@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 import UIKit
 
 extension UIImagePickerController {
@@ -12,3 +13,4 @@ extension UIImagePickerController {
         case unsupportedString
     }
 }
+#endif

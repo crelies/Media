@@ -5,11 +5,11 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 import SwiftUI
 import UIKit
 
-@available(iOS 13, OSX 10.15, *)
+@available(iOS 13, macOS 10.15, *)
 public struct Camera {
     public static func view(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         let availableMediaTypes = try (UIImagePickerController.availableMediaTypes(for: .camera) ?? []).map { try UIImagePickerController.MediaType(string: $0) }

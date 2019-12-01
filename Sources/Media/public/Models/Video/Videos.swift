@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public struct Videos {
     public static var all: [Video] {
         let options = PHFetchOptions()

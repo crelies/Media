@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 struct AlbumFetcher {
     static func fetchAlbums(with type: PHAssetCollectionType,
                             subtype: PHAssetCollectionSubtype,

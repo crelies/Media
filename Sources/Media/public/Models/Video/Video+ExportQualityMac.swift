@@ -8,8 +8,7 @@
 import AVFoundation
 
 // TODO: currently not used
-#if !targetEnvironment(macCatalyst) && os(macOS)
-@available(OSX 10.8, *)
+#if os(macOS) || targetEnvironment(macCatalyst)
 extension Video {
     public enum ExportQualityMac {
         case cellular
@@ -24,7 +23,6 @@ extension Video {
     }
 }
 
-@available(OSX 10.8, *)
 extension Video.ExportQualityMac {
     var avAssetExportPreset: String {
         switch self {

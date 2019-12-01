@@ -45,6 +45,7 @@ public extension Video {
     }
 }
 
+@available(macOS 10.15, *)
 public extension Video {
     func playerItem(_ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
         let options = PHVideoRequestOptions()
@@ -86,7 +87,7 @@ public extension Video {
                     exportSession.outputFileType = exportOptions.fileType.avFileType
 
                     var timer: Timer?
-                    if #available(iOS 10.0, *) {
+                    if #available(iOS 10.0, macOS 10.13, tvOS 10, *) {
                         timer = Timer(timeInterval: 1, repeats: true) { timer in
                             self.handleProgressTimerFired(exportSession: exportSession,
                                                           timer: timer,
@@ -124,6 +125,8 @@ public extension Video {
     }
 }
 
+// TODO: macOS: 10.13
+@available(macOS 10.15, *)
 public extension Video {
     static func with(identifier: String) -> Video? {
         let options = PHFetchOptions()
@@ -140,6 +143,8 @@ public extension Video {
     }
 }
 
+// TODO: macOS: 10.13
+@available(macOS 10.15, *)
 public extension Video {
     static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -163,7 +168,7 @@ public extension Video {
     }
 
     // TODO:
-    func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
+    /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
         let options = PHContentEditingInputRequestOptions()
         let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
             var contentEditingInput = contentEditingInput
@@ -193,7 +198,7 @@ public extension Video {
         return {
             self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
         }
-    }
+    }*/
 
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -220,24 +225,25 @@ extension Video {
     }
 }
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && !os(macOS)
 import SwiftUI
 
-@available (iOS 13, OSX 10.15, tvOS 13, *)
+@available (iOS 13, macOS 10.15, tvOS 13, *)
 public extension Video {
     var view: some View {
         VideoView(video: self)
     }
-
-    static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
-        try ViewCreator.browser(mediaTypes: [.movie], completion)
-    }
 }
 
-@available (iOS 13, OSX 10.15, *)
+#if !os(tvOS)
+@available (iOS 13, macOS 10.15, *)
 public extension Video {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         try ViewCreator.camera(for: [.movie], completion)
+    }
+
+    static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
+        try ViewCreator.browser(mediaTypes: [.movie], completion)
     }
 
     // TODO: UIVideoEditorController
@@ -245,4 +251,6 @@ public extension Video {
 //        EmptyView()
 //    }
 }
+#endif
+
 #endif

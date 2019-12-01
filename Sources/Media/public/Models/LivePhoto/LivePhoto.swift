@@ -8,7 +8,6 @@
 
 import Photos
 
-@available(iOS 9, OSX 10.11, *)
 public struct LivePhoto: MediaProtocol {
     public let phAsset: PHAsset
 
@@ -21,7 +20,7 @@ public struct LivePhoto: MediaProtocol {
     }
 }
 
-@available(iOS 9, *)
+#if !os(macOS) && !targetEnvironment(macCatalyst)
 public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
@@ -38,7 +37,7 @@ public extension LivePhoto {
     }
 }
 
-@available(iOS 9, OSX 10.11, *)
+@available(tvOS, unavailable)
 public extension LivePhoto {
     // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
@@ -49,7 +48,13 @@ public extension LivePhoto {
 
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
+}
 
+#endif
+
+// TODO: osx 10.13
+@available(macOS 10.15, *)
+public extension LivePhoto {
     static func with(identifier: String) -> LivePhoto? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
@@ -65,10 +70,11 @@ public extension LivePhoto {
     }
 }
 
-@available(iOS 9, OSX 10.11, *)
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension LivePhoto {
     // TODO:
-    func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
+    /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
         let options = PHContentEditingInputRequestOptions()
         let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
             var contentEditingInput = contentEditingInput
@@ -98,7 +104,7 @@ public extension LivePhoto {
         return {
             self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
         }
-    }
+    }*/
 
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -113,21 +119,29 @@ public extension LivePhoto {
 #if canImport(SwiftUI)
 import SwiftUI
 
+#if !os(macOS) && !os(tvOS)
 @available(iOS 13, *)
 public extension LivePhoto {
     static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         try ViewCreator.camera(for: [.image, .livePhoto], completion)
     }
-
-    func view(size: CGSize) -> some View {
-        LivePhotoView(livePhoto: self, size: size)
-    }
 }
 
-@available (iOS 13, OSX 10.15, *)
+@available(iOS 13, macOS 10.15, *)
 public extension LivePhoto {
     static func browser(_ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws -> some View {
         try ViewCreator.browser(mediaTypes: [.image, .livePhoto], completion)
     }
 }
+#endif
+
+#if !os(macOS) && !targetEnvironment(macCatalyst)
+@available(iOS 13, tvOS 13, *)
+public extension LivePhoto {
+    func view(size: CGSize) -> some View {
+        LivePhotoView(livePhoto: self, size: size)
+    }
+}
+#endif
+
 #endif

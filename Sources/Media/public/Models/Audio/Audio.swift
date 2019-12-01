@@ -18,6 +18,8 @@ public struct Audio: MediaProtocol {
     }
 }
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Audio {
     static func with(identifier: String) -> Audio? {
         let options = PHFetchOptions()

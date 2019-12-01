@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public struct Audios {
     public static var all: [Audio] {
         let options = PHFetchOptions()

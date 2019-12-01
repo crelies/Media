@@ -5,11 +5,11 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 import Photos
 import UIKit
 
-@available(iOS 13, OSX 10.15, *)
+@available(iOS 13, macOS 10.15, *)
 extension MediaPicker {
     final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         let mediaPicker: MediaPicker

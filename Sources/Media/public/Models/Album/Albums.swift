@@ -8,6 +8,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public struct Albums {
     public static var all: [Album] {
         let options = PHFetchOptions()

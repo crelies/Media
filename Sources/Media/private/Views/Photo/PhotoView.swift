@@ -5,10 +5,11 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(UIKit)
 import SwiftUI
+import UIKit
 
-@available(iOS 13, OSX 10.15, tvOS 13, *)
+@available(iOS 13, macOS 10.15, tvOS 13, *)
 struct PhotoView<ImageView: View>: View {
     @State private var data: Data?
     @State private var image: UIImage?

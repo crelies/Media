@@ -8,8 +8,8 @@
 import Photos
 
 struct PHAssetFetcher {
-    static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) -> [T] {
-        let result = PHAsset.fetchAssets(with: options)
+    static func fetchAssets<T: MediaProtocol>(in assetCollection: PHAssetCollection, options: PHFetchOptions) -> [T] {
+        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
 
         var items: [T] = []
         result.enumerateObjects { asset, _, _ in
@@ -18,9 +18,13 @@ struct PHAssetFetcher {
         }
         return items
     }
+}
 
-    static func fetchAssets<T: MediaProtocol>(in assetCollection: PHAssetCollection, options: PHFetchOptions) -> [T] {
-        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+// TODO: osx 10.13
+@available(macOS 10.15, *)
+extension PHAssetFetcher {
+    static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) -> [T] {
+        let result = PHAsset.fetchAssets(with: options)
 
         var items: [T] = []
         result.enumerateObjects { asset, _, _ in

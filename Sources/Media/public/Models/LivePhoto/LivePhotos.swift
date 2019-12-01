@@ -7,7 +7,8 @@
 
 import Photos
 
-@available(iOS 9, OSX 10.11, *)
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public struct LivePhotos {
     public static var all: [LivePhoto] {
         let options = PHFetchOptions()

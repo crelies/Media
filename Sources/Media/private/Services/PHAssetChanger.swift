@@ -7,6 +7,8 @@
 
 import Photos
 
+// TODO: OSX 10.13
+@available(macOS 10.15, *)
 struct PHAssetChanger {
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
                                                 _ completion: @escaping (Result<T, Error>) -> Void) {

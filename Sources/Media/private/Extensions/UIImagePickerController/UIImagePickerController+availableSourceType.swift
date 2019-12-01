@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 01.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 import UIKit
 
 extension UIImagePickerController {
@@ -18,3 +19,4 @@ extension UIImagePickerController {
         }
     }
 }
+#endif

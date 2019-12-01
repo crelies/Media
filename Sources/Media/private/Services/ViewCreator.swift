@@ -5,10 +5,11 @@
 //  Created by Christian Elies on 01.12.19.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 import SwiftUI
+import UIKit
 
-@available(iOS 13, OSX 10.15, tvOS 13, *)
+@available(iOS 13, macOS 10.15, *)
 struct ViewCreator {
     static func camera(for mediaTypes: [UIImagePickerController.MediaType],
                        _ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
