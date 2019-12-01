@@ -8,8 +8,8 @@
 import Photos
 
 extension PHAsset {
-    var abstractMediaType: AbstractMedia.Type? {
-        var type: AbstractMedia.Type?
+    var abstractMediaType: MediaProtocol.Type? {
+        var type: MediaProtocol.Type?
 
         switch mediaType {
         case .audio:

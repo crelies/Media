@@ -65,11 +65,11 @@ public extension Album {
         return livePhotos
     }
 
-    var allMedia: [AbstractMedia] {
+    var allMedia: [MediaProtocol] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var media: [AbstractMedia] = []
+        var media: [MediaProtocol] = []
         result.enumerateObjects { asset, _, _ in
             guard let mediaType = asset.abstractMediaType else {
                 return
