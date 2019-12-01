@@ -9,7 +9,7 @@
 import Photos
 
 @available(iOS 9, OSX 10.11, *)
-public struct LivePhoto: AbstractMedia {
+public struct LivePhoto: MediaProtocol {
     public let phAsset: PHAsset
 
     public let type: MediaType = .image

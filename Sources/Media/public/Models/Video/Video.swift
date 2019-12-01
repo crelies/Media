@@ -8,7 +8,7 @@
 
 import Photos
 
-public struct Video: AbstractMedia {
+public struct Video: MediaProtocol {
     public let phAsset: PHAsset
 
     public let type: MediaType = .video

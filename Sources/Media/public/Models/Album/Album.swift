@@ -152,7 +152,7 @@ public extension Album {
 }
 
 public extension Album {
-    func add<T: AbstractMedia>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+    func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
@@ -176,7 +176,7 @@ public extension Album {
         })
     }
 
-    func delete<T: AbstractMedia>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+    func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return

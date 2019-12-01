@@ -25,7 +25,7 @@ struct ViewCreator {
         }
     }
 
-    static func browser<T: AbstractMedia>(for type: T.Type,
+    static func browser<T: MediaProtocol>(for type: T.Type,
                                           mediaTypes: [UIImagePickerController.MediaType],
                                           _ completion: @escaping (Result<T, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {

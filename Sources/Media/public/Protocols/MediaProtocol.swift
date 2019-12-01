@@ -1,5 +1,5 @@
 //
-//  AbstractMedia.swift
+//  MediaProtocol.swift
 //  Media
 //
 //  Created by Christian Elies on 21.11.19.
@@ -8,7 +8,7 @@
 
 import Photos
 
-public protocol AbstractMedia {
+public protocol MediaProtocol {
     var phAsset: PHAsset { get }
     var identifier: String { get }
     var type: MediaType { get }
@@ -19,7 +19,7 @@ public protocol AbstractMedia {
     func delete(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-extension AbstractMedia {
+extension MediaProtocol {
     public var identifier: String { phAsset.localIdentifier }
 
     public func delete(completion: @escaping (Result<Void, Error>) -> Void) {

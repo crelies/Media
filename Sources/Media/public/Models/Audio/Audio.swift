@@ -8,7 +8,7 @@
 
 import Photos
 
-public struct Audio: AbstractMedia {
+public struct Audio: MediaProtocol {
     public let phAsset: PHAsset
 
     public let type: MediaType = .audio
