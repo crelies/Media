@@ -55,13 +55,7 @@ public extension LivePhoto {
     ///   - completion: a closure wich gets the `Result` (`LivePhoto` on `success` and `Error` on `failure`)
     ///
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         // TODO: determine file type
-
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
 }

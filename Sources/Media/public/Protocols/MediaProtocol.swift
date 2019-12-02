@@ -42,11 +42,6 @@ extension MediaProtocol {
     /// - Parameter completion: a closure which get's the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     public func delete(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHChanger.request({
             let phAssets: NSArray = [self.phAsset]
             PHAssetChangeRequest.deleteAssets(phAssets)

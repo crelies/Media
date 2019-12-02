@@ -101,11 +101,6 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         guard Album.with(title: title) == nil else {
             completion(.failure(AlbumError.albumWithTitleExists))
             return
@@ -119,11 +114,6 @@ public extension Album {
     /// - Parameter completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHChanger.request({
             let assetCollections: NSArray = [self.phAssetCollection]
             PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollections)
@@ -182,11 +172,6 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         guard !allMedia.contains(where: { $0.identifier == media.identifier }) else {
             completion(.success(()))
             return
@@ -209,11 +194,6 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         guard allMedia.contains(where: { $0.identifier == media.identifier }) else {
             completion(.success(()))
             return

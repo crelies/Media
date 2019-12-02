@@ -12,6 +12,11 @@ import Photos
 struct PHAssetChanger {
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
                                                 _ completion: @escaping (Result<T, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         var placeholderForCreatedAsset: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let creationRequest = request()

@@ -12,6 +12,11 @@ import Photos
 struct PHChanger {
     static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
                         _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         PHPhotoLibrary.shared().performChanges({
             _ = request()
         }, completionHandler: { isSuccess, error in

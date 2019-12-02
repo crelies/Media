@@ -161,11 +161,6 @@ public extension Photo {
     ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         let supportedPathExtensions = Set(Photo.FileType.allCases.map { $0.pathExtensions }.flatMap {$0 })
 
         switch url.pathExtension {
@@ -190,13 +185,8 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
-                               completion)
+                                     completion)
     }
     #endif
 

@@ -180,11 +180,6 @@ public extension Video {
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
     static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         let supportedPathExtensions = Set(Video.FileType.allCases.map { $0.pathExtension })
 
         switch url.pathExtension {
