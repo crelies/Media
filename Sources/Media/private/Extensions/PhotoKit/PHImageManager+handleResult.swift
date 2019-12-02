@@ -15,7 +15,7 @@ extension PHImageManager {
         } else if let item = result.item {
             completion(.success(item))
         } else {
-            completion(.failure(PhotosError.unknown))
+            completion(.failure(MediaError.unknown))
         }
     }
 }

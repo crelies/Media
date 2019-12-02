@@ -8,6 +8,8 @@
 import Photos
 
 extension PHAuthorizationStatus {
+    /// Computes the `PermissionError` representation of the receiver
+    ///
     public var permissionError: PermissionError? {
         switch self {
         case .denied:

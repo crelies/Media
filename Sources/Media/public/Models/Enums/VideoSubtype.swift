@@ -6,6 +6,8 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+/// Subtypes describing a `Video`
+///
 public enum VideoSubtype: CaseIterable {
     case streamed
     case highFrameRate
@@ -13,6 +15,8 @@ public enum VideoSubtype: CaseIterable {
 }
 
 extension VideoSubtype {
+    /// Compute a `PHAssetMediaSubtype` from the receiver
+    ///
     public var mediaSubtype: MediaSubtype {
         switch self {
         case .streamed:

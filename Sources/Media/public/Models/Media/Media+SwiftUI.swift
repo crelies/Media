@@ -11,6 +11,10 @@ import SwiftUI
 
 @available(iOS 13, macOS 10.15, *)
 public extension Media {
+    /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
+    ///
+    /// - Parameter completion: a closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`
+    ///
     static func browser(_ completion: @escaping (Result<PHAsset, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
             throw MediaPickerError.noBrowsingSourceTypeAvailable

@@ -8,6 +8,8 @@
 import AVFoundation
 
 extension Video {
+    /// Available qualities for `Video` exports
+    ///
     public enum ExportQuality {
         case low
         case medium
@@ -22,6 +24,8 @@ extension Video {
         // >= iOS 11
 //        case hevc3840x2160
 
+        /// Computes the `AVAssetExportPreset` of the receiver
+        ///
         var avAssetExportPreset: String {
             switch self {
             case .low:

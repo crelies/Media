@@ -8,6 +8,8 @@
 
 import Photos
 
+/// Type for Audio media
+///
 public struct Audio: MediaProtocol {
     public let phAsset: PHAsset
 
@@ -21,6 +23,10 @@ public struct Audio: MediaProtocol {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Audio {
+    /// Fetches the audio with the given identifier if it exists
+    ///
+    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    ///
     static func with(identifier: String) -> Audio? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.audio.rawValue)

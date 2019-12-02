@@ -8,6 +8,8 @@
 import AVFoundation
 
 extension Video {
+    /// Represents the available `Video` file types
+    ///
     public enum FileType: CaseIterable {
         case mov
         case mp4
@@ -16,8 +18,12 @@ extension Video {
 }
 
 extension Video.FileType {
+    /// Computes the path extension of the receiver
+    ///
     var pathExtension: String { String(describing: self) }
 
+    /// Computes the `AVFileType` representation of the receiver
+    ///
     var avFileType: AVFileType {
         switch self {
         case .mov:

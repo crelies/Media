@@ -11,6 +11,8 @@ import UIKit
 #endif
 import Photos
 
+/// Represents `Photo`s
+///
 public struct Photo: MediaProtocol {
     public let phAsset: PHAsset
 
@@ -23,6 +25,9 @@ public struct Photo: MediaProtocol {
 }
 
 public extension Photo {
+    /// Subtypes of the receiver
+    /// Similar to tags, like `hdr`, `panorama` or `screenshot`
+    ///
     var subtypes: [PhotoSubtype] {
         var types: [PhotoSubtype] = []
 
@@ -85,6 +90,10 @@ public extension Photo {
 
 #if !os(macOS)
 public extension Photo {
+    /// Data representation of the receiver
+    ///
+    /// - Parameter completion: a closure which gets a `Result` (`Data` on `success` or `Error` on `failure`)
+    ///
     func data(_ completion: @escaping (Result<Data, Error>) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
@@ -115,6 +124,13 @@ public extension Photo {
 #if canImport(UIKit)
 @available(macOS 10.15, *)
 public extension Photo {
+    /// `UIImage` representation of the receiver
+    ///
+    /// - Parameters:
+    ///   - targetSize: defines the desired size (width and height)
+    ///   - contentMode: specifies the desired content mode
+    ///   - completion: a closure which gets a `Result` (`UIImage` on `success` or `Error` on `failure`)
+    ///
     func uiImage(targetSize: CGSize,
                  contentMode: PHImageContentMode,
                  _ completion: @escaping (Result<Media.DisplayRepresentation<UIImage>, Error>) -> Void) {
@@ -135,6 +151,14 @@ public extension Photo {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Photo {
+    /// Saves the photo media at the given `URL` if
+    /// - the access to the photo library is allowed
+    /// - the path extension of the URL is a valid `Photo.FileType` path extension
+    ///
+    /// - Parameters:
+    ///   - url: the URL to the media object
+    ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
+    ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
     static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -159,6 +183,12 @@ public extension Photo {
     }
 
     #if canImport(UIKit)
+    /// Saves the given `UIImage` if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - image: the `UIImage` which should be saved
+    ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
+    ///
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -170,15 +200,20 @@ public extension Photo {
     }
     #endif
 
+    /// Updates the `favorite` state of the receiver
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean indicating the new `favorite` state
+    ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
+    ///
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 
+    /// Fetches the `Photo` with the given identifier if it exists
+    ///
+    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    ///
     static func with(identifier: String) -> Photo? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.image.rawValue)

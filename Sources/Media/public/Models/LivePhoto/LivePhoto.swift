@@ -8,6 +8,8 @@
 
 import Photos
 
+/// Represents `LivePhoto` media
+///
 public struct LivePhoto: MediaProtocol {
     public let phAsset: PHAsset
 
@@ -22,6 +24,13 @@ public struct LivePhoto: MediaProtocol {
 
 #if !os(macOS) && !targetEnvironment(macCatalyst)
 public extension LivePhoto {
+    /// Fetches a display representation of the receiver
+    ///
+    /// - Parameters:
+    ///   - targetSize: the desired size (width and height) of the representation
+    ///   - contentMode: the content mode for the representation
+    ///   - completion: a closure wich gets the `Result` (`DisplayRepresentation` on `success` and `Error` on `failure`)
+    ///
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
                                _ completion: @escaping (Result<Media.DisplayRepresentation<PHLivePhoto>, Error>) -> Void) {
@@ -39,12 +48,19 @@ public extension LivePhoto {
 
 @available(tvOS, unavailable)
 public extension LivePhoto {
-    // TODO: determine file type
+    /// Saves the live photo media at the given URL if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - url: the URL of the live photo media
+    ///   - completion: a closure wich gets the `Result` (`LivePhoto` on `success` and `Error` on `failure`)
+    ///
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
         }
+
+        // TODO: determine file type
 
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
@@ -55,6 +71,10 @@ public extension LivePhoto {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension LivePhoto {
+    /// Fetches the `LivePhoto` with the given `identifier` if it exists
+    ///
+    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    ///
     static func with(identifier: String) -> LivePhoto? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
@@ -106,12 +126,13 @@ public extension LivePhoto {
         }
     }*/
 
+    /// Updates the favorite state of the receiver if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean which indicates the new favorite state
+    ///   - completion: a closure wich gets the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 }

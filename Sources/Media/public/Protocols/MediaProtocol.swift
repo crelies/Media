@@ -8,6 +8,9 @@
 
 import Photos
 
+/// Defines the requirements for a specific `Media`,
+/// like a `LivePhoto` or `Video`
+///
 public protocol MediaProtocol {
     var phAsset: PHAsset { get }
     var identifier: String { get }
@@ -25,12 +28,19 @@ public protocol MediaProtocol {
 }
 
 extension MediaProtocol {
+    /// A unique identifier, currently the `localIdentifier` of the `phAsset`
+    ///
     public var identifier: String { phAsset.localIdentifier }
 }
 
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 extension MediaProtocol {
+    /// Deletes the receiver if the access to the photo library is allowed
+    ///
+    /// Hint: asynchronously
+    /// - Parameter completion: a closure which get's the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     public func delete(completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))

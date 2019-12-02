@@ -1,5 +1,5 @@
 //
-//  PhotosError.swift
+//  MediaError.swift
 //  Media
 //
 //  Created by Christian Elies on 21.11.19.
@@ -8,6 +8,9 @@
 
 import Foundation
 
-public enum PhotosError: Error {
+/// General errors thrown by the framework
+///
+public enum MediaError: Error {
+    /// an unknown error occurred
     case unknown
 }

@@ -6,6 +6,8 @@
 //
 
 extension Media {
+    /// Quality of media items, like `LivePhoto` and `Photo`
+    ///
     public enum Quality {
         case low
         case high

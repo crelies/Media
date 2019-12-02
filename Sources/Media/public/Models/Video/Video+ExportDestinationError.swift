@@ -6,6 +6,8 @@
 //
 
 extension Video {
+    /// Errors thrown during video export
+    ///
     public enum ExportDestinationError: Error {
         case pathExtensionMismatch
     }

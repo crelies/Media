@@ -6,6 +6,8 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+/// Subtypes describing a `Photo`
+///
 public enum PhotoSubtype: CaseIterable {
     case panorama
     case hdr
@@ -14,6 +16,8 @@ public enum PhotoSubtype: CaseIterable {
 }
 
 extension PhotoSubtype {
+    /// Compute a `PHAssetMediaSubtype` from the receiver
+    ///
     public var mediaSubtype: MediaSubtype? {
         switch self {
         case .panorama:

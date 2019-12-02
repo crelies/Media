@@ -9,6 +9,8 @@ import AVFoundation
 
 @available(iOS 11, macOS 10.11, tvOS 11, *)
 extension Photo {
+    /// Specifies the different file types for `Photo`s
+    ///
     public enum FileType: CaseIterable {
         case avci
         case heic
@@ -20,6 +22,8 @@ extension Photo {
 
 @available(iOS 11, macOS 10.11, tvOS 11, *)
 extension Photo.FileType {
+    /// Computes the path extensions for the receiver
+    ///
     var pathExtensions: [String] {
         switch self {
         case .avci, .heic, .heif:
@@ -31,6 +35,8 @@ extension Photo.FileType {
         }
     }
 
+    /// Computes the `AVFileType` representation of the receiver
+    ///
     var avFileType: AVFileType {
         switch self {
             case .avci:

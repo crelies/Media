@@ -11,6 +11,9 @@ import Photos
 @available(macOS 10.15, *)
 extension Media {
     public struct Photos {
+        /// All photos in the library
+        /// sorted by `creationDate descending`
+        ///
         public static var all: [Photo] {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -20,6 +23,9 @@ extension Media {
             return photos
         }
 
+        /// All panorama photos in the library
+        /// sorted by `creationDate descending`
+        ///
         public static var panorama: [Photo] {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -29,6 +35,9 @@ extension Media {
             return photos
         }
 
+        /// All HDR photos in the library
+        /// sorted by `creationDate descending`
+        ///
         public static var hdr: [Photo] {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -38,6 +47,9 @@ extension Media {
             return photos
         }
 
+        /// All screenshots in the library
+        /// sorted by `creationDate descending`
+        ///
         public static var screenshot: [Photo] {
             let options = PHFetchOptions()
             options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -47,6 +59,9 @@ extension Media {
             return photos
         }
 
+        /// All depth effect photos in the library
+        /// sorted by `creationDate descending`
+        ///
         @available(iOS 10.2, macOS 10.15, tvOS 10.1, *)
         public static var depthEffect: [Photo] {
             let options = PHFetchOptions()

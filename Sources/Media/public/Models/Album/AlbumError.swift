@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Errors thrown during Album operations
+///
 public enum AlbumError: Error {
     case albumWithTitleExists
 }

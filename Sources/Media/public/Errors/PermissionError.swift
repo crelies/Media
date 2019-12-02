@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Errors thrown during permission requests
+/// Like `PHAuthorizationStatus` but without `unknown` case
+///
 public enum PermissionError: Error {
     case denied
     case notDetermined

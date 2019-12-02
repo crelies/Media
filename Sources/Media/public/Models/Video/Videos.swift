@@ -10,6 +10,9 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public struct Videos {
+    /// All videos in the library
+    /// sorted by `creationDate descending`
+    ///
     public static var all: [Video] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -19,6 +22,9 @@ public struct Videos {
         return videos
     }
 
+    /// All streams in the library
+    /// sorted by `creationDate descending`
+    ///
     public static var streams: [Video] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -28,6 +34,9 @@ public struct Videos {
         return videos
     }
 
+    /// All high frame rate videos in the library
+    /// sorted by `creationDate descending`
+    ///
     public static var highFrameRates: [Video] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -37,6 +46,9 @@ public struct Videos {
         return videos
     }
 
+    /// All timelapse videos in the library
+    /// sorted by `creationDate descending`
+    ///
     public static var timelapses: [Video] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]

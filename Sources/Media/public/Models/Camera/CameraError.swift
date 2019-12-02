@@ -6,6 +6,8 @@
 //
 
 @available(tvOS, unavailable)
+/// Errors thrown during camera view creation
+///
 public enum CameraError: Error {
     case noCameraAvailable
 }

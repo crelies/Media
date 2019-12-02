@@ -8,6 +8,8 @@
 
 import Photos
 
+/// Represents `Video`s
+///
 public struct Video: MediaProtocol {
     public let phAsset: PHAsset
 
@@ -20,6 +22,9 @@ public struct Video: MediaProtocol {
 }
 
 public extension Video {
+    /// Computes the subtypes of the receiver
+    /// Similar to tags, like `highFrameRate` or `timelapse`
+    ///
     var subtypes: [VideoSubtype] {
         var types: [VideoSubtype] = []
 
@@ -47,6 +52,10 @@ public extension Video {
 
 @available(macOS 10.15, *)
 public extension Video {
+    /// Creates a `AVPlayerItem` representation of the receiver
+    ///
+    /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`
+    ///
     func playerItem(_ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
@@ -56,6 +65,10 @@ public extension Video {
         }
     }
 
+    /// Creates a `AVAsset` representation of the receiver
+    ///
+    /// - Parameter completion: a closure which gets an `AVAsset` on `success` and `Error` on `failure`
+    ///
     func avAsset(_ completion: @escaping (Result<AVAsset, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
@@ -65,6 +78,14 @@ public extension Video {
         }
     }
 
+    /// Exports the receiver using the given options
+    /// Notifies about the `progress` through the given closure
+    ///
+    /// - Parameters:
+    ///   - exportOptions: options specifying destination, file type and quality
+    ///   - progress: a closure which gets the current `Video.ExportProgress`
+    ///   - completion: a closure which gets a `Void` on `success` and `Error` on `failure`
+    ///
     func export(_ exportOptions: Video.ExportOptions, progress: @escaping (Video.ExportProgress) -> Void, _ completion: @escaping (Result<Void, Error>) -> Void) {
         let requestOptions = PHVideoRequestOptions()
         requestOptions.isNetworkAccessAllowed = true
@@ -113,13 +134,13 @@ public extension Video {
                             completion(.success(()))
                         case .failed:
                             timer?.invalidate()
-                            completion(.failure(exportSession.error ?? PhotosError.unknown))
+                            completion(.failure(exportSession.error ?? MediaError.unknown))
                         default: ()
                         }
                     }
                 }
             } else {
-                completion(.failure(PhotosError.unknown))
+                completion(.failure(MediaError.unknown))
             }
         }
     }
@@ -128,6 +149,10 @@ public extension Video {
 // TODO: macOS: 10.13
 @available(macOS 10.15, *)
 public extension Video {
+    /// Fetches the `Video` with the given identifier if it exists
+    ///
+    /// - Parameter identifier: the `localIdentifier` of related `PHAsset`
+    ///
     static func with(identifier: String) -> Video? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.video.rawValue)
@@ -146,6 +171,14 @@ public extension Video {
 // TODO: macOS: 10.13
 @available(macOS 10.15, *)
 public extension Video {
+    /// Saves the video media at the given URL if
+    /// - the access to the photo library is allowed
+    /// - the path extension of the URL matches a `Video.FileType` path extension
+    ///
+    /// - Parameters:
+    ///   - url: URL to the media
+    ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
+    ///
     static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -200,12 +233,13 @@ public extension Video {
         }
     }*/
 
+    /// Updates the `favorite` state of the receiver if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean indicating the new `favorite` state
+    ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
+    ///
     func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Media.isAccessAllowed else {
-            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-            return
-        }
-
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 }

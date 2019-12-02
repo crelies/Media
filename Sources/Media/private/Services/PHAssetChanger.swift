@@ -20,24 +20,29 @@ struct PHAssetChanger {
             }
         }, completionHandler: { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
+                completion(.failure(error ?? MediaError.unknown))
             } else {
                 if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let item = T.with(identifier: localIdentifier) {
                     completion(.success(item))
                 } else {
-                    completion(.failure(PhotosError.unknown))
+                    completion(.failure(MediaError.unknown))
                 }
             }
         })
     }
 
     static func favorite(phAsset: PHAsset, favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard Media.isAccessAllowed else {
+            completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+            return
+        }
+
         PHPhotoLibrary.shared().performChanges({
             let assetChangeRequest = PHAssetChangeRequest(for: phAsset)
             assetChangeRequest.isFavorite = favorite
         }) { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
+                completion(.failure(error ?? MediaError.unknown))
             } else {
                 completion(.success(()))
             }

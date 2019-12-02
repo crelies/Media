@@ -20,6 +20,9 @@ public struct Album {
 }
 
 public extension Album {
+    /// All audios contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
     var audios: [Audio] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -30,6 +33,9 @@ public extension Album {
         return audios
     }
 
+    /// All photos contained in the receiver (including `LivePhoto`s)
+    /// sorted by `creationDate descending`
+    ///
     var photos: [Photo] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -40,6 +46,9 @@ public extension Album {
         return photos
     }
 
+    /// All videos contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
     var videos: [Video] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -50,6 +59,9 @@ public extension Album {
         return videos
     }
 
+    /// All live photos contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
     var livePhotos: [LivePhoto] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -60,6 +72,9 @@ public extension Album {
         return livePhotos
     }
 
+    /// All media (audios, live photos, photos, videos and more?) contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
     var allMedia: [MediaProtocol] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -79,6 +94,12 @@ public extension Album {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Album {
+    /// Creates an album with the given title
+    ///
+    /// - Parameters:
+    ///   - title: title for the album
+    ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -93,6 +114,10 @@ public extension Album {
         PHChanger.request({ PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title) }, completion)
     }
 
+    /// Deletes the receiver if access to the photo library is allowed
+    ///
+    /// - Parameter completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     func delete(completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -110,6 +135,10 @@ public extension Album {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Album {
+    /// Get the album with the given `identifier` if it exists
+    ///
+    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    ///
     static func with(identifier: String) -> Album? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@", identifier)
@@ -123,6 +152,10 @@ public extension Album {
         return album
     }
 
+    /// Get the album with the given `title` if it exists
+    ///
+    /// - Parameter title: the `localizedTitle` of the `PHAsset`
+    ///
     static func with(title: String) -> Album? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localizedTitle = %@", title)
@@ -140,6 +173,14 @@ public extension Album {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Album {
+    /// Adds the given `Media`to the receiver if
+    ///  - the acess to the photo library is allowed
+    ///  - the receiver doesn't contain it
+    ///
+    /// - Parameters:
+    ///   - media: an object conforming to the `MediaProtocol`
+    ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
@@ -159,6 +200,14 @@ public extension Album {
         }, completion)
     }
 
+    /// Deletes the given `Media` from the receiver if
+    /// - the access to the photo library is allowed
+    /// - the receiver contains it
+    ///
+    /// - Parameters:
+    ///   - media: an object conforming to the `MediaProtocol`
+    ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
+    ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))

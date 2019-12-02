@@ -16,7 +16,7 @@ struct PHChanger {
             _ = request()
         }, completionHandler: { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? PhotosError.unknown))
+                completion(.failure(error ?? MediaError.unknown))
             } else {
                 completion(.success(()))
             }

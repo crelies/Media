@@ -10,6 +10,9 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public struct LivePhotos {
+    /// All live photos in the photo library
+    /// sorted by `creationDate descending`
+    ///
     public static var all: [LivePhoto] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
