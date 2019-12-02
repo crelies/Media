@@ -5,8 +5,7 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
-#if !os(tvOS)
+@available(tvOS, unavailable)
 public enum CameraError: Error {
     case noCameraAvailable
 }
-#endif

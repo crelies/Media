@@ -37,7 +37,7 @@ public extension LivePhoto {
     }
 }
 
-#if !os(tvOS)
+@available(tvOS, unavailable)
 public extension LivePhoto {
     // TODO: determine file type
     static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
@@ -49,7 +49,6 @@ public extension LivePhoto {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
 }
-#endif
 
 #endif
 
