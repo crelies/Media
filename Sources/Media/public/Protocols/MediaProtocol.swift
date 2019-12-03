@@ -14,7 +14,7 @@ import Photos
 public protocol MediaProtocol {
     var phAsset: PHAsset { get }
     var identifier: String { get }
-    var type: MediaType { get }
+    static var type: MediaType { get }
 
     init(phAsset: PHAsset)
 

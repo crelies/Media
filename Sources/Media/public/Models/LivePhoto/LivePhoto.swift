@@ -13,7 +13,7 @@ import Photos
 public struct LivePhoto: MediaProtocol {
     public let phAsset: PHAsset
 
-    public let type: MediaType = .image
+    public static let type: MediaType = .image
     public var subtype: MediaSubtype { .photoLive }
     public var isFavorite: Bool { phAsset.isFavorite }
 

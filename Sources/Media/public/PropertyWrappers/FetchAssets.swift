@@ -9,6 +9,9 @@ import Photos
 
 @propertyWrapper
 public final class FetchAssets<T: MediaProtocol> {
+    private let mediaTypePredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
+    private let defaultSortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
     private lazy var assets: [T] = {
         PHAssetFetcher.fetchAssets(options: options)
     }()
@@ -17,13 +20,27 @@ public final class FetchAssets<T: MediaProtocol> {
     public var wrappedValue: [T] { assets }
 
     public init() {
-        self.options = PHFetchOptions()
+        let options = PHFetchOptions()
+        options.predicate = mediaTypePredicate
+        options.sortDescriptors = defaultSortDescriptors
+        self.options = options
     }
 
-    public init(predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]) {
+    public init(predicate: NSPredicate? = nil, sortDescriptors: [NSSortDescriptor]? = nil) {
         let options = PHFetchOptions()
-        options.predicate = predicate
-        options.sortDescriptors = sortDescriptors
+
+        if let additionalPredicate = predicate {
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, additionalPredicate])
+        } else {
+            options.predicate = mediaTypePredicate
+        }
+
+        if let sortDescriptors = sortDescriptors {
+            options.sortDescriptors = sortDescriptors
+        } else {
+            options.sortDescriptors = defaultSortDescriptors
+        }
+
         self.options = options
     }
 }

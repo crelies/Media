@@ -16,7 +16,7 @@ import Photos
 public struct Photo: MediaProtocol {
     public let phAsset: PHAsset
 
-    public let type: MediaType = .image
+    public static let type: MediaType = .image
     public var isFavorite: Bool { phAsset.isFavorite }
 
     public init(phAsset: PHAsset) {

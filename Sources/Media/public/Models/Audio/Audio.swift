@@ -13,7 +13,7 @@ import Photos
 public struct Audio: MediaProtocol {
     public let phAsset: PHAsset
 
-    public let type: MediaType = .audio
+    public static let type: MediaType = .audio
 
     public init(phAsset: PHAsset) {
         self.phAsset = phAsset
