@@ -17,21 +17,29 @@ struct VideoView: View {
     let video: Video
 
     var body: some View {
-        if avPlayerItem == nil && error == nil {
-            self.video.playerItem { result in
-                switch result {
-                case .success(let avPlayerItem):
-                    self.avPlayerItem = avPlayerItem
-                case .failure(let error):
-                    self.error = error
-                }
-            }
-        }
+        fetchPlayerItem()
 
         return Group {
             avPlayerItem.map { AVPlayerView(avPlayerItem: $0) }
 
             error.map { Text($0.localizedDescription) }
+        }
+    }
+}
+
+extension VideoView {
+    private func fetchPlayerItem() {
+        if avPlayerItem == nil && error == nil {
+            self.video.playerItem { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let avPlayerItem):
+                        self.avPlayerItem = avPlayerItem
+                    case .failure(let error):
+                        self.error = error
+                    }
+                }
+            }
         }
     }
 }

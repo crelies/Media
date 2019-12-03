@@ -19,16 +19,7 @@ struct PhotoView<ImageView: View>: View {
     let photo: Photo
 
     var body: some View {
-        if data == nil && image == nil && error == nil {
-            self.photo.data { result in
-                switch result {
-                case .success(let data):
-                    self.data = data
-                case .failure(let error):
-                    self.error = error
-                }
-            }
-        }
+        fetchData()
 
         return Group {
             data.map { UIImage(data: $0).map { self.imageView(Image(uiImage: $0)) } }
@@ -41,6 +32,23 @@ struct PhotoView<ImageView: View>: View {
          @ViewBuilder imageView: @escaping (Image) -> ImageView) {
         self.photo = photo
         self.imageView = imageView
+    }
+}
+
+extension PhotoView {
+    private func fetchData() {
+        if data == nil && image == nil && error == nil {
+            self.photo.data { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let data):
+                        self.data = data
+                    case .failure(let error):
+                        self.error = error
+                    }
+                }
+            }
+        }
     }
 }
 #endif

@@ -18,24 +18,32 @@ struct LivePhotoView: View {
     let size: CGSize
 
     var body: some View {
-        if phLivePhoto == nil && error == nil {
-            self.livePhoto.displayRepresentation(targetSize: self.size) { result in
-                switch result {
-                case .success(let livePhotoDisplayRepresentation):
-                    guard livePhotoDisplayRepresentation.quality == .high else {
-                        return
-                    }
-                    self.phLivePhoto = livePhotoDisplayRepresentation.value
-                case .failure(let error):
-                    self.error = error
-                }
-            }
-        }
+        fetchDisplayRepresentation()
 
         return Group {
             phLivePhoto.map { PhotosUILivePhotoView(phLivePhoto: $0) }
 
             error.map { Text($0.localizedDescription) }
+        }
+    }
+}
+
+extension LivePhotoView {
+    private func fetchDisplayRepresentation() {
+        if phLivePhoto == nil && error == nil {
+            self.livePhoto.displayRepresentation(targetSize: self.size) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let livePhotoDisplayRepresentation):
+                        guard livePhotoDisplayRepresentation.quality == .high else {
+                            return
+                        }
+                        self.phLivePhoto = livePhotoDisplayRepresentation.value
+                    case .failure(let error):
+                        self.error = error
+                    }
+                }
+            }
         }
     }
 }
