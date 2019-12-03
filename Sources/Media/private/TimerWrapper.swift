@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias TimerFiredClosure = (Timer) -> Void
-
 final class TimerWrapper {
+    typealias TimerFiredClosure = (Timer) -> Void
+
     private let timeInterval: TimeInterval
     private let repeats: Bool
     private let timerFiredClosure: TimerFiredClosure
