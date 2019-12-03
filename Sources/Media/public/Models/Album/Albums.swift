@@ -28,10 +28,7 @@ public struct Albums {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
         let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { collection in
-            if AlbumType.user.subtypes.contains(collection.assetCollectionSubtype) {
-                return true
-            }
-            return false
+            AlbumType.user.subtypes.contains(collection.assetCollectionSubtype)
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
@@ -43,10 +40,7 @@ public struct Albums {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
         let albums = AlbumFetcher.fetchAlbums(with: .smartAlbum, subtype: .any, options: options) { collection in
-            if AlbumType.smart.subtypes.contains(collection.assetCollectionSubtype) {
-                return true
-            }
-            return false
+            AlbumType.smart.subtypes.contains(collection.assetCollectionSubtype)
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }
@@ -58,10 +52,7 @@ public struct Albums {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
         let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { collection in
-            if AlbumType.cloud.subtypes.contains(collection.assetCollectionSubtype) {
-                return true
-            }
-            return false
+            AlbumType.cloud.subtypes.contains(collection.assetCollectionSubtype)
         }
         return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
     }

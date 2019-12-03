@@ -8,11 +8,13 @@
 
 import Photos
 
-enum AlbumType {
+public enum AlbumType {
     case user
     case cloud
     case smart
+}
 
+extension AlbumType {
     var subtypes: [PHAssetCollectionSubtype] {
         switch self {
         case .user:
