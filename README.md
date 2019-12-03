@@ -1,4 +1,4 @@
-# Media
+# Media 🖼️
 
 A **beautiful**, **declarative** and **convenient** *wrapper API* for Apple's `PhotoKit`
 
@@ -13,9 +13,11 @@ Each *type* in `PhotoKit` got it's own *wrapper type*:
 - Photo
 - Video
 
+**`SwiftUI` special:** This package provides ready-to-use `SwiftUI` views, like a `Camera` view or a view for an instance of  `LivePhoto`, `Photo` and `Video`.
+
 That's all you need to know. Now take a look at the **API**.
 
-## API
+## API 🧭
 
 Get started by adding the `Media` Swift package to your project and by importing it.
 
@@ -178,3 +180,9 @@ Get started by adding the `Media` Swift package to your project and by importing
 - **SwiftUI only**: `Video.browser { result in }` (*some View*)
 
 - **SwiftUI only**: `video.view` (*some View*)
+
+### `@propertyWrapper` 🚀
+
+The `Media` package also includes some generic property wrappers you can use to interact with the photo library.
+
+- `@FetchAssets(predicate?:sortDescriptors?) var items: [ <Audio | LivePhoto | Photo | Video> ]`
