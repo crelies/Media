@@ -15,6 +15,15 @@ public enum AlbumType {
 }
 
 extension AlbumType {
+    var assetCollectionType: PHAssetCollectionType {
+        switch self {
+        case .user, .cloud:
+            return .album
+        case .smart:
+            return .smartAlbum
+        }
+    }
+
     var subtypes: [PHAssetCollectionSubtype] {
         switch self {
         case .user:

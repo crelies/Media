@@ -14,22 +14,23 @@ public final class FetchAlbums {
     private let options = PHFetchOptions()
     private let defaultSortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
 
-    private let albumType: AlbumType
+    private let albumType: AlbumType?
 
     private lazy var albums: [Album] = {
-        AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { collection in
-            self.albumType.subtypes.contains(collection.assetCollectionSubtype)
+        AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
+                                 subtype: .any,
+                                 options: options) { collection in
+            self.albumType?.subtypes.contains(collection.assetCollectionSubtype) ?? true
         }
     }()
 
     public var wrappedValue: [Album] { albums }
 
-    /// Initializes the property wrapper using the given album type
+    /// Initializes the property wrapper without an album type filter and
+    /// with a default sort descriptor (sort by `localizedTitle ascending`)
     ///
-    /// - Parameter type: determines the type of albums to be fetched
-    ///
-    public init(ofType type: AlbumType) {
-        albumType = type
+    public init() {
+        albumType = nil
         options.sortDescriptors = defaultSortDescriptors
     }
 
@@ -37,11 +38,11 @@ public final class FetchAlbums {
     /// Uses the given predicate and the sort descriptors as fetch options
     ///
     /// - Parameters:
-    ///   - type: specifies the type of albums to be fetched
+    ///   - type: specifies the type of albums to be fetched, fetches all albums if nil
     ///   - predicate: determines filters for the album fetch
     ///   - sortDescriptors: descriptors used to sort the fetched albums
     ///
-    public init(ofType type: AlbumType,
+    public init(ofType type: AlbumType? = nil,
                 predicate: NSPredicate? = nil,
                 sortDescriptors: [NSSortDescriptor]? = nil) {
         albumType = type
