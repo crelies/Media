@@ -185,10 +185,10 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 The `Media` package also includes some generic property wrappers you can use to interact with the photo library.
 
-- `@FetchAssets(filter:sortDescriptors?) var assets: [ <Audio | LivePhoto | Photo | Video> ]`
+- `@FetchAssets(filter:sort:) var assets: [ <Audio | LivePhoto | Photo | Video> ]`
 
 - `@FetchAsset(filter:) var asset: <Audio | LivePhoto | Photo | Video>?`
 
-- `@FetchAlbums(ofType:filter:sortDescriptors?) var albums: [Album]`
+- `@FetchAlbums(ofType:filter:sort) var albums: [Album]`
 
 - `@FetchAlbum(filter:) var album: Album?`
