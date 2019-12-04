@@ -14,62 +14,37 @@ extension Media {
         /// All photos in the library
         /// sorted by `creationDate descending`
         ///
-        public static var all: [Photo] {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
-            options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-            return photos
-        }
+        @FetchAssets(predicate: NSPredicate(format: "mediaType = %d", MediaType.image.rawValue),
+                     sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+        public static var all: [Photo]
 
         /// All panorama photos in the library
         /// sorted by `creationDate descending`
         ///
-        public static var panorama: [Photo] {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoPanorama.rawValue)
-            options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-            return photos
-        }
+        @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoPanorama.rawValue),
+                     sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+        public static var panorama: [Photo]
 
         /// All HDR photos in the library
         /// sorted by `creationDate descending`
         ///
-        public static var hdr: [Photo] {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoHDR.rawValue)
-            options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-            return photos
-        }
+        @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoHDR.rawValue),
+                     sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+        public static var hdr: [Photo]
 
         /// All screenshots in the library
         /// sorted by `creationDate descending`
         ///
-        public static var screenshot: [Photo] {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue)
-            options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-            return photos
-        }
+        @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoScreenshot.rawValue),
+                     sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+        public static var screenshot: [Photo]
 
         /// All depth effect photos in the library
         /// sorted by `creationDate descending`
         ///
+        @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoDepthEffect.rawValue),
+                     sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
         @available(iOS 10.2, macOS 10.15, tvOS 10.1, *)
-        public static var depthEffect: [Photo] {
-            let options = PHFetchOptions()
-            options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoDepthEffect.rawValue)
-            options.predicate = predicate
-            let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-            return photos
-        }
+        public static var depthEffect: [Photo]
     }
 }

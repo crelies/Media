@@ -14,64 +14,40 @@ public struct Album {
     public var identifier: String { phAssetCollection.localIdentifier }
     public var localizedTitle: String? { phAssetCollection.localizedTitle }
 
+    /// All audios contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
+    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue),
+                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+    public var audios: [Audio]
+
+    /// All photos contained in the receiver (including `LivePhoto`s)
+    /// sorted by `creationDate descending`
+    ///
+    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue),
+                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+    public var photos: [Photo]
+
+    /// All videos contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
+    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d", MediaType.video.rawValue),
+                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+    public var videos: [Video]
+
+    /// All live photos contained in the receiver
+    /// sorted by `creationDate descending`
+    ///
+    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue),
+                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+    public var livePhotos: [LivePhoto]
+
     init(phAssetCollection: PHAssetCollection) {
         self.phAssetCollection = phAssetCollection
     }
 }
 
 public extension Album {
-    /// All audios contained in the receiver
-    /// sorted by `creationDate descending`
-    ///
-    var audios: [Audio] {
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
-        options.predicate = predicate
-
-        let audios = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Audio]
-        return audios
-    }
-
-    /// All photos contained in the receiver (including `LivePhoto`s)
-    /// sorted by `creationDate descending`
-    ///
-    var photos: [Photo] {
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) == 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
-        options.predicate = predicate
-
-        let photos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Photo]
-        return photos
-    }
-
-    /// All videos contained in the receiver
-    /// sorted by `creationDate descending`
-    ///
-    var videos: [Video] {
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let predicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
-        options.predicate = predicate
-
-        let videos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [Video]
-        return videos
-    }
-
-    /// All live photos contained in the receiver
-    /// sorted by `creationDate descending`
-    ///
-    var livePhotos: [LivePhoto] {
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let predicate = NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
-        options.predicate = predicate
-
-        let livePhotos = PHAssetFetcher.fetchAssets(in: phAssetCollection, options: options) as [LivePhoto]
-        return livePhotos
-    }
-
     /// All media (audios, live photos, photos, videos and more?) contained in the receiver
     /// sorted by `creationDate descending`
     ///
