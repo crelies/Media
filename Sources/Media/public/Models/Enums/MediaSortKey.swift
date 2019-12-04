@@ -5,6 +5,9 @@
 //  Created by Christian Elies on 04.12.19.
 //
 
+/// Represents the supported keys
+/// for sorting media (`Audio`, `LivePhoto`, `Photo` or `Video`)
+///
 public enum MediaSortKey: String {
     case localIdentifier
     case creationDate

@@ -8,6 +8,9 @@
 
 import Photos
 
+/// Represents the available album
+/// types
+///
 public enum AlbumType {
     case user
     case cloud

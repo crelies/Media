@@ -5,6 +5,9 @@
 //  Created by Christian Elies on 04.12.19.
 //
 
+/// Represents the supported keys
+/// for sorting albums
+///
 public enum AlbumSortKey: String {
     case localIdentifier
     case localizedTitle

@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Represents the supported filter
+/// for filtering albums
+///
 public enum AlbumFilter {
     case localIdentifier(_ localIdentifier: String)
     case localizedTitle(_ localizedTitle: String)

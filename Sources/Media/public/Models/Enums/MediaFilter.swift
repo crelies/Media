@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Generic filter type for `Media`
+/// (`Audio`, `LivePhoto`, `Photo` or `Video`)
+///
 public enum MediaFilter<MediaSubtype> where MediaSubtype: MediaSubtypeProvider {
     case localIdentifier(_ localIdentifier: String)
     case creationDate(_ creationDate: Date)
