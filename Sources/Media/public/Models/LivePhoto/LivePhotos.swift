@@ -13,7 +13,7 @@ public struct LivePhotos {
     /// All live photos in the photo library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.image.rawValue, MediaSubtype.photoLive.rawValue),
+    @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var all: [LivePhoto]
 }

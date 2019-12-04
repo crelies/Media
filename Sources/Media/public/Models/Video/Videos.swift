@@ -13,28 +13,28 @@ public struct Videos {
     /// All videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d", MediaType.video.rawValue),
+    @FetchAssets(filter: [.mediaType(.video)],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var all: [Video]
 
     /// All streams in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoStreamed.rawValue),
+    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoStreamed])],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var streams: [Video]
 
     /// All high frame rate videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoHighFrameRate.rawValue),
+    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoHighFrameRate])],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var highFrameRates: [Video]
 
     /// All timelapse videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d && (mediaSubtypes & %d) != 0", MediaType.video.rawValue, MediaSubtype.videoTimelapse.rawValue),
+    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoTimelapse])],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var timelapses: [Video]
 }

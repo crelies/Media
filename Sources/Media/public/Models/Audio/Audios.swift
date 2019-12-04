@@ -13,7 +13,7 @@ public struct Audios {
     /// All audios in the photo library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(predicate: NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue),
+    @FetchAssets(filter: [.mediaType(.audio)],
                  sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
     public static var all: [Audio]
 }
