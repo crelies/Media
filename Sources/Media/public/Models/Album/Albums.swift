@@ -14,14 +14,14 @@ public struct Albums {
     /// All albums in the photo library
     /// sorted by `localizedTitle ascending`
     ///
-    @FetchAlbums(sortDescriptors: [NSSortDescriptor(key: "localizedTitle", ascending: true)])
+    @FetchAlbums(sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var all: [Album]
 
     /// All user albums in the photo library
     /// sorted by `localizedTitle ascending`
     ///
     @FetchAlbums(ofType: .user,
-                 sortDescriptors: [NSSortDescriptor(key: "localizedTitle", ascending: true)])
+                 sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var user: [Album]
 //        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 
@@ -29,7 +29,7 @@ public struct Albums {
     /// sorted by `localizedTitle ascending`
     ///
     @FetchAlbums(ofType: .smart,
-                 sortDescriptors: [NSSortDescriptor(key: "localizedTitle", ascending: true)])
+                 sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var smart: [Album]
 //        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 
@@ -37,7 +37,7 @@ public struct Albums {
     /// sorted by `localizedTitle ascending`
     ///
     @FetchAlbums(ofType: .cloud,
-                 sortDescriptors: [NSSortDescriptor(key: "localizedTitle", ascending: true)])
+                 sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var cloud: [Album]
 //        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 }

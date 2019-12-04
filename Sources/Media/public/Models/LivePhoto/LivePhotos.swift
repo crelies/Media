@@ -14,6 +14,6 @@ public struct LivePhotos {
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [LivePhoto]
 }

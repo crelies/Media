@@ -14,6 +14,6 @@ public struct Audios {
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.audio)],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [Audio]
 }

@@ -18,28 +18,28 @@ public struct Album {
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.audio)],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public var audios: [Audio]
 
     /// All photos contained in the receiver (including `LivePhoto`s)
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public var photos: [Photo]
 
     /// All videos contained in the receiver
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.video)],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public var videos: [Video]
 
     /// All live photos contained in the receiver
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public var livePhotos: [LivePhoto]
 
     init(phAssetCollection: PHAssetCollection) {

@@ -12,7 +12,7 @@ import Photos
 @propertyWrapper
 public final class FetchAlbums {
     private let options = PHFetchOptions()
-    private let defaultSortDescriptors = [NSSortDescriptor(key: "localizedTitle", ascending: true)]
+    private let defaultSort: Sort<AlbumSortKey> = Sort(key: .localizedTitle, ascending: true)
 
     private let albumType: AlbumType?
 
@@ -31,7 +31,7 @@ public final class FetchAlbums {
     ///
     public init() {
         albumType = nil
-        options.sortDescriptors = defaultSortDescriptors
+        options.sortDescriptors = [defaultSort.sortDescriptor]
     }
 
     /// Initializes the property wrapper using the given album type
@@ -39,12 +39,12 @@ public final class FetchAlbums {
     ///
     /// - Parameters:
     ///   - type: specifies the type of albums to be fetched, fetches all albums if nil
-    ///   - filter: a set of `AlbumFilter` for the fetch
-    ///   - sortDescriptors: descriptors used to sort the fetched albums
+    ///   - filter: a set of `AlbumFilter` for the fetch, defaults to empty
+    ///   - sort: a set of `Sort<AlbumSortKey>` for the fetch, defaults to empty
     ///
     public init(ofType type: AlbumType? = nil,
                 filter: Set<AlbumFilter> = [],
-                sortDescriptors: [NSSortDescriptor]? = nil) {
+                sort: Set<Sort<AlbumSortKey>> = []) {
         albumType = type
 
         if !filter.isEmpty {
@@ -52,10 +52,12 @@ public final class FetchAlbums {
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
 
-        if let sortDescriptors = sortDescriptors {
+        var sortKeys = sort
+        sortKeys.insert(defaultSort)
+
+        if !sortKeys.isEmpty {
+            let sortDescriptors = sortKeys.map { $0.sortDescriptor }
             options.sortDescriptors = sortDescriptors
-        } else {
-            options.sortDescriptors = defaultSortDescriptors
         }
     }
 }

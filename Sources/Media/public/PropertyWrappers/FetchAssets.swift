@@ -14,7 +14,7 @@ import Photos
 public final class FetchAssets<T: MediaProtocol> {
     private let options = PHFetchOptions()
     private let mediaTypeFilter: MediaFilter = .mediaType(T.type)
-    private let defaultSortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+    private let defaultSort: Sort<MediaSortKey> = Sort(key: .creationDate, ascending: false)
 
     private lazy var assets: [T] = {
         PHAssetFetcher.fetchAssets(options: options)
@@ -27,7 +27,7 @@ public final class FetchAssets<T: MediaProtocol> {
     ///
     public init() {
         options.predicate = mediaTypeFilter.predicate
-        options.sortDescriptors = defaultSortDescriptors
+        options.sortDescriptors = [defaultSort.sortDescriptor]
     }
 
     /// Initializes the property wrapper using the given predicate and sort descriptors
@@ -35,9 +35,10 @@ public final class FetchAssets<T: MediaProtocol> {
     ///
     /// - Parameters:
     ///   - filter: a set of `MediaFilter` for filtering the assets
-    ///   - sortDescriptors: descriptors for sorting the results
+    ///   - sort: a set of `Sort<MediaSortKey>` for sorting the assets
     ///
-    public init(filter: Set<MediaFilter> = [], sortDescriptors: [NSSortDescriptor]? = nil) {
+    public init(filter: Set<MediaFilter> = [],
+                sort: Set<Sort<MediaSortKey>> = []) {
         var mediaFilter = filter
         mediaFilter.insert(mediaTypeFilter)
 
@@ -46,10 +47,12 @@ public final class FetchAssets<T: MediaProtocol> {
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
 
-        if let sortDescriptors = sortDescriptors {
+        var sortKeys = sort
+        sortKeys.insert(defaultSort)
+
+        if !sortKeys.isEmpty {
+            let sortDescriptors = sortKeys.map { $0.sortDescriptor }
             options.sortDescriptors = sortDescriptors
-        } else {
-            options.sortDescriptors = defaultSortDescriptors
         }
     }
 }

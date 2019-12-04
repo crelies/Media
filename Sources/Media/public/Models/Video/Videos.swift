@@ -14,27 +14,27 @@ public struct Videos {
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.video)],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [Video]
 
     /// All streams in the library
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoStreamed])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var streams: [Video]
 
     /// All high frame rate videos in the library
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoHighFrameRate])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var highFrameRates: [Video]
 
     /// All timelapse videos in the library
     /// sorted by `creationDate descending`
     ///
     @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoTimelapse])],
-                 sortDescriptors: [NSSortDescriptor(key: "creationDate", ascending: false)])
+                 sort: [Sort(key: .creationDate, ascending: false)])
     public static var timelapses: [Video]
 }
