@@ -23,9 +23,12 @@ public final class FetchAsset<T: MediaProtocol> {
 
     /// Initializes the property wrapper with the given predicate
     ///
-    /// - Parameter predicate: predicate to use for the fetch
+    /// - Parameter filter: a set of `MediaFilter` to use for the fetch
     ///
-    public init(predicate: NSPredicate) {
-        options.predicate = predicate
+    public init(filter: Set<MediaFilter> = []) {
+        if !filter.isEmpty {
+            let predicates = filter.map { $0.predicate }
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
     }
 }

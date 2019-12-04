@@ -34,7 +34,7 @@ public final class FetchAssets<T: MediaProtocol> {
     /// to define the `PHFetchOptions`
     ///
     /// - Parameters:
-    ///   - predicate: a predicate for filtering the assets
+    ///   - filter: a set of `MediaFilter` for filtering the assets
     ///   - sortDescriptors: descriptors for sorting the results
     ///
     public init(filter: Set<MediaFilter> = [], sortDescriptors: [NSSortDescriptor]? = nil) {

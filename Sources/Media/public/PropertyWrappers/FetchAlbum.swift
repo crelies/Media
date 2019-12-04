@@ -22,9 +22,12 @@ public final class FetchAlbum {
     /// Initializes the property wrapper using the given predicate
     /// as the fetch options
     ///
-    /// - Parameter predicate: predicate used as a fetch filter
+    /// - Parameter filter: a set of `AlbumFilter` to use for the fetch
     ///
-    public init(predicate: NSPredicate) {
-        options.predicate = predicate
+    public init(filter: Set<AlbumFilter> = []) {
+        if !filter.isEmpty {
+            let predicates = filter.map { $0.predicate }
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
     }
 }

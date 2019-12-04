@@ -16,6 +16,8 @@ public enum AlbumFilter {
     case estimatedAssetCount(_ estimatedAssetCount: Int)
 }
 
+extension AlbumFilter: Hashable {}
+
 extension AlbumFilter {
     var predicate: NSPredicate {
         switch self {

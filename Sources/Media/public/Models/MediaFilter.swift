@@ -11,7 +11,9 @@ public enum MediaFilter {
     case localIdentifier(_ localIdentifier: String)
     case creationDate(_ creationDate: Date)
     case modificationDate(_ modificationDate: Date)
+    // TODO: constraint media type
     case mediaType(_ mediaType: MediaType)
+    // TODO: constraint media sub type
     case mediaSubtypes(_ subtypes: [MediaSubtype])
     case duration(_ duration: TimeInterval)
     case pixelWidth(_ pixelWidth: Int)

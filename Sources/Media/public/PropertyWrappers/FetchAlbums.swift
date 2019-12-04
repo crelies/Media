@@ -39,15 +39,18 @@ public final class FetchAlbums {
     ///
     /// - Parameters:
     ///   - type: specifies the type of albums to be fetched, fetches all albums if nil
-    ///   - predicate: determines filters for the album fetch
+    ///   - filter: a set of `AlbumFilter` for the fetch
     ///   - sortDescriptors: descriptors used to sort the fetched albums
     ///
     public init(ofType type: AlbumType? = nil,
-                predicate: NSPredicate? = nil,
+                filter: Set<AlbumFilter> = [],
                 sortDescriptors: [NSSortDescriptor]? = nil) {
         albumType = type
 
-        options.predicate = predicate
+        if !filter.isEmpty {
+            let predicates = filter.map { $0.predicate }
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
 
         if let sortDescriptors = sortDescriptors {
             options.sortDescriptors = sortDescriptors
