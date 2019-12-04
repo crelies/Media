@@ -13,28 +13,27 @@ public struct Videos {
     /// All videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.video)],
-                 sort: [Sort(key: .creationDate, ascending: false)])
+    @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [Video]
 
     /// All streams in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoStreamed])],
+    @FetchAssets(filter: [.mediaSubtypes([.streamed])],
                  sort: [Sort(key: .creationDate, ascending: false)])
     public static var streams: [Video]
 
     /// All high frame rate videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoHighFrameRate])],
+    @FetchAssets(filter: [.mediaSubtypes([.highFrameRate])],
                  sort: [Sort(key: .creationDate, ascending: false)])
     public static var highFrameRates: [Video]
 
     /// All timelapse videos in the library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.video), .mediaSubtypes([.videoTimelapse])],
+    @FetchAssets(filter: [.mediaSubtypes([.timelapse])],
                  sort: [Sort(key: .creationDate, ascending: false)])
     public static var timelapses: [Video]
 }

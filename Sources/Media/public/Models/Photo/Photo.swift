@@ -14,8 +14,8 @@ import Photos
 /// Represents `Photo`s
 ///
 public struct Photo: MediaProtocol {
+    public typealias MediaSubtype = PhotoSubtype
     public let phAsset: PHAsset
-
     public static let type: MediaType = .image
     public var isFavorite: Bool { phAsset.isFavorite }
 

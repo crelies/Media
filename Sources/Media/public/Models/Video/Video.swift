@@ -11,8 +11,8 @@ import Photos
 /// Represents `Video`s
 ///
 public struct Video: MediaProtocol {
+    public typealias MediaSubtype = VideoSubtype
     public let phAsset: PHAsset
-
     public static let type: MediaType = .video
     public var isFavorite: Bool { phAsset.isFavorite }
 

@@ -17,28 +17,25 @@ public struct Album {
     /// All audios contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.audio)],
-                 sort: [Sort(key: .creationDate, ascending: false)])
+    @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
     public var audios: [Audio]
 
     /// All photos contained in the receiver (including `LivePhoto`s)
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
-                 sort: [Sort(key: .creationDate, ascending: false)])
+    @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
     public var photos: [Photo]
 
     /// All videos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.video)],
-                 sort: [Sort(key: .creationDate, ascending: false)])
+    @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
     public var videos: [Video]
 
     /// All live photos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
+    @FetchAssets(filter: [.mediaSubtypes([.live])],
                  sort: [Sort(key: .creationDate, ascending: false)])
     public var livePhotos: [LivePhoto]
 
@@ -51,17 +48,16 @@ public extension Album {
     /// All media (audios, live photos, photos, videos and more?) contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    var allMedia: [MediaProtocol] {
+    var allMedia: [AnyMedia] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
-        var media: [MediaProtocol] = []
+        var media: [AnyMedia] = []
         result.enumerateObjects { asset, _, _ in
-            guard let mediaType = asset.abstractMediaType else {
+            guard let anyMedia = asset.anyMedia else {
                 return
             }
-            let item = mediaType.init(phAsset: asset)
-            media.append(item)
+            media.append(anyMedia)
         }
         return media
     }

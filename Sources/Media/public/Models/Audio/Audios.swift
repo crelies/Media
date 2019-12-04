@@ -13,7 +13,6 @@ public struct Audios {
     /// All audios in the photo library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.audio)],
-                 sort: [Sort(key: .creationDate, ascending: false)])
+    @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [Audio]
 }

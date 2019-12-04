@@ -7,13 +7,10 @@
 
 import Foundation
 
-public enum MediaFilter {
+public enum MediaFilter<MediaSubtype> where MediaSubtype: MediaSubtypeProvider {
     case localIdentifier(_ localIdentifier: String)
     case creationDate(_ creationDate: Date)
     case modificationDate(_ modificationDate: Date)
-    // TODO: constraint media type
-    case mediaType(_ mediaType: MediaType)
-    // TODO: constraint media sub type
     case mediaSubtypes(_ subtypes: [MediaSubtype])
     case duration(_ duration: TimeInterval)
     case pixelWidth(_ pixelWidth: Int)
@@ -32,10 +29,9 @@ extension MediaFilter: Hashable {
                 hasher.combine(creationDate)
             case .modificationDate(let modificationDate):
                 hasher.combine(modificationDate)
-            case .mediaType(let mediaType):
-                hasher.combine(mediaType)
             case .mediaSubtypes(let subtypes):
-                hasher.combine(subtypes)
+                let rawValues = subtypes.compactMap { $0.mediaSubtype }.map { $0.rawValue }
+                hasher.combine(rawValues)
             case .duration(let duration):
                 hasher.combine(duration)
             case .pixelWidth(let pixelWidth):
@@ -52,6 +48,12 @@ extension MediaFilter: Hashable {
     }
 }
 
+extension MediaFilter: Equatable {
+    public static func == (lhs: MediaFilter<MediaSubtype>, rhs: MediaFilter<MediaSubtype>) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+}
+
 extension MediaFilter {
     var predicate: NSPredicate {
         switch self {
@@ -61,12 +63,10 @@ extension MediaFilter {
                 return NSPredicate(format: "creationDate = %@", creationDate as NSDate)
             case .modificationDate(let modificationDate):
                 return NSPredicate(format: "modificationDate = %@", modificationDate as NSDate)
-            case .mediaType(let mediaType):
-                return NSPredicate(format: "mediaType = %d", mediaType.rawValue)
             case .mediaSubtypes(let subtypes):
                 let predicateFormatStatements = subtypes.map { _ in "(mediaSubtypes & %d) != 0" }
                 let predicateFormatString = predicateFormatStatements.joined(separator: " || ")
-                let subtypeRawValues = subtypes.map { $0.rawValue }
+                let subtypeRawValues = subtypes.compactMap { $0.mediaSubtype }.map { $0.rawValue }
                 return NSPredicate(format: predicateFormatString, subtypeRawValues)
             case .duration(let duration):
                 return NSPredicate(format: "duration = %d", duration)

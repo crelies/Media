@@ -11,10 +11,9 @@ import Photos
 /// Represents `LivePhoto` media
 ///
 public struct LivePhoto: MediaProtocol {
+    public typealias MediaSubtype = LivePhotoSubtype
     public let phAsset: PHAsset
-
     public static let type: MediaType = .image
-    public var subtype: MediaSubtype { .photoLive }
     public var isFavorite: Bool { phAsset.isFavorite }
 
     public init(phAsset: PHAsset) {
@@ -71,7 +70,7 @@ public extension LivePhoto {
     ///
     static func with(identifier: String) -> LivePhoto? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, MediaSubtype.photoLive.rawValue)
+        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier, MediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue)
         options.predicate = predicate
 
         let livePhoto = PHAssetFetcher.fetchAsset(options: options) { asset in

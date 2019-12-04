@@ -11,8 +11,8 @@ import Photos
 /// Type for Audio media
 ///
 public struct Audio: MediaProtocol {
+    public typealias MediaSubtype = AudioSubtype
     public let phAsset: PHAsset
-
     public static let type: MediaType = .audio
 
     public init(phAsset: PHAsset) {

@@ -15,7 +15,7 @@ public enum PhotoSubtype: CaseIterable {
     case depthEffect
 }
 
-extension PhotoSubtype {
+extension PhotoSubtype: MediaSubtypeProvider {
     /// Compute a `PHAssetMediaSubtype` from the receiver
     ///
     public var mediaSubtype: MediaSubtype? {

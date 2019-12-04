@@ -14,10 +14,10 @@ public enum VideoSubtype: CaseIterable {
     case timelapse
 }
 
-extension VideoSubtype {
+extension VideoSubtype: MediaSubtypeProvider {
     /// Compute a `PHAssetMediaSubtype` from the receiver
     ///
-    public var mediaSubtype: MediaSubtype {
+    public var mediaSubtype: MediaSubtype? {
         switch self {
         case .streamed:
             return .videoStreamed

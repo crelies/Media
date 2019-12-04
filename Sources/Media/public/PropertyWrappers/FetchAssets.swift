@@ -13,7 +13,7 @@ import Photos
 @propertyWrapper
 public final class FetchAssets<T: MediaProtocol> {
     private let options = PHFetchOptions()
-    private let mediaTypeFilter: MediaFilter = .mediaType(T.type)
+    private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
     private let defaultSort: Sort<MediaSortKey> = Sort(key: .creationDate, ascending: false)
 
     private lazy var assets: [T] = {
@@ -26,7 +26,7 @@ public final class FetchAssets<T: MediaProtocol> {
     /// (sort by `creationDate descending`)
     ///
     public init() {
-        options.predicate = mediaTypeFilter.predicate
+        options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
     }
 
@@ -37,14 +37,13 @@ public final class FetchAssets<T: MediaProtocol> {
     ///   - filter: a set of `MediaFilter` for filtering the assets
     ///   - sort: a set of `Sort<MediaSortKey>` for sorting the assets
     ///
-    public init(filter: Set<MediaFilter> = [],
+    public init(filter: Set<MediaFilter<T.MediaSubtype>> = [],
                 sort: Set<Sort<MediaSortKey>> = []) {
-        var mediaFilter = filter
-        mediaFilter.insert(mediaTypeFilter)
-
-        if !mediaFilter.isEmpty {
-            let predicates = mediaFilter.map { $0.predicate }
-            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        if !filter.isEmpty {
+            let predicates = filter.map { $0.predicate }
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates + [mediaTypePredicate])
+        } else {
+            options.predicate = mediaTypePredicate
         }
 
         var sortKeys = sort

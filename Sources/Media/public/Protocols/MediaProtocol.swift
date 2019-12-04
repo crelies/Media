@@ -12,6 +12,8 @@ import Photos
 /// like a `LivePhoto` or `Video`
 ///
 public protocol MediaProtocol {
+    associatedtype MediaSubtype: MediaSubtypeProvider
+
     var phAsset: PHAsset { get }
     var identifier: String { get }
     static var type: MediaType { get }

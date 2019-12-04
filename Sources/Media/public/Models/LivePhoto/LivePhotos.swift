@@ -13,7 +13,7 @@ public struct LivePhotos {
     /// All live photos in the photo library
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaType(.image), .mediaSubtypes([.photoLive])],
+    @FetchAssets(filter: [.mediaSubtypes([.live])],
                  sort: [Sort(key: .creationDate, ascending: false)])
     public static var all: [LivePhoto]
 }
