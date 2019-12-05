@@ -37,10 +37,14 @@ public final class FetchAssets<T: MediaProtocol> {
     ///   - filter: a set of `MediaFilter` for filtering the assets
     ///   - sort: a set of `Sort<MediaSortKey>` for sorting the assets
     ///   - fetchLimit: a maximum number of results to fetch, defaults to 0 (no limit)
+    ///   - includeAllBurstAssets: a Boolean value that determines whether the fetch result includes all assets from burst photo sequences, defaults to false
+    ///   - includeHiddenAssets: a Boolean value that determines whether the fetch result includes assets marked as hidden, defaults to false
     ///
     public init(filter: Set<MediaFilter<T.MediaSubtype>> = [],
                 sort: Set<Sort<MediaSortKey>> = [],
-                fetchLimit: Int = 0) {
+                fetchLimit: Int = 0,
+                includeAllBurstAssets: Bool = false,
+                includeHiddenAssets: Bool = false) {
         if !filter.isEmpty {
             let predicates = filter.map { $0.predicate }
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates + [mediaTypePredicate])
@@ -57,5 +61,7 @@ public final class FetchAssets<T: MediaProtocol> {
         }
 
         options.fetchLimit = fetchLimit
+        options.includeAllBurstAssets = includeAllBurstAssets
+        options.includeHiddenAssets = includeHiddenAssets
     }
 }
