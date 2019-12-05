@@ -25,6 +25,10 @@ public struct Audio: MediaProtocol {
 public extension Audio {
     /// Fetches the audio with the given identifier if it exists
     ///
+    /// Alternative:
+    /// @FetchAsset(filter: [.localIdentifier("1234")])
+    /// private var audio: Audio?
+    ///
     /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
     ///
     static func with(identifier: String) -> Audio? {

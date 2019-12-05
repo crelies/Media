@@ -12,6 +12,7 @@ import Photos
 @propertyWrapper
 public final class FetchAsset<T: MediaProtocol> {
     private let options = PHFetchOptions().fetchLimit(1)
+    private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
 
     private lazy var asset: T? = {
         PHAssetFetcher.fetchAsset(options: options) { asset in
@@ -28,7 +29,9 @@ public final class FetchAsset<T: MediaProtocol> {
     public init(filter: Set<MediaFilter<T.MediaSubtype>> = []) {
         if !filter.isEmpty {
             let predicates = filter.map { $0.predicate }
-            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates + [mediaTypePredicate])
+        } else {
+            options.predicate = mediaTypePredicate
         }
     }
 }

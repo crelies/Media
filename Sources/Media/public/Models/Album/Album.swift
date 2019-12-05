@@ -99,6 +99,10 @@ public extension Album {
 public extension Album {
     /// Get the album with the given `identifier` if it exists
     ///
+    /// /// Alternative:
+    /// @FetchAlbum(filter: [.localIdentifier("1234")])
+    /// private var album: Album?
+    ///
     /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
     ///
     static func with(identifier: String) -> Album? {
@@ -115,6 +119,10 @@ public extension Album {
     }
 
     /// Get the album with the given `title` if it exists
+    ///
+    /// /// Alternative:
+    /// @FetchAlbum(filter: [.localizedTitle("1234")])
+    /// private var album: Album?
     ///
     /// - Parameter title: the `localizedTitle` of the `PHAsset`
     ///

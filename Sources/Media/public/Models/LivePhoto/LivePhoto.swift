@@ -66,6 +66,10 @@ public extension LivePhoto {
 public extension LivePhoto {
     /// Fetches the `LivePhoto` with the given `identifier` if it exists
     ///
+    /// Alternative:
+    /// @FetchAsset(filter: [.localIdentifier("1234"), .mediaSubtypes([.live])])
+    /// private var livePhoto: LivePhoto?
+    ///
     /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
     ///
     static func with(identifier: String) -> LivePhoto? {

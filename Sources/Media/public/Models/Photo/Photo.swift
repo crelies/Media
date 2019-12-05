@@ -202,6 +202,10 @@ public extension Photo {
 
     /// Fetches the `Photo` with the given identifier if it exists
     ///
+    /// /// Alternative:
+    /// @FetchAsset(filter: [.localIdentifier("1234")])
+    /// private var photo: Photo?
+    ///
     /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
     ///
     static func with(identifier: String) -> Photo? {

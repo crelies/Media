@@ -151,6 +151,10 @@ public extension Video {
 public extension Video {
     /// Fetches the `Video` with the given identifier if it exists
     ///
+    /// Alternative:
+    /// @FetchAsset(filter: [.localIdentifier("1234")])
+    /// private var video: Video?
+    ///
     /// - Parameter identifier: the `localIdentifier` of related `PHAsset`
     ///
     static func with(identifier: String) -> Video? {
