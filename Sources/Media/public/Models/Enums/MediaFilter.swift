@@ -70,7 +70,7 @@ extension MediaFilter {
                 let predicateFormatStatements = subtypes.map { _ in "(mediaSubtypes & %d) != 0" }
                 let predicateFormatString = predicateFormatStatements.joined(separator: " || ")
                 let subtypeRawValues = subtypes.compactMap { $0.mediaSubtype }.map { $0.rawValue }
-                return NSPredicate(format: predicateFormatString, subtypeRawValues)
+                return NSPredicate(format: predicateFormatString, argumentArray: subtypeRawValues)
             case .duration(let duration):
                 return NSPredicate(format: "duration = %d", duration)
             case .pixelWidth(let pixelWidth):

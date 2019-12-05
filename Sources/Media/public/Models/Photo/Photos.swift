@@ -17,6 +17,15 @@ extension Media {
         @FetchAssets(sort: [Sort(key: .creationDate, ascending: false)])
         public static var all: [Photo]
 
+        // TODO: osx 10.13
+        @available(macOS 10.15, *)
+        /// All live photos in the library
+        /// sorted by `creationDate descending`
+        ///
+        @FetchAssets(filter: [.mediaSubtypes([.live])],
+                     sort: [Sort(key: .creationDate, ascending: false)])
+        public static var live: [LivePhoto]
+
         /// All panorama photos in the library
         /// sorted by `creationDate descending`
         ///

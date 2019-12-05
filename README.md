@@ -85,11 +85,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - **SwiftUI only**: `Camera.view { result in }` (*some View*)
 
-### LivePhotos
-
-- `LivePhotos.all`
-
-#### LivePhoto
+### LivePhoto
 
 - `livePhoto.displayRepresentation(targetSize:contentMode) { result in }`
 
@@ -112,6 +108,8 @@ Get started by adding the `Media` Swift package to your project and by importing
 ### (Media.)Photos
 
 - `Photos.all (includes livePhotos)`
+
+- `Photos.live`
 
 - `Photos.panorama`
 
