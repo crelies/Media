@@ -28,6 +28,7 @@ struct LivePhotoView: View {
     }
 }
 
+@available(iOS 13, tvOS 13, *)
 extension LivePhotoView {
     private func fetchDisplayRepresentation() {
         if phLivePhoto == nil && error == nil {

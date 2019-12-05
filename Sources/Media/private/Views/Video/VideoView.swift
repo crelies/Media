@@ -27,6 +27,7 @@ struct VideoView: View {
     }
 }
 
+@available(iOS 13, macOS 10.15, tvOS 13, *)
 extension VideoView {
     private func fetchPlayerItem() {
         if avPlayerItem == nil && error == nil {

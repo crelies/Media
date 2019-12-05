@@ -35,6 +35,7 @@ struct PhotoView<ImageView: View>: View {
     }
 }
 
+@available(iOS 13, macOS 10.15, tvOS 13, *)
 extension PhotoView {
     private func fetchData() {
         if data == nil && image == nil && error == nil {
