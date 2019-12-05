@@ -9,4 +9,3 @@ import Photos
 
 public typealias MediaType = PHAssetMediaType
 public typealias MediaSubtype = PHAssetMediaSubtype
-public typealias Cancellable = () -> Void
