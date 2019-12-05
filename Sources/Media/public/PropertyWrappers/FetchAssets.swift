@@ -36,9 +36,11 @@ public final class FetchAssets<T: MediaProtocol> {
     /// - Parameters:
     ///   - filter: a set of `MediaFilter` for filtering the assets
     ///   - sort: a set of `Sort<MediaSortKey>` for sorting the assets
+    ///   - fetchLimit: a maximum number of results to fetch, defaults to 0 (no limit)
     ///
     public init(filter: Set<MediaFilter<T.MediaSubtype>> = [],
-                sort: Set<Sort<MediaSortKey>> = []) {
+                sort: Set<Sort<MediaSortKey>> = [],
+                fetchLimit: Int = 0) {
         if !filter.isEmpty {
             let predicates = filter.map { $0.predicate }
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates + [mediaTypePredicate])
@@ -53,5 +55,7 @@ public final class FetchAssets<T: MediaProtocol> {
             let sortDescriptors = sortKeys.map { $0.sortDescriptor }
             options.sortDescriptors = sortDescriptors
         }
+
+        options.fetchLimit = fetchLimit
     }
 }

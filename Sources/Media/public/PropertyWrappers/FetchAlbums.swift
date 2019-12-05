@@ -41,10 +41,12 @@ public final class FetchAlbums {
     ///   - type: specifies the type of albums to be fetched, fetches all albums if nil
     ///   - filter: a set of `AlbumFilter` for the fetch, defaults to empty
     ///   - sort: a set of `Sort<AlbumSortKey>` for the fetch, defaults to empty
+    ///   - fetchLimit: a maximum number of results to fetch, defaults to 0 (no limit)
     ///
     public init(ofType type: AlbumType? = nil,
                 filter: Set<AlbumFilter> = [],
-                sort: Set<Sort<AlbumSortKey>> = []) {
+                sort: Set<Sort<AlbumSortKey>> = [],
+                fetchLimit: Int = 0) {
         albumType = type
 
         if !filter.isEmpty {
@@ -59,5 +61,7 @@ public final class FetchAlbums {
             let sortDescriptors = sortKeys.map { $0.sortDescriptor }
             options.sortDescriptors = sortDescriptors
         }
+
+        options.fetchLimit = fetchLimit
     }
 }
