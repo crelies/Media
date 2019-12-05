@@ -97,7 +97,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `livePhoto.favorite(true|false) { result in }`
 
-- TODO: livePhoto.edit
+##### **SwiftUI**
 
 - **SwiftUI only**: `LivePhoto.camera { result in }` (*some View*)
 
@@ -135,7 +135,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `photo.favorite(true|false) { result in }`
 
-- TODO: photo.edit
+##### **SwiftUI**
 
 - **SwiftUI only**: `Photo.camera { result in }` (*some View*)
 
@@ -167,9 +167,9 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `video.favorite(true|false) { result in }`
 
-- TODO: video.edit
-
 - `video.delete { result in }`
+
+##### **SwiftUI**
 
 - **SwiftUI only**: `Video.camera { result in }` (*some View*)
 
