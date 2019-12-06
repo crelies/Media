@@ -8,6 +8,8 @@
 
 import Photos
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public struct Album {
     let phAssetCollection: PHAssetCollection
 
@@ -44,6 +46,8 @@ public struct Album {
     }
 }
 
+// TODO: osx 10.13
+@available(macOS 10.15, *)
 public extension Album {
     /// All media (audios, live photos, photos, videos and more?) contained in the receiver
     /// sorted by `creationDate descending`
