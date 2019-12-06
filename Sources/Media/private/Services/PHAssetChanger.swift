@@ -10,6 +10,8 @@ import Photos
 // TODO: OSX 10.13
 @available(macOS 10.15, *)
 struct PHAssetChanger {
+    static var photoLibrary: PHPhotoLibrary.Type = PHPhotoLibrary.self
+
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
                                                 _ completion: @escaping (Result<T, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -18,7 +20,7 @@ struct PHAssetChanger {
         }
 
         var placeholderForCreatedAsset: PHObjectPlaceholder?
-        PHPhotoLibrary.shared().performChanges({
+        photoLibrary.shared().performChanges({
             let creationRequest = request()
             if let placeholder = creationRequest?.placeholderForCreatedAsset {
                 placeholderForCreatedAsset = placeholder
@@ -42,7 +44,7 @@ struct PHAssetChanger {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        photoLibrary.shared().performChanges({
             let assetChangeRequest = PHAssetChangeRequest(for: phAsset)
             assetChangeRequest.isFavorite = favorite
         }) { isSuccess, error in

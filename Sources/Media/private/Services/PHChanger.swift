@@ -10,6 +10,8 @@ import Photos
 // TODO: macOS 10.13
 @available(macOS 10.15, *)
 struct PHChanger {
+    static var photoLibrary: PHPhotoLibrary.Type = PHPhotoLibrary.self
+
     static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
                         _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard Media.isAccessAllowed else {
@@ -17,7 +19,7 @@ struct PHChanger {
             return
         }
 
-        PHPhotoLibrary.shared().performChanges({
+        photoLibrary.shared().performChanges({
             _ = request()
         }, completionHandler: { isSuccess, error in
             if !isSuccess {
