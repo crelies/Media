@@ -11,7 +11,7 @@ import XCTest
 @available(macOS 10.15, *)
 final class PHAssetChangerTests: XCTestCase {
     override func setUp() {
-        PHAssetChanger.photoLibrary = MockPhotoLibrary.self
+        PHAssetChanger.photoLibrary = MockPhotoLibrary()
     }
 
     override func tearDown() {

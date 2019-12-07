@@ -10,7 +10,7 @@ import Photos
 // TODO: macOS 10.13
 @available(macOS 10.15, *)
 struct PHChanger {
-    static var photoLibrary: PHPhotoLibrary.Type = PHPhotoLibrary.self
+    static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
     static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
                         _ completion: @escaping (Result<Void, Error>) -> Void) {
@@ -19,7 +19,7 @@ struct PHChanger {
             return
         }
 
-        photoLibrary.shared().performChanges({
+        photoLibrary.performChanges({
             _ = request()
         }, completionHandler: { isSuccess, error in
             if !isSuccess {

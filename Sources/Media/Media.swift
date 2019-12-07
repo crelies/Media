@@ -12,6 +12,8 @@ import Photos
 /// for the photos library
 ///
 public struct Media {
+    static var photoLibrary: PhotoLibrary.Type = PHPhotoLibrary.self
+
     /// Indicates that the access to the photo library is granted
     ///
     public static var isAccessAllowed: Bool {
@@ -21,7 +23,7 @@ public struct Media {
     /// Returns the current permission to the photo library
     ///
     public static var currentPermission: PHAuthorizationStatus {
-        return PHPhotoLibrary.authorizationStatus()
+        return photoLibrary.authorizationStatus()
     }
 
     /// Requests the user's permission to the photo library
@@ -29,7 +31,7 @@ public struct Media {
     /// - Parameter completion: a closure which gets a `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     public static func requestPermission(_ completion: @escaping (Result<Void, PermissionError>) -> Void) {
-        PHPhotoLibrary.requestAuthorization { authorizationStatus in
+        photoLibrary.requestAuthorization { authorizationStatus in
             switch authorizationStatus {
             case .authorized:
                 completion(.success(()))
