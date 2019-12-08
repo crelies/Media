@@ -16,6 +16,7 @@ struct AlbumFetcher {
                             subtype: PHAssetCollectionSubtype,
                             options: PHFetchOptions,
                             filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> [Album] {
+        // TODO: check permission, return [] if permission is denied
         let result = assetCollection.fetchAssetCollections(with: type,
                                                            subtype: subtype,
                                                            options: options)
@@ -33,6 +34,7 @@ struct AlbumFetcher {
                            subtype: PHAssetCollectionSubtype,
                            options: PHFetchOptions,
                            filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> Album? {
+        // TODO: check permission, return nil if permission is denied
         let result = assetCollection.fetchAssetCollections(with: type,
                                                            subtype: subtype,
                                                            options: options)
