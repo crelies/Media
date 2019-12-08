@@ -88,12 +88,17 @@ public extension Video {
     ///   - completion: a closure which gets a `Void` on `success` and `Error` on `failure`
     ///
     func export(_ exportOptions: Video.ExportOptions, progress: @escaping (Video.ExportProgress) -> Void, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let exportPreset = exportOptions.quality.avAssetExportPreset else {
+            completion(.failure(VideoError.unsupportedExportPreset))
+            return
+        }
+
         let requestOptions = PHVideoRequestOptions()
         requestOptions.isNetworkAccessAllowed = true
 
         PHImageManager.default().requestExportSession(forVideo: phAsset,
                                                       options: requestOptions,
-                                                      exportPreset: exportOptions.quality.avAssetExportPreset)
+                                                      exportPreset: exportPreset)
         { exportSession, info in
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
