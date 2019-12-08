@@ -210,8 +210,9 @@ public extension Photo {
     ///
     static func with(identifier: Media.Identifier<Self>) -> Photo? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.image.rawValue)
-        options.predicate = predicate
+        let mediaTypeFilter: MediaFilter<PhotoSubtype> = .localIdentifier(identifier.localIdentifier)
+        let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
+        options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 
         let photo = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .image {
