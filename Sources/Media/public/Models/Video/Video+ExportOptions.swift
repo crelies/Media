@@ -27,8 +27,8 @@ extension Video {
 
             switch url.pathExtension {
             case \.isEmpty:
-                url.appendPathExtension(fileType.pathExtension)
-            case .mismatchs(fileType.pathExtension):
+                url.appendPathExtension(fileType.pathExtensions.first!)
+            case .mismatchs(fileType.pathExtensions.first!):
                 throw Video.ExportDestinationError.pathExtensionMismatch
             default: ()
             }

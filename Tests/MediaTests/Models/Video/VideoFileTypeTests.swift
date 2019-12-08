@@ -10,10 +10,10 @@ import AVFoundation
 import XCTest
 
 final class VideoFileTypeTests: XCTestCase {
-    func testMovPathExtension() {
+    func testMovPathExtensions() {
         let fileType: Video.FileType = .mov
-        let expectedPathExtension = "mov"
-        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
+        let expectedPathExtension = ["mov"]
+        XCTAssertEqual(fileType.pathExtensions, expectedPathExtension)
     }
 
     func testMovAVFileType() {
@@ -22,10 +22,10 @@ final class VideoFileTypeTests: XCTestCase {
         XCTAssertEqual(fileType.avFileType, expectedAVFileType)
     }
 
-    func testMP4PathExtension() {
+    func testMP4PathExtensions() {
         let fileType: Video.FileType = .mp4
-        let expectedPathExtension = "mp4"
-        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
+        let expectedPathExtension = ["mp4"]
+        XCTAssertEqual(fileType.pathExtensions, expectedPathExtension)
     }
 
     func testMP4AVFileType() {
@@ -34,10 +34,10 @@ final class VideoFileTypeTests: XCTestCase {
         XCTAssertEqual(fileType.avFileType, expectedAVFileType)
     }
 
-    func testM4VPathExtension() {
+    func testM4VPathExtensions() {
         let fileType: Video.FileType = .m4v
-        let expectedPathExtension = "m4v"
-        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
+        let expectedPathExtension = ["m4v"]
+        XCTAssertEqual(fileType.pathExtensions, expectedPathExtension)
     }
 
     func testM4VAVFileType() {

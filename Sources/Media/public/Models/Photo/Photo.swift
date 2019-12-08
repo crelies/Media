@@ -160,21 +160,9 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
-    static func save(_ url: URL, _ completion: @escaping (Result<Photo, Error>) -> Void) {
-        let supportedPathExtensions = Set(Photo.FileType.allCases.map { $0.pathExtensions }.flatMap {$0 })
-
-        switch url.pathExtension {
-        case \.isEmpty:
-            completion(.failure(PhotoError.missingPathExtension))
-            return
-        case .unsupportedPathExtension(supportedPathExtensions: supportedPathExtensions):
-            completion(.failure(PhotoError.unsupportedPathExtension))
-            return
-        default: ()
-        }
-
-        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) },
-                               completion)
+    static func save(_ mediaURL: MediaURL<Self, Photo.FileType>, _ completion: @escaping (Result<Photo, Error>) -> Void) {
+        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
+                                     completion)
     }
 
     #if canImport(UIKit)

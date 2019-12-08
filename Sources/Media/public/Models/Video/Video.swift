@@ -173,6 +173,7 @@ public extension Video {
 }
 
 // TODO: macOS: 10.13
+@available(iOS 11, *)
 @available(macOS 10.15, *)
 public extension Video {
     /// Saves the video media at the given URL if
@@ -183,20 +184,8 @@ public extension Video {
     ///   - url: URL to the media
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
-    static func save(_ url: URL, _ completion: @escaping (Result<Video, Error>) -> Void) {
-        let supportedPathExtensions = Set(Video.FileType.allCases.map { $0.pathExtension })
-
-        switch url.pathExtension {
-        case \.isEmpty:
-            completion(.failure(VideoError.missingPathExtension))
-            return
-        case .unsupportedPathExtension(supportedPathExtensions: supportedPathExtensions):
-            completion(.failure(VideoError.unsupportedPathExtension))
-            return
-        default: ()
-        }
-
-        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url) }, completion)
+    static func save(_ mediaURL: MediaURL<Self, Video.FileType>, _ completion: @escaping (Result<Video, Error>) -> Void) {
+        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
     }
 
     // TODO:

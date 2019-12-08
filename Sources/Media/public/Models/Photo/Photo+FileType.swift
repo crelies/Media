@@ -21,10 +21,10 @@ extension Photo {
 }
 
 @available(iOS 11, macOS 10.11, tvOS 11, *)
-extension Photo.FileType {
+extension Photo.FileType: PathExtensionsProvider {
     /// Computes the path extensions for the receiver
     ///
-    var pathExtensions: [String] {
+    public var pathExtensions: [String] {
         switch self {
         case .avci, .heic, .heif:
                 return [String(describing: self)]

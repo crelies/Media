@@ -8,7 +8,5 @@
 /// Errors thrown during `Video` related operations
 ///
 public enum VideoError: Error {
-    case missingPathExtension
     case unsupportedFileType
-    case unsupportedPathExtension
 }

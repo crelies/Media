@@ -17,11 +17,13 @@ extension Video {
     }
 }
 
-extension Video.FileType {
+extension Video.FileType: PathExtensionsProvider {
     /// Computes the path extension of the receiver
     ///
-    var pathExtension: String { String(describing: self) }
+    public var pathExtensions: [String] { [String(describing: self)] }
+}
 
+extension Video.FileType {
     /// Computes the `AVFileType` representation of the receiver
     ///
     var avFileType: AVFileType {
