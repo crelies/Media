@@ -26,7 +26,7 @@ public final class FetchAlbum {
     ///
     /// - Parameter filter: a set of `AlbumFilter` to use for the fetch
     ///
-    public init(filter: Set<AlbumFilter> = []) {
+    public init(filter: Set<Album.Filter> = []) {
         if !filter.isEmpty {
             let predicates = filter.map { $0.predicate }
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)

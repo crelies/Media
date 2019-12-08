@@ -14,7 +14,7 @@ import Photos
 @propertyWrapper
 public final class FetchAlbums {
     private let options = PHFetchOptions()
-    private let defaultSort: Sort<AlbumSortKey> = Sort(key: .localizedTitle, ascending: true)
+    private let defaultSort: Sort<Album.SortKey> = Sort(key: .localizedTitle, ascending: true)
 
     private let albumType: AlbumType?
 
@@ -46,8 +46,8 @@ public final class FetchAlbums {
     ///   - fetchLimit: a maximum number of results to fetch, defaults to 0 (no limit)
     ///
     public init(ofType type: AlbumType? = nil,
-                filter: Set<AlbumFilter> = [],
-                sort: Set<Sort<AlbumSortKey>> = [],
+                filter: Set<Album.Filter> = [],
+                sort: Set<Sort<Album.SortKey>> = [],
                 fetchLimit: Int = 0) {
         albumType = type
 

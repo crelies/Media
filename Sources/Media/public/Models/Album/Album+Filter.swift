@@ -7,21 +7,23 @@
 
 import Foundation
 
-/// Represents the supported filter
-/// for filtering albums
-///
-public enum AlbumFilter {
-    case localIdentifier(_ localIdentifier: String)
-    case localizedTitle(_ localizedTitle: String)
-    case title(_ title: String)
-    case startDate(_ startDate: Date)
-    case endDate(_ endDate: Date)
-    case estimatedAssetCount(_ estimatedAssetCount: Int)
+extension Album {
+    /// Represents the supported filter
+    /// for filtering albums
+    ///
+    public enum Filter {
+        case localIdentifier(_ localIdentifier: String)
+        case localizedTitle(_ localizedTitle: String)
+        case title(_ title: String)
+        case startDate(_ startDate: Date)
+        case endDate(_ endDate: Date)
+        case estimatedAssetCount(_ estimatedAssetCount: Int)
+    }
 }
 
-extension AlbumFilter: Hashable {}
+extension Album.Filter: Hashable {}
 
-extension AlbumFilter {
+extension Album.Filter {
     var predicate: NSPredicate {
         switch self {
             case .localIdentifier(let localIdentifier):
