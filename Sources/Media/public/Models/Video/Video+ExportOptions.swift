@@ -21,7 +21,7 @@ extension Video {
         ///   - fileType: specifies the `Video.FileType` at the given `URL`
         ///   - quality: definies the desired quality for the export
         ///
-        public init(url: MediaURL<Video>, quality: Video.ExportQuality) throws {
+        public init(url: MediaURL<Video>, quality: Video.ExportQuality) {
             self.outputURL = url
             self.quality = quality
         }
