@@ -26,4 +26,10 @@ final class VideoSubtypeTests: XCTestCase {
         let expectedMediaSubtype: MediaSubtype = .videoTimelapse
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
+
+    static var allTests = [
+        ("testStreamedMediaSubtype", testStreamedMediaSubtype),
+        ("testHighFrameRateMediaSubtype", testHighFrameRateMediaSubtype),
+        ("testTimelapseMediaSubtype", testTimelapseMediaSubtype)
+    ]
 }
