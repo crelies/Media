@@ -57,4 +57,18 @@ final class VideoExportQualityTests: XCTestCase {
         let expectedExportPreset = AVAssetExportPreset3840x2160
         XCTAssertEqual(quality.avAssetExportPreset, expectedExportPreset)
     }
+
+    @available(iOS 11, *)
+    func testqhevc1920x1080AVAssetExportPreset() {
+        let quality: Video.ExportQuality = .hevc1920x1080
+        let expectedExportPreset = AVAssetExportPresetHEVC1920x1080
+        XCTAssertEqual(quality.avAssetExportPreset, expectedExportPreset)
+    }
+
+    @available(iOS 11, *)
+    func testqhevc3840x2160AVAssetExportPreset() {
+        let quality: Video.ExportQuality = .hevc3840x2160
+        let expectedExportPreset = AVAssetExportPresetHEVC3840x2160
+        XCTAssertEqual(quality.avAssetExportPreset, expectedExportPreset)
+    }
 }
