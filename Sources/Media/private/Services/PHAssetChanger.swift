@@ -10,6 +10,7 @@ import Photos
 // TODO: OSX 10.13
 @available(macOS 10.15, *)
 struct PHAssetChanger {
+    // TODO: unavailabilityReason
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> PHAssetChangeRequest?,
