@@ -6,7 +6,12 @@
 //
 
 #if !os(tvOS)
+
+#if os(macOS)
 import CoreServices
+#elseif os(iOS)
+import MobileCoreServices
+#endif
 
 extension CFString {
     static var image: CFString { kUTTypeImage }
