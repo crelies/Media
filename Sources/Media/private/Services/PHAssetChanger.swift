@@ -29,7 +29,7 @@ struct PHAssetChanger {
             if !isSuccess {
                 completion(.failure(error ?? MediaError.unknown))
             } else {
-                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let item = T.with(identifier: localIdentifier) {
+                if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let item = T.with(identifier: Media.Identifier(localIdentifier: localIdentifier)) {
                     completion(.success(item))
                 } else {
                     completion(.failure(MediaError.unknown))

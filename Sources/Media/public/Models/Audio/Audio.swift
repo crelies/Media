@@ -29,15 +29,15 @@ public extension Audio {
     /// @FetchAsset(filter: [.localIdentifier("1234")])
     /// private var audio: Audio?
     ///
-    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: String) -> Audio? {
+    static func with(identifier: Media.Identifier) -> Audio? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.audio.rawValue)
+        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.audio.rawValue)
         options.predicate = predicate
 
         let audio = PHAssetFetcher.fetchAsset(options: options) { asset in
-            if asset.localIdentifier == identifier && asset.mediaType == .audio {
+            if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .audio {
                 return true
             }
             return false

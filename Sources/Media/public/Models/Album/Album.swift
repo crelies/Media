@@ -77,7 +77,7 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Album.with(title: title) == nil else {
+        guard Album.with(localizedTitle: title) == nil else {
             completion(.failure(AlbumError.albumWithTitleExists))
             return
         }
@@ -107,14 +107,14 @@ public extension Album {
     /// @FetchAlbum(filter: [.localIdentifier("1234")])
     /// private var album: Album?
     ///
-    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: String) -> Album? {
+    static func with(identifier: Media.Identifier) -> Album? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@", identifier)
+        let predicate = NSPredicate(format: "localIdentifier = %@", identifier.localIdentifier)
         options.predicate = predicate
         let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { collection in
-            if collection.localIdentifier == identifier {
+            if collection.localIdentifier == identifier.localIdentifier {
                 return true
             }
             return false
@@ -128,14 +128,14 @@ public extension Album {
     /// @FetchAlbum(filter: [.localizedTitle("1234")])
     /// private var album: Album?
     ///
-    /// - Parameter title: the `localizedTitle` of the `PHAsset`
+    /// - Parameter localizedTitle: the `localizedTitle` of the `PHAsset`
     ///
-    static func with(title: String) -> Album? {
+    static func with(localizedTitle: String) -> Album? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localizedTitle = %@", title)
+        let predicate = NSPredicate(format: "localizedTitle = %@", localizedTitle)
         options.predicate = predicate
         let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { collection in
-            if collection.localizedTitle == title {
+            if collection.localizedTitle == localizedTitle {
                 return true
             }
             return false

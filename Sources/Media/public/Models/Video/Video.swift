@@ -155,15 +155,15 @@ public extension Video {
     /// @FetchAsset(filter: [.localIdentifier("1234")])
     /// private var video: Video?
     ///
-    /// - Parameter identifier: the `localIdentifier` of related `PHAsset`
+    /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: String) -> Video? {
+    static func with(identifier: Media.Identifier) -> Video? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.video.rawValue)
+        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.video.rawValue)
         options.predicate = predicate
 
         let video = PHAssetFetcher.fetchAsset(options: options) { asset in
-            if asset.localIdentifier == identifier && asset.mediaType == .video {
+            if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .video {
                 return true
             }
             return false

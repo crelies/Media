@@ -15,14 +15,14 @@ public protocol MediaProtocol {
     associatedtype MediaSubtype: MediaSubtypeProvider
 
     var phAsset: PHAsset { get }
-    var identifier: String { get }
+    var identifier: Media.Identifier { get }
     static var type: MediaType { get }
 
     init(phAsset: PHAsset)
 
     // TODO: osx 10.13
     @available(macOS 10.15, *)
-    static func with(identifier: String) -> Self?
+    static func with(identifier: Media.Identifier) -> Self?
 
     // TODO: osx 10.13
     @available(macOS 10.15, *)
@@ -32,7 +32,7 @@ public protocol MediaProtocol {
 extension MediaProtocol {
     /// A unique identifier, currently the `localIdentifier` of the `phAsset`
     ///
-    public var identifier: String { phAsset.localIdentifier }
+    public var identifier: Media.Identifier { Media.Identifier(localIdentifier: phAsset.localIdentifier) }
 }
 
 // TODO: osx 10.13

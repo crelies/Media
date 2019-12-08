@@ -6,7 +6,7 @@
 //
 
 public struct AnyMedia {
-    let identifier: String
+    let identifier: Media.Identifier
 
     public let value: Any
 

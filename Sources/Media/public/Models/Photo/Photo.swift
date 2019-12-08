@@ -206,15 +206,15 @@ public extension Photo {
     /// @FetchAsset(filter: [.localIdentifier("1234")])
     /// private var photo: Photo?
     ///
-    /// - Parameter identifier: the `localIdentifier` of the `PHAsset`
+    /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: String) -> Photo? {
+    static func with(identifier: Media.Identifier) -> Photo? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier, MediaType.image.rawValue)
+        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.image.rawValue)
         options.predicate = predicate
 
         let photo = PHAssetFetcher.fetchAsset(options: options) { asset in
-            if asset.localIdentifier == identifier && asset.mediaType == .image {
+            if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .image {
                 return true
             }
             return false
