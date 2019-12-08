@@ -11,4 +11,14 @@ extension Media {
     }
 }
 
-extension Media.Identifier: Equatable {}
+extension Media.Identifier: Hashable {}
+
+extension Media.Identifier: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        localIdentifier = value
+    }
+}
+
+extension Media.Identifier: CustomStringConvertible {
+    public var description: String { localIdentifier }
+}

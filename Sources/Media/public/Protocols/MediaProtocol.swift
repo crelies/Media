@@ -32,7 +32,7 @@ public protocol MediaProtocol {
 extension MediaProtocol {
     /// A unique identifier, currently the `localIdentifier` of the `phAsset`
     ///
-    public var identifier: Media.Identifier { Media.Identifier(localIdentifier: phAsset.localIdentifier) }
+    public var identifier: Media.Identifier { Media.Identifier(stringLiteral: phAsset.localIdentifier) }
 }
 
 // TODO: osx 10.13
