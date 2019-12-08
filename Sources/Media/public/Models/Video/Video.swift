@@ -157,7 +157,7 @@ public extension Video {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier) -> Video? {
+    static func with(identifier: Media.Identifier<Self>) -> Video? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.video.rawValue)
         options.predicate = predicate

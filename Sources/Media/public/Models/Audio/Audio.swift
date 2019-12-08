@@ -31,7 +31,7 @@ public extension Audio {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier) -> Audio? {
+    static func with(identifier: Media.Identifier<Self>) -> Audio? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.audio.rawValue)
         options.predicate = predicate

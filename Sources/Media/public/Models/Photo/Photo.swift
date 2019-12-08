@@ -208,7 +208,7 @@ public extension Photo {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier) -> Photo? {
+    static func with(identifier: Media.Identifier<Self>) -> Photo? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.image.rawValue)
         options.predicate = predicate

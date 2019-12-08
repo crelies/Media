@@ -6,12 +6,12 @@
 //
 
 public struct AnyMedia {
-    let identifier: Media.Identifier
+    let localIdentifier: String
 
     public let value: Any
 
     init<T: MediaProtocol>(_ media: T) {
-        identifier = media.identifier
+        localIdentifier = media.identifier.localIdentifier
         value = media
     }
 }

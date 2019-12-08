@@ -72,7 +72,7 @@ public extension LivePhoto {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier) -> LivePhoto? {
+    static func with(identifier: Media.Identifier<Self>) -> LivePhoto? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier.localIdentifier, MediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue)
         options.predicate = predicate

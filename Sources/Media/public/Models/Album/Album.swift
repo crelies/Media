@@ -109,7 +109,7 @@ public extension Album {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier) -> Album? {
+    static func with(identifier: Album.Identifier) -> Album? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@", identifier.localIdentifier)
         options.predicate = predicate
@@ -156,7 +156,7 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard !allMedia.contains(where: { $0.identifier == media.identifier }) else {
+        guard !allMedia.contains(where: { $0.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return
         }
@@ -178,7 +178,7 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard allMedia.contains(where: { $0.identifier == media.identifier }) else {
+        guard allMedia.contains(where: { $0.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return
         }
