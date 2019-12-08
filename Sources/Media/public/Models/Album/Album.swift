@@ -156,7 +156,7 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard !allMedia.contains(where: { $0.localIdentifier == media.identifier.localIdentifier }) else {
+        guard !allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return
         }
@@ -178,7 +178,7 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard allMedia.contains(where: { $0.localIdentifier == media.identifier.localIdentifier }) else {
+        guard allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return
         }
