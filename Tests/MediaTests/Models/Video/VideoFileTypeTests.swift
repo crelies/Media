@@ -5,19 +5,44 @@
 //  Created by Christian Elies on 08.12.19.
 //
 
+import AVFoundation
+@testable import Media
 import XCTest
 
 final class VideoFileTypeTests: XCTestCase {
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testMovPathExtension() {
+        let fileType: Video.FileType = .mov
+        let expectedPathExtension = "mov"
+        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testMovAVFileType() {
+        let fileType: Video.FileType = .mov
+        let expectedAVFileType: AVFileType = .mov
+        XCTAssertEqual(fileType.avFileType, expectedAVFileType)
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testMP4PathExtension() {
+        let fileType: Video.FileType = .mp4
+        let expectedPathExtension = "mp4"
+        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
+    }
+
+    func testMP4AVFileType() {
+        let fileType: Video.FileType = .mp4
+        let expectedAVFileType: AVFileType = .mp4
+        XCTAssertEqual(fileType.avFileType, expectedAVFileType)
+    }
+
+    func testM4VPathExtension() {
+        let fileType: Video.FileType = .m4v
+        let expectedPathExtension = "m4v"
+        XCTAssertEqual(fileType.pathExtension, expectedPathExtension)
+    }
+
+    func testM4VAVFileType() {
+        let fileType: Video.FileType = .m4v
+        let expectedAVFileType: AVFileType = .m4v
+        XCTAssertEqual(fileType.avFileType, expectedAVFileType)
     }
 }
