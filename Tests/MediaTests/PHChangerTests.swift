@@ -73,4 +73,26 @@ final class PHChangerTests: XCTestCase {
         default: ()
         }
     }
+
+    func testRequestWithSuccess() {
+        let expectation = self.expectation(description: "RequestCompleted")
+
+        var result: Result<Void, Error>?
+        PHChanger.request({ nil }) { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 2, handler: nil)
+
+        XCTAssertNotNil(result)
+
+        switch result {
+        case .success: ()
+        case .failure:
+            XCTFail("Invalid result")
+        case .none:
+            XCTFail("Missing result")
+        }
+    }
 }
