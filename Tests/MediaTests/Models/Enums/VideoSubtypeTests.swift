@@ -5,19 +5,25 @@
 //  Created by Christian Elies on 08.12.19.
 //
 
+@testable import Media
 import XCTest
 
 final class VideoSubtypeTests: XCTestCase {
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testStreamedMediaSubtype() {
+        let subtype: VideoSubtype = .streamed
+        let expectedMediaSubtype: MediaSubtype = .videoStreamed
+        XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testHighFrameRateMediaSubtype() {
+        let subtype: VideoSubtype = .highFrameRate
+        let expectedMediaSubtype: MediaSubtype = .videoHighFrameRate
+        XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testTimelapseMediaSubtype() {
+        let subtype: VideoSubtype = .timelapse
+        let expectedMediaSubtype: MediaSubtype = .videoTimelapse
+        XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 }
