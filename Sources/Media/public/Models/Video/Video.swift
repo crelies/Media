@@ -12,6 +12,7 @@ import Photos
 ///
 public struct Video: MediaProtocol {
     public typealias MediaSubtype = VideoSubtype
+    public typealias MediaFileType = Video.FileType
     public let phAsset: PHAsset
     public static let type: MediaType = .video
     public var isFavorite: Bool { phAsset.isFavorite }
@@ -99,13 +100,13 @@ public extension Video {
             } else if let exportSession = exportSession {
                 // TODO: improve
                 exportSession.determineCompatibleFileTypes { compatibleFileTypes in
-                    guard compatibleFileTypes.contains(exportOptions.fileType.avFileType) else {
+                    guard compatibleFileTypes.contains(exportOptions.outputURL.fileType.avFileType) else {
                         completion(.failure(VideoError.unsupportedFileType))
                         return
                     }
 
-                    exportSession.outputURL = exportOptions.outputURL
-                    exportSession.outputFileType = exportOptions.fileType.avFileType
+                    exportSession.outputURL = exportOptions.outputURL.value
+                    exportSession.outputFileType = exportOptions.outputURL.fileType.avFileType
 
                     var timer: Timer?
                     if #available(iOS 10.0, macOS 10.13, tvOS 10, *) {
@@ -184,7 +185,7 @@ public extension Video {
     ///   - url: URL to the media
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
-    static func save(_ mediaURL: MediaURL<Self, Video.FileType>, _ completion: @escaping (Result<Video, Error>) -> Void) {
+    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Video, Error>) -> Void) {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
     }
 

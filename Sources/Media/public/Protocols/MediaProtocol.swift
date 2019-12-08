@@ -13,6 +13,7 @@ import Photos
 ///
 public protocol MediaProtocol {
     associatedtype MediaSubtype: MediaSubtypeProvider
+    associatedtype MediaFileType: RawRepresentable where MediaFileType.RawValue == String, MediaFileType: CaseIterable, MediaFileType: PathExtensionsProvider
 
     var phAsset: PHAsset { get }
     var identifier: Media.Identifier<Self> { get }

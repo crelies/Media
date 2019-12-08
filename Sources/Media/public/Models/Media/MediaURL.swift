@@ -10,9 +10,9 @@ import Foundation
 /// Generic URL type for different types of media
 /// like `Photo` or `Video`
 ///
-@available(iOS 11, *)
-public struct MediaURL<T: MediaProtocol, FileType: CaseIterable> where FileType: PathExtensionsProvider {
+public struct MediaURL<T: MediaProtocol> {
     let value: URL
+    let fileType: T.MediaFileType
 
     /// Initializes with the given URL
     /// Throws a `MediaURLError` if the path extension of the URL doesn't match the specific file type
@@ -20,7 +20,7 @@ public struct MediaURL<T: MediaProtocol, FileType: CaseIterable> where FileType:
     /// - Parameter url: the URL of the media
     ///
     public init(url: URL) throws {
-        let supportedPathExtensions = Set(FileType.allCases.map { $0.pathExtensions }.flatMap {$0 })
+        let supportedPathExtensions = Set(T.MediaFileType.allCases.map { $0.pathExtensions }.flatMap {$0 })
 
         switch url.pathExtension {
         case \.isEmpty:
@@ -28,7 +28,11 @@ public struct MediaURL<T: MediaProtocol, FileType: CaseIterable> where FileType:
         case .unsupportedPathExtension(supportedPathExtensions: supportedPathExtensions):
             throw MediaURLError.unsupportedPathExtension
         default:
+            guard let fileType = T.MediaFileType(rawValue: url.pathExtension) else {
+                throw MediaURLError.couldNotCreateFileType
+            }
             self.value = url
+            self.fileType = fileType
         }
     }
 }

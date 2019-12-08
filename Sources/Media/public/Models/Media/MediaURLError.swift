@@ -8,6 +8,7 @@
 import Foundation
 
 public enum MediaURLError: Error {
+    case couldNotCreateFileType
     case missingPathExtension
     case unsupportedPathExtension
 }

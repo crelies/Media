@@ -12,6 +12,7 @@ import Photos
 ///
 public struct LivePhoto: MediaProtocol {
     public typealias MediaSubtype = LivePhotoSubtype
+    public typealias MediaFileType = LivePhoto.FileType
     public let phAsset: PHAsset
     public static let type: MediaType = .image
     public var isFavorite: Bool { phAsset.isFavorite }
