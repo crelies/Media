@@ -33,8 +33,9 @@ public extension Audio {
     ///
     static func with(identifier: Media.Identifier<Self>) -> Audio? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.audio.rawValue)
-        options.predicate = predicate
+        let mediaTypeFilter: MediaFilter<AudioSubtype> = .localIdentifier(identifier.localIdentifier)
+        let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
+        options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 
         let audio = PHAssetFetcher.fetchAsset(options: options) { asset in
             if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .audio {
