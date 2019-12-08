@@ -16,7 +16,7 @@ import Photos
 public final class FetchAssets<T: MediaProtocol> {
     private let options = PHFetchOptions()
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
-    private let defaultSort: Sort<MediaSortKey> = Sort(key: .creationDate, ascending: false)
+    private let defaultSort: Sort<Media.SortKey> = Sort(key: .creationDate, ascending: false)
 
     private lazy var assets: [T] = {
         PHAssetFetcher.fetchAssets(options: options)
@@ -43,7 +43,7 @@ public final class FetchAssets<T: MediaProtocol> {
     ///   - includeHiddenAssets: a Boolean value that determines whether the fetch result includes assets marked as hidden, defaults to false
     ///
     public init(filter: Set<MediaFilter<T.MediaSubtype>> = [],
-                sort: Set<Sort<MediaSortKey>> = [],
+                sort: Set<Sort<Media.SortKey>> = [],
                 fetchLimit: Int = 0,
                 includeAllBurstAssets: Bool = false,
                 includeHiddenAssets: Bool = false) {
