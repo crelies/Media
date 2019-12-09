@@ -13,16 +13,12 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
-public final class FetchAssets<T: MediaProtocol> {
+public struct FetchAssets<T: MediaProtocol> {
     private let options = PHFetchOptions()
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
     private let defaultSort: Sort<Media.SortKey> = Sort(key: .creationDate, ascending: false)
 
-    private lazy var assets: [T] = {
-        PHAssetFetcher.fetchAssets(options: options)
-    }()
-
-    public var wrappedValue: [T] { assets }
+    public var wrappedValue: [T] { PHAssetFetcher.fetchAssets(options: options) }
 
     /// Initializes the property wrapper using a default sort descriptor
     /// (sort by `creationDate descending`)
