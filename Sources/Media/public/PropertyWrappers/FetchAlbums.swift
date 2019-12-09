@@ -12,21 +12,19 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
-public final class FetchAlbums {
+public struct FetchAlbums {
     private let options = PHFetchOptions()
     private let defaultSort: Sort<Album.SortKey> = Sort(key: .localizedTitle, ascending: true)
 
     private let albumType: AlbumType?
 
-    private lazy var albums: [Album] = {
+    public var wrappedValue: [Album] {
         AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
                                  subtype: .any,
                                  options: options) { collection in
             self.albumType?.subtypes.contains(collection.assetCollectionSubtype) ?? true
         }
-    }()
-
-    public var wrappedValue: [Album] { albums }
+    }
 
     /// Initializes the property wrapper without an album type filter and
     /// with a default sort descriptor (sort by `localizedTitle ascending`)
