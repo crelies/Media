@@ -113,12 +113,7 @@ public extension Album {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@", identifier.localIdentifier)
         options.predicate = predicate
-        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { collection in
-            if collection.localIdentifier == identifier.localIdentifier {
-                return true
-            }
-            return false
-        }
+        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localIdentifier == identifier.localIdentifier }
         return album
     }
 
@@ -134,12 +129,7 @@ public extension Album {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localizedTitle = %@", localizedTitle)
         options.predicate = predicate
-        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { collection in
-            if collection.localizedTitle == localizedTitle {
-                return true
-            }
-            return false
-        }
+        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localizedTitle == localizedTitle }
         return album
     }
 }

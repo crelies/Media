@@ -9,9 +9,13 @@ import Photos
 
 final class MockPHAssetCollection: PHAssetCollection {
     static var fetchResult = MockPHAssetCollectionFetchResult()
+    var localIdentifierToReturn = UUID().uuidString
+    var localizedTitleToReturn = "Title"
     var assetCollectionTypeToReturn: PHAssetCollectionType = .album
     var assetCollectionSubtypeToReturn: PHAssetCollectionSubtype = .albumRegular
 
+    override var localIdentifier: String { localIdentifierToReturn }
+    override var localizedTitle: String? { localizedTitleToReturn }
     override var assetCollectionType: PHAssetCollectionType { assetCollectionTypeToReturn }
     override var assetCollectionSubtype: PHAssetCollectionSubtype { assetCollectionSubtypeToReturn }
 
