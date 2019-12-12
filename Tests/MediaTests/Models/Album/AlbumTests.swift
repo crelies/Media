@@ -166,7 +166,7 @@ final class AlbumTests: XCTestCase {
         switch result {
         case .success: ()
         default:
-            XCTFail("Invalid album create result")
+            XCTFail("Invalid album create result \(String(describing: result))")
         }
     }
 
@@ -209,7 +209,7 @@ final class AlbumTests: XCTestCase {
         case .failure(let error):
             XCTAssertEqual(error as? MediaError, .unknown)
         default:
-            XCTFail("Invalid album delete result")
+            XCTFail("Invalid album delete result \(String(describing: result))")
         }
     }
 
@@ -227,7 +227,7 @@ final class AlbumTests: XCTestCase {
         switch result {
         case .success: ()
         default:
-            XCTFail("Invalid album delete result")
+            XCTFail("Invalid album delete result \(String(describing: result))")
         }
     }
 }

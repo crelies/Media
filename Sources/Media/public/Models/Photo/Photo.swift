@@ -14,6 +14,8 @@ import Photos
 /// Represents `Photo`s
 ///
 public struct Photo: MediaProtocol {
+    static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
+
     public typealias MediaSubtype = PhotoSubtype
     public typealias MediaFileType = Photo.FileType
     public let phAsset: PHAsset
@@ -162,7 +164,7 @@ public extension Photo {
     ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
     static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Photo, Error>) -> Void) {
-        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
+        PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
                                      completion)
     }
 
@@ -174,7 +176,7 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
-        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAsset(from: image) },
+        PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)
     }
     #endif

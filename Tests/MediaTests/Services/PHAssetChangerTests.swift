@@ -69,7 +69,7 @@ final class PHAssetChangerTests: XCTestCase {
             let mediaError = error as? MediaError
             XCTAssertEqual(mediaError, MediaError.unknown)
         default:
-            XCTFail()
+            XCTFail("Invalid result \(String(describing: result))")
         }
     }
 
@@ -91,7 +91,7 @@ final class PHAssetChangerTests: XCTestCase {
         case .failure(let error):
             XCTFail(error.localizedDescription)
         case .none:
-            XCTFail()
+            XCTFail("Invalid result \(String(describing: result))")
         }
     }
 }
