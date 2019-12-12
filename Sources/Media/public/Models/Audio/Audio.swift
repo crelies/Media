@@ -38,12 +38,7 @@ public extension Audio {
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 
-        let audio = PHAssetFetcher.fetchAsset(options: options) { asset in
-            if asset.localIdentifier == identifier.localIdentifier && asset.mediaType == .audio {
-                return true
-            }
-            return false
-        } as Audio?
+        let audio = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .audio } as Audio?
         return audio
     }
 }
