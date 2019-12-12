@@ -12,26 +12,17 @@ import UIKit
 
 @available(iOS 13, macOS 10.15, *)
 struct MediaPicker: UIViewControllerRepresentable {
+    static var imagePickerControllerType: UIImagePickerController.Type = UIImagePickerController.self
+
     let sourceType: UIImagePickerController.SourceType
     let mediaTypes: [UIImagePickerController.MediaType]
     let onSelection: (MediaPickerValue) -> Void
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPicker>) -> UIImagePickerController {
-        let imagePickerViewController = UIImagePickerController()
+        let imagePickerViewController = Self.imagePickerControllerType.init()
 
-        if !mediaTypes.isEmpty, let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: sourceType), !availableMediaTypes.isEmpty {
-            let imagePickerViewControllerMediaTypes: [String] = mediaTypes.compactMap { mediaType in
-                let mediaTypeString = mediaType.cfString as String
-                guard availableMediaTypes.contains(mediaTypeString) else {
-                    return nil
-                }
-                return mediaTypeString
-            }
-            if !imagePickerViewControllerMediaTypes.isEmpty {
-                imagePickerViewController.mediaTypes = availableMediaTypes
-            }
-        } else if let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: sourceType), !availableMediaTypes.isEmpty {
-            imagePickerViewController.mediaTypes = availableMediaTypes
+        if let mediaTypes = Self.imagePickerControllerType.supportedMediaTypes(from: mediaTypes, sourceType: sourceType) {
+            imagePickerViewController.mediaTypes = mediaTypes
         }
 
         imagePickerViewController.sourceType = sourceType
