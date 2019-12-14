@@ -10,8 +10,12 @@ import Photos
 
 final class MockVideoManager: VideoManager {
     var mockRequestID = PHImageRequestID()
+    var avPlayerItemToReturn: AVPlayerItem?
+    var avAssetToReturn: AVAsset?
+    var infoToReturn: [AnyHashable : Any]?
 
     func requestPlayerItem(forVideo asset: PHAsset, options: PHVideoRequestOptions?, resultHandler: @escaping (AVPlayerItem?, [AnyHashable : Any]?) -> Void) -> PHImageRequestID {
+        resultHandler(avPlayerItemToReturn, infoToReturn)
         return mockRequestID
     }
 
@@ -20,6 +24,7 @@ final class MockVideoManager: VideoManager {
     }
 
     func requestAVAsset(forVideo asset: PHAsset, options: PHVideoRequestOptions?, resultHandler: @escaping (AVAsset?, AVAudioMix?, [AnyHashable : Any]?) -> Void) -> PHImageRequestID {
+        resultHandler(avAssetToReturn, nil, infoToReturn)
         return mockRequestID
     }
 }
