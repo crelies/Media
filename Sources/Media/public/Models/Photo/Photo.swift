@@ -15,6 +15,7 @@ import Photos
 ///
 public struct Photo: MediaProtocol {
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
+    static var imageManager: ImageManager = PHImageManager.default()
 
     public typealias MediaSubtype = PhotoSubtype
     public typealias MediaFileType = Photo.FileType
@@ -101,7 +102,7 @@ public extension Photo {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         if #available(iOS 13, macOS 10.15, tvOS 13, *) {
-            PHImageManager.default().requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
+            Self.imageManager.requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
                 PHImageManager.handleResult(result: (data, info), completion)
             })
         } else {
@@ -140,10 +141,10 @@ public extension Photo {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
 
-        PHImageManager.default().requestImage(for: phAsset,
-                                              targetSize: targetSize,
-                                              contentMode: contentMode,
-                                              options: options)
+        Self.imageManager.requestImage(for: phAsset,
+                                       targetSize: targetSize,
+                                       contentMode: contentMode,
+                                       options: options)
         { image, info in
             PHImageManager.handlePotentialDegradedResult((image, info), completion)
         }

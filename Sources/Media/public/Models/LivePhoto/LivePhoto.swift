@@ -11,6 +11,8 @@ import Photos
 /// Represents `LivePhoto` media
 ///
 public struct LivePhoto: MediaProtocol {
+    static var livePhotoManager: LivePhotoManager = PHImageManager.default()
+
     public typealias MediaSubtype = LivePhotoSubtype
     public typealias MediaFileType = LivePhoto.FileType
     public let phAsset: PHAsset
@@ -36,10 +38,11 @@ public extension LivePhoto {
                                _ completion: @escaping (Result<Media.DisplayRepresentation<PHLivePhoto>, Error>) -> Void) {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
-        PHImageManager.default().requestLivePhoto(for: phAsset,
-                                                  targetSize: targetSize,
-                                                  contentMode: contentMode,
-                                                  options: options)
+
+        Self.livePhotoManager.requestLivePhoto(for: phAsset,
+                                               targetSize: targetSize,
+                                               contentMode: contentMode,
+                                               options: options)
         { livePhoto, info in
             PHImageManager.handlePotentialDegradedResult((livePhoto, info), completion)
         }
@@ -75,8 +78,11 @@ public extension LivePhoto {
     ///
     static func with(identifier: Media.Identifier<Self>) -> LivePhoto? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d && (mediaSubtypes & %d) != 0", identifier.localIdentifier, MediaType.image.rawValue, PHAssetMediaSubtype.photoLive.rawValue)
-        options.predicate = predicate
+
+        let mediaFilter: [MediaFilter<LivePhotoSubtype>] = [.localIdentifier(identifier.localIdentifier), .mediaSubtypes([.live])]
+        let mediaFilterPredicates = mediaFilter.map { $0.predicate }
+        let mediaTypePredicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
+        options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate] + mediaFilterPredicates)
 
         let livePhoto = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .image && $0.mediaSubtypes.contains(.photoLive) } as LivePhoto?
         return livePhoto

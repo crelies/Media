@@ -11,6 +11,8 @@ import Photos
 /// Represents `Video`s
 ///
 public struct Video: MediaProtocol {
+    static var videoManager: VideoManager = PHImageManager.default()
+
     public typealias MediaSubtype = VideoSubtype
     public typealias MediaFileType = Video.FileType
     public let phAsset: PHAsset
@@ -60,8 +62,9 @@ public extension Video {
     func playerItem(_ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
+        // TODO: delivery mode
 
-        PHImageManager.default().requestPlayerItem(forVideo: phAsset, options: options) { playerItem, info in
+        Self.videoManager.requestPlayerItem(forVideo: phAsset, options: options) { playerItem, info in
             PHImageManager.handleResult(result: (playerItem, info), completion)
         }
     }
@@ -73,8 +76,9 @@ public extension Video {
     func avAsset(_ completion: @escaping (Result<AVAsset, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
+        // TODO: delivery mode
 
-        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { asset, _, info in
+        Self.videoManager.requestAVAsset(forVideo: phAsset, options: options) { asset, _, info in
             PHImageManager.handleResult(result: (asset, info), completion)
         }
     }
@@ -95,10 +99,11 @@ public extension Video {
 
         let requestOptions = PHVideoRequestOptions()
         requestOptions.isNetworkAccessAllowed = true
+        // TODO: delivery mode
 
-        PHImageManager.default().requestExportSession(forVideo: phAsset,
-                                                      options: requestOptions,
-                                                      exportPreset: exportPreset)
+        Self.videoManager.requestExportSession(forVideo: phAsset,
+                                               options: requestOptions,
+                                               exportPreset: exportPreset)
         { exportSession, info in
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
@@ -165,7 +170,10 @@ public extension Video {
     ///
     static func with(identifier: Media.Identifier<Self>) -> Video? {
         let options = PHFetchOptions()
-        let predicate = NSPredicate(format: "localIdentifier = %@ && mediaType = %d", identifier.localIdentifier, MediaType.video.rawValue)
+
+        let localIdentifierFilter: MediaFilter<VideoSubtype> = .localIdentifier(identifier.localIdentifier)
+        let mediaTypePredicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, localIdentifierFilter.predicate])
         options.predicate = predicate
 
         let video = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .video } as Video?
