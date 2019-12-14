@@ -12,13 +12,8 @@ import XCTest
 @available(macOS 10.15, *)
 final class AlbumFetcherTests: XCTestCase {
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
         AlbumFetcher.assetCollection = MockPHAssetCollection.self
         MockPHAssetCollection.fetchResult.mockAssetCollections.removeAll()
-    }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     func testFetchAlbumsWithNoAlbums() {
@@ -35,7 +30,12 @@ final class AlbumFetcherTests: XCTestCase {
     }
 
     func testFetchAlbumsWithFilter() {
-
+        let assetCollection = MockPHAssetCollection()
+        assetCollection.assetCollectionSubtypeToReturn = .albumRegular
+        MockPHAssetCollection.fetchResult.mockAssetCollections = [assetCollection]
+        let options = PHFetchOptions()
+        let albums = AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { $0.assetCollectionSubtype == .albumRegular }
+        XCTAssertFalse(albums.isEmpty)
     }
 
     func testFetchAlbumWithNoAlbum() {
@@ -52,6 +52,11 @@ final class AlbumFetcherTests: XCTestCase {
     }
 
     func testFetchAlbumWithFilter() {
-
+        let assetCollection = MockPHAssetCollection()
+        assetCollection.assetCollectionSubtypeToReturn = .albumRegular
+        MockPHAssetCollection.fetchResult.mockAssetCollections = [assetCollection]
+        let options = PHFetchOptions()
+        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.assetCollectionSubtype == .albumRegular }
+        XCTAssertNotNil(album)
     }
 }
