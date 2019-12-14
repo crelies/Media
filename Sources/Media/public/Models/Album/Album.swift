@@ -78,7 +78,7 @@ public extension Album {
     ///
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard Album.with(localizedTitle: title) == nil else {
-            completion(.failure(AlbumError.albumWithTitleExists))
+            completion(.failure(AlbumError.albumWithTitleExists(title)))
             return
         }
 

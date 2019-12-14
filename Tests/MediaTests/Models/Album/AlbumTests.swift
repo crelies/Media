@@ -146,7 +146,11 @@ final class AlbumTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? AlbumError, .albumWithTitleExists)
+            guard case let AlbumError.albumWithTitleExists(title) = error else {
+                XCTFail("Invalid error")
+                return
+            }
+            XCTAssertEqual(title, localizedTitle)
         default:
             XCTFail("Invalid album create result")
         }
