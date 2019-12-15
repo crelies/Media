@@ -196,39 +196,6 @@ public extension Video {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
     }
 
-    // TODO:
-    /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
-        let options = PHContentEditingInputRequestOptions()
-        let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
-            var contentEditingInput = contentEditingInput
-            change(&contentEditingInput)
-
-            if let editingInput = contentEditingInput {
-                guard Media.isAccessAllowed else {
-                    completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-                    return
-                }
-
-                let output = PHContentEditingOutput(contentEditingInput: editingInput)
-
-                PHPhotoLibrary.shared().performChanges({
-                    let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
-                    assetChangeRequest.contentEditingOutput = output
-                }) { isSuccess, error in
-                    if !isSuccess {
-                        completion(.failure(error ?? PhotosError.unknown))
-                    } else {
-                        completion(.success(()))
-                    }
-                }
-            }
-        }
-
-        return {
-            self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
-        }
-    }*/
-
     /// Updates the `favorite` state of the receiver if the access to the photo library is allowed
     ///
     /// - Parameters:
@@ -254,3 +221,36 @@ extension Video {
         progress(exportProgress)
     }
 }
+
+// TODO:
+/*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
+    let options = PHContentEditingInputRequestOptions()
+    let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
+        var contentEditingInput = contentEditingInput
+        change(&contentEditingInput)
+
+        if let editingInput = contentEditingInput {
+            guard Media.isAccessAllowed else {
+                completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+                return
+            }
+
+            let output = PHContentEditingOutput(contentEditingInput: editingInput)
+
+            PHPhotoLibrary.shared().performChanges({
+                let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
+                assetChangeRequest.contentEditingOutput = output
+            }) { isSuccess, error in
+                if !isSuccess {
+                    completion(.failure(error ?? PhotosError.unknown))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
+    }
+
+    return {
+        self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
+    }
+}*/
