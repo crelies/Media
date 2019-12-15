@@ -39,7 +39,7 @@ extension LivePhotoView {
                         guard livePhotoDisplayRepresentation.quality == .high else {
                             return
                         }
-                        self.phLivePhoto = livePhotoDisplayRepresentation.value
+                        self.phLivePhoto = livePhotoDisplayRepresentation.value as? PHLivePhoto
                     case .failure(let error):
                         self.error = error
                     }

@@ -35,14 +35,14 @@ public extension LivePhoto {
     ///
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
-                               _ completion: @escaping (Result<Media.DisplayRepresentation<PHLivePhoto>, Error>) -> Void) {
+                               _ completion: @escaping (Result<Media.DisplayRepresentation<PHLivePhotoProtocol>, Error>) -> Void) {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
 
-        Self.livePhotoManager.requestLivePhoto(for: phAsset,
-                                               targetSize: targetSize,
-                                               contentMode: contentMode,
-                                               options: options)
+        Self.livePhotoManager.customRequestLivePhoto(for: phAsset,
+                                                     targetSize: targetSize,
+                                                     contentMode: contentMode,
+                                                     options: options)
         { livePhoto, info in
             PHImageManager.handlePotentialDegradedResult((livePhoto, info), completion)
         }
@@ -92,39 +92,6 @@ public extension LivePhoto {
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension LivePhoto {
-    // TODO:
-    /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
-        let options = PHContentEditingInputRequestOptions()
-        let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
-            var contentEditingInput = contentEditingInput
-            change(&contentEditingInput)
-
-            if let editingInput = contentEditingInput {
-                guard Media.isAccessAllowed else {
-                    completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-                    return
-                }
-
-                let output = PHContentEditingOutput(contentEditingInput: editingInput)
-
-                PHPhotoLibrary.shared().performChanges({
-                    let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
-                    assetChangeRequest.contentEditingOutput = output
-                }) { isSuccess, error in
-                    if !isSuccess {
-                        completion(.failure(error ?? PhotosError.unknown))
-                    } else {
-                        completion(.success(()))
-                    }
-                }
-            }
-        }
-
-        return {
-            self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
-        }
-    }*/
-
     /// Updates the favorite state of the receiver if the access to the photo library is allowed
     ///
     /// - Parameters:
@@ -135,3 +102,36 @@ public extension LivePhoto {
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 }
+
+// TODO:
+/*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
+    let options = PHContentEditingInputRequestOptions()
+    let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
+        var contentEditingInput = contentEditingInput
+        change(&contentEditingInput)
+
+        if let editingInput = contentEditingInput {
+            guard Media.isAccessAllowed else {
+                completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
+                return
+            }
+
+            let output = PHContentEditingOutput(contentEditingInput: editingInput)
+
+            PHPhotoLibrary.shared().performChanges({
+                let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
+                assetChangeRequest.contentEditingOutput = output
+            }) { isSuccess, error in
+                if !isSuccess {
+                    completion(.failure(error ?? PhotosError.unknown))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
+    }
+
+    return {
+        self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
+    }
+}*/
