@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIImagePickerController {
-    static func supportedMediaTypes(from mediaTypes: [UIImagePickerController.MediaType],
+    static func supportedMediaTypes(from mediaTypes: Set<UIImagePickerController.MediaType>,
                                     sourceType: UIImagePickerController.SourceType) -> [String]? {
         guard let availableMediaTypes = Self.availableMediaTypes(for: sourceType) else {
             return nil

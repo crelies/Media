@@ -18,7 +18,7 @@ public struct Camera {
     ///
     public static func view(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         let availableMediaTypes = try (UIImagePickerController.availableMediaTypes(for: .camera) ?? []).map { try UIImagePickerController.MediaType(string: $0) }
-        return try ViewCreator.camera(for: availableMediaTypes, completion)
+        return try ViewCreator.camera(for: Set(availableMediaTypes), completion)
     }
 }
 #endif

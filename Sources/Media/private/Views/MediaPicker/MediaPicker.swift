@@ -15,7 +15,7 @@ struct MediaPicker: UIViewControllerRepresentable {
     static var imagePickerControllerType: UIImagePickerController.Type = UIImagePickerController.self
 
     let sourceType: UIImagePickerController.SourceType
-    let mediaTypes: [UIImagePickerController.MediaType]
+    let mediaTypes: Set<UIImagePickerController.MediaType>
     let onSelection: (MediaPickerValue) -> Void
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPicker>) -> UIImagePickerController {

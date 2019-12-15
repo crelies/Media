@@ -11,7 +11,7 @@ import UIKit
 
 @available(iOS 13, macOS 10.15, *)
 struct ViewCreator {
-    static func camera(for mediaTypes: [UIImagePickerController.MediaType],
+    static func camera(for mediaTypes: Set<UIImagePickerController.MediaType>,
                        _ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             throw CameraError.noCameraAvailable
@@ -26,7 +26,7 @@ struct ViewCreator {
         }
     }
 
-    static func browser<T: MediaProtocol>(mediaTypes: [UIImagePickerController.MediaType],
+    static func browser<T: MediaProtocol>(mediaTypes: Set<UIImagePickerController.MediaType>,
                                           _ completion: @escaping (Result<T, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
             throw MediaPickerError.noBrowsingSourceTypeAvailable
