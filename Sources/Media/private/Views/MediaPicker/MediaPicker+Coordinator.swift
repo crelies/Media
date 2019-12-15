@@ -35,7 +35,6 @@ extension MediaPicker {
 
             switch (picker.sourceType, mediaType as CFString) {
             case (.camera, .image),
-                 (.camera, .livePhoto),
                  (.camera, .movie):
                 guard let imageURL = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
                     picker.dismiss(animated: true, completion: nil)
@@ -46,10 +45,23 @@ extension MediaPicker {
                 mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
+            case (.camera, .livePhoto):
+                guard let imageURL = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
+                    picker.dismiss(animated: true, completion: nil)
+                    return
+                }
+
+                guard let livePhoto = info[UIImagePickerController.InfoKey.livePhoto] as? PHLivePhoto else {
+                    picker.dismiss(animated: true, completion: nil)
+                    return
+                }
+
+                let mediaPickerValue: MediaPickerValue = .tookLivePhoto(livePhoto, url: imageURL)
+                mediaPicker.onSelection(mediaPickerValue)
+                picker.dismiss(animated: true, completion: nil)
+
             case (.photoLibrary, .image),
                  (.savedPhotosAlbum, .image),
-                 (.photoLibrary, .livePhoto),
-                 (.savedPhotosAlbum, .livePhoto),
                  (.photoLibrary, .movie),
                  (.savedPhotosAlbum, .movie):
                 guard let phAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
@@ -58,6 +70,22 @@ extension MediaPicker {
                 }
 
                 let mediaPickerValue: MediaPickerValue = .selectedMedia(phAsset: phAsset)
+                mediaPicker.onSelection(mediaPickerValue)
+                picker.dismiss(animated: true, completion: nil)
+
+            case (.photoLibrary, .livePhoto),
+                 (.savedPhotosAlbum, .livePhoto):
+                guard let phAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
+                    picker.dismiss(animated: true, completion: nil)
+                    return
+                }
+
+                guard let livePhoto = info[UIImagePickerController.InfoKey.livePhoto] as? PHLivePhoto else {
+                    picker.dismiss(animated: true, completion: nil)
+                    return
+                }
+
+                let mediaPickerValue: MediaPickerValue = .selectedLivePhoto(livePhoto, phAsset: phAsset)
                 mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
