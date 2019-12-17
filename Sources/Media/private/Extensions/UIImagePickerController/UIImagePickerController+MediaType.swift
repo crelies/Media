@@ -10,7 +10,7 @@ import CoreServices
 import UIKit
 
 extension UIImagePickerController {
-    enum MediaType {
+    enum MediaType: CaseIterable {
         case image
         case livePhoto
         case movie
