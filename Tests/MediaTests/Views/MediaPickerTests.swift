@@ -16,14 +16,10 @@ final class MediaPickerTests: XCTestCase {
         MockUIImagePickerController.availableMediaTypesToReturn = [CFString.image as String]
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testMakeUIViewController() {
+    func testInitPhotoLibraryMediaPicker() {
         let selection: (MediaPickerValue) -> Void = { value in }
-        let mediaPicker = MediaPicker(sourceType: .photoLibrary,
-                                      mediaTypes: [],
-                                      onSelection: selection)
+        _ = MediaPicker(sourceType: .photoLibrary,
+                        mediaTypes: [],
+                        onSelection: selection)
     }
 }
