@@ -12,14 +12,12 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
-public final class FetchAlbum {
+public struct FetchAlbum {
     private let options = PHFetchOptions().fetchLimit(1)
 
-    private lazy var album: Album? = {
+    public var wrappedValue: Album? {
         AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options)
-    }()
-
-    public var wrappedValue: Album? { album }
+    }
 
     /// Initializes the property wrapper using the given predicate
     /// as the fetch options

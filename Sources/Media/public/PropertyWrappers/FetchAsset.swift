@@ -12,17 +12,15 @@ import Photos
 // TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
-public final class FetchAsset<T: MediaProtocol> {
+public struct FetchAsset<T: MediaProtocol> {
     private let options = PHFetchOptions().fetchLimit(1)
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
 
-    private lazy var asset: T? = {
+    public var wrappedValue: T? {
         PHAssetFetcher.fetchAsset(options: options) { asset in
             asset.mediaType == T.type
         }
-    }()
-
-    public var wrappedValue: T? { asset }
+    }
 
     /// Initializes the property wrapper with the given predicate
     ///
