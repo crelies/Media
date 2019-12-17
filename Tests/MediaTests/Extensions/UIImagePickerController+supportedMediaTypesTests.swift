@@ -40,4 +40,14 @@ final class UIImagePickerController_supportedMediaTypesTests: XCTestCase {
         let expectedMediaTypes: [String] = [UIImagePickerController.MediaType.image.cfString, .movie].map { $0 as String }
         XCTAssertEqual(supportedMediaTypes?.sorted(), expectedMediaTypes.sorted())
     }
+
+    func testSupportedMediaTypesForPhotoLibraryWithLivePhotoMediaType() {
+        let supportedMediaTypes = UIImagePickerController.supportedMediaTypes(from: [.livePhoto], sourceType: .photoLibrary)
+        XCTAssertNil(supportedMediaTypes)
+    }
+
+    func testSupportedMediaTypesForSavedPhotosAlbumWithLivePhotoMediaType() {
+        let supportedMediaTypes = UIImagePickerController.supportedMediaTypes(from: [.livePhoto], sourceType: .savedPhotosAlbum)
+        XCTAssertNil(supportedMediaTypes)
+    }
 }
