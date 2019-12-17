@@ -10,6 +10,9 @@ import XCTest
 import UIKit
 
 final class UIImagePickerController_supportedMediaTypesTests: XCTestCase {
+    /*
+        Camera is not supported in simulator
+     */
     func testSupportedMediaTypesForCameraWithNoGivenMediaTypes() {
         let supportedMediaTypes = UIImagePickerController.supportedMediaTypes(from: [], sourceType: .camera)
         XCTAssertNil(supportedMediaTypes)
@@ -41,11 +44,17 @@ final class UIImagePickerController_supportedMediaTypesTests: XCTestCase {
         XCTAssertEqual(supportedMediaTypes?.sorted(), expectedMediaTypes.sorted())
     }
 
+    /*
+        Live photos seem to be unsupported in simulator
+     */
     func testSupportedMediaTypesForPhotoLibraryWithLivePhotoMediaType() {
         let supportedMediaTypes = UIImagePickerController.supportedMediaTypes(from: [.livePhoto], sourceType: .photoLibrary)
         XCTAssertNil(supportedMediaTypes)
     }
 
+    /*
+        Live photos seem to be unsupported in simulator
+     */
     func testSupportedMediaTypesForSavedPhotosAlbumWithLivePhotoMediaType() {
         let supportedMediaTypes = UIImagePickerController.supportedMediaTypes(from: [.livePhoto], sourceType: .savedPhotosAlbum)
         XCTAssertNil(supportedMediaTypes)
