@@ -14,6 +14,7 @@ import Photos
 /// Represents `Photo`s
 ///
 public struct Photo: MediaProtocol {
+    @available(macOS 10.15, *)
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
@@ -176,6 +177,7 @@ public extension Photo {
     ///   - image: the `UIImage` which should be saved
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
+    @available(macOS 10.15, *)
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)

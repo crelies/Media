@@ -7,6 +7,8 @@
 
 import Foundation
 
+// TODO: 10.13
+@available(macOS 10.15, *)
 extension Album {
     /// Represents the supported filter
     /// for filtering albums
@@ -21,8 +23,12 @@ extension Album {
     }
 }
 
+// TODO: 10.13
+@available(macOS 10.15, *)
 extension Album.Filter: Hashable {}
 
+// TODO: 10.13
+@available(macOS 10.15, *)
 extension Album.Filter {
     var predicate: NSPredicate {
         switch self {

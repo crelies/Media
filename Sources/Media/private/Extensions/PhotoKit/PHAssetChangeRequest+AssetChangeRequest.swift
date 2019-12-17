@@ -7,4 +7,5 @@
 
 import Photos
 
+@available(macOS 10.15, *)
 extension PHAssetChangeRequest: AssetChangeRequest {}

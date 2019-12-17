@@ -48,13 +48,13 @@ extension Video.ExportQuality {
         case .q3840x2160:
             return AVAssetExportPreset3840x2160
         case .hevc1920x1080:
-            if #available(iOS 11.0, *) {
+            if #available(iOS 11.0, tvOS 11.0, *) {
                 return AVAssetExportPresetHEVC1920x1080
             } else {
                 return nil
             }
         case .hevc3840x2160:
-            if #available(iOS 11.0, *) {
+            if #available(iOS 11.0, tvOS 11.0, *) {
                 return AVAssetExportPresetHEVC3840x2160
             } else {
                 return nil

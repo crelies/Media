@@ -28,15 +28,15 @@ extension MediaPicker {
             with a PHLivePhoto representation of the photo as the corresponding value.
          */
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            guard let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? NSString else {
+            guard let mediaType = info.mediaType else {
                 picker.dismiss(animated: true, completion: nil)
                 return
             }
 
-            switch (picker.sourceType, mediaType as CFString) {
+            switch (picker.sourceType, mediaType) {
             case (.camera, .image),
                  (.camera, .movie):
-                guard let imageURL = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
+                guard let imageURL = info.imageURL else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
@@ -46,12 +46,12 @@ extension MediaPicker {
                 picker.dismiss(animated: true, completion: nil)
 
             case (.camera, .livePhoto):
-                guard let imageURL = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
+                guard let imageURL = info.imageURL else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
 
-                guard let livePhoto = info[UIImagePickerController.InfoKey.livePhoto] as? PHLivePhoto else {
+                guard let livePhoto = info.phLivePhoto else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
@@ -64,7 +64,7 @@ extension MediaPicker {
                  (.savedPhotosAlbum, .image),
                  (.photoLibrary, .movie),
                  (.savedPhotosAlbum, .movie):
-                guard let phAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
+                guard let phAsset = info.phAsset else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
@@ -75,12 +75,12 @@ extension MediaPicker {
 
             case (.photoLibrary, .livePhoto),
                  (.savedPhotosAlbum, .livePhoto):
-                guard let phAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
+                guard let phAsset = info.phAsset else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }
 
-                guard let livePhoto = info[UIImagePickerController.InfoKey.livePhoto] as? PHLivePhoto else {
+                guard let livePhoto = info.phLivePhoto else {
                     picker.dismiss(animated: true, completion: nil)
                     return
                 }

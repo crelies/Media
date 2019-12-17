@@ -5,6 +5,8 @@
 //  Created by Christian Elies on 04.12.19.
 //
 
+// TODO: 10.13
+@available(macOS 10.15, *)
 extension Album {
     /// Represents the supported keys
     /// for sorting albums
