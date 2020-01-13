@@ -8,6 +8,7 @@
 @testable import Media
 import XCTest
 
+@available(macOS 10.15, *)
 final class PhotosTests: XCTestCase {
     let mockAsset = MockPHAsset()
 
@@ -78,12 +79,14 @@ final class PhotosTests: XCTestCase {
     }
 
     @available(iOS 10.2, *)
+    @available(tvOS 10.1, *)
     func testDepthEffectEmpty() {
         let photos = Media.Photos.depthEffect
         XCTAssertTrue(photos.isEmpty)
     }
 
     @available(iOS 10.2, *)
+    @available(tvOS 10.1, *)
     func testDepthEffectNotEmpty() {
         mockAsset.mediaSubtypesToReturn = [.photoDepthEffect]
         MockPHAsset.fetchResult.mockAssets = [mockAsset]

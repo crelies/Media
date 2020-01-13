@@ -7,6 +7,7 @@
 
 import Photos
 
+@available(macOS 10.15, *)
 final class MockPHObjectPlaceholder: PHObjectPlaceholder {
     var localIdentifierToReturn = UUID().uuidString
 

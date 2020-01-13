@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 14.12.19.
 //
 
+#if canImport(UIKit)
 @testable import Media
 import Photos
 import UIKit
@@ -20,3 +21,4 @@ final class MockImageManager: ImageManager {
         return mockRequestID
     }
 }
+#endif

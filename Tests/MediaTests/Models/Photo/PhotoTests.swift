@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 12.12.19.
 //
 
+#if canImport(UIKit)
 @testable import Media
 import XCTest
 
@@ -29,6 +30,7 @@ final class PhotoTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testSaveURLSuccess() {
         let localIdentifier = UUID().uuidString
         mockAsset.localIdentifierToReturn = localIdentifier
@@ -63,6 +65,7 @@ final class PhotoTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testSaveURLFailure() {
         MockPhotoLibrary.performChangesSuccess = false
         MockPhotoLibrary.performChangesError = MediaError.unknown
@@ -178,3 +181,4 @@ final class PhotoTests: XCTestCase {
         }
     }
 }
+#endif

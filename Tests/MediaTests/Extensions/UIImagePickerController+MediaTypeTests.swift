@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 08.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 @testable import Media
 import MobileCoreServices
 import XCTest
@@ -43,3 +44,4 @@ final class UIImagePickerController_MediaTypeTests: XCTestCase {
         }
     }
 }
+#endif

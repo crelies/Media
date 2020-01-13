@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 15.12.19.
 //
 
+#if canImport(UIKit)
 @testable import Media
 import Photos
 import UIKit
@@ -20,3 +21,4 @@ final class MockPHLivePhoto: PHLivePhotoProtocol {
 
     static func cancelRequest(withRequestID requestID: PHLivePhotoRequestID) {}
 }
+#endif

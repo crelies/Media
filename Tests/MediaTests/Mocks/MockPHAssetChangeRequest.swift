@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 12.12.19.
 //
 
+#if canImport(UIKit)
 @testable import Media
 import Photos
 import UIKit
@@ -22,3 +23,4 @@ final class MockPHAssetChangeRequest: AssetChangeRequest {
         Self.init()
     }
 }
+#endif

@@ -17,6 +17,7 @@ final class PhotoFileTypeTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testAVCIAVFileType() {
         let fileType: Photo.FileType = .avci
         let expectedAVFileType: AVFileType = .avci
@@ -30,6 +31,7 @@ final class PhotoFileTypeTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testHEICAVFileType() {
         let fileType: Photo.FileType = .heic
         let expectedAVFileType: AVFileType = .heic
@@ -43,6 +45,7 @@ final class PhotoFileTypeTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testHEIFAVFileType() {
         let fileType: Photo.FileType = .heif
         let expectedAVFileType: AVFileType = .heif
@@ -56,6 +59,7 @@ final class PhotoFileTypeTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testJPGAVFileType() {
         let fileType: Photo.FileType = .jpg
         let expectedAVFileType: AVFileType = .jpg
@@ -69,6 +73,7 @@ final class PhotoFileTypeTests: XCTestCase {
     }
 
     @available(iOS 11, *)
+    @available(tvOS 11, *)
     func testTIFAVFileType() {
         let fileType: Photo.FileType = .tif
         let expectedAVFileType: AVFileType = .tif

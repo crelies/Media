@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 10.12.19.
 //
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(tvOS)
 import UIKit
 
 final class MockUIImagePickerController: UIImagePickerController {

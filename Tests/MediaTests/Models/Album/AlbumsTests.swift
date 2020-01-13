@@ -8,6 +8,7 @@
 @testable import Media
 import XCTest
 
+@available(macOS 10.15, *)
 final class AlbumsTests: XCTestCase {
     let mockAssetCollection = MockPHAssetCollection()
 

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 08.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 @testable import Media
 import XCTest
 
@@ -30,3 +31,4 @@ final class ViewCreatorTests: XCTestCase {
         }
     }
 }
+#endif

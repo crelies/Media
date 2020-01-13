@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 17.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 @testable import Media
 import XCTest
 
@@ -19,3 +20,4 @@ final class CameraTests: XCTestCase {
         }
     }
 }
+#endif

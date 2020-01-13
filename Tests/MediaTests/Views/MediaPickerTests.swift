@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 10.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 @testable import Media
 import SwiftUI
 import XCTest
@@ -23,3 +24,4 @@ final class MediaPickerTests: XCTestCase {
                         onSelection: selection)
     }
 }
+#endif

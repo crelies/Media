@@ -8,6 +8,7 @@
 @testable import Media
 import Photos
 
+@available(macOS 10.15, *)
 final class MockVideoManager: VideoManager {
     var mockRequestID = PHImageRequestID()
     var avPlayerItemToReturn: AVPlayerItem?

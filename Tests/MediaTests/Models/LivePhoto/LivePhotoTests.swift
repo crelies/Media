@@ -18,7 +18,10 @@ final class LivePhotoTests: XCTestCase {
     override func setUp() {
         LivePhoto.livePhotoManager = livePhotoManager
         PHAssetFetcher.asset = MockPHAsset.self
-        PHAssetChanger.photoLibrary = photoLibrary
+
+        if #available(OSX 10.15, *) {
+            PHAssetChanger.photoLibrary = photoLibrary
+        }
 
         livePhotoManager.livePhotoToReturn = nil
         livePhotoManager.infoToReturn = nil
@@ -34,6 +37,7 @@ final class LivePhotoTests: XCTestCase {
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
 
+    #if !os(macOS)
     @available(iOS 10, *)
     func testDisplayRepresentationHighQualitySuccess() {
         livePhotoManager.livePhotoToReturn = MockPHLivePhoto()
@@ -104,7 +108,9 @@ final class LivePhotoTests: XCTestCase {
             XCTFail("Invalid display representaiton result \(String(describing: result))")
         }
     }
+    #endif
 
+    @available(macOS 10.15, *)
     func testWithIdentifierExists() {
         let localIdentifier = "Lopar"
         asset.localIdentifierToReturn = localIdentifier
@@ -117,6 +123,7 @@ final class LivePhotoTests: XCTestCase {
         XCTAssertNotNil(livePhoto)
     }
 
+    @available(macOS 10.15, *)
     func testWithIdentifierNotExists() {
         let localIdentifier = "Blop"
         let identifier = Media.Identifier<LivePhoto>(stringLiteral: localIdentifier)
@@ -124,6 +131,7 @@ final class LivePhotoTests: XCTestCase {
         XCTAssertNil(livePhoto)
     }
 
+    @available(macOS 10.15, *)
     func testFavoriteSuccess() {
         let expectation = self.expectation(description: "FavoriteResult")
 
@@ -143,6 +151,7 @@ final class LivePhotoTests: XCTestCase {
         }
     }
 
+    @available(macOS 10.15, *)
     func testFavoriteFailure() {
         let expectation = self.expectation(description: "FavoriteResult")
 

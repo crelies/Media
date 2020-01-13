@@ -10,6 +10,7 @@ import AVFoundation
 import Photos
 import XCTest
 
+@available(macOS 10.15, *)
 final class VideoTests: XCTestCase {
     let videoManager = MockVideoManager()
     let mockAsset = MockPHAsset()

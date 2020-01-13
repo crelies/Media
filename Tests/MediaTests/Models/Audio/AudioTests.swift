@@ -14,6 +14,7 @@ final class AudioTests: XCTestCase {
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
 
+    @available(macOS 10.15, *)
     func testWithIdentifierExists() {
         let localIdentifier = "Lopa"
 
@@ -27,6 +28,7 @@ final class AudioTests: XCTestCase {
         XCTAssertNotNil(audio)
     }
 
+    @available(macOS 10.15, *)
     func testWithIdentifierNotExists() {
         let localIdentifier = "Lopa"
         let identifier = Media.Identifier<Audio>(stringLiteral: localIdentifier)

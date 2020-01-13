@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 17.12.19.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 @testable import Media
 import XCTest
 import UIKit
@@ -60,3 +61,4 @@ final class UIImagePickerController_supportedMediaTypesTests: XCTestCase {
         XCTAssertNil(supportedMediaTypes)
     }
 }
+#endif

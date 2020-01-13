@@ -13,6 +13,8 @@ final class MockLivePhotoManager: LivePhotoManager {
 
     var livePhotoToReturn: PHLivePhotoProtocol?
     var infoToReturn: [AnyHashable:Any]?
+
+    @available(macOS 10.15, *)
     func customRequestLivePhoto(for asset: PHAsset, targetSize: CGSize, contentMode: PHImageContentMode, options: PHLivePhotoRequestOptions?, resultHandler: @escaping (PHLivePhotoProtocol?, [AnyHashable : Any]?) -> Void) -> PHImageRequestID {
         resultHandler(livePhotoToReturn, infoToReturn)
         return mockRequestID

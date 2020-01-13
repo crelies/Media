@@ -42,6 +42,8 @@ final class AlbumTypeTests: XCTestCase {
     }
 
     @available(iOS 13, *)
+    @available(macOS 10.15, *)
+    @available(tvOS 11, *)
     func testSubtypesForSmartType() {
         let albumType: AlbumType = .smart
         let expectedSubtypes: [PHAssetCollectionSubtype] = [.smartAlbumScreenshots,

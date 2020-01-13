@@ -28,6 +28,7 @@ final class PhotoSubtypeTests: XCTestCase {
     }
 
     @available(iOS 10.2, *)
+    @available(tvOS 10.1, *)
     func testDepthEffectMediaSubtype() {
         let subtype: PhotoSubtype = .depthEffect
         let expectedMediaSubtype: MediaSubtype = .photoDepthEffect
