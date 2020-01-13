@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: macOS 10.13
 @available(macOS 10.15, *)
 struct PHChanger {
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()

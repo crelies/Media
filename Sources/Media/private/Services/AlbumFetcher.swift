@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 struct AlbumFetcher {
     static var assetCollection: PHAssetCollection.Type = PHAssetCollection.self
