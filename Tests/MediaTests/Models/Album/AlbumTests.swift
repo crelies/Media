@@ -84,29 +84,45 @@ final class AlbumTests: XCTestCase {
     }
 
     func testAlbumWithIdentifierExists() {
-        let localIdentifier = "Nebula"
-        mockAssetCollection.localIdentifierToReturn = localIdentifier
-        MockPHAssetCollection.fetchResult.mockAssetCollections = [mockAssetCollection]
-        let album = Album.with(identifier: .init(stringLiteral: localIdentifier))
-        XCTAssertNotNil(album)
+        do {
+            let localIdentifier = "Nebula"
+            mockAssetCollection.localIdentifierToReturn = localIdentifier
+            MockPHAssetCollection.fetchResult.mockAssetCollections = [mockAssetCollection]
+            let album = try Album.with(identifier: .init(stringLiteral: localIdentifier))
+            XCTAssertNotNil(album)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testAlbumWithIdentifierNil() {
-        let album = Album.with(identifier: .init(stringLiteral: "Xikola"))
-        XCTAssertNil(album)
+        do {
+            let album = try Album.with(identifier: .init(stringLiteral: "Xikola"))
+            XCTAssertNil(album)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testAlbumWithLocalizedTitleExists() {
-        let localizedTitle = "Lopasr"
-        mockAssetCollection.localizedTitleToReturn = localizedTitle
-        MockPHAssetCollection.fetchResult.mockAssetCollections = [mockAssetCollection]
-        let album = Album.with(localizedTitle: localizedTitle)
-        XCTAssertNotNil(album)
+        do {
+            let localizedTitle = "Lopasr"
+            mockAssetCollection.localizedTitleToReturn = localizedTitle
+            MockPHAssetCollection.fetchResult.mockAssetCollections = [mockAssetCollection]
+            let album = try Album.with(localizedTitle: localizedTitle)
+            XCTAssertNotNil(album)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testAlbumWithLocalizedTitleNil() {
-        let album = Album.with(localizedTitle: "Bluabo")
-        XCTAssertNil(album)
+        do {
+            let album = try Album.with(localizedTitle: "Bluabo")
+            XCTAssertNil(album)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testAlbumCreatePermissionDenied() {

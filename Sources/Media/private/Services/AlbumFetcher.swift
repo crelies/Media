@@ -14,8 +14,11 @@ struct AlbumFetcher {
     static func fetchAlbums(with type: PHAssetCollectionType,
                             subtype: PHAssetCollectionSubtype,
                             options: PHFetchOptions,
-                            filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> [Album] {
-        // TODO: check permission, return [] if permission is denied
+                            filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) throws -> [Album] {
+        guard Media.isAccessAllowed else {
+            throw Media.currentPermission.permissionError ?? PermissionError.unknown
+        }
+
         let result = assetCollection.fetchAssetCollections(with: type,
                                                            subtype: subtype,
                                                            options: options)
@@ -32,8 +35,11 @@ struct AlbumFetcher {
     static func fetchAlbum(with type: PHAssetCollectionType,
                            subtype: PHAssetCollectionSubtype,
                            options: PHFetchOptions,
-                           filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) -> Album? {
-        // TODO: check permission, return nil if permission is denied
+                           filter: @escaping (PHAssetCollection) -> Bool = { _ in true }) throws -> Album? {
+        guard Media.isAccessAllowed else {
+            throw Media.currentPermission.permissionError ?? PermissionError.unknown
+        }
+
         let result = assetCollection.fetchAssetCollections(with: type,
                                                            subtype: subtype,
                                                            options: options)

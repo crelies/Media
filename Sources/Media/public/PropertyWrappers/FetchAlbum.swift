@@ -16,7 +16,7 @@ public struct FetchAlbum {
     private let options = PHFetchOptions().fetchLimit(1)
 
     public var wrappedValue: Album? {
-        AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options)
+        try? AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options)
     }
 
     /// Initializes the property wrapper using the given predicate

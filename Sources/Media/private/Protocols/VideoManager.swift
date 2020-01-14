@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: 10.13
 @available(macOS 10.15, *)
 protocol VideoManager {
     @discardableResult

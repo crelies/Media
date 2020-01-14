@@ -77,8 +77,13 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard Album.with(localizedTitle: title) == nil else {
-            completion(.failure(AlbumError.albumWithTitleExists(title)))
+        do {
+            guard try Album.with(localizedTitle: title) == nil else {
+                completion(.failure(AlbumError.albumWithTitleExists(title)))
+                return
+            }
+        } catch {
+            completion(.failure(error))
             return
         }
 
@@ -109,11 +114,11 @@ public extension Album {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Album.Identifier) -> Album? {
+    static func with(identifier: Album.Identifier) throws -> Album? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localIdentifier = %@", identifier.localIdentifier)
         options.predicate = predicate
-        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localIdentifier == identifier.localIdentifier }
+        let album = try AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localIdentifier == identifier.localIdentifier }
         return album
     }
 
@@ -125,11 +130,11 @@ public extension Album {
     ///
     /// - Parameter localizedTitle: the `localizedTitle` of the `PHAsset`
     ///
-    static func with(localizedTitle: String) -> Album? {
+    static func with(localizedTitle: String) throws -> Album? {
         let options = PHFetchOptions()
         let predicate = NSPredicate(format: "localizedTitle = %@", localizedTitle)
         options.predicate = predicate
-        let album = AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localizedTitle == localizedTitle }
+        let album = try AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options) { $0.localizedTitle == localizedTitle }
         return album
     }
 }

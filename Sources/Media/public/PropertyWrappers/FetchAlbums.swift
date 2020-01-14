@@ -19,11 +19,11 @@ public struct FetchAlbums {
     private let albumType: AlbumType?
 
     public var wrappedValue: [Album] {
-        AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
+        (try? AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
                                  subtype: .any,
                                  options: options) { collection in
             self.albumType?.subtypes.contains(collection.assetCollectionSubtype) ?? true
-        }
+        }) ?? []
     }
 
     /// Initializes the property wrapper without an album type filter and

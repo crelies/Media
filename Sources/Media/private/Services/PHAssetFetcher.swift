@@ -23,7 +23,6 @@ struct PHAssetFetcher {
     }
 }
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 extension PHAssetFetcher {
     static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) -> [T] {

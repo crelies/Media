@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: OSX 10.13
 @available(macOS 10.15, *)
 struct PHAssetChanger {
     // TODO: unavailabilityReason
