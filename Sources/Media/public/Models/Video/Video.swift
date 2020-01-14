@@ -181,7 +181,6 @@ public extension Video {
     }
 }
 
-// TODO: macOS: 10.13
 @available(macOS 10.15, *)
 public extension Video {
     /// Saves the video media at the given URL if

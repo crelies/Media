@@ -8,7 +8,6 @@
 
 import Photos
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public struct Albums {
     /// All albums in the photo library
@@ -23,7 +22,6 @@ public struct Albums {
     @FetchAlbums(ofType: .user,
                  sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var user: [Album]
-//        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 
     /// All smart albums in the photo library
     /// sorted by `localizedTitle ascending`
@@ -31,7 +29,6 @@ public struct Albums {
     @FetchAlbums(ofType: .smart,
                  sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var smart: [Album]
-//        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 
     /// All cloud albums in the photo library
     /// sorted by `localizedTitle ascending`
@@ -39,5 +36,4 @@ public struct Albums {
     @FetchAlbums(ofType: .cloud,
                  sort: [Sort(key: .localizedTitle, ascending: true)])
     public static var cloud: [Album]
-//        return albums.sorted { $0.localizedTitle.compare($1.localizedTitle) == .orderedAscending }
 }
