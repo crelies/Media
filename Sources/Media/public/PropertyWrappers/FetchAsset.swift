@@ -17,7 +17,7 @@ public struct FetchAsset<T: MediaProtocol> {
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
 
     public var wrappedValue: T? {
-        PHAssetFetcher.fetchAsset(options: options) { asset in
+        try? PHAssetFetcher.fetchAsset(options: options) { asset in
             asset.mediaType == T.type
         }
     }

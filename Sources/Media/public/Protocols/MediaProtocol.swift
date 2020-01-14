@@ -23,7 +23,7 @@ public protocol MediaProtocol {
 
     // TODO: osx 10.13
     @available(macOS 10.15, *)
-    static func with(identifier: Media.Identifier<Self>) -> Self?
+    static func with(identifier: Media.Identifier<Self>) throws -> Self?
 
     // TODO: osx 10.13
     @available(macOS 10.15, *)

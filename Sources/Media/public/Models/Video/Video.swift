@@ -170,7 +170,7 @@ public extension Video {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier<Self>) -> Video? {
+    static func with(identifier: Media.Identifier<Self>) throws -> Video? {
         let options = PHFetchOptions()
 
         let localIdentifierFilter: MediaFilter<VideoSubtype> = .localIdentifier(identifier.localIdentifier)
@@ -178,7 +178,7 @@ public extension Video {
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, localIdentifierFilter.predicate])
         options.predicate = predicate
 
-        let video = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .video } as Video?
+        let video = try PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .video } as Video?
         return video
     }
 }

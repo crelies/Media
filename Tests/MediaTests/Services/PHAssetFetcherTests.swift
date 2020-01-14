@@ -16,59 +16,87 @@ final class PHAssetFetcherTests: XCTestCase {
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testFetchAudiosNotEmpty() {
-        MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
-        let options = PHFetchOptions()
-        let audios = PHAssetFetcher.fetchAssets(options: options) as [Audio]
-        XCTAssertEqual(audios.count, 1)
+        do {
+            MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
+            let options = PHFetchOptions()
+            let audios = try PHAssetFetcher.fetchAssets(options: options) as [Audio]
+            XCTAssertEqual(audios.count, 1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchAudiosEmpty() {
-        let options = PHFetchOptions()
-        let audios = PHAssetFetcher.fetchAssets(options: options) as [Audio]
-        XCTAssertEqual(audios.count, 0)
+        do {
+            let options = PHFetchOptions()
+            let audios = try PHAssetFetcher.fetchAssets(options: options) as [Audio]
+            XCTAssertEqual(audios.count, 0)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchLivePhotosNotEmpty() {
-        MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
-        let options = PHFetchOptions()
-        let livePhotos = PHAssetFetcher.fetchAssets(options: options) as [LivePhoto]
-        XCTAssertEqual(livePhotos.count, 1)
+        do {
+            MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
+            let options = PHFetchOptions()
+            let livePhotos = try PHAssetFetcher.fetchAssets(options: options) as [LivePhoto]
+            XCTAssertEqual(livePhotos.count, 1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchLivePhotosEmpty() {
-        let options = PHFetchOptions()
-        let livePhotos = PHAssetFetcher.fetchAssets(options: options) as [LivePhoto]
-        XCTAssertEqual(livePhotos.count, 0)
+        do {
+            let options = PHFetchOptions()
+            let livePhotos = try PHAssetFetcher.fetchAssets(options: options) as [LivePhoto]
+            XCTAssertEqual(livePhotos.count, 0)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchPhotosNotEmpty() {
-        MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
-        let options = PHFetchOptions()
-        let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-        XCTAssertEqual(photos.count, 1)
+        do {
+            MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
+            let options = PHFetchOptions()
+            let photos = try PHAssetFetcher.fetchAssets(options: options) as [Photo]
+            XCTAssertEqual(photos.count, 1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchPhotosEmpty() {
-        let options = PHFetchOptions()
-        let photos = PHAssetFetcher.fetchAssets(options: options) as [Photo]
-        XCTAssertEqual(photos.count, 0)
+        do {
+            let options = PHFetchOptions()
+            let photos = try PHAssetFetcher.fetchAssets(options: options) as [Photo]
+            XCTAssertEqual(photos.count, 0)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchVideosNotEmpty() {
-        MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
-        let options = PHFetchOptions()
-        let videos = PHAssetFetcher.fetchAssets(options: options) as [Video]
-        XCTAssertEqual(videos.count, 1)
+        do {
+            MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
+            let options = PHFetchOptions()
+            let videos = try PHAssetFetcher.fetchAssets(options: options) as [Video]
+            XCTAssertEqual(videos.count, 1)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFetchVideosEmpty() {
-        let options = PHFetchOptions()
-        let videos = PHAssetFetcher.fetchAssets(options: options) as [Video]
-        XCTAssertEqual(videos.count, 0)
+        do {
+            let options = PHFetchOptions()
+            let videos = try PHAssetFetcher.fetchAssets(options: options) as [Video]
+            XCTAssertEqual(videos.count, 0)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 }

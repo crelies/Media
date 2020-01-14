@@ -112,23 +112,31 @@ final class LivePhotoTests: XCTestCase {
 
     @available(macOS 10.15, *)
     func testWithIdentifierExists() {
-        let localIdentifier = "Lopar"
-        asset.localIdentifierToReturn = localIdentifier
-        asset.mediaTypeToReturn = .image
-        asset.mediaSubtypesToReturn = .photoLive
-        MockPHAsset.fetchResult.mockAssets = [asset]
+        do {
+            let localIdentifier = "Lopar"
+            asset.localIdentifierToReturn = localIdentifier
+            asset.mediaTypeToReturn = .image
+            asset.mediaSubtypesToReturn = .photoLive
+            MockPHAsset.fetchResult.mockAssets = [asset]
 
-        let identifier = Media.Identifier<LivePhoto>(stringLiteral: localIdentifier)
-        let livePhoto = LivePhoto.with(identifier: identifier)
-        XCTAssertNotNil(livePhoto)
+            let identifier = Media.Identifier<LivePhoto>(stringLiteral: localIdentifier)
+            let livePhoto = try LivePhoto.with(identifier: identifier)
+            XCTAssertNotNil(livePhoto)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     @available(macOS 10.15, *)
     func testWithIdentifierNotExists() {
-        let localIdentifier = "Blop"
-        let identifier = Media.Identifier<LivePhoto>(stringLiteral: localIdentifier)
-        let livePhoto = LivePhoto.with(identifier: identifier)
-        XCTAssertNil(livePhoto)
+        do {
+            let localIdentifier = "Blop"
+            let identifier = Media.Identifier<LivePhoto>(stringLiteral: localIdentifier)
+            let livePhoto = try LivePhoto.with(identifier: identifier)
+            XCTAssertNil(livePhoto)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     @available(macOS 10.15, *)

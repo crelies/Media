@@ -32,13 +32,13 @@ public extension Audio {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier<Self>) -> Audio? {
+    static func with(identifier: Media.Identifier<Self>) throws -> Audio? {
         let options = PHFetchOptions()
         let mediaTypeFilter: MediaFilter<AudioSubtype> = .localIdentifier(identifier.localIdentifier)
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 
-        let audio = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .audio } as Audio?
+        let audio = try PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .audio } as Audio?
         return audio
     }
 }

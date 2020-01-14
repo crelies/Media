@@ -35,17 +35,25 @@ final class VideoTests: XCTestCase {
     }
 
     func testWithIdentifierExists() {
-        let localIdentifier = "TestIdentifier"
-        mockAsset.localIdentifierToReturn = localIdentifier
-        mockAsset.mediaTypeToReturn = .video
-        MockPHAsset.fetchResult.mockAssets = [mockAsset]
-        let video = Video.with(identifier: .init(stringLiteral: localIdentifier))
-        XCTAssertNotNil(video)
+        do {
+            let localIdentifier = "TestIdentifier"
+            mockAsset.localIdentifierToReturn = localIdentifier
+            mockAsset.mediaTypeToReturn = .video
+            MockPHAsset.fetchResult.mockAssets = [mockAsset]
+            let video = try Video.with(identifier: .init(stringLiteral: localIdentifier))
+            XCTAssertNotNil(video)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testWithIdentifierNotExists() {
-        let video = Video.with(identifier: .init(stringLiteral: "Bloal"))
-        XCTAssertNil(video)
+        do {
+            let video = try Video.with(identifier: .init(stringLiteral: "Bloal"))
+            XCTAssertNil(video)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     func testFavoriteSuccess() {

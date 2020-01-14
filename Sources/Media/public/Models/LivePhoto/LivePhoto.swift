@@ -76,7 +76,7 @@ public extension LivePhoto {
     ///
     /// - Parameter identifier: the identifier of the media
     ///
-    static func with(identifier: Media.Identifier<Self>) -> LivePhoto? {
+    static func with(identifier: Media.Identifier<Self>) throws -> LivePhoto? {
         let options = PHFetchOptions()
 
         let mediaFilter: [MediaFilter<LivePhotoSubtype>] = [.localIdentifier(identifier.localIdentifier), .mediaSubtypes([.live])]
@@ -84,7 +84,7 @@ public extension LivePhoto {
         let mediaTypePredicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate] + mediaFilterPredicates)
 
-        let livePhoto = PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .image && $0.mediaSubtypes.contains(.photoLive) } as LivePhoto?
+        let livePhoto = try PHAssetFetcher.fetchAsset(options: options) { $0.localIdentifier == identifier.localIdentifier && $0.mediaType == .image && $0.mediaSubtypes.contains(.photoLive) } as LivePhoto?
         return livePhoto
     }
 }
