@@ -9,7 +9,6 @@ import Photos
 
 /// Property wrapper for fetching albums
 ///
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
 public struct FetchAlbums {
