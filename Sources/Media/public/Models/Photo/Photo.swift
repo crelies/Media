@@ -153,7 +153,6 @@ public extension Photo {
 }
 #endif
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Photo {
     /// Saves the photo media at the given `URL` if
@@ -177,7 +176,6 @@ public extension Photo {
     ///   - image: the `UIImage` which should be saved
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
-    @available(macOS 10.15, *)
     static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)
@@ -214,7 +212,7 @@ public extension Photo {
 }
 
 public extension Photo {
-    // TODO:
+    // TODO: editing
     /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
         let options = PHContentEditingInputRequestOptions()
         let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in

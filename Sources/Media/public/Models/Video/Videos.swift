@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public struct Videos {
     /// All videos in the library

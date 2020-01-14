@@ -7,7 +7,6 @@
 
 import Photos
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public struct LivePhotos {
     /// All live photos in the photo library

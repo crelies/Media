@@ -65,7 +65,6 @@ public extension LivePhoto {
 
 #endif
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension LivePhoto {
     /// Fetches the `LivePhoto` with the given `identifier` if it exists
@@ -89,7 +88,6 @@ public extension LivePhoto {
     }
 }
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension LivePhoto {
     /// Updates the favorite state of the receiver if the access to the photo library is allowed
@@ -103,7 +101,7 @@ public extension LivePhoto {
     }
 }
 
-// TODO:
+// TODO: editing
 /*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
     let options = PHContentEditingInputRequestOptions()
     let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in

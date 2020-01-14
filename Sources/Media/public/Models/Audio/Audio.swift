@@ -21,7 +21,6 @@ public struct Audio: MediaProtocol {
     }
 }
 
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 public extension Audio {
     /// Fetches the audio with the given identifier if it exists

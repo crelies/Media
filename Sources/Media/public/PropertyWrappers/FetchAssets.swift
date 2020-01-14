@@ -10,7 +10,6 @@ import Photos
 /// Generic property wrapper for fetching assets from the photo library
 /// Fetches the assets lazily (after accessing the property)
 ///
-// TODO: osx 10.13
 @available(macOS 10.15, *)
 @propertyWrapper
 public struct FetchAssets<T: MediaProtocol> {
