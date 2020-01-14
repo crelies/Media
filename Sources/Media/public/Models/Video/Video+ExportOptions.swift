@@ -7,6 +7,7 @@
 
 import Photos
 
+@available(macOS 10.15, *)
 extension Video {
     /// Represents the options for a `Video` export
     ///

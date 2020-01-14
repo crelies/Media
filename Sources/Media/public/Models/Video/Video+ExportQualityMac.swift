@@ -9,6 +9,7 @@ import AVFoundation
 
 // TODO: currently not used
 #if os(macOS)
+@available(macOS 10.15, *)
 extension Video {
     public enum ExportQualityMac {
         case cellular
@@ -19,10 +20,11 @@ extension Video {
         case hd720p
         case hd1080p
         // 10.15
-//        case proRes422LPCM
+        case proRes422LPCM
     }
 }
 
+@available(macOS 10.15, *)
 extension Video.ExportQualityMac {
     var avAssetExportPreset: String {
         switch self {
@@ -40,8 +42,9 @@ extension Video.ExportQualityMac {
                 return AVAssetExportPresetAppleM4V720pHD
             case .hd1080p:
                 return AVAssetExportPresetAppleM4V1080pHD
-//            case .proRes422LPCM:
-//                return AVAssetExportPresetAppleProRes422LPCM
+            // 10.15
+            case .proRes422LPCM:
+                return AVAssetExportPresetAppleProRes422LPCM
         }
     }
 }
