@@ -155,9 +155,9 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 #### Video
 
-- `video.playerItem { result in }`
+- `video.playerItem(deliveryMode:) { result in }`
 
-- `video.avAsset { result in }`
+- `video.avAsset(deliveryMode:) { result in }`
 
 - `video.export(options, progress: { progress in }) { result in }`
 

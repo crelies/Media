@@ -60,10 +60,10 @@ public extension Video {
     ///
     /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`
     ///
-    func playerItem(_ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
+    func playerItem(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
-        // TODO: delivery mode
+        options.deliveryMode = deliveryMode
 
         Self.videoManager.requestPlayerItem(forVideo: phAsset, options: options) { playerItem, info in
             PHImageManager.handleResult(result: (playerItem, info), completion)
@@ -74,10 +74,10 @@ public extension Video {
     ///
     /// - Parameter completion: a closure which gets an `AVAsset` on `success` and `Error` on `failure`
     ///
-    func avAsset(_ completion: @escaping (Result<AVAsset, Error>) -> Void) {
+    func avAsset(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVAsset, Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
-        // TODO: delivery mode
+        options.deliveryMode = deliveryMode
 
         Self.videoManager.requestAVAsset(forVideo: phAsset, options: options) { asset, _, info in
             PHImageManager.handleResult(result: (asset, info), completion)
@@ -100,7 +100,7 @@ public extension Video {
 
         let requestOptions = PHVideoRequestOptions()
         requestOptions.isNetworkAccessAllowed = true
-        // TODO: delivery mode
+        requestOptions.deliveryMode = exportOptions.deliveryMode
 
         Self.videoManager.requestExportSession(forVideo: phAsset,
                                                options: requestOptions,
