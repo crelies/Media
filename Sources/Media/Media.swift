@@ -12,6 +12,20 @@ import Photos
 /// for the photos library
 ///
 public struct Media {
+    public static weak var availabilityObserver: PHPhotoLibraryAvailabilityObserver? {
+        willSet {
+            if let currentObserver = availabilityObserver {
+                PHPhotoLibrary.shared().unregisterAvailabilityObserver(currentObserver)
+            }
+
+            guard let observer = newValue else {
+                return
+            }
+
+            PHPhotoLibrary.shared().register(observer)
+        }
+    }
+
     static var photoLibrary: PhotoLibrary.Type = PHPhotoLibrary.self
 
     /// Indicates that the access to the photo library is granted
