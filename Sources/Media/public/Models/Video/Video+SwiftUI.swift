@@ -35,11 +35,6 @@ public extension Video {
     static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
         try ViewCreator.browser(mediaTypes: [.movie], completion)
     }
-
-    // TODO: UIVideoEditorController
-//    static func editor() -> some View {
-//        EmptyView()
-//    }
 }
 #endif
 

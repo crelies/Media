@@ -11,6 +11,8 @@ import Foundation
 /// General errors thrown by the framework
 ///
 public enum MediaError: Error {
+    /// the operation was cancelled
+    case cancelled
     /// an unknown error occurred
     case unknown
 }

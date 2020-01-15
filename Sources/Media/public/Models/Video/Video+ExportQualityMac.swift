@@ -18,7 +18,6 @@ extension Video {
         case wifi
         case hd720p
         case hd1080p
-        // 10.15
         case proRes422LPCM
     }
 }
@@ -40,7 +39,6 @@ extension Video.ExportQualityMac {
                 return AVAssetExportPresetAppleM4V720pHD
             case .hd1080p:
                 return AVAssetExportPresetAppleM4V1080pHD
-            // 10.15
             case .proRes422LPCM:
                 return AVAssetExportPresetAppleProRes422LPCM
         }

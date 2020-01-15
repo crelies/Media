@@ -107,7 +107,6 @@ public extension Video {
             if let error = info?[PHImageErrorKey] as? Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
-                // TODO: improve
                 exportSession.determineCompatibleFileTypes { compatibleFileTypes in
                     guard compatibleFileTypes.contains(exportOptions.outputURL.fileType.avFileType) else {
                         completion(.failure(VideoError.unsupportedFileType))
@@ -117,34 +116,20 @@ public extension Video {
                     exportSession.outputURL = exportOptions.outputURL.value
                     exportSession.outputFileType = exportOptions.outputURL.fileType.avFileType
 
-                    var timer: Timer?
-                    if #available(iOS 10.0, macOS 10.13, tvOS 10, *) {
-                        timer = Timer(timeInterval: 1, repeats: true) { timer in
-                            self.handleProgressTimerFired(exportSession: exportSession,
-                                                          timer: timer,
-                                                          progress: progress)
-                        }
-                    } else {
-                        let timerWrapper = TimerWrapper(timeInterval: 1, repeats: true) { timer in
-                            self.handleProgressTimerFired(exportSession: exportSession,
-                                                          timer: timer,
-                                                          progress: progress)
-                        }
-                        timer = timerWrapper.timer
-                    }
-
-                    if let timer = timer {
-                        RunLoop.main.add(timer, forMode: .common)
-                    }
+                    let timer = self.createTimer(for: exportSession, progress: progress)
+                    RunLoop.main.add(timer, forMode: .common)
 
                     exportSession.exportAsynchronously {
                         switch exportSession.status {
                         case .completed:
-                            timer?.invalidate()
+                            timer.invalidate()
                             completion(.success(()))
                         case .failed:
-                            timer?.invalidate()
+                            timer.invalidate()
                             completion(.failure(exportSession.error ?? MediaError.unknown))
+                        case .cancelled:
+                            timer.invalidate()
+                            completion(.failure(exportSession.error ?? MediaError.cancelled))
                         default: ()
                         }
                     }
@@ -215,37 +200,26 @@ extension Video {
         let exportProgress: ExportProgress = .pending(value: exportSession.progress)
         progress(exportProgress)
     }
-}
 
-// TODO: editing
-/*func edit(_ change: @escaping (inout PHContentEditingInput?) -> Void, completion: @escaping (Result<Void, Error>) -> Void) -> Cancellable {
-    let options = PHContentEditingInputRequestOptions()
-    let contentEditingInputRequestID = phAsset.requestContentEditingInput(with: options) { contentEditingInput, info in
-        var contentEditingInput = contentEditingInput
-        change(&contentEditingInput)
+    private func createTimer(for exportSession: AVAssetExportSession,
+                             progress: @escaping (Video.ExportProgress) -> Void) -> Timer {
+        var timer: Timer
 
-        if let editingInput = contentEditingInput {
-            guard Media.isAccessAllowed else {
-                completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
-                return
+        if #available(iOS 10.0, macOS 10.13, tvOS 10, *) {
+            timer = Timer(timeInterval: 1, repeats: true) { timer in
+                self.handleProgressTimerFired(exportSession: exportSession,
+                                              timer: timer,
+                                              progress: progress)
             }
-
-            let output = PHContentEditingOutput(contentEditingInput: editingInput)
-
-            PHPhotoLibrary.shared().performChanges({
-                let assetChangeRequest = PHAssetChangeRequest(for: self.phAsset)
-                assetChangeRequest.contentEditingOutput = output
-            }) { isSuccess, error in
-                if !isSuccess {
-                    completion(.failure(error ?? PhotosError.unknown))
-                } else {
-                    completion(.success(()))
-                }
+        } else {
+            let timerWrapper = TimerWrapper(timeInterval: 1, repeats: true) { timer in
+                self.handleProgressTimerFired(exportSession: exportSession,
+                                              timer: timer,
+                                              progress: progress)
             }
+            timer = timerWrapper.timer
         }
-    }
 
-    return {
-        self.phAsset.cancelContentEditingInputRequest(contentEditingInputRequestID)
+        return timer
     }
-}*/
+}
