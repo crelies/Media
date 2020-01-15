@@ -26,7 +26,6 @@ struct PHAssetFetcher {
     }
 }
 
-@available(macOS 10.15, *)
 extension PHAssetFetcher {
     static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) throws -> [T] {
         guard Media.isAccessAllowed else {

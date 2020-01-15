@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 extension Media {
     public struct Photos {
         /// All photos in the library

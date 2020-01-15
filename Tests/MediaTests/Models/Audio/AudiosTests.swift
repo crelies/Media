@@ -14,13 +14,11 @@ final class AudiosTests: XCTestCase {
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
 
-    @available(macOS 10.15, *)
     func testAllEmpty() {
         let audios = Audios.all
         XCTAssertTrue(audios.isEmpty)
     }
 
-    @available(macOS 10.15, *)
     func testAllNotEmpty() {
         MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
         let audios = Audios.all

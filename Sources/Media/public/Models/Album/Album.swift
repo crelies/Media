@@ -8,8 +8,6 @@
 
 import Photos
 
-// TODO: osx 10.13
-@available(macOS 10.15, *)
 public struct Album {
     let phAssetCollection: PHAssetCollection
 
@@ -46,8 +44,6 @@ public struct Album {
     }
 }
 
-// TODO: osx 10.13
-@available(macOS 10.15, *)
 public extension Album {
     /// All media (audios, live photos, photos, videos and more?) contained in the receiver
     /// sorted by `creationDate descending`
@@ -67,8 +63,6 @@ public extension Album {
     }
 }
 
-// TODO: osx 10.13
-@available(macOS 10.15, *)
 public extension Album {
     /// Creates an album with the given title
     ///
@@ -103,8 +97,6 @@ public extension Album {
     }
 }
 
-// TODO: osx 10.13
-@available(macOS 10.15, *)
 public extension Album {
     /// Get the album with the given `identifier` if it exists
     ///
@@ -139,8 +131,6 @@ public extension Album {
     }
 }
 
-// TODO: osx 10.13
-@available(macOS 10.15, *)
 public extension Album {
     /// Adds the given `Media`to the receiver if
     ///  - the acess to the photo library is allowed

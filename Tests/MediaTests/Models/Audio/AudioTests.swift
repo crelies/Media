@@ -14,7 +14,6 @@ final class AudioTests: XCTestCase {
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
 
-    @available(macOS 10.15, *)
     func testWithIdentifierExists() {
         do {
             let localIdentifier = "Lopa"
@@ -32,7 +31,6 @@ final class AudioTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.15, *)
     func testWithIdentifierNotExists() {
         do {
             let localIdentifier = "Lopa"

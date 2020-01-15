@@ -9,7 +9,6 @@
 import Photos
 import XCTest
 
-@available(macOS 10.15, *)
 final class AlbumFetcherTests: XCTestCase {
     override func setUp() {
         Media.photoLibrary = MockPhotoLibrary.self

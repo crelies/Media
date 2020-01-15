@@ -65,7 +65,6 @@ public extension LivePhoto {
 
 #endif
 
-@available(macOS 10.15, *)
 public extension LivePhoto {
     /// Fetches the `LivePhoto` with the given `identifier` if it exists
     ///
@@ -88,7 +87,6 @@ public extension LivePhoto {
     }
 }
 
-@available(macOS 10.15, *)
 public extension LivePhoto {
     /// Updates the favorite state of the receiver if the access to the photo library is allowed
     ///

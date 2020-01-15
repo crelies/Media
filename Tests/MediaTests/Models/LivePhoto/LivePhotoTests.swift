@@ -110,7 +110,6 @@ final class LivePhotoTests: XCTestCase {
     }
     #endif
 
-    @available(macOS 10.15, *)
     func testWithIdentifierExists() {
         do {
             let localIdentifier = "Lopar"
@@ -127,7 +126,6 @@ final class LivePhotoTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.15, *)
     func testWithIdentifierNotExists() {
         do {
             let localIdentifier = "Blop"
@@ -139,7 +137,6 @@ final class LivePhotoTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.15, *)
     func testFavoriteSuccess() {
         let expectation = self.expectation(description: "FavoriteResult")
 
@@ -159,7 +156,6 @@ final class LivePhotoTests: XCTestCase {
         }
     }
 
-    @available(macOS 10.15, *)
     func testFavoriteFailure() {
         let expectation = self.expectation(description: "FavoriteResult")
 

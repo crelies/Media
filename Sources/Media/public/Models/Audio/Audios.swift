@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 public struct Audios {
     /// All audios in the photo library
     /// sorted by `creationDate descending`

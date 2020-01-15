@@ -7,7 +7,7 @@ let package = Package(
     name: "Media",
     platforms: [
         .iOS("9.1"),
-        .macOS(.v10_13),
+        .macOS(.v10_15),
         .tvOS(.v10)
     ],
     products: [

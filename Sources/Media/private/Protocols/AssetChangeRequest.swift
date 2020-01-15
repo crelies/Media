@@ -11,7 +11,6 @@ import UIKit
 #endif
 
 protocol AssetChangeRequest: class {
-    @available(macOS 10.15, *)
     var placeholderForCreatedAsset: PHObjectPlaceholder? { get }
     #if canImport(UIKit)
     static func creationRequestForAsset(from image: UIImage) -> Self

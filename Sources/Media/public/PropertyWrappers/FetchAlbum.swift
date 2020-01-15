@@ -9,7 +9,6 @@ import Photos
 
 /// Property wrapper for fetching a single album
 ///
-@available(macOS 10.15, *)
 @propertyWrapper
 public struct FetchAlbum {
     private let options = PHFetchOptions().fetchLimit(1)

@@ -21,10 +21,8 @@ public protocol MediaProtocol {
 
     init(phAsset: PHAsset)
 
-    @available(macOS 10.15, *)
     static func with(identifier: Media.Identifier<Self>) throws -> Self?
 
-    @available(macOS 10.15, *)
     func delete(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
@@ -34,7 +32,6 @@ extension MediaProtocol {
     public var identifier: Media.Identifier<Self> { Media.Identifier(stringLiteral: phAsset.localIdentifier) }
 }
 
-@available(macOS 10.15, *)
 extension MediaProtocol {
     /// Deletes the receiver if the access to the photo library is allowed
     ///

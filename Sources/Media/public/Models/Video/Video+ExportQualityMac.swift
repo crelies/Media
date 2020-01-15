@@ -9,7 +9,6 @@ import AVFoundation
 
 // TODO: currently not used
 #if os(macOS)
-@available(macOS 10.15, *)
 extension Video {
     public enum ExportQualityMac {
         case cellular
@@ -24,7 +23,6 @@ extension Video {
     }
 }
 
-@available(macOS 10.15, *)
 extension Video.ExportQualityMac {
     var avAssetExportPreset: String {
         switch self {

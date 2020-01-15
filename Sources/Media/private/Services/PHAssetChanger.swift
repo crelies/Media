@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 struct PHAssetChanger {
     // TODO: unavailabilityReason
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()

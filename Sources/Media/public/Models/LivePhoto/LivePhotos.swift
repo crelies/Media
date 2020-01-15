@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 public struct LivePhotos {
     /// All live photos in the photo library
     /// sorted by `creationDate descending`

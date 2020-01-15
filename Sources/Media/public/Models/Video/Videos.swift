@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 public struct Videos {
     /// All videos in the library
     /// sorted by `creationDate descending`

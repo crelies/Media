@@ -11,7 +11,6 @@ import Photos
 /// Represents `Video`s
 ///
 public struct Video: MediaProtocol {
-    @available(macOS 10.15, *)
     static var videoManager: VideoManager = PHImageManager.default()
 
     public typealias MediaSubtype = VideoSubtype
@@ -54,7 +53,6 @@ public extension Video {
     }
 }
 
-@available(macOS 10.15, *)
 public extension Video {
     /// Creates a `AVPlayerItem` representation of the receiver
     ///
@@ -158,7 +156,6 @@ public extension Video {
     }
 }
 
-@available(macOS 10.15, *)
 public extension Video {
     /// Fetches the `Video` with the given identifier if it exists
     ///
@@ -181,7 +178,6 @@ public extension Video {
     }
 }
 
-@available(macOS 10.15, *)
 public extension Video {
     /// Saves the video media at the given URL if
     /// - the access to the photo library is allowed

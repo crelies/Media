@@ -8,7 +8,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 public struct Albums {
     /// All albums in the photo library
     /// sorted by `localizedTitle ascending`

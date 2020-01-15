@@ -9,7 +9,6 @@
 import Photos
 import XCTest
 
-@available(macOS 10.15, *)
 final class PHAssetFetcherTests: XCTestCase {
     override func setUp() {
         PHAssetFetcher.asset = MockPHAsset.self

@@ -14,7 +14,6 @@ import Photos
 /// Represents `Photo`s
 ///
 public struct Photo: MediaProtocol {
-    @available(macOS 10.15, *)
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
@@ -127,7 +126,6 @@ public extension Photo {
 #endif
 
 #if canImport(UIKit)
-@available(macOS 10.15, *)
 public extension Photo {
     /// `UIImage` representation of the receiver
     ///
@@ -153,7 +151,6 @@ public extension Photo {
 }
 #endif
 
-@available(macOS 10.15, *)
 public extension Photo {
     /// Saves the photo media at the given `URL` if
     /// - the access to the photo library is allowed

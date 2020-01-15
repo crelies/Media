@@ -7,7 +7,6 @@
 
 import Photos
 
-@available(macOS 10.15, *)
 protocol VideoManager {
     @discardableResult
     func requestPlayerItem(forVideo asset: PHAsset, options: PHVideoRequestOptions?, resultHandler: @escaping (AVPlayerItem?, [AnyHashable : Any]?) -> Void) -> PHImageRequestID

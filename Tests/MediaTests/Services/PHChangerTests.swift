@@ -8,7 +8,6 @@
 @testable import Media
 import XCTest
 
-@available(macOS 10.15, *)
 final class PHChangerTests: XCTestCase {
     override func setUp() {
         PHChanger.photoLibrary = MockPhotoLibrary()

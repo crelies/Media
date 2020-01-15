@@ -9,7 +9,6 @@ import Photos
 
 /// Property wrapper for fetching a single asset
 ///
-@available(macOS 10.15, *)
 @propertyWrapper
 public struct FetchAsset<T: MediaProtocol> {
     private let options = PHFetchOptions().fetchLimit(1)

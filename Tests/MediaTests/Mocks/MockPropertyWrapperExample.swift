@@ -7,7 +7,6 @@
 
 @testable import Media
 
-@available(macOS 10.15, *)
 struct MockPropertyWrapperExample {
     static var localIdentifierToUse = "Test"
 

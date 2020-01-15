@@ -8,7 +8,6 @@
 @testable import Media
 import XCTest
 
-@available(macOS 10.15, *)
 final class AlbumFilterTests: XCTestCase {
     func testLocalIdentifierPredicate() {
         let localIdentifier = "MockIdentifier"
