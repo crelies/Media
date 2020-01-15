@@ -24,10 +24,10 @@ extension Video {
     }
 }
 
-extension Video.ExportQuality {
+extension Video.ExportQuality: AVAssetExportPresetProvider {
     /// Computes the `AVAssetExportPreset` of the receiver
     /// Returns nil if the export preset is not available in the current
-    /// os version (< iOS 11, tvOS 11, < macOS 10.13, < macCatalyst 10.13)
+    /// os version (< iOS 11, tvOS 11, < macOS 10.13)
     ///
     var avAssetExportPreset: String? {
         switch self {

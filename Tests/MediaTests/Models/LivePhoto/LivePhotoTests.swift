@@ -19,9 +19,7 @@ final class LivePhotoTests: XCTestCase {
         LivePhoto.livePhotoManager = livePhotoManager
         PHAssetFetcher.asset = MockPHAsset.self
 
-        if #available(OSX 10.15, *) {
-            PHAssetChanger.photoLibrary = photoLibrary
-        }
+        PHAssetChanger.photoLibrary = photoLibrary
 
         livePhotoManager.livePhotoToReturn = nil
         livePhotoManager.infoToReturn = nil

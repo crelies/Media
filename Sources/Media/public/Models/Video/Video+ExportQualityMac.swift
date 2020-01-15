@@ -7,9 +7,11 @@
 
 import AVFoundation
 
-// TODO: currently not used
 #if os(macOS)
 extension Video {
+    /// Available qualities for `Video` exports
+    /// on the mac
+    ///
     public enum ExportQualityMac {
         case cellular
         case ipod
@@ -22,8 +24,12 @@ extension Video {
     }
 }
 
-extension Video.ExportQualityMac {
-    var avAssetExportPreset: String {
+extension Video.ExportQualityMac: AVAssetExportPresetProvider {
+    /// Computes the `AVAssetExportPreset` of the receiver
+    /// Returns nil if the export preset is not available in the current
+    /// os version (< iOS 11, tvOS 11, < macOS 10.13)
+    ///
+    var avAssetExportPreset: String? {
         switch self {
             case .cellular:
                 return AVAssetExportPresetAppleM4VCellular
