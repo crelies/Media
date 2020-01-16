@@ -61,6 +61,26 @@ public extension LivePhoto {
         // TODO: determine file type
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
     }
+
+    static func save(stillImageData: Data, livePhotoMovieURL: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws {
+        PHAssetChanger.createRequest({
+            // Add the captured photo's file data as the main resource for the Photos asset.
+            let creationRequest = PHAssetCreationRequest.forAsset()
+            creationRequest.addResource(with: .photo, data: stillImageData, options: nil)
+
+            // Add the movie file URL as the Live Photo's paired video resource.
+            let options = PHAssetResourceCreationOptions()
+            /*
+                Use the shouldMoveFile option
+                so that iOS can transfer the movie file from your app’s sandbox
+                to the system Photos library without an expensive data-copying operation.
+             */
+            options.shouldMoveFile = true
+            creationRequest.addResource(with: .pairedVideo, fileURL: livePhotoMovieURL, options: options)
+
+            return creationRequest
+        }, completion)
+    }
 }
 
 #endif
