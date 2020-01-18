@@ -51,24 +51,19 @@ public extension LivePhoto {
 
 @available(tvOS, unavailable)
 public extension LivePhoto {
-    /// Saves the live photo media at the given URL if the access to the photo library is allowed
+    /// Saves the given still image data and the movie at the given URL as a `LivePhoto`
+    /// if the access to the photo library is allowed
     ///
     /// - Parameters:
-    ///   - url: the URL of the live photo media
+    ///   - stillImageData: the still image portion of the live photo
+    ///   - livePhotoMovieURL: the URL to the movie portion of the live photo
     ///   - completion: a closure wich gets the `Result` (`LivePhoto` on `success` and `Error` on `failure`)
     ///
-    static func save(_ url: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) {
-        // TODO: determine file type
-        PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url) }, completion)
-    }
-
     static func save(stillImageData: Data, livePhotoMovieURL: URL, _ completion: @escaping (Result<LivePhoto, Error>) -> Void) throws {
         PHAssetChanger.createRequest({
-            // Add the captured photo's file data as the main resource for the Photos asset.
             let creationRequest = PHAssetCreationRequest.forAsset()
             creationRequest.addResource(with: .photo, data: stillImageData, options: nil)
 
-            // Add the movie file URL as the Live Photo's paired video resource.
             let options = PHAssetResourceCreationOptions()
             /*
                 Use the shouldMoveFile option

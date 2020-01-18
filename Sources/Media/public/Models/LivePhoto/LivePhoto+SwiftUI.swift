@@ -15,8 +15,8 @@ public extension LivePhoto {
     ///
     /// - Parameter completion: a closure which gets the `URL` of the captured `LivePhoto` on `success` or `Error` on `failure`
     ///
-    static func camera(_ completion: @escaping (Result<(Data, URL), Swift.Error>) -> Void) throws -> some View {
-        try CameraCreator.livePhoto(completion)
+    static func camera() throws -> some View {
+        try CameraViewCreator.livePhoto()
     }
 }
 #endif
