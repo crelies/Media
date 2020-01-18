@@ -89,7 +89,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 - `livePhoto.displayRepresentation(targetSize:contentMode) { result in }`
 
-- `LivePhoto.save(URL) { result in }`
+- `LivePhoto.save(stillImageData:livePhotoMovieURL:) { result in }`
 
 - `LivePhoto.with(identifier:) -> LivePhoto? (check for existence if you want)`
 
@@ -99,7 +99,7 @@ Get started by adding the `Media` Swift package to your project and by importing
 
 ##### **SwiftUI**
 
-- **SwiftUI only**: `LivePhoto.camera { result in }` (*some View*)
+- **SwiftUI only**: `LivePhoto.camera()` (*some View*)
 
 - **SwiftUI only**: `LivePhoto.browser { result in }` (*some View*)
 
