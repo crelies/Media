@@ -24,7 +24,7 @@ final class Photograph: NSObject {
 @available(iOS 10.0, *)
 extension Photograph {
     func shootPhoto(stillImageCompletion: @escaping (Result<Data, Error>) -> Void,
-                    livePhotoCompletion: @escaping (Result<LivePhotoData, Error>) -> Void) {
+                    livePhotoCompletion: ((Result<LivePhotoData, Error>) -> Void)?) {
         self.stillImageCompletion = stillImageCompletion
         self.livePhotoCompletion = livePhotoCompletion
 
