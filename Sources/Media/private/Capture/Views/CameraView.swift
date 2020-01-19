@@ -27,7 +27,7 @@ struct CameraView: View {
         self.captureSession = captureSession
         self.captureSettings = captureSettings
         self.output = output
-        self.photograph = Photograph(output: output, settings: captureSettings)
+        self.photograph = Photograph(photoOutput: output, photoSettings: captureSettings)
     }
 
     var body: some View {
@@ -119,7 +119,7 @@ extension CameraView {
     private func capture() {
         reset()
 
-        photograph.captureLivePhoto(stillImageCompletion: { stillImageResult in
+        photograph.shootPhoto(stillImageCompletion: { stillImageResult in
             switch stillImageResult {
             case .success(let data):
                 self.stillImageData = data

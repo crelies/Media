@@ -9,22 +9,22 @@ import AVFoundation
 
 @available(iOS 10.0, *)
 final class Photograph: NSObject {
-    private let output: AVCapturePhotoOutput
-    private let settings: AVCapturePhotoSettings
+    private let photoOutput: AVCapturePhotoOutput
+    private let photoSettings: AVCapturePhotoSettings
     private var captureProcessor: CaptureProcessor?
     private var stillImageCompletion: ((Result<Data, Error>) -> Void)?
     private var livePhotoCompletion: ((Result<LivePhotoData, Error>) -> Void)?
 
-    init(output: AVCapturePhotoOutput, settings: AVCapturePhotoSettings) {
-        self.output = output
-        self.settings = settings
+    init(photoOutput: AVCapturePhotoOutput, photoSettings: AVCapturePhotoSettings) {
+        self.photoOutput = photoOutput
+        self.photoSettings = photoSettings
     }
 }
 
 @available(iOS 10.0, *)
 extension Photograph {
-    func captureLivePhoto(stillImageCompletion: @escaping (Result<Data, Error>) -> Void,
-                          livePhotoCompletion: @escaping (Result<LivePhotoData, Error>) -> Void) {
+    func shootPhoto(stillImageCompletion: @escaping (Result<Data, Error>) -> Void,
+                    livePhotoCompletion: @escaping (Result<LivePhotoData, Error>) -> Void) {
         self.stillImageCompletion = stillImageCompletion
         self.livePhotoCompletion = livePhotoCompletion
 
@@ -32,7 +32,7 @@ extension Photograph {
         captureProcessor.delegate = self
         self.captureProcessor = captureProcessor
 
-        output.capturePhoto(with: AVCapturePhotoSettings(from: settings), delegate: captureProcessor)
+        photoOutput.capturePhoto(with: AVCapturePhotoSettings(from: photoSettings), delegate: captureProcessor)
     }
 }
 
