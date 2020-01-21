@@ -5,8 +5,10 @@
 //  Created by Christian Elies on 17.01.20.
 //
 
+#if canImport(UIKit) && !os(tvOS)
 import AVFoundation
 import SwiftUI
+import UIKit
 
 @available(iOS 13, *)
 struct VideoPreview: UIViewRepresentable {
@@ -22,3 +24,4 @@ struct VideoPreview: UIViewRepresentable {
 
     func updateUIView(_ uiView: AVCaptureVideoPreview, context: UIViewRepresentableContext<VideoPreview>) {}
 }
+#endif

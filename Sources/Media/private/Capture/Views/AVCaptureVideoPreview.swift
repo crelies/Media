@@ -5,10 +5,13 @@
 //  Created by Christian Elies on 17.01.20.
 //
 
+#if canImport(UIKit)
 import AVFoundation
 import UIKit
 
 @available(iOS 10, *)
+@available(macOS 10.15, *)
+@available(tvOS, unavailable)
 final class AVCaptureVideoPreview: UIView {
     override static var layerClass: AnyClass {
         return AVCaptureVideoPreviewLayer.self
@@ -19,3 +22,4 @@ final class AVCaptureVideoPreview: UIView {
         return layer as! AVCaptureVideoPreviewLayer
     }
 }
+#endif

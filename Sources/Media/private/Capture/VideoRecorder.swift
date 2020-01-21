@@ -8,6 +8,7 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(tvOS, unavailable)
 final class VideoRecorder: NSObject {
     private let videoOutput: AVCaptureMovieFileOutput
     private var completion: ((Result<URL, Error>) -> Void)?
@@ -18,6 +19,7 @@ final class VideoRecorder: NSObject {
 }
 
 @available(iOS 10, *)
+@available(tvOS, unavailable)
 extension VideoRecorder {
     func start(recordTo url: URL, completion: @escaping (Result<URL, Error>) -> Void) {
         self.completion = completion
@@ -31,6 +33,7 @@ extension VideoRecorder {
 }
 
 @available(iOS 10, *)
+@available(tvOS, unavailable)
 extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput,
                     didFinishRecordingTo outputFileURL: URL,

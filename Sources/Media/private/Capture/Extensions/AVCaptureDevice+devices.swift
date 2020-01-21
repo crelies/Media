@@ -5,11 +5,13 @@
 //  Created by Christian Elies on 19.01.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 
 @available(iOS 10, *)
 extension AVCaptureDevice {
     static func backVideoCamera() throws -> AVCaptureDevice {
+        #if !os(macOS)
         if #available(iOS 13, *) {
             if let device = AVCaptureDevice.default(.builtInTripleCamera,
                                                     for: .video,
@@ -30,6 +32,7 @@ extension AVCaptureDevice {
                 return device
             }
         }
+        #endif
 
         if let device = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                 for: .video, position: .back) {
@@ -39,3 +42,4 @@ extension AVCaptureDevice {
         throw Error.noBackVideoCamera
     }
 }
+#endif

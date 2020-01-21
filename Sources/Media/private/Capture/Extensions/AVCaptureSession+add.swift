@@ -8,6 +8,7 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(tvOS, unavailable)
 extension AVCaptureSession {
     func addDevice(device: AVCaptureDevice) throws {
         let input = try AVCaptureDeviceInput(device: device)

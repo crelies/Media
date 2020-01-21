@@ -8,6 +8,8 @@
 import Foundation
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
 struct LivePhotoData {
     let stillImageData: Data
     let movieURL: URL

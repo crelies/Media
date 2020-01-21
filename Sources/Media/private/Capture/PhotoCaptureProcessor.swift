@@ -5,9 +5,11 @@
 //  Created by Christian Elies on 16.01.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
 final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
     private var stillImageData: Data?
 
@@ -31,6 +33,7 @@ final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
         delegate?.didCapturePhoto(data: stillImageData)
     }
 
+    #if !os(macOS)
     /*
        Image portion
     */
@@ -74,4 +77,6 @@ final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
         let livePhotoData = LivePhotoData(stillImageData: stillImageData, movieURL: outputFileURL)
         delegate?.didCaptureLivePhoto(data: livePhotoData)
     }
+    #endif
 }
+#endif

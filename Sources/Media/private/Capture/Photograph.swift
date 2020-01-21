@@ -5,9 +5,11 @@
 //  Created by Christian Elies on 18.01.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
 final class Photograph: NSObject {
     private let photoOutput: AVCapturePhotoOutput
     private let photoSettings: AVCapturePhotoSettings
@@ -22,6 +24,7 @@ final class Photograph: NSObject {
 }
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
 extension Photograph {
     func shootPhoto(stillImageCompletion: @escaping (Result<Data, Error>) -> Void,
                     livePhotoCompletion: ((Result<LivePhotoData, Error>) -> Void)?) {
@@ -37,6 +40,7 @@ extension Photograph {
 }
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
 extension Photograph: CaptureProcessorDelegate {
     func didCapturePhoto(data: Data) {
         stillImageCompletion?(.success(data))
@@ -46,3 +50,4 @@ extension Photograph: CaptureProcessorDelegate {
         livePhotoCompletion?(.success(data))
     }
 }
+#endif

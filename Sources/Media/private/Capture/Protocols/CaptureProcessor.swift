@@ -8,6 +8,8 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
 protocol CaptureProcessor: AVCapturePhotoCaptureDelegate {
     var delegate: CaptureProcessorDelegate? { get set }
 }

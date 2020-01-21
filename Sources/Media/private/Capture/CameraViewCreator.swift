@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 16.01.20.
 //
 
+#if os(iOS)
 import AVFoundation
 import SwiftUI
 
@@ -38,3 +39,4 @@ struct CameraViewCreator {
                           output: photoOutput)
     }
 }
+#endif

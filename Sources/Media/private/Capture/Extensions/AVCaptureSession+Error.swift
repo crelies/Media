@@ -8,6 +8,7 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(tvOS, unavailable)
 extension AVCaptureSession {
     enum Error: Swift.Error {
         case cannotAddInput(_ input: AVCaptureDeviceInput)
