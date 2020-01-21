@@ -9,19 +9,19 @@ import Photos
 
 public extension Photo {
     struct Metadata: AnyMetadata {
-        let type: PHAssetMediaType
-        let subtypes: PHAssetMediaSubtype
-        let sourceType: PHAssetSourceType
-        let creationDate: Date?
-        let modificationDate: Date?
-        let location: CLLocation?
-        let isFavorite: Bool
-        let isHidden: Bool
+        public let type: PHAssetMediaType
+        public let subtypes: PHAssetMediaSubtype
+        public let sourceType: PHAssetSourceType
+        public let creationDate: Date?
+        public let modificationDate: Date?
+        public let location: CLLocation?
+        public let isFavorite: Bool
+        public let isHidden: Bool
 
         // The width, in pixels, of the asset’s image or video data.
-        let pixelWidth: Int
+        public let pixelWidth: Int
 
         // The height, in pixels, of the asset’s image or video data.
-        let pixelHeight: Int
+        public let pixelHeight: Int
     }
 }

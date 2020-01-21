@@ -107,6 +107,32 @@ public extension Photo {
     }
 }
 
+public extension Photo {
+    /// Downloads the image - if needed - and parses its properties
+    ///
+    /// - Parameter completion: `Result` containing all available properties on `success` or an error on `failure`
+    ///
+    func properties(_ completion: @escaping (Result<Properties, Error>) -> Void) {
+        let options = PHContentEditingInputRequestOptions()
+        options.isNetworkAccessAllowed = true
+
+        phAsset.requestContentEditingInput(with: options) { contentEditingInput, _ in
+            guard let fullSizeImageURL = contentEditingInput?.fullSizeImageURL else {
+                completion(.failure(PhotoError.missingFullSizeImageURL))
+                return
+            }
+
+            guard let fullImage = CIImage(contentsOf: fullSizeImageURL) else {
+                completion(.failure(PhotoError.couldNotCreateCIImage))
+                return
+            }
+
+            let properties = Properties(dictionary: fullImage.properties)
+            completion(.success(properties))
+        }
+    }
+}
+
 #if !os(macOS)
 public extension Photo {
     /// Data representation of the receiver

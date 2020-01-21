@@ -8,5 +8,6 @@
 /// Errors thrown during `Photo` related operations
 ///
 public enum PhotoError: Error {
+    case couldNotCreateCIImage
     case missingFullSizeImageURL
 }
