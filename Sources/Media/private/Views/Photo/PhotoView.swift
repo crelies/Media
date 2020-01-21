@@ -25,14 +25,6 @@ struct PhotoView<ImageView: View>: View {
             data.map { UIImage(data: $0).map { self.imageView(Image(uiImage: $0)) } }
 
             error.map { Text($0.localizedDescription) }
-        }.onAppear {
-            self.photo.properties { result in
-                switch result {
-                case .success(let properties):
-                    debugPrint(properties)
-                default: ()
-                }
-            }
         }
     }
 
