@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-@available(iOS 10.0, *)
+@available(iOS 10, *)
 final class Photograph: NSObject {
     private let photoOutput: AVCapturePhotoOutput
     private let photoSettings: AVCapturePhotoSettings
@@ -21,7 +21,7 @@ final class Photograph: NSObject {
     }
 }
 
-@available(iOS 10.0, *)
+@available(iOS 10, *)
 extension Photograph {
     func shootPhoto(stillImageCompletion: @escaping (Result<Data, Error>) -> Void,
                     livePhotoCompletion: ((Result<LivePhotoData, Error>) -> Void)?) {
@@ -36,7 +36,7 @@ extension Photograph {
     }
 }
 
-@available(iOS 10.0, *)
+@available(iOS 10, *)
 extension Photograph: CaptureProcessorDelegate {
     func didCapturePhoto(data: Data) {
         stillImageCompletion?(.success(data))

@@ -8,7 +8,7 @@
 import AVFoundation
 import SwiftUI
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 struct VideoPreview: UIViewRepresentable {
     let captureSession: AVCaptureSession
 

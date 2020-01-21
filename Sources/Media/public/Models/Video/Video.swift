@@ -205,7 +205,7 @@ extension Video {
                              progress: @escaping (Video.ExportProgress) -> Void) -> Timer {
         var timer: Timer
 
-        if #available(iOS 10.0, macOS 10.13, tvOS 10, *) {
+        if #available(iOS 10, macOS 10.13, tvOS 10, *) {
             timer = Timer(timeInterval: 1, repeats: true) { timer in
                 self.handleProgressTimerFired(exportSession: exportSession,
                                               timer: timer,

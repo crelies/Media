@@ -8,7 +8,7 @@
 import AVFoundation
 import SwiftUI
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 struct CameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     @State private var isLivePhotoAvailable = false
@@ -109,7 +109,7 @@ struct CameraView: View {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 extension CameraView {
     private func onDisappear() {
         self.reset()
@@ -154,7 +154,7 @@ extension CameraView {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13, *)
 extension CameraView {
     private func dismiss() {
         DispatchQueue.global(qos: .userInitiated).async {
