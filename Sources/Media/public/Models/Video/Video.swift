@@ -15,9 +15,25 @@ public struct Video: MediaProtocol {
 
     public typealias MediaSubtype = VideoSubtype
     public typealias MediaFileType = Video.FileType
+
     public let phAsset: PHAsset
     public static let type: MediaType = .video
-    public var isFavorite: Bool { phAsset.isFavorite }
+
+    /// Metadata of the `Video`
+    public var metadata: Metadata {
+        Metadata(
+            type: phAsset.mediaType,
+            subtypes: phAsset.mediaSubtypes,
+            sourceType: phAsset.sourceType,
+            creationDate: phAsset.creationDate,
+            modificationDate: phAsset.modificationDate,
+            location: phAsset.location,
+            isFavorite: phAsset.isFavorite,
+            isHidden: phAsset.isHidden,
+            pixelWidth: phAsset.pixelWidth,
+            pixelHeight: phAsset.pixelHeight,
+            duration: phAsset.duration)
+    }
 
     public init(phAsset: PHAsset) {
         self.phAsset = phAsset

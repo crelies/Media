@@ -13,8 +13,22 @@ import Photos
 public struct Audio: MediaProtocol {
     public typealias MediaSubtype = AudioSubtype
     public typealias MediaFileType = Audio.FileType
+
     public let phAsset: PHAsset
     public static let type: MediaType = .audio
+
+    /// Metadata of the `Audio`
+    public var metadata: Metadata {
+        Metadata(
+            type: phAsset.mediaType,
+            subtypes: phAsset.mediaSubtypes,
+            sourceType: phAsset.sourceType,
+            creationDate: phAsset.creationDate,
+            modificationDate: phAsset.modificationDate,
+            location: phAsset.location,
+            isFavorite: phAsset.isFavorite,
+            isHidden: phAsset.isHidden)
+    }
 
     public init(phAsset: PHAsset) {
         self.phAsset = phAsset

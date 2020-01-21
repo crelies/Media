@@ -19,9 +19,24 @@ public struct Photo: MediaProtocol {
 
     public typealias MediaSubtype = PhotoSubtype
     public typealias MediaFileType = Photo.FileType
+
     public let phAsset: PHAsset
     public static let type: MediaType = .image
-    public var isFavorite: Bool { phAsset.isFavorite }
+
+    /// Metadata of the `Photo`
+    public var metadata: Metadata {
+        Metadata(
+            type: phAsset.mediaType,
+            subtypes: phAsset.mediaSubtypes,
+            sourceType: phAsset.sourceType,
+            creationDate: phAsset.creationDate,
+            modificationDate: phAsset.modificationDate,
+            location: phAsset.location,
+            isFavorite: phAsset.isFavorite,
+            isHidden: phAsset.isHidden,
+            pixelWidth: phAsset.pixelWidth,
+            pixelHeight: phAsset.pixelHeight)
+    }
 
     public init(phAsset: PHAsset) {
         self.phAsset = phAsset
