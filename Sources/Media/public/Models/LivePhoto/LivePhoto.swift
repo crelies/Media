@@ -19,7 +19,7 @@ public struct LivePhoto: MediaProtocol {
     public let phAsset: PHAsset
     public static let type: MediaType = .image
 
-    /// Metadata of the `LivePhoto`
+    /// Locally available metadata of the `LivePhoto`
     public var metadata: Metadata {
         Metadata(
             type: phAsset.mediaType,

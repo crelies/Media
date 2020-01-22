@@ -19,7 +19,7 @@ public struct Video: MediaProtocol {
     public let phAsset: PHAsset
     public static let type: MediaType = .video
 
-    /// Metadata of the `Video`
+    /// Locally available metadata of the `Video`
     public var metadata: Metadata {
         Metadata(
             type: phAsset.mediaType,

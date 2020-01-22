@@ -17,7 +17,7 @@ public struct Audio: MediaProtocol {
     public let phAsset: PHAsset
     public static let type: MediaType = .audio
 
-    /// Metadata of the `Audio`
+    /// Locally available metadata of the `Audio`
     public var metadata: Metadata {
         Metadata(
             type: phAsset.mediaType,

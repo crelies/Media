@@ -23,7 +23,8 @@ public struct Photo: MediaProtocol {
     public let phAsset: PHAsset
     public static let type: MediaType = .image
 
-    /// Metadata of the `Photo`
+    /// Locally available metadata of the `Photo`
+    ///
     public var metadata: Metadata {
         Metadata(
             type: phAsset.mediaType,
@@ -108,9 +109,11 @@ public extension Photo {
 }
 
 public extension Photo {
-    /// Downloads the image - if needed - and parses its properties
+    /// Get `EXIF`, `GPS` and `TIFF` information of the `Photo`
+    /// Keep in mind that this method might download a full size copy
+    /// of the `Photo` from the cloud to get the information
     ///
-    /// - Parameter completion: `Result` containing all available properties on `success` or an error on `failure`
+    /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
     ///
     func properties(_ completion: @escaping (Result<Properties, Error>) -> Void) {
         let options = PHContentEditingInputRequestOptions()
