@@ -24,7 +24,7 @@ public extension Video {
     ///
     /// - Parameter completion: a closure wich gets `URL` on `success` or `Error` on `failure`
     ///
-    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
+    static func camera(_ completion: @escaping (Result<URL, Swift.Error>) -> Void) throws -> some View {
         // TODO: return MediaURL or store video directly in library
         try ViewCreator.camera(for: [.movie], completion)
     }
@@ -33,7 +33,7 @@ public extension Video {
     ///
     /// - Parameter completion: a closure wich gets `Video` on `success` or `Error` on `failure`
     ///
-    static func browser(_ completion: @escaping (Result<Video, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<Video, Swift.Error>) -> Void) throws -> some View {
         try ViewCreator.browser(mediaTypes: [.movie], completion)
     }
 }

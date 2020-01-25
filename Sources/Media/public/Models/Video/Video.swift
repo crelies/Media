@@ -70,11 +70,36 @@ public extension Video {
 }
 
 public extension Video {
+    /// Get all metadata of the `Video` (locally + remotely available)
+    /// Keep in mind that this method might download a copy
+    /// of the `Video` from the cloud to get the information
+    ///
+    /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
+    ///
+    func properties(_ completion: @escaping (Result<Properties, Swift.Error>) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.isNetworkAccessAllowed = true
+
+        Self.videoManager.requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, info in
+            PHImageManager.handleResult(result: (avAsset, info)) { result in
+                switch result {
+                case .success(let avAsset):
+                    let properties = Properties(metadata: avAsset.metadata)
+                    completion(.success(properties))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+}
+
+public extension Video {
     /// Creates a `AVPlayerItem` representation of the receiver
     ///
     /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`
     ///
-    func playerItem(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVPlayerItem, Error>) -> Void) {
+    func playerItem(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVPlayerItem, Swift.Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
@@ -88,7 +113,7 @@ public extension Video {
     ///
     /// - Parameter completion: a closure which gets an `AVAsset` on `success` and `Error` on `failure`
     ///
-    func avAsset(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVAsset, Error>) -> Void) {
+    func avAsset(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping (Result<AVAsset, Swift.Error>) -> Void) {
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
@@ -106,9 +131,9 @@ public extension Video {
     ///   - progress: a closure which gets the current `Video.ExportProgress`
     ///   - completion: a closure which gets a `Void` on `success` and `Error` on `failure`
     ///
-    func export(_ exportOptions: Video.ExportOptions, progress: @escaping (Video.ExportProgress) -> Void, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func export(_ exportOptions: Video.ExportOptions, progress: @escaping (Video.ExportProgress) -> Void, _ completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         guard let exportPreset = exportOptions.quality.avAssetExportPreset else {
-            completion(.failure(VideoError.unsupportedExportPreset))
+            completion(.failure(Error.unsupportedExportPreset))
             return
         }
 
@@ -120,12 +145,12 @@ public extension Video {
                                                options: requestOptions,
                                                exportPreset: exportPreset)
         { exportSession, info in
-            if let error = info?[PHImageErrorKey] as? Error {
+            if let error = info?[PHImageErrorKey] as? Swift.Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
                 exportSession.determineCompatibleFileTypes { compatibleFileTypes in
                     guard compatibleFileTypes.contains(exportOptions.outputURL.fileType.avFileType) else {
-                        completion(.failure(VideoError.unsupportedFileType))
+                        completion(.failure(Error.unsupportedFileType))
                         return
                     }
 
@@ -188,7 +213,7 @@ public extension Video {
     ///   - url: URL to the media
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
-    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Video, Error>) -> Void) {
+    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Video, Swift.Error>) -> Void) {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
     }
 
@@ -198,7 +223,7 @@ public extension Video {
     ///   - favorite: a boolean indicating the new `favorite` state
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
-    func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 }

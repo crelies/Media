@@ -50,7 +50,7 @@ public extension Photo {
     var subtypes: [PhotoSubtype] {
         var types: [PhotoSubtype] = []
 
-        if #available(iOS 10.2, macOS 10.11, tvOS 10.1, *) {
+        if #available(iOS 10.2, macOS 10.15, tvOS 10.1, *) {
             switch phAsset.mediaSubtypes {
             case [.photoDepthEffect, .photoScreenshot, .photoHDR, .photoPanorama]:
                 types.append(contentsOf: [.depthEffect, .screenshot, .hdr, .panorama])
@@ -120,12 +120,12 @@ public extension Photo {
 
         phAsset.requestContentEditingInput(with: options) { contentEditingInput, _ in
             guard let fullSizeImageURL = contentEditingInput?.fullSizeImageURL else {
-                completion(.failure(PhotoError.missingFullSizeImageURL))
+                completion(.failure(Error.missingFullSizeImageURL))
                 return
             }
 
             guard let fullImage = CIImage(contentsOf: fullSizeImageURL) else {
-                completion(.failure(PhotoError.couldNotCreateCIImage))
+                completion(.failure(Error.couldNotCreateCIImage))
                 return
             }
 
@@ -141,7 +141,7 @@ public extension Photo {
     ///
     /// - Parameter completion: a closure which gets a `Result` (`Data` on `success` or `Error` on `failure`)
     ///
-    func data(_ completion: @escaping (Result<Data, Error>) -> Void) {
+    func data(_ completion: @escaping (Result<Data, Swift.Error>) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         if #available(iOS 13, macOS 10.15, tvOS 13, *) {
@@ -152,7 +152,7 @@ public extension Photo {
             // Fallback on earlier versions
             phAsset.requestContentEditingInput(with: nil) { contentEditingInput, _ in
                 guard let fullSizeImageURL = contentEditingInput?.fullSizeImageURL else {
-                    completion(.failure(PhotoError.missingFullSizeImageURL))
+                    completion(.failure(Error.missingFullSizeImageURL))
                     return
                 }
 
@@ -179,7 +179,7 @@ public extension Photo {
     ///
     func uiImage(targetSize: CGSize,
                  contentMode: PHImageContentMode,
-                 _ completion: @escaping (Result<Media.DisplayRepresentation<UIImage>, Error>) -> Void) {
+                 _ completion: @escaping (Result<Media.DisplayRepresentation<UIImage>, Swift.Error>) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -204,7 +204,7 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
-    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Photo, Error>) -> Void) {
+    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Photo, Swift.Error>) -> Void) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
                                      completion)
     }
@@ -216,7 +216,7 @@ public extension Photo {
     ///   - image: the `UIImage` which should be saved
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
-    static func save(_ image: UIImage, completion: @escaping (Result<Photo, Error>) -> Void) {
+    static func save(_ image: UIImage, completion: @escaping (Result<Photo, Swift.Error>) -> Void) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)
     }
@@ -228,7 +228,7 @@ public extension Photo {
     ///   - favorite: a boolean indicating the new `favorite` state
     ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
     ///
-    func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func favorite(_ favorite: Bool, _ completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
     }
 

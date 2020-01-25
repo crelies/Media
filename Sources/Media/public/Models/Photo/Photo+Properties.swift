@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 21.01.20.
 //
 
+import CoreLocation
 import UIKit
 
 extension Photo {
@@ -72,6 +73,12 @@ extension Photo {
             public let longitudeRef: String?
             public let speed: Int?
             public let speedRef: String?
+
+            public var location: CLLocation? {
+                guard let latitude = latitude else { return nil }
+                guard let longitude = longitude else { return nil }
+                return CLLocation(latitude: latitude, longitude: longitude)
+            }
         }
 
         public struct TIFF {

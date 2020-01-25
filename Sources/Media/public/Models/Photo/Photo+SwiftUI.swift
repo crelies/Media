@@ -15,7 +15,7 @@ public extension Photo {
     ///
     /// - Parameter completion: a closure which gets a `Result` (`URL` on `success` or `Error` on `failure`)
     ///
-    static func camera(_ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
+    static func camera(_ completion: @escaping (Result<URL, Swift.Error>) -> Void) throws -> some View {
         // TODO: return MediaURL or store image directly in library
         try ViewCreator.camera(for: [.image], completion)
     }
@@ -24,7 +24,7 @@ public extension Photo {
     ///
     /// - Parameter completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
-    static func browser(_ completion: @escaping (Result<Photo, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<Photo, Swift.Error>) -> Void) throws -> some View {
         try ViewCreator.browser(mediaTypes: [.image], completion)
     }
 }
