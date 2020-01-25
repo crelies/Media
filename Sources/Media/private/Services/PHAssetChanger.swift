@@ -8,7 +8,6 @@
 import Photos
 
 struct PHAssetChanger {
-    // TODO: unavailabilityReason
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> AssetChangeRequest?,

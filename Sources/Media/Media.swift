@@ -14,29 +14,6 @@ import Photos
 public struct Media {
     static var photoLibrary: PhotoLibrary.Type = PHPhotoLibrary.self
 
-    /// Register an availability observer to the underlying photo library
-    ///
-    @available(iOS 13, *)
-    @available(macOS 10.15, *)
-    @available(tvOS 13, *)
-    public static weak var availabilityObserver: PHPhotoLibraryAvailabilityObserver? {
-        willSet {
-            if let currentObserver = availabilityObserver {
-                PHPhotoLibrary.shared().unregisterAvailabilityObserver(currentObserver)
-            }
-
-            guard let observer = newValue else {
-                return
-            }
-
-            PHPhotoLibrary.shared().register(observer)
-        }
-    }
-
-    public static var isPhotoLibraryAvailable: Bool {
-        return false
-    }
-
     /// Indicates that the access to the photo library is granted
     ///
     public static var isAccessAllowed: Bool {
