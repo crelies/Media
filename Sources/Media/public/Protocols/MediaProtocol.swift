@@ -16,6 +16,9 @@ public protocol MediaProtocol {
     associatedtype MediaFileType: RawRepresentable where MediaFileType.RawValue == String, MediaFileType: CaseIterable, MediaFileType: PathExtensionsProvider
 
     var phAsset: PHAsset { get }
+    /// Identifier resolves to the local identifier of the underlying
+    /// `PHAsset`
+    ///
     var identifier: Media.Identifier<Self> { get }
     static var type: MediaType { get }
 

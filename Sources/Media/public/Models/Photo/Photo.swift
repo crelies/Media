@@ -24,7 +24,6 @@ public struct Photo: MediaProtocol {
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `Photo`
-    ///
     public var metadata: Metadata {
         Metadata(
             type: phAsset.mediaType,

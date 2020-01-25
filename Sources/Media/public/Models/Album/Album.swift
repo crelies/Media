@@ -11,8 +11,12 @@ import Photos
 public struct Album {
     let phAssetCollection: PHAssetCollection
 
+    /// Identifier resolves to the local identifier of the underlying
+    /// `PHAssetCollection`
+    ///
     public var identifier: String { phAssetCollection.localIdentifier }
     public var localizedTitle: String? { phAssetCollection.localizedTitle }
+    public var metadata: Metadata { Metadata(phAssetCollection: phAssetCollection) }
 
     /// All audios contained in the receiver
     /// sorted by `creationDate descending`
