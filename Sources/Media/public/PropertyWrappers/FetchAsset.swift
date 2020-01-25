@@ -24,7 +24,7 @@ public struct FetchAsset<T: MediaProtocol> {
     ///
     /// - Parameter filter: a set of `MediaFilter` to use for the fetch
     ///
-    public init(filter: Set<MediaFilter<T.MediaSubtype>> = []) {
+    public init(filter: Set<Media.Filter<T.MediaSubtype>> = []) {
         if !filter.isEmpty {
             let predicates = filter.map { $0.predicate }
             options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates + [mediaTypePredicate])

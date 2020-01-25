@@ -1,5 +1,5 @@
 //
-//  VideoError.swift
+//  Video+Error.swift
 //  
 //
 //  Created by Christian Elies on 29.11.19.

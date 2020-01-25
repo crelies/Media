@@ -21,7 +21,7 @@ struct PHChanger {
             _ = request()
         }, completionHandler: { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? MediaError.unknown))
+                completion(.failure(error ?? Media.Error.unknown))
             } else {
                 completion(.success(()))
             }

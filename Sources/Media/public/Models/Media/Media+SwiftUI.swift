@@ -15,14 +15,14 @@ public extension Media {
     ///
     /// - Parameter completion: a closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`
     ///
-    static func browser(_ completion: @escaping (Result<PHAsset, Error>) -> Void) throws -> some View {
+    static func browser(_ completion: @escaping (Result<PHAsset, Swift.Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
-            throw MediaPickerError.noBrowsingSourceTypeAvailable
+            throw MediaPicker.Error.noBrowsingSourceTypeAvailable
         }
 
         return MediaPicker(sourceType: sourceType, mediaTypes: []) { value in
             guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
+                completion(.failure(MediaPicker.Error.unsupportedValue))
                 return
             }
             completion(.success(phAsset))

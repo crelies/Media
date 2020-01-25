@@ -1,5 +1,5 @@
 //
-//  PhotoError.swift
+//  Photo+Error.swift
 //  
 //
 //  Created by Christian Elies on 23.11.19.

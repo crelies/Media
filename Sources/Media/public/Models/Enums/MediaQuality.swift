@@ -1,5 +1,5 @@
 //
-//  MediaQuality.swift
+//  Media+Quality.swift
 //  
 //
 //  Created by Christian Elies on 28.11.19.

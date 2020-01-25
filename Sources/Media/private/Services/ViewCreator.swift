@@ -14,12 +14,12 @@ struct ViewCreator {
     static func camera(for mediaTypes: Set<UIImagePickerController.MediaType>,
                        _ completion: @escaping (Result<URL, Error>) -> Void) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            throw CameraError.noCameraAvailable
+            throw Camera.Error.noCameraAvailable
         }
 
         return MediaPicker(sourceType: .camera, mediaTypes: mediaTypes) { value in
             guard case let MediaPickerValue.tookMedia(imageURL) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
+                completion(.failure(MediaPicker.Error.unsupportedValue))
                 return
             }
             completion(.success(imageURL))
@@ -29,12 +29,12 @@ struct ViewCreator {
     static func browser<T: MediaProtocol>(mediaTypes: Set<UIImagePickerController.MediaType>,
                                           _ completion: @escaping (Result<T, Error>) -> Void) throws -> some View {
         guard let sourceType = UIImagePickerController.availableSourceType else {
-            throw MediaPickerError.noBrowsingSourceTypeAvailable
+            throw MediaPicker.Error.noBrowsingSourceTypeAvailable
         }
 
         return MediaPicker(sourceType: sourceType, mediaTypes: mediaTypes) { value in
             guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                completion(.failure(MediaPickerError.unsupportedValue))
+                completion(.failure(MediaPicker.Error.unsupportedValue))
                 return
             }
             let media = T.init(phAsset: phAsset)

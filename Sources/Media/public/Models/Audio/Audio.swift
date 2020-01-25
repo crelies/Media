@@ -11,7 +11,7 @@ import Photos
 /// Type for Audio media
 ///
 public struct Audio: MediaProtocol {
-    public typealias MediaSubtype = AudioSubtype
+    public typealias MediaSubtype = Audio.Subtype
     public typealias MediaFileType = Audio.FileType
 
     public let phAsset: PHAsset
@@ -46,7 +46,7 @@ public extension Audio {
     ///
     static func with(identifier: Media.Identifier<Self>) throws -> Audio? {
         let options = PHFetchOptions()
-        let mediaTypeFilter: MediaFilter<AudioSubtype> = .localIdentifier(identifier.localIdentifier)
+        let mediaTypeFilter: Media.Filter<Audio.Subtype> = .localIdentifier(identifier.localIdentifier)
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.audio.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 

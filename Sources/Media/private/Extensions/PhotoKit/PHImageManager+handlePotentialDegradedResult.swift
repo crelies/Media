@@ -28,7 +28,7 @@ extension PHImageManager {
                     }
             }
         } else {
-            completion(.failure(MediaError.unknown))
+            completion(.failure(Media.Error.unknown))
         }
     }
 }

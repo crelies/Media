@@ -1,20 +1,22 @@
 //
-//  VideoSubtype.swift
+//  Video+Subtype.swift
 //  Media
 //
 //  Created by Christian Elies on 21.11.19.
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-/// Subtypes describing a `Video`
-///
-public enum VideoSubtype: CaseIterable {
-    case streamed
-    case highFrameRate
-    case timelapse
+extension Video {
+    /// Subtypes describing a `Video`
+    ///
+    public enum Subtype: CaseIterable {
+        case streamed
+        case highFrameRate
+        case timelapse
+    }
 }
 
-extension VideoSubtype: MediaSubtypeProvider {
+extension Video.Subtype: MediaSubtypeProvider {
     /// Compute a `PHAssetMediaSubtype` from the receiver
     ///
     public var mediaSubtype: MediaSubtype? {

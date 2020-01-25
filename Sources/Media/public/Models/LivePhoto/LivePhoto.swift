@@ -13,7 +13,7 @@ import Photos
 public struct LivePhoto: MediaProtocol {
     static var livePhotoManager: LivePhotoManager = PHImageManager.default()
 
-    public typealias MediaSubtype = LivePhotoSubtype
+    public typealias MediaSubtype = LivePhoto.Subtype
     public typealias MediaFileType = LivePhoto.FileType
 
     public let phAsset: PHAsset
@@ -105,7 +105,7 @@ public extension LivePhoto {
     static func with(identifier: Media.Identifier<Self>) throws -> LivePhoto? {
         let options = PHFetchOptions()
 
-        let mediaFilter: [MediaFilter<LivePhotoSubtype>] = [.localIdentifier(identifier.localIdentifier), .mediaSubtypes([.live])]
+        let mediaFilter: [Media.Filter<LivePhoto.Subtype>] = [.localIdentifier(identifier.localIdentifier), .mediaSubtypes([.live])]
         let mediaFilterPredicates = mediaFilter.map { $0.predicate }
         let mediaTypePredicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate] + mediaFilterPredicates)

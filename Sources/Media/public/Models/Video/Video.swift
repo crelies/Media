@@ -13,7 +13,7 @@ import Photos
 public struct Video: MediaProtocol {
     static var videoManager: VideoManager = PHImageManager.default()
 
-    public typealias MediaSubtype = VideoSubtype
+    public typealias MediaSubtype = Video.Subtype
     public typealias MediaFileType = Video.FileType
 
     public let phAsset: PHAsset
@@ -44,8 +44,8 @@ public extension Video {
     /// Computes the subtypes of the receiver
     /// Similar to tags, like `highFrameRate` or `timelapse`
     ///
-    var subtypes: [VideoSubtype] {
-        var types: [VideoSubtype] = []
+    var subtypes: [Video.Subtype] {
+        var types: [Video.Subtype] = []
 
         switch phAsset.mediaSubtypes {
         case [.videoHighFrameRate, .videoStreamed, .videoTimelapse]:
@@ -167,16 +167,16 @@ public extension Video {
                             completion(.success(()))
                         case .failed:
                             timer.invalidate()
-                            completion(.failure(exportSession.error ?? MediaError.unknown))
+                            completion(.failure(exportSession.error ?? Media.Error.unknown))
                         case .cancelled:
                             timer.invalidate()
-                            completion(.failure(exportSession.error ?? MediaError.cancelled))
+                            completion(.failure(exportSession.error ?? Media.Error.cancelled))
                         default: ()
                         }
                     }
                 }
             } else {
-                completion(.failure(MediaError.unknown))
+                completion(.failure(Media.Error.unknown))
             }
         }
     }
@@ -194,7 +194,7 @@ public extension Video {
     static func with(identifier: Media.Identifier<Self>) throws -> Video? {
         let options = PHFetchOptions()
 
-        let localIdentifierFilter: MediaFilter<VideoSubtype> = .localIdentifier(identifier.localIdentifier)
+        let localIdentifierFilter: Media.Filter<Video.Subtype> = .localIdentifier(identifier.localIdentifier)
         let mediaTypePredicate = NSPredicate(format: "mediaType = %d", MediaType.video.rawValue)
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, localIdentifierFilter.predicate])
         options.predicate = predicate
@@ -213,7 +213,7 @@ public extension Video {
     ///   - url: URL to the media
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
-    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Video, Swift.Error>) -> Void) {
+    static func save(_ mediaURL: Media.URL<Self>, _ completion: @escaping (Result<Video, Swift.Error>) -> Void) {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
     }
 

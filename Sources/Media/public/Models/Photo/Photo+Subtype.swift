@@ -1,21 +1,23 @@
 //
-//  PhotoSubtype.swift
+//  Photo+Subtype.swift
 //  Media
 //
 //  Created by Christian Elies on 21.11.19.
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-/// Subtypes describing a `Photo`
-///
-public enum PhotoSubtype: CaseIterable {
-    case panorama
-    case hdr
-    case screenshot
-    case depthEffect
+extension Photo {
+    /// Subtypes describing a `Photo`
+    ///
+    public enum Subtype: CaseIterable {
+        case panorama
+        case hdr
+        case screenshot
+        case depthEffect
+    }
 }
 
-extension PhotoSubtype: MediaSubtypeProvider {
+extension Photo.Subtype: MediaSubtypeProvider {
     /// Compute a `PHAssetMediaSubtype` from the receiver
     ///
     public var mediaSubtype: MediaSubtype? {

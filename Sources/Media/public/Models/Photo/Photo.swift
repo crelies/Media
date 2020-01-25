@@ -17,7 +17,7 @@ public struct Photo: MediaProtocol {
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
-    public typealias MediaSubtype = PhotoSubtype
+    public typealias MediaSubtype = Photo.Subtype
     public typealias MediaFileType = Photo.FileType
 
     public let phAsset: PHAsset
@@ -47,8 +47,8 @@ public extension Photo {
     /// Subtypes of the receiver
     /// Similar to tags, like `hdr`, `panorama` or `screenshot`
     ///
-    var subtypes: [PhotoSubtype] {
-        var types: [PhotoSubtype] = []
+    var subtypes: [Photo.Subtype] {
+        var types: [Photo.Subtype] = []
 
         if #available(iOS 10.2, macOS 10.15, tvOS 10.1, *) {
             switch phAsset.mediaSubtypes {
@@ -204,7 +204,7 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
     @available(iOS 11, macOS 10.15, tvOS 11, *)
-    static func save(_ mediaURL: MediaURL<Self>, _ completion: @escaping (Result<Photo, Swift.Error>) -> Void) {
+    static func save(_ mediaURL: Media.URL<Self>, _ completion: @escaping (Result<Photo, Swift.Error>) -> Void) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
                                      completion)
     }
@@ -242,7 +242,7 @@ public extension Photo {
     ///
     static func with(identifier: Media.Identifier<Self>) throws -> Photo? {
         let options = PHFetchOptions()
-        let mediaTypeFilter: MediaFilter<PhotoSubtype> = .localIdentifier(identifier.localIdentifier)
+        let mediaTypeFilter: Media.Filter<Photo.Subtype> = .localIdentifier(identifier.localIdentifier)
         let predicate = NSPredicate(format: "mediaType = %d", MediaType.image.rawValue)
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, mediaTypeFilter.predicate])
 

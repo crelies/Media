@@ -74,10 +74,10 @@ public extension Album {
     ///   - title: title for the album
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    static func create(title: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    static func create(title: String, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         do {
             guard try Album.with(localizedTitle: title) == nil else {
-                completion(.failure(AlbumError.albumWithTitleExists(title)))
+                completion(.failure(Album.Error.albumWithTitleExists(title)))
                 return
             }
         } catch {
@@ -92,7 +92,7 @@ public extension Album {
     ///
     /// - Parameter completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func delete(completion: @escaping (Result<Void, Error>) -> Void) {
+    func delete(completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         PHChanger.request({
             let assetCollections: NSArray = [self.phAssetCollection]
             PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollections)
@@ -144,7 +144,7 @@ public extension Album {
     ///   - media: an object conforming to the `MediaProtocol`
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+    func add<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         guard !allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return
@@ -166,7 +166,7 @@ public extension Album {
     ///   - media: an object conforming to the `MediaProtocol`
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Error>) -> Void) {
+    func delete<T: MediaProtocol>(_ media: T, completion: @escaping (Result<Void, Swift.Error>) -> Void) {
         guard allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
             completion(.success(()))
             return

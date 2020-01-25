@@ -1,5 +1,5 @@
 //
-//  MediaFilter.swift
+//  Media+Filter.swift
 //  
 //
 //  Created by Christian Elies on 04.12.19.
@@ -7,23 +7,25 @@
 
 import Foundation
 
-/// Generic filter type for `Media`
-/// (`Audio`, `LivePhoto`, `Photo` or `Video`)
-///
-public enum MediaFilter<MediaSubtype> where MediaSubtype: MediaSubtypeProvider {
-    case localIdentifier(_ localIdentifier: String)
-    case creationDate(_ creationDate: Date)
-    case modificationDate(_ modificationDate: Date)
-    case mediaSubtypes(_ subtypes: [MediaSubtype])
-    case duration(_ duration: TimeInterval)
-    case pixelWidth(_ pixelWidth: Int)
-    case pixelHeight(_ pixelHeight: Int)
-    case isFavorite(_ isFavorite: Bool)
-    case isHidden(_ isHidden: Bool)
-    case burstIdentifier(_ burstIdentifier: String)
+extension Media {
+    /// Generic filter type for `Media`
+    /// (`Audio`, `LivePhoto`, `Photo` or `Video`)
+    ///
+    public enum Filter<MediaSubtype> where MediaSubtype: MediaSubtypeProvider {
+        case localIdentifier(_ localIdentifier: String)
+        case creationDate(_ creationDate: Date)
+        case modificationDate(_ modificationDate: Date)
+        case mediaSubtypes(_ subtypes: [MediaSubtype])
+        case duration(_ duration: TimeInterval)
+        case pixelWidth(_ pixelWidth: Int)
+        case pixelHeight(_ pixelHeight: Int)
+        case isFavorite(_ isFavorite: Bool)
+        case isHidden(_ isHidden: Bool)
+        case burstIdentifier(_ burstIdentifier: String)
+    }
 }
 
-extension MediaFilter: Hashable {
+extension Media.Filter: Hashable {
     public func hash(into hasher: inout Hasher) {
         switch self {
             case .localIdentifier(let localIdentifier):
@@ -51,13 +53,13 @@ extension MediaFilter: Hashable {
     }
 }
 
-extension MediaFilter: Equatable {
-    public static func == (lhs: MediaFilter<MediaSubtype>, rhs: MediaFilter<MediaSubtype>) -> Bool {
+extension Media.Filter: Equatable {
+    public static func == (lhs: Media.Filter<MediaSubtype>, rhs: Media.Filter<MediaSubtype>) -> Bool {
         lhs.hashValue == rhs.hashValue
     }
 }
 
-extension MediaFilter {
+extension Media.Filter {
     var predicate: NSPredicate {
         switch self {
             case .localIdentifier(let localIdentifier):

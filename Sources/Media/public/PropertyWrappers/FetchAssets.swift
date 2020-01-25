@@ -36,7 +36,7 @@ public struct FetchAssets<T: MediaProtocol> {
     ///   - includeAllBurstAssets: a Boolean value that determines whether the fetch result includes all assets from burst photo sequences, defaults to false
     ///   - includeHiddenAssets: a Boolean value that determines whether the fetch result includes assets marked as hidden, defaults to false
     ///
-    public init(filter: Set<MediaFilter<T.MediaSubtype>> = [],
+    public init(filter: Set<Media.Filter<T.MediaSubtype>> = [],
                 sort: Set<Sort<Media.SortKey>> = [],
                 fetchLimit: Int = 0,
                 includeAllBurstAssets: Bool = false,

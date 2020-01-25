@@ -26,13 +26,13 @@ struct PHAssetChanger {
             }
         }, completionHandler: { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? MediaError.unknown))
+                completion(.failure(error ?? Media.Error.unknown))
             } else {
                 do {
                     if let localIdentifier = placeholderForCreatedAsset?.localIdentifier, let item = try T.with(identifier: Media.Identifier(stringLiteral: localIdentifier)) {
                         completion(.success(item))
                     } else {
-                        completion(.failure(MediaError.unknown))
+                        completion(.failure(Media.Error.unknown))
                     }
                 } catch {
                     completion(.failure(error))
@@ -52,7 +52,7 @@ struct PHAssetChanger {
             assetChangeRequest.isFavorite = favorite
         }) { isSuccess, error in
             if !isSuccess {
-                completion(.failure(error ?? MediaError.unknown))
+                completion(.failure(error ?? Media.Error.unknown))
             } else {
                 completion(.success(()))
             }
