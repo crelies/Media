@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 21.01.20.
 //
 
+#if canImport(UIKit)
 import CoreLocation
 import UIKit
 
@@ -133,11 +134,11 @@ extension Photo.Properties {
             whiteBalance: exifDictionary?[kCGImagePropertyExifWhiteBalance as String] as? Int
         )
 
-        if #available(iOS 13.1, *) {
+        if #available(iOS 13.1, macOS 10.15, tvOS 13.1, *) {
             exif.compositeImage = exifDictionary?[kCGImagePropertyExifCompositeImage as String] as? Int
         }
 
-        if #available(iOS 13, *) {
+        if #available(iOS 13, macOS 10.15, tvOS 13, *) {
             exif.offsetTime = exifDictionary?[kCGImagePropertyExifOffsetTime as String] as? String
             exif.offsetTimeDigitized = exifDictionary?[kCGImagePropertyExifOffsetTimeDigitized as String] as? String
             exif.offsetTimeOriginal = exifDictionary?[kCGImagePropertyExifOffsetTimeOriginal as String] as? String
@@ -186,10 +187,11 @@ extension Photo.Properties {
             tiff: tiff
         )
 
-        if #available(iOS 11, *) {
+        if #available(iOS 11, macOS 10.15, tvOS 11, *) {
             properties.primaryImage = dictionary[kCGImagePropertyPrimaryImage as String] as? Int
         }
 
         self = properties
     }
 }
+#endif

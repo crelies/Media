@@ -5,8 +5,8 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 @available(iOS 13, *)
-@available(tvOS, unavailable)
 extension Camera {
     /// Errors thrown during camera view creation
     ///
@@ -14,3 +14,4 @@ extension Camera {
         case noCameraAvailable
     }
 }
+#endif

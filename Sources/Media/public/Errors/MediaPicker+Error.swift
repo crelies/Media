@@ -5,8 +5,8 @@
 //  Created by Christian Elies on 26.11.19.
 //
 
+#if canImport(SwiftUI) && canImport(UIKit) && !os(tvOS)
 @available(iOS 13, *)
-@available(tvOS, unavailable)
 extension MediaPicker {
     /// Errors thrown by the `MediaPicker`
     ///
@@ -17,3 +17,4 @@ extension MediaPicker {
         case unsupportedValue
     }
 }
+#endif

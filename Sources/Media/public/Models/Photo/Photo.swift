@@ -107,6 +107,7 @@ public extension Photo {
     }
 }
 
+#if canImport(UIKit)
 public extension Photo {
     /// Get `EXIF`, `GPS` and `TIFF` information of the `Photo`
     /// Keep in mind that this method might download a full size copy
@@ -134,6 +135,7 @@ public extension Photo {
         }
     }
 }
+#endif
 
 #if !os(macOS)
 public extension Photo {
