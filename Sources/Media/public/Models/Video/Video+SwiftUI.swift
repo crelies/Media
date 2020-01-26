@@ -22,10 +22,20 @@ public extension Video {
 public extension Video {
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     ///
-    /// - Parameter completion: a closure wich gets `URL` on `success` or `Error` on `failure`
+    /// - Parameter completion: a closure wich gets `Media.URL<Video>` on `success` or `Error` on `failure`
     ///
-    static func camera(_ completion: @escaping (Result<URL, Swift.Error>) -> Void) throws -> some View {
-        try ViewCreator.camera(for: [.movie], completion)
+    static func camera(_ completion: @escaping (Result<Media.URL<Video>, Swift.Error>) -> Void) throws -> some View {
+        try ViewCreator.camera(for: [.movie]) { result in
+            switch result {
+            case .success(let url):
+                let mediaURLResult = Result {
+                    try Media.URL<Video>(url: url)
+                }
+                completion(mediaURLResult)
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing `Video`s in the photo library
