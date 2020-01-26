@@ -15,12 +15,3 @@ extension Album {
         case albumWithTitleExists(_ title: String)
     }
 }
-
-extension Album.Error: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .albumWithTitleExists(let title):
-            return "An album with the title \(title) already exists."
-        }
-    }
-}

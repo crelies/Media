@@ -11,6 +11,7 @@ extension Camera {
     /// Errors thrown during camera view creation
     ///
     public enum Error: Swift.Error {
+        /// Thrown if no camera is available
         case noCameraAvailable
     }
 }

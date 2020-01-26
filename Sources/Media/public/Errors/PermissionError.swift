@@ -11,9 +11,13 @@ import Foundation
 /// Like `PHAuthorizationStatus` but without `unknown` case
 ///
 public enum PermissionError: Error {
+    /// Thrown if the permission was denied
     case denied
+    /// Thrown if the permission could not be determined
     case notDetermined
+    /// Thrown if the access was restricted
     case restricted
+    /// Thrown if an unknown error occurred
     case unknown
 }
 

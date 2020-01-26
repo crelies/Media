@@ -11,6 +11,7 @@ import AVFoundation
 @available(tvOS, unavailable)
 extension AVCaptureDevice {
     enum Error: Swift.Error {
+        /// Thrown if there is no back video camera
         case noBackVideoCamera
     }
 }

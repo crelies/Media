@@ -10,6 +10,7 @@ import UIKit
 
 extension UIImagePickerController {
     enum MediaTypeError: Error {
+        /// Thrown if the string is unsupported
         case unsupportedString
     }
 }
