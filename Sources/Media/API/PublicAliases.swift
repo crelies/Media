@@ -1,0 +1,22 @@
+//
+//  Aliases.swift
+//  
+//
+//  Created by Christian Elies on 30.11.19.
+//
+
+import Photos
+
+@available(iOS 10, *)
+public typealias LivePhotoDataCompletion = (Result<LivePhotoData, Error>) -> Void
+
+public typealias MediaType = PHAssetMediaType
+public typealias MediaSubtype = PHAssetMediaSubtype
+
+public typealias ResultDataCompletion = (Result<Data, Swift.Error>) -> Void
+public typealias ResultLivePhotoCompletion = (Result<LivePhoto, Error>) -> Void
+public typealias RequestLivePhotoResultHandler = (PHLivePhoto?, [AnyHashable : Any]) -> Void
+public typealias ResultPhotoCompletion = (Result<Photo, Swift.Error>) -> Void
+public typealias ResultURLCompletion = (Result<URL, Swift.Error>) -> Void
+public typealias ResultVideoCompletion = (Result<Video, Swift.Error>) -> Void
+public typealias ResultVoidCompletion = (Result<Void, Swift.Error>) -> Void
