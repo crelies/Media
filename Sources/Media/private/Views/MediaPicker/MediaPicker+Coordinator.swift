@@ -45,21 +45,6 @@ extension MediaPicker {
                 mediaPicker.onSelection(mediaPickerValue)
                 picker.dismiss(animated: true, completion: nil)
 
-            case (.camera, .livePhoto):
-                guard let imageURL = info.imageURL else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                guard let livePhoto = info.phLivePhoto else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                let mediaPickerValue: MediaPickerValue = .tookLivePhoto(livePhoto, url: imageURL)
-                mediaPicker.onSelection(mediaPickerValue)
-                picker.dismiss(animated: true, completion: nil)
-
             case (.photoLibrary, .image),
                  (.savedPhotosAlbum, .image),
                  (.photoLibrary, .movie),

@@ -12,7 +12,6 @@ import Photos
 @available(tvOS, unavailable)
 enum MediaPickerValue {
     case tookMedia(url: URL)
-    case tookLivePhoto(_ livePhoto: PHLivePhoto, url: URL)
     case selectedMedia(phAsset: PHAsset)
     case selectedLivePhoto(_ livePhoto: PHLivePhoto, phAsset: PHAsset)
 }
