@@ -42,7 +42,6 @@ extension MediaProtocol {
     /// - Parameter completion: a closure which get's the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     public func delete(completion: @escaping (Result<Void, Error>) -> Void) {
-        // TODO: what should we do with the asset reference?
         PHChanger.request({
             let phAssets: NSArray = [self.phAsset]
             PHAssetChangeRequest.deleteAssets(phAssets)
