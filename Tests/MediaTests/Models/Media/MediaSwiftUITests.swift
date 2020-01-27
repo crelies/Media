@@ -14,7 +14,7 @@ import XCTest
 final class MediaSwiftUITests: XCTestCase {
     func testBrowser() {
         do {
-            let completion: (Result<PHAsset, Error>) -> Void = { result in }
+            let completion: ResultPHAssetCompletion = { result in }
             _ = try Media.browser(completion)
         } catch {
             XCTFail(error.localizedDescription)

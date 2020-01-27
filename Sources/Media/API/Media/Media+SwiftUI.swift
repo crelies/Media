@@ -11,8 +11,6 @@ import SwiftUI
 
 @available(iOS 13, macOS 10.15, *)
 public extension Media {
-    typealias ResultPHAssetCompletion = (Result<PHAsset, Swift.Error>) -> Void
-
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     ///
     /// - Parameter completion: a closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`

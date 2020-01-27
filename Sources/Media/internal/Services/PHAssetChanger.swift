@@ -8,6 +8,8 @@
 import Photos
 
 struct PHAssetChanger {
+    private static var changeObserver: PhotoLibraryChangeObserver?
+
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> AssetChangeRequest?,
@@ -40,11 +42,28 @@ struct PHAssetChanger {
         })
     }
 
-    static func favorite(phAsset: PHAsset, favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+    static func favorite(phAsset: PHAsset, favorite: Bool, _ completion: @escaping ResultPHAssetCompletion) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
         }
+
+        let completion: ResultPHAssetCompletion = { result in
+            switch result {
+            case .success(let asset):
+                if let observer = self.changeObserver {
+                    photoLibrary.unregisterChangeObserver(observer)
+                    self.changeObserver = nil
+                }
+                completion(.success(asset))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+
+        let observer = PhotoLibraryChangeObserver(asset: phAsset, completion)
+        self.changeObserver = observer
+        photoLibrary.register(observer)
 
         photoLibrary.performChanges({
             let assetChangeRequest = PHAssetChangeRequest(for: phAsset)
@@ -52,8 +71,6 @@ struct PHAssetChanger {
         }) { isSuccess, error in
             if !isSuccess {
                 completion(.failure(error ?? Media.Error.unknown))
-            } else {
-                completion(.success(()))
             }
         }
     }

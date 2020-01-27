@@ -17,10 +17,12 @@ public struct Photo: MediaProtocol {
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
+    private let phAssetWrapper: PHAssetWrapper
+
     public typealias MediaSubtype = Photo.Subtype
     public typealias MediaFileType = Photo.FileType
 
-    public let phAsset: PHAsset
+    public var phAsset: PHAsset { phAssetWrapper.value }
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `Photo`
@@ -39,7 +41,7 @@ public struct Photo: MediaProtocol {
     }
 
     public init(phAsset: PHAsset) {
-        self.phAsset = phAsset
+        phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
 }
 
@@ -235,7 +237,14 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
-        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
+        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
+            do {
+                self.phAssetWrapper.value = try result.get()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 
     /// Fetches the `Photo` with the given identifier if it exists

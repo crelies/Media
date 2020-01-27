@@ -15,10 +15,12 @@ public struct Video: MediaProtocol {
 
     static var videoManager: VideoManager = PHImageManager.default()
 
+    private let phAssetWrapper: PHAssetWrapper
+
     public typealias MediaSubtype = Video.Subtype
     public typealias MediaFileType = Video.FileType
 
-    public let phAsset: PHAsset
+    public var phAsset: PHAsset { phAssetWrapper.value }
     public static let type: MediaType = .video
 
     /// Locally available metadata of the `Video`
@@ -38,7 +40,7 @@ public struct Video: MediaProtocol {
     }
 
     public init(phAsset: PHAsset) {
-        self.phAsset = phAsset
+        phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
 }
 
@@ -231,7 +233,14 @@ public extension Video {
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
-        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
+        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
+            do {
+                self.phAssetWrapper.value = try result.get()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 }
 

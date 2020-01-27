@@ -15,10 +15,12 @@ public struct LivePhoto: MediaProtocol {
 
     static var livePhotoManager: LivePhotoManager = PHImageManager.default()
 
+    private let phAssetWrapper: PHAssetWrapper
+
     public typealias MediaSubtype = LivePhoto.Subtype
     public typealias MediaFileType = LivePhoto.FileType
 
-    public let phAsset: PHAsset
+    public var phAsset: PHAsset { phAssetWrapper.value }
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `LivePhoto`
@@ -35,7 +37,7 @@ public struct LivePhoto: MediaProtocol {
     }
 
     public init(phAsset: PHAsset) {
-        self.phAsset = phAsset
+        phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
 }
 
@@ -125,6 +127,13 @@ public extension LivePhoto {
     ///   - completion: a closure wich gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
-        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite, completion)
+        PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
+            do {
+                self.phAssetWrapper.value = try result.get()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 }

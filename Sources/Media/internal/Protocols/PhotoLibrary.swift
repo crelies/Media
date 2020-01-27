@@ -14,4 +14,6 @@ protocol PhotoLibrary: class {
     static func authorizationStatus() -> PHAuthorizationStatus
     static func requestAuthorization(_ handler: @escaping RequestAuthorizationHandler)
     func performChanges(_ changeBlock: @escaping () -> Void, completionHandler: PerformChangesCompletionHandler?)
+    func register(_ observer: PHPhotoLibraryChangeObserver)
+    func unregisterChangeObserver(_ observer: PHPhotoLibraryChangeObserver)
 }
