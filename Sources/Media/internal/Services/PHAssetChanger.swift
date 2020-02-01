@@ -77,7 +77,7 @@ struct PHAssetChanger {
 }
 
 extension PHAssetChanger {
-    static func unregisterChangeObserver() {
+    private static func unregisterChangeObserver() {
         if let observer = changeObserver {
             photoLibrary.unregisterChangeObserver(observer)
             changeObserver = nil
