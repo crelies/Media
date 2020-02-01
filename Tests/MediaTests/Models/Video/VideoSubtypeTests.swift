@@ -10,19 +10,19 @@ import XCTest
 
 final class VideoSubtypeTests: XCTestCase {
     func testStreamedMediaSubtype() {
-        let subtype: VideoSubtype = .streamed
+        let subtype: Video.Subtype = .streamed
         let expectedMediaSubtype: MediaSubtype = .videoStreamed
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
     func testHighFrameRateMediaSubtype() {
-        let subtype: VideoSubtype = .highFrameRate
+        let subtype: Video.Subtype = .highFrameRate
         let expectedMediaSubtype: MediaSubtype = .videoHighFrameRate
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
     func testTimelapseMediaSubtype() {
-        let subtype: VideoSubtype = .timelapse
+        let subtype: Video.Subtype = .timelapse
         let expectedMediaSubtype: MediaSubtype = .videoTimelapse
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }

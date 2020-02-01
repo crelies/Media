@@ -9,8 +9,8 @@
 import XCTest
 
 final class LivePhotoFileTypeTests: XCTestCase {
-    func testNonePathExtensions() {
-        let fileType: LivePhoto.FileType = .none
-        XCTAssertTrue(fileType.pathExtensions.isEmpty)
+    func testMovPathExtensions() {
+        let fileType: LivePhoto.FileType = .mov
+        XCTAssertFalse(fileType.pathExtensions.isEmpty)
     }
 }

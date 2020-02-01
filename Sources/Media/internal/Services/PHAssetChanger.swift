@@ -8,8 +8,9 @@
 import Photos
 
 struct PHAssetChanger {
-    private static var changeObserver: PhotoLibraryChangeObserver?
+    private static var changeObserver: PHPhotoLibraryChangeObserver?
 
+    static var photoLibraryChangeObserver: PhotoLibraryChangeObserver.Type = CustomPhotoLibraryChangeObserver.self
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
     static func createRequest<T: MediaProtocol>(_ request: @escaping () -> AssetChangeRequest?,
@@ -48,20 +49,18 @@ struct PHAssetChanger {
             return
         }
 
-        let completion: ResultPHAssetCompletion = { result in
+        let photoLibraryChangeObserverCompletion: ResultPHAssetCompletion = { result in
             switch result {
             case .success(let asset):
-                if let observer = self.changeObserver {
-                    photoLibrary.unregisterChangeObserver(observer)
-                    self.changeObserver = nil
-                }
                 completion(.success(asset))
             case .failure(let error):
                 completion(.failure(error))
             }
+
+            unregisterChangeObserver()
         }
 
-        let observer = PhotoLibraryChangeObserver(asset: phAsset, completion)
+        let observer = photoLibraryChangeObserver.init(asset: phAsset, photoLibraryChangeObserverCompletion)
         self.changeObserver = observer
         photoLibrary.register(observer)
 
@@ -70,8 +69,18 @@ struct PHAssetChanger {
             assetChangeRequest.isFavorite = favorite
         }) { isSuccess, error in
             if !isSuccess {
+                unregisterChangeObserver()
                 completion(.failure(error ?? Media.Error.unknown))
             }
+        }
+    }
+}
+
+extension PHAssetChanger {
+    static func unregisterChangeObserver() {
+        if let observer = changeObserver {
+            photoLibrary.unregisterChangeObserver(observer)
+            changeObserver = nil
         }
     }
 }

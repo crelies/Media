@@ -10,19 +10,19 @@ import XCTest
 
 final class PhotoSubtypeTests: XCTestCase {
     func testPanoramaMediaSubtype() {
-        let subtype: PhotoSubtype = .panorama
+        let subtype: Photo.Subtype = .panorama
         let expectedMediaSubtype: MediaSubtype = .photoPanorama
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
     func testHDRMediaSubtype() {
-        let subtype: PhotoSubtype = .hdr
+        let subtype: Photo.Subtype = .hdr
         let expectedMediaSubtype: MediaSubtype = .photoHDR
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
 
     func testScreenshotMediaSubtype() {
-        let subtype: PhotoSubtype = .screenshot
+        let subtype: Photo.Subtype = .screenshot
         let expectedMediaSubtype: MediaSubtype = .photoScreenshot
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }
@@ -30,7 +30,7 @@ final class PhotoSubtypeTests: XCTestCase {
     @available(iOS 10.2, *)
     @available(tvOS 10.1, *)
     func testDepthEffectMediaSubtype() {
-        let subtype: PhotoSubtype = .depthEffect
+        let subtype: Photo.Subtype = .depthEffect
         let expectedMediaSubtype: MediaSubtype = .photoDepthEffect
         XCTAssertEqual(subtype.mediaSubtype, expectedMediaSubtype)
     }

@@ -10,6 +10,8 @@ import Photos
 import XCTest
 
 final class PHAssetChangerTests: XCTestCase {
+    let mockAsset = MockPHAsset()
+
     override func setUp() {
         Media.photoLibrary = MockPhotoLibrary.self
         PHAssetChanger.photoLibrary = MockPhotoLibrary()
@@ -19,16 +21,12 @@ final class PHAssetChangerTests: XCTestCase {
         MockPhotoLibrary.performChangesError = nil
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testFavoriteWithoutPermission() {
         MockPhotoLibrary.authorizationStatusToReturn = .denied
 
         let expectation = self.expectation(description: "RequestCompleted")
 
-        var result: Result<Void, Error>?
+        var result: Result<PHAsset, Error>?
         PHAssetChanger.favorite(phAsset: PHAsset(), favorite: false) { res in
             result = res
             expectation.fulfill()
@@ -49,11 +47,11 @@ final class PHAssetChangerTests: XCTestCase {
 
     func testFavoriteWithError() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "RequestCompleted")
 
-        var result: Result<Void, Error>?
+        var result: Result<PHAsset, Error>?
         PHAssetChanger.favorite(phAsset: PHAsset(), favorite: false) { res in
             result = res
             expectation.fulfill()
@@ -65,8 +63,8 @@ final class PHAssetChangerTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            let mediaError = error as? MediaError
-            XCTAssertEqual(mediaError, MediaError.unknown)
+            let mediaError = error as? Media.Error
+            XCTAssertEqual(mediaError, Media.Error.unknown)
         default:
             XCTFail("Invalid result \(String(describing: result))")
         }
@@ -75,8 +73,10 @@ final class PHAssetChangerTests: XCTestCase {
     func testFavoriteWithSuccess() {
         let expectation = self.expectation(description: "RequestCompleted")
 
-        var result: Result<Void, Error>?
-        PHAssetChanger.favorite(phAsset: PHAsset(), favorite: false) { res in
+        XCTAssertFalse(mockAsset.isFavorite)
+
+        var result: Result<PHAsset, Error>?
+        PHAssetChanger.favorite(phAsset: mockAsset, favorite: !mockAsset.isFavorite) { res in
             result = res
             expectation.fulfill()
         }
@@ -86,7 +86,16 @@ final class PHAssetChangerTests: XCTestCase {
         XCTAssertNotNil(result)
 
         switch result {
-        case .success: ()
+        case .success:
+            do {
+                guard let asset = try result?.get() else {
+                    XCTFail("Missing asset in result")
+                    return
+                }
+                XCTAssertTrue(asset.isFavorite)
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
         case .failure(let error):
             XCTFail(error.localizedDescription)
         case .none:

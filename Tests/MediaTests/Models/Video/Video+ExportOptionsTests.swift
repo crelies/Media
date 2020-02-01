@@ -12,8 +12,13 @@ final class Video_ExportOptionsTests: XCTestCase {
     func testInit() {
         do {
             let url = URL(fileURLWithPath: "file://test.mov")
-            let mediaURL = try MediaURL<Video>(url: url)
-            _ = Video.ExportOptions(url: mediaURL, quality: .low)
+            let mediaURL = try Media.URL<Video>(url: url)
+            #if os(macOS)
+            let quality: Video.ExportQualityMac = .cellular
+            #else
+            let quality: Video.ExportQuality = .low
+            #endif
+            _ = Video.ExportOptions(url: mediaURL, quality: quality)
         } catch {
             XCTFail(error.localizedDescription)
         }

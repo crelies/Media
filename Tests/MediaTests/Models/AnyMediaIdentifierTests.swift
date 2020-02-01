@@ -12,7 +12,7 @@ final class AnyMediaIdentifierTests: XCTestCase {
     func testInitialization() {
         let localIdentifier = "MockLocalIdentifier"
         let mediaIdentifier = Media.Identifier<Photo>(stringLiteral: localIdentifier)
-        let anyMediaIdentifier = AnyMediaIdentifier(mediaIdentifier)
+        let anyMediaIdentifier = AnyMedia.Identifier(mediaIdentifier)
         XCTAssertEqual(anyMediaIdentifier.localIdentifier, localIdentifier)
     }
 }

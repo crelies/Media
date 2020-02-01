@@ -49,7 +49,7 @@ final class PHChangerTests: XCTestCase {
 
     func testRequestWithError() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "RequestCompleted")
 
@@ -67,8 +67,8 @@ final class PHChangerTests: XCTestCase {
         case .success:
             XCTFail("Invalid result")
         case .failure(let error):
-            let mediaError = error as? MediaError
-            XCTAssertEqual(mediaError, MediaError.unknown)
+            let mediaError = error as? Media.Error
+            XCTAssertEqual(mediaError, Media.Error.unknown)
         default: ()
         }
     }

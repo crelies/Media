@@ -76,7 +76,7 @@ final class VideoTests: XCTestCase {
 
     func testFavoriteFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "VideoFavoriteResult")
 
@@ -91,7 +91,7 @@ final class VideoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid video favorite result")
         }
@@ -127,7 +127,7 @@ final class VideoTests: XCTestCase {
     }
 
     func testPlayerItemFailure() {
-        videoManager.infoToReturn = [PHImageErrorKey: MediaError.unknown]
+        videoManager.infoToReturn = [PHImageErrorKey: Media.Error.unknown]
 
         let expectation = self.expectation(description: "PlayerItemResult")
         var result: Result<AVPlayerItem, Error>?
@@ -140,7 +140,7 @@ final class VideoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid player item result")
         }
@@ -176,7 +176,7 @@ final class VideoTests: XCTestCase {
     }
 
     func testAVAssetFailure() {
-        videoManager.infoToReturn = [PHImageErrorKey: MediaError.unknown]
+        videoManager.infoToReturn = [PHImageErrorKey: Media.Error.unknown]
 
         let expectation = self.expectation(description: "AVAssetResult")
         var result: Result<AVAsset, Error>?
@@ -189,7 +189,7 @@ final class VideoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid av asset result")
         }

@@ -1,5 +1,5 @@
 //
-//  PhotoLibraryChangeObserver.swift
+//  CustomPhotoLibraryChangeObserver.swift
 //  Media
 //
 //  Created by Christian Elies on 27.01.20.
@@ -7,7 +7,7 @@
 
 import Photos
 
-final class PhotoLibraryChangeObserver: NSObject {
+final class CustomPhotoLibraryChangeObserver: NSObject {
     private let asset: PHAsset
     private let completion: ResultPHAssetCompletion
 
@@ -17,7 +17,7 @@ final class PhotoLibraryChangeObserver: NSObject {
     }
 }
 
-extension PhotoLibraryChangeObserver: PHPhotoLibraryChangeObserver {
+extension CustomPhotoLibraryChangeObserver: PhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         let changeDetails = changeInstance.changeDetails(for: asset)
 

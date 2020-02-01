@@ -9,6 +9,8 @@
 import Photos
 
 final class MockPhotoLibrary: PhotoLibrary {
+    private weak var observer: PHPhotoLibraryChangeObserver?
+
     static var authorizationStatusToReturn: PHAuthorizationStatus = .authorized
     static var performChangesSuccess: Bool = false
     static var performChangesError: Error?
@@ -27,5 +29,14 @@ final class MockPhotoLibrary: PhotoLibrary {
 
     func performChanges(_ changeBlock: @escaping () -> Void, completionHandler: ((Bool, Error?) -> Void)? = nil) {
         completionHandler?(Self.performChangesSuccess, Self.performChangesError)
+        observer.map { $0.photoLibraryDidChange(PHChange()) }
+    }
+
+    func register(_ observer: PHPhotoLibraryChangeObserver) {
+        self.observer = observer
+    }
+
+    func unregisterChangeObserver(_ observer: PHPhotoLibraryChangeObserver) {
+        self.observer = nil
     }
 }

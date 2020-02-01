@@ -13,10 +13,12 @@ final class MockPHAsset: PHAsset {
     var localIdentifierToReturn = UUID().uuidString
     var mediaTypeToReturn: PHAssetMediaType = .image
     var mediaSubtypesToReturn: PHAssetMediaSubtype = []
+    var isFavoriteToReturn = false
 
     override var localIdentifier: String { localIdentifierToReturn }
     override var mediaType: PHAssetMediaType { mediaTypeToReturn }
     override var mediaSubtypes: PHAssetMediaSubtype { mediaSubtypesToReturn }
+    override var isFavorite: Bool { isFavoriteToReturn }
 
     override class func fetchAssets(with options: PHFetchOptions?) -> PHFetchResult<PHAsset> {
         fetchResult

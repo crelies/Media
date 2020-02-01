@@ -162,7 +162,7 @@ final class AlbumTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            guard case let AlbumError.albumWithTitleExists(title) = error else {
+            guard case let Album.Error.albumWithTitleExists(title) = error else {
                 XCTFail("Invalid error")
                 return
             }
@@ -213,7 +213,7 @@ final class AlbumTests: XCTestCase {
 
     func testAlbumDeleteFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "AlbumDeleteResult")
 
@@ -227,7 +227,7 @@ final class AlbumTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid album delete result \(String(describing: result))")
         }

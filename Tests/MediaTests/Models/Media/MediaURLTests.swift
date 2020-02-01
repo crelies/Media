@@ -12,9 +12,9 @@ final class MediaURLTests: XCTestCase {
     func testNoPathExtension() {
         do {
             let url = URL(fileURLWithPath: "file:///test")
-            _ = try MediaURL<Photo>(url: url)
+            _ = try Media.URL<Photo>(url: url)
         } catch {
-            let error = error as? MediaURLError
+            let error = error as? Media.URL<Photo>.Error
             XCTAssertEqual(error, .missingPathExtension)
         }
     }
@@ -22,9 +22,9 @@ final class MediaURLTests: XCTestCase {
     func testUnsupportedPhotoFileType() {
         do {
             let url = URL(fileURLWithPath: "file:///test.\(Video.FileType.mov.pathExtensions.first!)")
-            _ = try MediaURL<Photo>(url: url)
+            _ = try Media.URL<Photo>(url: url)
         } catch {
-            let error = error as? MediaURLError
+            let error = error as? Media.URL<Photo>.Error
             XCTAssertEqual(error, .unsupportedPathExtension)
         }
     }
@@ -32,7 +32,7 @@ final class MediaURLTests: XCTestCase {
     func testSupportedPhotoFileType() {
         do {
             let url = URL(fileURLWithPath: "file:///test.\(Photo.FileType.jpg.pathExtensions.first!)")
-            _ = try MediaURL<Photo>(url: url)
+            _ = try Media.URL<Photo>(url: url)
         } catch {
             XCTFail(error.localizedDescription)
         }
@@ -41,9 +41,9 @@ final class MediaURLTests: XCTestCase {
     func testUnsupportedVideoFileType() {
         do {
             let url = URL(fileURLWithPath: "file:///test.\(Photo.FileType.jpg.pathExtensions.first!)")
-            _ = try MediaURL<Video>(url: url)
+            _ = try Media.URL<Video>(url: url)
         } catch {
-            let error = error as? MediaURLError
+            let error = error as? Media.URL<Video>.Error
             XCTAssertEqual(error, .unsupportedPathExtension)
         }
     }
@@ -51,7 +51,7 @@ final class MediaURLTests: XCTestCase {
     func testSupportedVideoFileType() {
         do {
             let url = URL(fileURLWithPath: "file:///test.\(Video.FileType.mov.pathExtensions.first!)")
-            _ = try MediaURL<Video>(url: url)
+            _ = try Media.URL<Video>(url: url)
         } catch {
             XCTFail(error.localizedDescription)
         }

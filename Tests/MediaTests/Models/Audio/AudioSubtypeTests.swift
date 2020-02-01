@@ -10,7 +10,7 @@ import XCTest
 
 final class AudioSubtypeTests: XCTestCase {
     func testMediaSubtype() {
-        let audioSubtype: AudioSubtype? = .none
+        let audioSubtype: Audio.Subtype? = .none
         XCTAssertNil(audioSubtype?.mediaSubtype)
     }
 }

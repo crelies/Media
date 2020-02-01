@@ -20,6 +20,7 @@ final class LivePhotoTests: XCTestCase {
         PHAssetFetcher.asset = MockPHAsset.self
 
         PHAssetChanger.photoLibrary = photoLibrary
+        PHAssetChanger.photoLibraryChangeObserver = MockPhotoLibraryChangeObserver.self
 
         livePhotoManager.livePhotoToReturn = nil
         livePhotoManager.infoToReturn = nil
@@ -158,7 +159,7 @@ final class LivePhotoTests: XCTestCase {
         let expectation = self.expectation(description: "FavoriteResult")
 
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         var result: Result<Void, Error>?
         let isFavorite = false
@@ -171,7 +172,7 @@ final class LivePhotoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid favorite result \(String(describing: result))")
         }

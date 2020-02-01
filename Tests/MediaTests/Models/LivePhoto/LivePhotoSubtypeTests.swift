@@ -10,7 +10,7 @@ import XCTest
 
 final class LivePhotoSubtypeTests: XCTestCase {
     func testLiveMediaSubtype() {
-        let subtype: LivePhotoSubtype = .live
+        let subtype: LivePhoto.Subtype = .live
         XCTAssertEqual(subtype.mediaSubtype, .photoLive)
     }
 }

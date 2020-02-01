@@ -13,8 +13,14 @@ final class AnyMediaTests: XCTestCase {
         let asset = MockPHAsset()
         let photo = Photo(phAsset: asset)
         let anyMedia = AnyMedia(photo)
-        let expectedIdentifier = AnyMediaIdentifier(photo.identifier)
-        XCTAssertEqual(anyMedia.identifier, expectedIdentifier)
-        XCTAssertNotNil(anyMedia.value as? Photo)
+
+        guard let photoIdentifier = photo.identifier else {
+            XCTFail("Missing photo identifier")
+            return
+        }
+        
+        let expectedIdentifier = AnyMedia.Identifier(photoIdentifier)
+        XCTAssertEqual(anyMedia?.identifier, expectedIdentifier)
+        XCTAssertNotNil(anyMedia?.value as? Photo)
     }
 }
