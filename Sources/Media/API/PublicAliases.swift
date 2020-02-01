@@ -8,6 +8,8 @@
 import Photos
 
 @available(iOS 10, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
 public typealias LivePhotoDataCompletion = (Result<LivePhotoData, Error>) -> Void
 
 public typealias MediaType = PHAssetMediaType
