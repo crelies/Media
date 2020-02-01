@@ -17,17 +17,18 @@ public struct Photo: MediaProtocol {
     static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
-    private let phAssetWrapper: PHAssetWrapper
+    private var phAsset: PHAsset? { phAssetWrapper.value }
 
     public typealias MediaSubtype = Photo.Subtype
     public typealias MediaFileType = Photo.FileType
 
-    public var phAsset: PHAsset { phAssetWrapper.value }
+    public let phAssetWrapper: PHAssetWrapper
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `Photo`
-    public var metadata: Metadata {
-        Metadata(
+    public var metadata: Metadata? {
+        guard let phAsset = phAsset else { return nil }
+        return Metadata(
             type: phAsset.mediaType,
             subtypes: phAsset.mediaSubtypes,
             sourceType: phAsset.sourceType,
@@ -50,6 +51,8 @@ public extension Photo {
     /// Similar to tags, like `hdr`, `panorama` or `screenshot`
     ///
     var subtypes: [Photo.Subtype] {
+        guard let phAsset = phAsset else { return [] }
+
         var types: [Photo.Subtype] = []
 
         if #available(iOS 10.2, macOS 10.15, tvOS 10.1, *) {
@@ -111,7 +114,7 @@ public extension Photo {
 
 #if canImport(UIKit)
 public extension Photo {
-    typealias ResultPhotoPropertiesCompletion = (Result<Properties, Error>) -> Void
+    typealias ResultPhotoPropertiesCompletion = (Result<Properties, Swift.Error>) -> Void
 
     /// Get `EXIF`, `GPS` and `TIFF` information of the `Photo`
     /// Keep in mind that this method might download a full size copy
@@ -120,6 +123,11 @@ public extension Photo {
     /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
     ///
     func properties(_ completion: @escaping ResultPhotoPropertiesCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHContentEditingInputRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -148,6 +156,11 @@ public extension Photo {
     /// - Parameter completion: a closure which gets a `Result` (`Data` on `success` or `Error` on `failure`)
     ///
     func data(_ completion: @escaping ResultDataCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         if #available(iOS 13, macOS 10.15, tvOS 13, *) {
@@ -188,6 +201,11 @@ public extension Photo {
     func uiImage(targetSize: CGSize,
                  contentMode: PHImageContentMode,
                  _ completion: @escaping UIImageCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -237,6 +255,11 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
                 self.phAssetWrapper.value = try result.get()

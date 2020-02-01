@@ -145,14 +145,19 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
-        guard !allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
+        guard let phAsset = media.phAssetWrapper.value else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
+        guard !allMedia.contains(where: { $0.identifier.localIdentifier == phAsset.localIdentifier }) else {
             completion(.success(()))
             return
         }
 
         PHChanger.request({
             let addAssetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
-            let assets: NSArray = [media.phAsset]
+            let assets: NSArray = [phAsset]
             addAssetRequest?.addAssets(assets)
             return addAssetRequest
         }, completion)
@@ -167,14 +172,19 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
-        guard allMedia.contains(where: { $0.identifier.localIdentifier == media.identifier.localIdentifier }) else {
+        guard let phAsset = media.phAssetWrapper.value else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
+        guard allMedia.contains(where: { $0.identifier.localIdentifier == phAsset.localIdentifier }) else {
             completion(.success(()))
             return
         }
 
         PHChanger.request({
             let assetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
-            let assets: NSArray = [media.phAsset]
+            let assets: NSArray = [phAsset]
             assetRequest?.removeAssets(assets)
             return assetRequest
         }, completion)

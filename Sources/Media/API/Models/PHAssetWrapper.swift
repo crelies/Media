@@ -7,8 +7,8 @@
 
 import Photos
 
-final class PHAssetWrapper {
-    var value: PHAsset
+public final class PHAssetWrapper {
+    var value: PHAsset?
 
     init(value: PHAsset) {
         self.value = value

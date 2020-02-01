@@ -9,8 +9,9 @@ public struct AnyMedia {
     public let identifier: AnyMedia.Identifier
     public let value: Any
 
-    init<T: MediaProtocol>(_ media: T) {
-        identifier = AnyMedia.Identifier(media.identifier)
+    init?<T: MediaProtocol>(_ media: T) {
+        guard let identifier = media.identifier else { return nil }
+        self.identifier = AnyMedia.Identifier(identifier)
         value = media
     }
 }

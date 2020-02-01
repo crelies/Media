@@ -14,12 +14,15 @@ public struct Audio: MediaProtocol {
     public typealias MediaSubtype = Audio.Subtype
     public typealias MediaFileType = Audio.FileType
 
-    public let phAsset: PHAsset
+    private var phAsset: PHAsset? { phAssetWrapper.value }
+
+    public let phAssetWrapper: PHAssetWrapper
     public static let type: MediaType = .audio
 
     /// Locally available metadata of the `Audio`
-    public var metadata: Metadata {
-        Metadata(
+    public var metadata: Metadata? {
+        guard let phAsset = phAsset else { return nil }
+        return Metadata(
             type: phAsset.mediaType,
             subtypes: phAsset.mediaSubtypes,
             sourceType: phAsset.sourceType,
@@ -31,7 +34,7 @@ public struct Audio: MediaProtocol {
     }
 
     public init(phAsset: PHAsset) {
-        self.phAsset = phAsset
+        self.phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
 }
 

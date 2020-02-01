@@ -15,17 +15,18 @@ public struct Video: MediaProtocol {
 
     static var videoManager: VideoManager = PHImageManager.default()
 
-    private let phAssetWrapper: PHAssetWrapper
+    private var phAsset: PHAsset? { phAssetWrapper.value }
 
     public typealias MediaSubtype = Video.Subtype
     public typealias MediaFileType = Video.FileType
 
-    public var phAsset: PHAsset { phAssetWrapper.value }
+    public let phAssetWrapper: PHAssetWrapper
     public static let type: MediaType = .video
 
     /// Locally available metadata of the `Video`
-    public var metadata: Metadata {
-        Metadata(
+    public var metadata: Metadata? {
+        guard let phAsset = phAsset else { return nil }
+        return Metadata(
             type: phAsset.mediaType,
             subtypes: phAsset.mediaSubtypes,
             sourceType: phAsset.sourceType,
@@ -49,6 +50,8 @@ public extension Video {
     /// Similar to tags, like `highFrameRate` or `timelapse`
     ///
     var subtypes: [Video.Subtype] {
+        guard let phAsset = phAsset else { return []}
+
         var types: [Video.Subtype] = []
 
         switch phAsset.mediaSubtypes {
@@ -83,6 +86,11 @@ public extension Video {
     /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
     ///
     func properties(_ completion: @escaping ResultVideoPropertiesCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -109,6 +117,11 @@ public extension Video {
     /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`
     ///
     func playerItem(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping ResultAVPlayerItemCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
@@ -123,6 +136,11 @@ public extension Video {
     /// - Parameter completion: a closure which gets an `AVAsset` on `success` and `Error` on `failure`
     ///
     func avAsset(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping ResultAVAssetCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
         options.deliveryMode = deliveryMode
@@ -141,6 +159,11 @@ public extension Video {
     ///   - completion: a closure which gets a `Void` on `success` and `Error` on `failure`
     ///
     func export(_ exportOptions: Video.ExportOptions, progress: @escaping ProgressHandler, _ completion: @escaping ResultVoidCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         guard let exportPreset = exportOptions.quality.avAssetExportPreset else {
             completion(.failure(Error.unsupportedExportPreset))
             return
@@ -233,6 +256,11 @@ public extension Video {
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+        
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
                 self.phAssetWrapper.value = try result.get()

@@ -15,17 +15,18 @@ public struct LivePhoto: MediaProtocol {
 
     static var livePhotoManager: LivePhotoManager = PHImageManager.default()
 
-    private let phAssetWrapper: PHAssetWrapper
+    private var phAsset: PHAsset? { phAssetWrapper.value }
 
     public typealias MediaSubtype = LivePhoto.Subtype
     public typealias MediaFileType = LivePhoto.FileType
 
-    public var phAsset: PHAsset { phAssetWrapper.value }
+    public let phAssetWrapper: PHAssetWrapper
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `LivePhoto`
-    public var metadata: Metadata {
-        Metadata(
+    public var metadata: Metadata? {
+        guard let phAsset = phAsset else { return nil }
+        return Metadata(
             type: phAsset.mediaType,
             subtypes: phAsset.mediaSubtypes,
             sourceType: phAsset.sourceType,
@@ -53,6 +54,11 @@ public extension LivePhoto {
     func displayRepresentation(targetSize: CGSize,
                                contentMode: PHImageContentMode = .default,
                                _ completion: @escaping ResultDisplayRepresentationCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
 
@@ -127,6 +133,11 @@ public extension LivePhoto {
     ///   - completion: a closure wich gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+        guard let phAsset = phAsset else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetFound))
+            return
+        }
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
                 self.phAssetWrapper.value = try result.get()
