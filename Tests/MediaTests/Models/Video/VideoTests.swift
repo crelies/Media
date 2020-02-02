@@ -31,6 +31,10 @@ final class VideoTests: XCTestCase {
 
         mockAsset.localIdentifierToReturn = ""
         mockAsset.mediaTypeToReturn = .image
+        mockAsset.mediaSubtypesToReturn = []
+        mockAsset.contentEditingInputToReturn = nil
+
+        video.phAssetWrapper.value = mockAsset
     }
 
     func testWithIdentifierExists() {
@@ -192,6 +196,64 @@ final class VideoTests: XCTestCase {
             XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid av asset result")
+        }
+    }
+
+    func testMetadata() {
+        XCTAssertNotNil(video.metadata)
+    }
+
+    func testSubtypes() {
+        mockAsset.mediaSubtypesToReturn = .videoHighFrameRate
+        XCTAssertEqual(video.subtypes.count, 1)
+    }
+
+    @available(iOS 13, *)
+    func testVideoPropertiesSuccess() {
+        do {
+            videoManager.avAssetToReturn = AVMovie()
+
+            let url = try createMockImage()
+
+            let contentEditingInput = MockPHContentEditingInput()
+            contentEditingInput.fullSizeImageURLToReturn = url
+            mockAsset.contentEditingInputToReturn = contentEditingInput
+
+            let expectation = self.expectation(description: "PropertiesResult")
+
+            var res: Result<Video.Properties, Error>?
+            video.properties { result in
+                res = result
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1)
+
+            let properties = try res?.get()
+            XCTAssertNotNil(properties)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testVideoPropertiesFailure() {
+        video.phAssetWrapper.value = nil
+
+        let expectation = self.expectation(description: "PropertiesResult")
+
+        var res: Result<Video.Properties, Error>?
+        video.properties { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch res {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, Media.Error.noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Invalid result")
         }
     }
 }

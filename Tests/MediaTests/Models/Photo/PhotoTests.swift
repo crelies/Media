@@ -7,12 +7,14 @@
 
 #if canImport(UIKit)
 @testable import Media
+import Photos
 import XCTest
 
 final class PhotoTests: XCTestCase {
     let mockAsset = MockPHAsset()
     lazy var photo = Photo(phAsset: mockAsset)
     let mockPHObjectPlaceholder = MockPHObjectPlaceholder()
+    let mockImageManager = MockImageManager()
 
     override func setUp() {
         PHAssetChanger.photoLibrary = MockPhotoLibrary()
@@ -21,12 +23,20 @@ final class PhotoTests: XCTestCase {
         MockPhotoLibrary.performChangesSuccess = true
         MockPhotoLibrary.performChangesError = nil
         Photo.assetChangeRequest = MockPHAssetChangeRequest.self
+        Photo.imageManager = mockImageManager
         mockPHObjectPlaceholder.localIdentifierToReturn = ""
         MockPHAssetChangeRequest.placeholderForCreatedAssetToReturn = mockPHObjectPlaceholder
         PHAssetFetcher.asset = MockPHAsset.self
         MockPHAsset.fetchResult.mockAssets.removeAll()
         mockAsset.localIdentifierToReturn = ""
         mockAsset.mediaTypeToReturn = .unknown
+        mockAsset.mediaSubtypesToReturn = []
+        mockAsset.contentEditingInputToReturn = nil
+
+        mockImageManager.requestImageToReturn = nil
+        mockImageManager.requestImageDataAndOrientationToReturn = nil
+
+        photo.phAssetWrapper.value = mockAsset
     }
 
     @available(iOS 11, *)
@@ -178,6 +188,202 @@ final class PhotoTests: XCTestCase {
             XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid photo favorite result")
+        }
+    }
+
+    func testSubtypes() {
+        mockAsset.mediaSubtypesToReturn = [.photoHDR]
+        let subtypes = photo.subtypes
+        XCTAssertEqual(subtypes.count, 1)
+    }
+
+    func testMetadata() {
+        XCTAssertNotNil(photo.metadata)
+    }
+
+    func testPropertiesSuccess() {
+        do {
+            let url = try createMockImage()
+
+            let contentEditingInput = MockPHContentEditingInput()
+            contentEditingInput.fullSizeImageURLToReturn = url
+            mockAsset.contentEditingInputToReturn = contentEditingInput
+
+            let expectation = self.expectation(description: "PropertiesResult")
+
+            var res: Result<Photo.Properties, Swift.Error>?
+            photo.properties { result in
+                res = result
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1)
+
+            let properties = try res?.get()
+            XCTAssertNotNil(properties)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testPropertiesFailure() {
+        photo.phAssetWrapper.value = nil
+
+        let expectation = self.expectation(description: "PropertiesResult")
+
+        var res: Result<Photo.Properties, Swift.Error>?
+        photo.properties { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch res {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, Media.Error.noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Invalid result")
+        }
+    }
+
+    func testPropertiesMissingFullSizeImageURL() {
+        let contentEditingInput = MockPHContentEditingInput()
+        mockAsset.contentEditingInputToReturn = contentEditingInput
+
+        let expectation = self.expectation(description: "PropertiesResult")
+
+        var res: Result<Photo.Properties, Swift.Error>?
+        photo.properties { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch res {
+        case .failure(let error):
+            XCTAssertEqual(error as? Photo.Error, Photo.Error.missingFullSizeImageURL)
+        default:
+            XCTFail("Invalid result")
+        }
+    }
+
+    func testDataSuccess() {
+        let expectedData = Data()
+        mockImageManager.requestImageDataAndOrientationToReturn = expectedData
+
+        let expectation = self.expectation(description: "DataResult")
+
+        var res: Result<Data, Error>?
+        photo.data { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        do {
+            let data = try res?.get()
+            XCTAssertEqual(data, expectedData)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testDataFailure() {
+        photo.phAssetWrapper.value = nil
+
+        let expectation = self.expectation(description: "DataResult")
+
+        var res: Result<Data, Error>?
+        photo.data { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch res {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, Media.Error.noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Invalid result")
+        }
+    }
+
+    func testUIImageSuccess() {
+        let expectedImage = UIImage()
+        mockImageManager.requestImageToReturn = expectedImage
+
+        let targetSize = CGSize(width: 20, height: 20)
+        let contentMode: PHImageContentMode = .aspectFit
+
+        let expectation = self.expectation(description: "UIImageResult")
+
+        var res: Result<Media.DisplayRepresentation<UIImage>, Error>?
+        photo.uiImage(targetSize: targetSize, contentMode: contentMode) { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        do {
+            let image = try res?.get()
+            XCTAssertEqual(image?.value, expectedImage)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testUIImageFailure() {
+        photo.phAssetWrapper.value = nil
+
+        let targetSize = CGSize(width: 20, height: 20)
+        let contentMode: PHImageContentMode = .aspectFit
+
+        let expectation = self.expectation(description: "UIImageResult")
+
+        var res: Result<Media.DisplayRepresentation<UIImage>, Error>?
+        photo.uiImage(targetSize: targetSize, contentMode: contentMode) { result in
+            res = result
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch res {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, Media.Error.noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Invalid result")
+        }
+    }
+
+    func testWithIdentifierFound() {
+        do {
+            let localIdentifier = UUID().uuidString
+            mockAsset.localIdentifierToReturn = localIdentifier
+            mockAsset.mediaTypeToReturn = .image
+            MockPHAsset.fetchResult.mockAssets = [mockAsset]
+
+            let identifier = Media.Identifier<Photo>(localIdentifier: localIdentifier)
+            let photo = try Photo.with(identifier: identifier)
+            XCTAssertNotNil(photo)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testWithIdentifierNotFound() {
+        do {
+            let localIdentifier = UUID().uuidString
+            let identifier = Media.Identifier<Photo>(localIdentifier: localIdentifier)
+            let photo = try Photo.with(identifier: identifier)
+            XCTAssertNil(photo)
+        } catch {
+            XCTFail(error.localizedDescription)
         }
     }
 }

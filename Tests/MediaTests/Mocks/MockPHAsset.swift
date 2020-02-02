@@ -14,6 +14,7 @@ final class MockPHAsset: PHAsset {
     var mediaTypeToReturn: PHAssetMediaType = .image
     var mediaSubtypesToReturn: PHAssetMediaSubtype = []
     var isFavoriteToReturn = false
+    var contentEditingInputToReturn: PHContentEditingInput?
 
     override var localIdentifier: String { localIdentifierToReturn }
     override var mediaType: PHAssetMediaType { mediaTypeToReturn }
@@ -22,5 +23,12 @@ final class MockPHAsset: PHAsset {
 
     override class func fetchAssets(with options: PHFetchOptions?) -> PHFetchResult<PHAsset> {
         fetchResult
+    }
+
+    override func requestContentEditingInput(
+        with options: PHContentEditingInputRequestOptions?,
+        completionHandler: @escaping (PHContentEditingInput?, [AnyHashable : Any]) -> Void) -> PHContentEditingInputRequestID {
+        completionHandler(contentEditingInputToReturn, [:])
+        return Int.random(in: 1...999)
     }
 }
