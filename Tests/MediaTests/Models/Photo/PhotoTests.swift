@@ -43,7 +43,7 @@ final class PhotoTests: XCTestCase {
 
         do {
             let url = URL(fileURLWithPath: "file://test.\(Photo.FileType.jpg.pathExtensions.first!)")
-            let mediaURL: MediaURL<Photo> = try MediaURL(url: url)
+            let mediaURL: Media.URL<Photo> = try Media.URL(url: url)
 
             var result: Result<Photo, Error>?
             Photo.save(mediaURL, { res in
@@ -68,13 +68,13 @@ final class PhotoTests: XCTestCase {
     @available(tvOS 11, *)
     func testSaveURLFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "SaveURLResult")
 
         do {
             let url = URL(fileURLWithPath: "file://test.\(Photo.FileType.jpg.pathExtensions.first!)")
-            let mediaURL: MediaURL<Photo> = try MediaURL(url: url)
+            let mediaURL: Media.URL<Photo> = try Media.URL(url: url)
 
             var result: Result<Photo, Error>?
             Photo.save(mediaURL, { res in
@@ -86,7 +86,7 @@ final class PhotoTests: XCTestCase {
 
             switch result {
             case .failure(let error):
-                XCTAssertEqual(error as? MediaError, .unknown)
+                XCTAssertEqual(error as? Media.Error, .unknown)
             default:
                 XCTFail("Invalid photo save URL result")
             }
@@ -118,7 +118,7 @@ final class PhotoTests: XCTestCase {
 
     func testSaveUIImageFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "SaveUIImageResult")
 
@@ -133,7 +133,7 @@ final class PhotoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid photo save UIImage result")
         }
@@ -160,7 +160,7 @@ final class PhotoTests: XCTestCase {
 
     func testFavoriteFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "PhotoFavoriteResult")
 
@@ -175,7 +175,7 @@ final class PhotoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid photo favorite result")
         }

@@ -17,7 +17,7 @@ final class ViewCreatorTests: XCTestCase {
             _ = try ViewCreator.camera(for: [], completion)
             XCTFail("This should never happen because the simulator has no camera.")
         } catch {
-            let cameraError = error as? CameraError
+            let cameraError = error as? Camera.Error
             XCTAssertEqual(cameraError, .noCameraAvailable)
         }
     }

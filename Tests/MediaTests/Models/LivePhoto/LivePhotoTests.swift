@@ -87,7 +87,7 @@ final class LivePhotoTests: XCTestCase {
 
     func testDisplayRepresentationFailure() {
         MockPhotoLibrary.performChangesSuccess = false
-        MockPhotoLibrary.performChangesError = MediaError.unknown
+        MockPhotoLibrary.performChangesError = Media.Error.unknown
 
         let expectation = self.expectation(description: "DisplayRepresentationResult")
 
@@ -102,7 +102,7 @@ final class LivePhotoTests: XCTestCase {
 
         switch result {
         case .failure(let error):
-            XCTAssertEqual(error as? MediaError, .unknown)
+            XCTAssertEqual(error as? Media.Error, .unknown)
         default:
             XCTFail("Invalid display representaiton result \(String(describing: result))")
         }

@@ -16,7 +16,7 @@ final class CameraTests: XCTestCase {
             _ = try Camera.view { _ in }
             XCTFail("This should never happen because the simulator has no camera.")
         } catch {
-            XCTAssertEqual(error as? CameraError, .noCameraAvailable)
+            XCTAssertEqual(error as? Camera.Error, .noCameraAvailable)
         }
     }
 }
