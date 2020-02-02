@@ -10,7 +10,7 @@ import Foundation
 @available(iOS 10, *)
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
-public struct LivePhotoData {
+public struct LivePhotoData: Equatable {
     public let stillImageData: Data
     public let movieURL: Media.URL<LivePhoto>
 }

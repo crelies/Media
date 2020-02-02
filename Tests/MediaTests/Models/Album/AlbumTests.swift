@@ -24,6 +24,7 @@ final class AlbumTests: XCTestCase {
         MockPhotoLibrary.performChangesSuccess = true
         MockPhotoLibrary.performChangesError = nil
         MockPhotoLibrary.authorizationStatusToReturn = .authorized
+        mockAssetCollection.assetCollectionTypeToReturn = .moment
     }
 
     func testAudiosNotEmpty() {
@@ -249,5 +250,12 @@ final class AlbumTests: XCTestCase {
         default:
             XCTFail("Invalid album delete result \(String(describing: result))")
         }
+    }
+
+    func testAlbumMetadata() {
+        mockAssetCollection.assetCollectionTypeToReturn = .album
+
+        let metadata = album.metadata
+        XCTAssertEqual(metadata.assetCollectionType, .album)
     }
 }

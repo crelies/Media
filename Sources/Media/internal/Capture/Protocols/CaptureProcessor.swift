@@ -10,6 +10,6 @@ import AVFoundation
 @available(iOS 10, *)
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
-protocol CaptureProcessor: AVCapturePhotoCaptureDelegate {
+protocol CaptureProcessor: AVCapturePhotoCaptureDelegate where Self: NSObject {
     var delegate: CaptureProcessorDelegate? { get set }
 }

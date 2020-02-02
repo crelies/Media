@@ -38,3 +38,9 @@ extension Media {
         }
     }
 }
+
+extension Media.URL: Equatable {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.value == rhs.value && lhs.fileType.rawValue == rhs.fileType.rawValue
+    }
+}

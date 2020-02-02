@@ -11,6 +11,8 @@ import AVFoundation
 @available(iOS 10, *)
 @available(macOS, unavailable)
 final class Photograph: NSObject {
+    static var captureProcessor: CaptureProcessor.Type = PhotoCaptureProcessor.self
+
     private let photoOutput: AVCapturePhotoOutput
     private let photoSettings: AVCapturePhotoSettings
     private var captureProcessor: CaptureProcessor?
@@ -31,7 +33,7 @@ extension Photograph {
         self.stillImageCompletion = stillImageCompletion
         self.livePhotoCompletion = livePhotoCompletion
 
-        let captureProcessor = PhotoCaptureProcessor()
+        let captureProcessor = Self.captureProcessor.init()
         captureProcessor.delegate = self
         self.captureProcessor = captureProcessor
 
