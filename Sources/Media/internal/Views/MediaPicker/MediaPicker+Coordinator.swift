@@ -33,51 +33,63 @@ extension MediaPicker {
                 return
             }
 
-            switch (picker.sourceType, mediaType) {
-            case (.camera, .image),
-                 (.camera, .movie):
-                guard let imageURL = info.imageURL else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                let mediaPickerValue: MediaPickerValue = .tookMedia(url: imageURL)
+            if let mediaPickerValue = Self.mediaPickerValue(forSourceType: picker.sourceType, mediaType: mediaType, info: info) {
                 mediaPicker.onSelection(mediaPickerValue)
-                picker.dismiss(animated: true, completion: nil)
-
-            case (.photoLibrary, .image),
-                 (.savedPhotosAlbum, .image),
-                 (.photoLibrary, .movie),
-                 (.savedPhotosAlbum, .movie):
-                guard let phAsset = info.phAsset else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                let mediaPickerValue: MediaPickerValue = .selectedMedia(phAsset: phAsset)
-                mediaPicker.onSelection(mediaPickerValue)
-                picker.dismiss(animated: true, completion: nil)
-
-            case (.photoLibrary, .livePhoto),
-                 (.savedPhotosAlbum, .livePhoto):
-                guard let phAsset = info.phAsset else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                guard let livePhoto = info.phLivePhoto else {
-                    picker.dismiss(animated: true, completion: nil)
-                    return
-                }
-
-                let mediaPickerValue: MediaPickerValue = .selectedLivePhoto(livePhoto, phAsset: phAsset)
-                mediaPicker.onSelection(mediaPickerValue)
-                picker.dismiss(animated: true, completion: nil)
-
-            default:
-                picker.dismiss(animated: true, completion: nil)
             }
+
+            picker.dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+@available(iOS 13, macOS 10.15, *)
+extension MediaPicker.Coordinator {
+    static func mediaPickerValue(
+        forSourceType sourceType: UIImagePickerController.SourceType,
+        mediaType: UIImagePickerController.MediaType,
+        info: [UIImagePickerController.InfoKey: Any]) -> MediaPickerValue? {
+
+        switch (sourceType, mediaType) {
+        case (.camera, .image):
+            guard let imageURL = info.imageURL else {
+                return nil
+            }
+
+            return .tookPhoto(url: imageURL)
+
+        case (.camera, .movie):
+            guard let mediaURL = info.mediaURL else {
+                return nil
+            }
+
+            return .tookVideo(url: mediaURL)
+
+        case (.photoLibrary, .image),
+             (.savedPhotosAlbum, .image),
+             (.photoLibrary, .movie),
+             (.savedPhotosAlbum, .movie):
+            guard let phAsset = info.phAsset else {
+                return nil
+            }
+
+            return .selectedMedia(phAsset: phAsset)
+
+        case (.photoLibrary, .livePhoto),
+             (.savedPhotosAlbum, .livePhoto):
+            guard let phAsset = info.phAsset else {
+                return nil
+            }
+
+            guard let livePhoto = info.phLivePhoto else {
+                return nil
+            }
+
+            return .selectedLivePhoto(livePhoto, phAsset: phAsset)
+
+        default: ()
+        }
+
+        return nil
     }
 }
 #endif

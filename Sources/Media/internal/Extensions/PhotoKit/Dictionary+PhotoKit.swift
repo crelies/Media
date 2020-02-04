@@ -25,5 +25,7 @@ extension Dictionary where Key == UIImagePickerController.InfoKey {
     var imageURL: URL? { self[Key.imageURL] as? URL }
 
     var phLivePhoto: PHLivePhoto? { self[Key.livePhoto] as? PHLivePhoto }
+
+    var mediaURL: URL? { self[Key.mediaURL] as? URL }
 }
 #endif

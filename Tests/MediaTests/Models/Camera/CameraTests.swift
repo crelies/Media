@@ -13,7 +13,8 @@ final class CameraTests: XCTestCase {
     @available(iOS 13, *)
     func testView() {
         do {
-            _ = try Camera.view { _ in }
+            let completion: ResultMediaURLCompletion<Photo> = { _ in }
+            _ = try Camera.view(completion)
             XCTFail("This should never happen because the simulator has no camera.")
         } catch {
             XCTAssertEqual(error as? Camera.Error, .noCameraAvailable)

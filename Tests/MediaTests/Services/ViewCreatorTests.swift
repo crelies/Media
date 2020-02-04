@@ -13,7 +13,7 @@ import XCTest
 final class ViewCreatorTests: XCTestCase {
     func testCreateCameraView() {
         do {
-            let completion: (Result<URL, Error>) -> Void = { result in }
+            let completion: (Result<Media.URL<Photo>, Error>) -> Void = { result in }
             _ = try ViewCreator.camera(for: [], completion)
             XCTFail("This should never happen because the simulator has no camera.")
         } catch {

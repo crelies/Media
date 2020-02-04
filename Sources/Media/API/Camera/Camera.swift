@@ -16,7 +16,7 @@ public struct Camera {
     ///
     /// - Parameter completion: a closure which gets the `Result` (`URL` to the captured media on `success` or `Error` on `failure`)
     ///
-    public static func view(_ completion: @escaping ResultURLCompletion) throws -> some View {
+    public static func view<T: MediaProtocol>(_ completion: @escaping ResultMediaURLCompletion<T>) throws -> some View {
         let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         let mediaTypes = try availableMediaTypes.map { try UIImagePickerController.MediaType(string: $0) }
         return try ViewCreator.camera(for: Set(mediaTypes), completion)

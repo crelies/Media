@@ -18,17 +18,7 @@ public extension Photo {
     /// - Parameter completion: a closure which gets a `Result` (`Media.URL<Photo>` on `success` or `Error` on `failure`)
     ///
     static func camera(_ completion: @escaping ResultMediaURLPhotoCompletion) throws -> some View {
-        try ViewCreator.camera(for: [.image]) { result in
-            switch result {
-            case .success(let url):
-                let mediaURLResult = Result {
-                    try Media.URL<Photo>(url: url)
-                }
-                completion(mediaURLResult)
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        try ViewCreator.camera(for: [.image], completion)
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library

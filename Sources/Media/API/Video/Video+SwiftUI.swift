@@ -27,17 +27,7 @@ public extension Video {
     /// - Parameter completion: a closure wich gets `Media.URL<Video>` on `success` or `Error` on `failure`
     ///
     static func camera(_ completion: @escaping ResultMediaURLVideoCompletion) throws -> some View {
-        try ViewCreator.camera(for: [.movie]) { result in
-            switch result {
-            case .success(let url):
-                let mediaURLResult = Result {
-                    try Media.URL<Video>(url: url)
-                }
-                completion(mediaURLResult)
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        try ViewCreator.camera(for: [.movie], completion)
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing `Video`s in the photo library

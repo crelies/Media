@@ -37,6 +37,14 @@ final class PhotoKitDictionaryTests: XCTestCase {
         XCTAssertEqual(dictionary.imageURL, imageURL)
     }
 
+    func testMediaURL() {
+        let mediaURL = URL(fileURLWithPath: "file://test.mov")
+
+        dictionary[.mediaURL] = mediaURL
+
+        XCTAssertEqual(dictionary.mediaURL, mediaURL)
+    }
+
     func testPHLivePhoto() {
         XCTAssertNil(dictionary.phLivePhoto)
     }

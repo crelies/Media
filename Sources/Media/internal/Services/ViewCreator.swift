@@ -11,18 +11,25 @@ import UIKit
 
 @available(iOS 13, macOS 10.15, *)
 struct ViewCreator {
-    static func camera(for mediaTypes: Set<UIImagePickerController.MediaType>,
-                       _ completion: @escaping ResultURLCompletion) throws -> some View {
+    static func camera<T: MediaProtocol>(
+        for mediaTypes: Set<UIImagePickerController.MediaType>,
+        _ completion: @escaping ResultMediaURLCompletion<T>) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             throw Camera.Error.noCameraAvailable
         }
 
         return MediaPicker(sourceType: .camera, mediaTypes: mediaTypes) { value in
-            guard case let MediaPickerValue.tookMedia(imageURL) = value else {
+            switch value {
+            case .tookPhoto(let url), .tookVideo(let url):
+                do {
+                    let mediaURL = try Media.URL<T>(url: url)
+                    completion(.success(mediaURL))
+                } catch {
+                    completion(.failure(error))
+                }
+            default:
                 completion(.failure(MediaPicker.Error.unsupportedValue))
-                return
             }
-            completion(.success(imageURL))
         }
     }
 
