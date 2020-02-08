@@ -2,6 +2,12 @@
 
 A **beautiful**, **simple**, **declarative**, **convenient** and **unit-tested** *wrapper API* for Apple's `PhotoKit`
 
+[![Swift5](https://img.shields.io/badge/swift5-compatible-green.svg?longCache=true&style=flat-square)](https://developer.apple.com/swift)
+[![Platforms](https://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS-lightgrey.svg?longCache=true&style=flat-square)](https://www.apple.com)
+[![Current Version](https://img.shields.io/github/v/tag/crelies/Media?longCache=true&style=flat-square)](https://github.com/crelies/Media)
+[![Build status](https://travis-ci.com/crelies/Media.svg?token=THnaziKxRFFz1nKcsPgz&branch=dev)](https://travis-ci.com/crelies/Media)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
+
 ## ❤️ Motivation
 
 What I don't like about `PhotoKit` is that it's *not declarative* and that developers have to *think about too many details*.
