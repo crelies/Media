@@ -11,7 +11,13 @@ import AVFoundation
 final class MockAVCapturePhoto: AVCapturePhoto {
     private let id: String
 
+    var fileDataRepresentationData: Data?
+
     init(id: String = UUID().uuidString) {
         self.id = id
+    }
+
+    override func fileDataRepresentation() -> Data? {
+        fileDataRepresentationData
     }
 }
