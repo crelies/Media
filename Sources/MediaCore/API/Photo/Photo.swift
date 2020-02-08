@@ -14,7 +14,6 @@ import Photos
 /// Represents `Photo`s
 ///
 public struct Photo: MediaProtocol {
-    static var assetChangeRequest: AssetChangeRequest.Type = PHAssetChangeRequest.self
     static var imageManager: ImageManager = PHImageManager.default()
 
     private var phAsset: PHAsset? { phAssetWrapper.value }

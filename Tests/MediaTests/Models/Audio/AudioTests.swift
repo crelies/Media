@@ -9,6 +9,9 @@
 import XCTest
 
 final class AudioTests: XCTestCase {
+    let asset = MockPHAsset()
+    lazy var audio = Audio(phAsset: asset)
+
     override func setUp() {
         PHAssetFetcher.asset = MockPHAsset.self
         MockPHAsset.fetchResult.mockAssets.removeAll()
@@ -40,5 +43,10 @@ final class AudioTests: XCTestCase {
         } catch {
             XCTFail(error.localizedDescription)
         }
+    }
+
+    func testMetadata() {
+        let metadata = audio.metadata
+        XCTAssertNotNil(metadata)
     }
 }

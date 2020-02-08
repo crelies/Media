@@ -65,6 +65,8 @@ extension MediaProtocol {
 }
 
 extension MediaProtocol {
+    static var assetChangeRequest: AssetChangeRequest.Type { PHAssetChangeRequest.self }
+
     /// Deletes the receiver if the access to the photo library is allowed
     ///
     /// Hint: asynchronously
@@ -77,7 +79,7 @@ extension MediaProtocol {
         }
         PHChanger.request({
             let phAssets: NSArray = [phAsset]
-            PHAssetChangeRequest.deleteAssets(phAssets)
+            Self.assetChangeRequest.deleteAssets(phAssets)
             return nil
         }) { result in
             switch result {

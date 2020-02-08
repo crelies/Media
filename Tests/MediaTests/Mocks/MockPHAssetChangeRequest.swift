@@ -22,5 +22,9 @@ final class MockPHAssetChangeRequest: AssetChangeRequest {
     static func creationRequestForAssetFromImage(atFileURL fileURL: URL) -> Self? {
         Self.init()
     }
+
+    static func deleteAssets(_ assets: NSFastEnumeration) {
+        // TODO:
+    }
 }
 #endif

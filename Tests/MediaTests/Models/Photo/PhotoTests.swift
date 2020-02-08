@@ -10,6 +10,10 @@
 import Photos
 import XCTest
 
+extension Photo {
+    static var assetChangeRequest: AssetChangeRequest.Type = MockPHAssetChangeRequest.self
+}
+
 final class PhotoTests: XCTestCase {
     let mockAsset = MockPHAsset()
     lazy var photo = Photo(phAsset: mockAsset)
@@ -22,7 +26,6 @@ final class PhotoTests: XCTestCase {
         MockPhotoLibrary.authorizationStatusToReturn = .authorized
         MockPhotoLibrary.performChangesSuccess = true
         MockPhotoLibrary.performChangesError = nil
-        Photo.assetChangeRequest = MockPHAssetChangeRequest.self
         Photo.imageManager = mockImageManager
         mockPHObjectPlaceholder.localIdentifierToReturn = ""
         MockPHAssetChangeRequest.placeholderForCreatedAssetToReturn = mockPHObjectPlaceholder
@@ -384,6 +387,46 @@ final class PhotoTests: XCTestCase {
             XCTAssertNil(photo)
         } catch {
             XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testDeleteSuccess() {
+        let expectation = self.expectation(description: "DeleteResult")
+
+        var result: Result<Void, Error>?
+        photo.delete { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .failure(let error):
+            XCTFail("\(error)")
+        default:
+            XCTAssertNil(photo.phAssetWrapper.value)
+        }
+    }
+
+    func testDeleteFailure() {
+        let expectation = self.expectation(description: "DeleteResult")
+
+        photo.phAssetWrapper.value = nil
+
+        var result: Result<Void, Error>?
+        photo.delete { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .success:
+            XCTFail("Invalid result")
+        default:
+            XCTAssertNil(photo.phAssetWrapper.value)
         }
     }
 }
