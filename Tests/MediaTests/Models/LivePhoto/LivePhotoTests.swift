@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 15.12.19.
 //
 
-@testable import Media
+@testable import MediaCore
 import Photos
 import XCTest
 

@@ -6,7 +6,7 @@
 //
 
 #if canImport(UIKit)
-@testable import Media
+@testable import MediaCore
 import Photos
 import XCTest
 

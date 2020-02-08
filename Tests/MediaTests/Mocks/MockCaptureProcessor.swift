@@ -7,7 +7,7 @@
 
 import AVFoundation
 import Foundation
-@testable import Media
+@testable import MediaCore
 
 @available(iOS 10, *)
 final class MockCaptureProcessor: NSObject, CaptureProcessor {

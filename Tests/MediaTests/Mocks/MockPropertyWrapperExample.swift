@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 17.12.19.
 //
 
-@testable import Media
+@testable import MediaCore
 
 struct MockPropertyWrapperExample {
     static var localIdentifierToUse = "Test"

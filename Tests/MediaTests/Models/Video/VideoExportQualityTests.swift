@@ -6,7 +6,7 @@
 //
 
 import AVFoundation
-@testable import Media
+@testable import MediaCore
 import XCTest
 
 final class VideoExportQualityTests: XCTestCase {

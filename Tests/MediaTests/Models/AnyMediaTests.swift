@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 14.12.19.
 //
 
-@testable import Media
+@testable import MediaCore
 import XCTest
 
 final class AnyMediaTests: XCTestCase {

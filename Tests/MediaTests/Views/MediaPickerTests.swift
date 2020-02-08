@@ -6,7 +6,7 @@
 //
 
 #if canImport(UIKit) && !os(tvOS)
-@testable import Media
+@testable import MediaSwiftUI
 import SwiftUI
 import XCTest
 

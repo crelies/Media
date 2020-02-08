@@ -6,7 +6,8 @@
 //
 
 #if canImport(UIKit) && !os(tvOS)
-@testable import Media
+@testable import MediaCore
+@testable import MediaSwiftUI
 import XCTest
 
 final class CameraTests: XCTestCase {

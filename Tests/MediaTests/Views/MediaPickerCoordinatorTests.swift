@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 04.02.20.
 //
 
-@testable import Media
+@testable import MediaSwiftUI
 import XCTest
 
 @available(iOS 13, *)

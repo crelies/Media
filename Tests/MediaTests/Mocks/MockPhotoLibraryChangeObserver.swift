@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 01.02.20.
 //
 
-@testable import Media
+@testable import MediaCore
 import Photos
 
 final class MockPhotoLibraryChangeObserver: NSObject, PhotoLibraryChangeObserver {

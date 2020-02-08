@@ -6,7 +6,7 @@
 //
 
 #if !os(macOS) && !os(tvOS)
-@testable import Media
+@testable import MediaCore
 import MobileCoreServices
 import XCTest
 

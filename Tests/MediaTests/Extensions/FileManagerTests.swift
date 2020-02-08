@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 02.02.20.
 //
 
-@testable import Media
+@testable import MediaCore
 import XCTest
 
 final class FileManagerTests: XCTestCase {

@@ -6,7 +6,7 @@
 //
 
 import AVFoundation
-@testable import Media
+@testable import MediaCore
 import XCTest
 
 @available(iOS 13, *)
