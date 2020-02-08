@@ -17,11 +17,7 @@ final class PhotoCaptureProcessorTests: XCTestCase {
         return processor
     }()
 
-    override func setUpWithError() throws {
+    override func setUp() {
         captureProcessorDelegate.reset()
-    }
-
-    func testPhotoOutput() throws {
-
     }
 }
