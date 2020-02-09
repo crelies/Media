@@ -46,6 +46,8 @@ Many types implement static factory methods to make it easy for the developer to
 
 In addition to that this Swift package contains some simple and ready-to-use **SwiftUI views** for interacting with the photo library, like a `Camera` view or a view for an instance of  `LivePhoto`, `Photo` and `Video`.
 
+The core functionality is available through `import MediaCore`. If you want to use the included **SwiftUI** views `import MediaSwiftUI`.
+
 That's all you need to know. Now let's take a look at the **API**.
 
 ## 🧭 API
