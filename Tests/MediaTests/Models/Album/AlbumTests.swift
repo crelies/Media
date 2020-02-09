@@ -258,4 +258,92 @@ final class AlbumTests: XCTestCase {
         let metadata = album.metadata
         XCTAssertEqual(metadata.assetCollectionType, .album)
     }
+
+    func testAddMediaSuccess() {
+        let expectation = self.expectation(description: "AddMediaResult")
+
+        let asset = MockPHAsset()
+        let photo = Photo(phAsset: asset)
+
+        var result: Result<Void, Error>?
+        album.add(photo) { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .success: ()
+        default:
+            XCTFail("Unexpected result: \(String(describing: result))")
+        }
+    }
+
+    func testAddMediaFailure() {
+        let expectation = self.expectation(description: "AddMediaResult")
+
+        let asset = MockPHAsset()
+        let photo = Photo(phAsset: asset)
+        photo.phAssetWrapper.value = nil
+
+        var result: Result<Void, Error>?
+        album.add(photo) { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, .noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Unexpected result: \(String(describing: result))")
+        }
+    }
+
+    func testDeleteMediaSuccess() {
+        let expectation = self.expectation(description: "DeleteMediaResult")
+
+        let asset = MockPHAsset()
+        let photo = Photo(phAsset: asset)
+
+        var result: Result<Void, Error>?
+        album.delete(photo) { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .success: ()
+        default:
+            XCTFail("Unexpected result: \(String(describing: result))")
+        }
+    }
+
+    func testDeleteMediaFailure() {
+        let expectation = self.expectation(description: "DeleteMediaResult")
+
+        let asset = MockPHAsset()
+        let photo = Photo(phAsset: asset)
+        photo.phAssetWrapper.value = nil
+
+        var result: Result<Void, Error>?
+        album.delete(photo) { res in
+            result = res
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+
+        switch result {
+        case .failure(let error):
+            XCTAssertEqual(error as? Media.Error, .noUnderlyingPHAssetFound)
+        default:
+            XCTFail("Unexpected result: \(String(describing: result))")
+        }
+    }
 }
