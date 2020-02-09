@@ -11,6 +11,7 @@ import Photos
 final class MockVideoManager: VideoManager {
     var mockRequestID = PHImageRequestID()
     var avPlayerItemToReturn: AVPlayerItem?
+    var avAssetExportSessionToReturn: AVAssetExportSession?
     var avAssetToReturn: AVAsset?
     var infoToReturn: [AnyHashable : Any]?
 
@@ -20,6 +21,7 @@ final class MockVideoManager: VideoManager {
     }
 
     func requestExportSession(forVideo asset: PHAsset, options: PHVideoRequestOptions?, exportPreset: String, resultHandler: @escaping (AVAssetExportSession?, [AnyHashable : Any]?) -> Void) -> PHImageRequestID {
+        resultHandler(avAssetExportSessionToReturn, infoToReturn)
         return mockRequestID
     }
 

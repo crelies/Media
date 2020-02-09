@@ -21,8 +21,14 @@ final class VideoTests: XCTestCase {
 
         Video.videoManager = videoManager
         videoManager.avPlayerItemToReturn = nil
+        videoManager.avAssetExportSessionToReturn = nil
         videoManager.avAssetToReturn = nil
         videoManager.infoToReturn = nil
+
+        if #available(iOS 13, *) {
+            MockAVAssetExportSession.avAsset = AVMovie()
+            MockAVAssetExportSession.presetName = AVAssetExportPresetLowQuality
+        }
 
         MockPHAsset.fetchResult.mockAssets.removeAll()
 
@@ -254,6 +260,118 @@ final class VideoTests: XCTestCase {
             XCTAssertEqual(error as? Media.Error, Media.Error.noUnderlyingPHAssetFound)
         default:
             XCTFail("Invalid result")
+        }
+    }
+
+    @available(iOS 13, *)
+    func testExportSuccess() {
+        do {
+            let exportSession = MockAVAssetExportSession()
+            exportSession?.compatibleFileTypesToReturn = [.mov]
+
+            MockAVAssetExportSession.presetName = AVAssetExportPresetHighestQuality
+
+            videoManager.avAssetExportSessionToReturn = exportSession
+
+            let expectation = self.expectation(description: "ExportResult")
+
+            let videoURL = URL(fileURLWithPath: "file://test.mov")
+            let mediaURL = try Media.URL<Video>(url: videoURL)
+            let exportOptions = Video.ExportOptions(url: mediaURL, quality: .highest, deliveryMode: .mediumQualityFormat)
+
+            exportSession?.exportAsynchronouslyStatus = .completed
+
+            var result: Result<Void, Error>?
+            video.export(exportOptions, progress: { _ in }) { res in
+                result = res
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1)
+
+            switch result {
+            case .success: ()
+            default:
+                XCTFail("Invalid result: \(String(describing: result))")
+            }
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
+    func testExportFailure() {
+        do {
+            video.phAssetWrapper.value = nil
+
+            let expectation = self.expectation(description: "ExportResult")
+
+            let videoURL = URL(fileURLWithPath: "file://test.mov")
+            let mediaURL = try Media.URL<Video>(url: videoURL)
+            let exportOptions = Video.ExportOptions(url: mediaURL, quality: .highest, deliveryMode: .mediumQualityFormat)
+
+            var result: Result<Void, Error>?
+            video.export(exportOptions, progress: { _ in }) { res in
+                result = res
+                expectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 1)
+
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual(error as? Media.Error, .noUnderlyingPHAssetFound)
+            default:
+                XCTFail("Invalid result: \(String(describing: result))")
+            }
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
+    @available(iOS 13, *)
+    func testExportProgress() {
+        do {
+            let exportSession = MockAVAssetExportSession()
+            exportSession?.compatibleFileTypesToReturn = [.mov]
+
+            MockAVAssetExportSession.presetName = AVAssetExportPresetHighestQuality
+
+            videoManager.avAssetExportSessionToReturn = exportSession
+
+            let exportExpectation = expectation(description: "ExportResult")
+
+            let videoURL = URL(fileURLWithPath: "file://test.mov")
+            let mediaURL = try Media.URL<Video>(url: videoURL)
+            let exportOptions = Video.ExportOptions(url: mediaURL, quality: .highest, deliveryMode: .mediumQualityFormat)
+
+            exportSession?.exportAsynchronouslyStatus = .exporting
+
+            var result: Result<Void, Error>?
+            var exportProgress: Video.ExportProgress?
+            video.export(exportOptions, progress: { progress in
+                exportProgress = progress
+                exportSession?.exportAsynchronouslyStatus = .completed
+            }) { res in
+                result = res
+                exportExpectation.fulfill()
+            }
+
+            waitForExpectations(timeout: 2)
+
+            switch result {
+            case .success: ()
+            default:
+                XCTFail("Invalid result: \(String(describing: result))")
+            }
+
+            XCTAssertNotNil(exportProgress)
+
+            guard case Video.ExportProgress.pending? = exportProgress else {
+                XCTFail("Unexpected export progress: \(String(describing: exportProgress))")
+                return
+            }
+        } catch {
+            XCTFail("\(error)")
         }
     }
 }
