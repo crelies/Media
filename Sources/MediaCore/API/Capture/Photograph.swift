@@ -8,7 +8,6 @@
 #if !os(tvOS)
 import AVFoundation
 
-// TODO: public
 @available(iOS 10, *)
 @available(macOS, unavailable)
 public final class Photograph: NSObject {

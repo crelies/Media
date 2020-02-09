@@ -44,41 +44,6 @@ final class PhotoTests: XCTestCase {
 
     @available(iOS 11, *)
     @available(tvOS 11, *)
-    func testSaveURLSuccess() {
-        let localIdentifier = UUID().uuidString
-        mockAsset.localIdentifierToReturn = localIdentifier
-        mockAsset.mediaTypeToReturn = .image
-        MockPHAsset.fetchResult.mockAssets = [mockAsset]
-
-        mockPHObjectPlaceholder.localIdentifierToReturn = localIdentifier
-
-        let expectation = self.expectation(description: "SaveURLResult")
-
-        do {
-            let url = URL(fileURLWithPath: "file://test.\(Photo.FileType.jpg.pathExtensions.first!)")
-            let mediaURL: Media.URL<Photo> = try Media.URL(url: url)
-
-            var result: Result<Photo, Error>?
-            Photo.save(mediaURL, { res in
-                result = res
-                expectation.fulfill()
-            })
-
-            waitForExpectations(timeout: 1)
-
-            switch result {
-            case .success: ()
-            default: ()
-                // TODO:
-//                XCTFail("Invalid photo save URL result")
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
-    }
-
-    @available(iOS 11, *)
-    @available(tvOS 11, *)
     func testSaveURLFailure() {
         MockPhotoLibrary.performChangesSuccess = false
         MockPhotoLibrary.performChangesError = Media.Error.unknown
@@ -105,27 +70,6 @@ final class PhotoTests: XCTestCase {
             }
         } catch {
             XCTFail(error.localizedDescription)
-        }
-    }
-
-    @available(iOS 11, *)
-    func testSaveUIImageSuccess() {
-        let expectation = self.expectation(description: "SaveUIImageResult")
-
-        let image = UIImage()
-        var result: Result<Photo, Error>?
-        Photo.save(image) { res in
-            result = res
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 1)
-
-        switch result {
-        case .success: ()
-        default: ()
-            // TODO:
-//                XCTFail("Invalid photo save UIImage result")
         }
     }
 

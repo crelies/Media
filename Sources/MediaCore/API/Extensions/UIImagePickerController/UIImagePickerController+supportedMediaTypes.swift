@@ -8,7 +8,6 @@
 #if canImport(UIKit) && !os(tvOS)
 import UIKit
 
-// TODO: public
 public extension UIImagePickerController {
     static func supportedMediaTypes(from mediaTypes: Set<UIImagePickerController.MediaType>,
                                     sourceType: UIImagePickerController.SourceType) -> [String]? {

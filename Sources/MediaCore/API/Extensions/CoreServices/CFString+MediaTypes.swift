@@ -13,7 +13,6 @@ import CoreServices
 import MobileCoreServices
 #endif
 
-// TODO: Public
 public extension CFString {
     static var image: CFString { kUTTypeImage }
     static var livePhoto: CFString { kUTTypeLivePhoto }

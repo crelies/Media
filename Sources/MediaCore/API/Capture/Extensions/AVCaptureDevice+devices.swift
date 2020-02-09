@@ -8,7 +8,6 @@
 #if !os(tvOS)
 import AVFoundation
 
-// TODO: public
 @available(iOS 10, *)
 public extension AVCaptureDevice {
     static func backVideoCamera() throws -> AVCaptureDevice {

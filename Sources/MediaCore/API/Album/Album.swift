@@ -9,6 +9,8 @@
 import Photos
 
 public struct Album {
+    static var phAsset: PHAsset.Type = PHAsset.self
+
     let phAssetCollection: PHAssetCollection
 
     /// Identifier resolves to the local identifier of the underlying
@@ -55,7 +57,7 @@ public extension Album {
     var allMedia: [AnyMedia] {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = PHAsset.fetchAssets(in: phAssetCollection, options: options)
+        let result = Self.phAsset.fetchAssets(in: phAssetCollection, options: options)
         var media: [AnyMedia] = []
         result.enumerateObjects { asset, _, _ in
             guard let anyMedia = asset.anyMedia else {

@@ -8,7 +8,6 @@
 #if canImport(UIKit) && !os(tvOS)
 import UIKit
 
-// TODO: Public
 public extension UIImagePickerController {
     static var availableSourceType: UIImagePickerController.SourceType? {
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {

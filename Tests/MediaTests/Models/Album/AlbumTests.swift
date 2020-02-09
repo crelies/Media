@@ -13,6 +13,7 @@ final class AlbumTests: XCTestCase {
     lazy var album = Album(phAssetCollection: mockAssetCollection)
 
     override func setUp() {
+        Album.phAsset = MockPHAsset.self
         PHAssetFetcher.asset = MockPHAsset.self
         MockPHAsset.fetchResult.mockAssets.removeAll()
         AlbumFetcher.assetCollection = MockPHAssetCollection.self
@@ -71,12 +72,11 @@ final class AlbumTests: XCTestCase {
         XCTAssertTrue(items.isEmpty)
     }
 
-    // TODO:
-    /*func testAllMediaNotEmpty() {
+    func testAllMediaNotEmpty() {
         MockPHAsset.fetchResult.mockAssets = [MockPHAsset()]
         let items = album.allMedia
         XCTAssertFalse(items.isEmpty)
-    }*/
+    }
 
     func testAllMediaEmpty() {
         let items = album.allMedia

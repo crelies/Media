@@ -10,7 +10,6 @@ import Photos
 import UIKit
 #endif
 
-// TODO: public
 public protocol AssetChangeRequest: class {
     var placeholderForCreatedAsset: PHObjectPlaceholder? { get }
     #if canImport(UIKit)

@@ -7,7 +7,6 @@
 
 import AVFoundation
 
-// TODO: public
 @available(iOS 10, *)
 @available(tvOS, unavailable)
 public extension AVCaptureSession {

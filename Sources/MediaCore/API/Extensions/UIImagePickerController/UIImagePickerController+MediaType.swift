@@ -9,7 +9,6 @@
 import CoreServices
 import UIKit
 
-// TODO: public
 public extension UIImagePickerController {
     enum MediaType: CaseIterable {
         case image

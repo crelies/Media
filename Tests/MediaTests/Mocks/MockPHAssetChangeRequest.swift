@@ -23,8 +23,6 @@ final class MockPHAssetChangeRequest: AssetChangeRequest {
         Self.init()
     }
 
-    static func deleteAssets(_ assets: NSFastEnumeration) {
-        // TODO:
-    }
+    static func deleteAssets(_ assets: NSFastEnumeration) {}
 }
 #endif

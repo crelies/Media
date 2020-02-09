@@ -25,6 +25,10 @@ final class MockPHAsset: PHAsset {
         fetchResult
     }
 
+    override class func fetchAssets(in assetCollection: PHAssetCollection, options: PHFetchOptions?) -> PHFetchResult<PHAsset> {
+        fetchResult
+    }
+
     override func requestContentEditingInput(
         with options: PHContentEditingInputRequestOptions?,
         completionHandler: @escaping (PHContentEditingInput?, [AnyHashable : Any]) -> Void) -> PHContentEditingInputRequestID {

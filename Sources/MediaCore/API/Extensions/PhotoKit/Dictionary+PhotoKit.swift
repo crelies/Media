@@ -9,7 +9,6 @@
 import Photos
 import UIKit
 
-// TODO: public
 extension Dictionary where Key == UIImagePickerController.InfoKey {
     public var mediaType: UIImagePickerController.MediaType? {
         guard let mediaTypeString = self[Key.mediaType] as? String else {

@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: public
 public extension FileManager {
     var cachesDirectory: URL {
         urls(for: .cachesDirectory, in: .userDomainMask).first!

@@ -208,37 +208,6 @@ final class LivePhotoTests: XCTestCase {
     }
 
     @available(iOS 10, *)
-    func testSaveSuccess() {
-        // TODO:
-//        do {
-//            let expectation = self.expectation(description: "SaveResult")
-//
-//            let movieURL = URL(fileURLWithPath: "file://test.mov")
-//            let stillImageData = Data()
-//            let mediaURL = try Media.URL<LivePhoto>(url: movieURL)
-//            let data = LivePhotoData(stillImageData: stillImageData, movieURL: mediaURL)
-//
-//            var result: Result<LivePhoto, Error>?
-//            try LivePhoto.save(data: data) { res in
-//                result = res
-//                expectation.fulfill()
-//            }
-//
-//            waitForExpectations(timeout: 1)
-//
-//            switch result {
-//            case .failure(let error):
-//                XCTFail("\(error)")
-//            case .none:
-//                XCTFail("Invalid result")
-//            default: ()
-//            }
-//        } catch {
-//            XCTFail("\(error)")
-//        }
-    }
-
-    @available(iOS 10, *)
     func testSaveFailure() {
         do {
             MockPhotoLibrary.authorizationStatusToReturn = .denied
