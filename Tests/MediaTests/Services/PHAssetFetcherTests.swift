@@ -11,6 +11,8 @@ import XCTest
 
 final class PHAssetFetcherTests: XCTestCase {
     override func setUp() {
+        Media.photoLibrary = MockPhotoLibrary.self
+        MockPhotoLibrary.authorizationStatusToReturn = .authorized
         PHAssetFetcher.asset = MockPHAsset.self
         MockPHAsset.fetchResult.mockAssets.removeAll()
     }
@@ -96,6 +98,30 @@ final class PHAssetFetcherTests: XCTestCase {
             XCTAssertEqual(videos.count, 0)
         } catch {
             XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testFetchAssetsInCollectionSuccess() {
+        do {
+            let collection = MockPHAssetCollection()
+            let options = PHFetchOptions()
+            let videos = try PHAssetFetcher.fetchAssets(in: collection, options: options) as [Video]
+            XCTAssertTrue(videos.isEmpty)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testFetchAssetsInCollectionFailure() {
+        MockPhotoLibrary.authorizationStatusToReturn = .denied
+
+        do {
+            let collection = MockPHAssetCollection()
+            let options = PHFetchOptions()
+            _ = try PHAssetFetcher.fetchAssets(in: collection, options: options) as [Video]
+            XCTFail("This should never happen because the Media access is denied")
+        } catch {
+            XCTAssertEqual(error as? PermissionError, .denied)
         }
     }
 }
