@@ -31,7 +31,13 @@ final class MediaFilterTests: XCTestCase {
     }
 
     func testMediaSubtypesPredicate() {
-        // TODO: implement test
+        guard let mediaSubtypeLive = LivePhoto.Subtype.live.mediaSubtype else {
+            XCTFail("Could not get media subtype of LivePhoto.Subtype.live")
+            return
+        }
+        let mediaFilter: Media.Filter<LivePhoto.Subtype> = .mediaSubtypes([.live])
+        let expectedPredicate = NSPredicate(format: "(mediaSubtypes & %d) != 0", mediaSubtypeLive.rawValue)
+        XCTAssertEqual(mediaFilter.predicate, expectedPredicate)
     }
 
     func testDurationPredicate() {
