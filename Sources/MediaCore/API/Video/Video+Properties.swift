@@ -8,11 +8,19 @@
 import AVFoundation
 
 extension Video {
+    /// Properties of the underlying asset
+    /// which have to be fetched
+    ///
     public struct Properties {
+        /// Location where the `Video` was taken
         public private(set) var location: String?
+        /// Vendor of the device which took the `Video`
         public private(set) var make: String?
+        /// Model of the device which took the `Video`
         public private(set) var model: String?
+        /// Software of the device which took the `Video`
         public private(set) var software: String?
+        /// Creation date of the `Video`
         public private(set) var creationDate: Date?
     }
 }

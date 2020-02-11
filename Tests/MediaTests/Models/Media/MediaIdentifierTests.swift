@@ -18,6 +18,6 @@ final class MediaIdentifierTests: XCTestCase {
     func testDescription() {
         let identifier = "Test"
         let mediaIdentifier = Media.Identifier<Video>(stringLiteral: identifier)
-        XCTAssertEqual(mediaIdentifier.description, identifier)
+        XCTAssertEqual(mediaIdentifier.localIdentifier, identifier)
     }
 }

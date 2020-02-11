@@ -10,6 +10,9 @@ import AVFoundation
 
 @available(iOS 10, *)
 @available(macOS, unavailable)
+/// Service for shooting (live) photos
+/// using `AVCapture` APIs
+///
 public final class Photograph: NSObject {
     static var captureProcessor: CaptureProcessor.Type = PhotoCaptureProcessor.self
 
@@ -19,6 +22,12 @@ public final class Photograph: NSObject {
     private var stillImageCompletion: ResultDataCompletion?
     private var livePhotoCompletion: LivePhotoDataCompletion?
 
+    /// Initializes a photograph
+    ///
+    /// - Parameters:
+    ///   - photoOutput: the photo output to use for capturing
+    ///   - photoSettings: the photo settings to use for capturing
+    ///
     public init(photoOutput: AVCapturePhotoOutput, photoSettings: AVCapturePhotoSettings) {
         self.photoOutput = photoOutput
         self.photoSettings = photoSettings
@@ -28,6 +37,12 @@ public final class Photograph: NSObject {
 @available(iOS 10, *)
 @available(macOS, unavailable)
 public extension Photograph {
+    /// Tells the receiver to shoot a photo
+    ///
+    /// - Parameters:
+    ///   - stillImageCompletion: block which should be called if a still image was taken
+    ///   - livePhotoCompletion: block which should be called if a live photo was taken
+    ///
     func shootPhoto(stillImageCompletion: @escaping ResultDataCompletion,
                     livePhotoCompletion: LivePhotoDataCompletion?) {
         self.stillImageCompletion = stillImageCompletion

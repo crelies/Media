@@ -10,6 +10,11 @@ import AVFoundation
 
 @available(iOS 10, *)
 public extension AVCaptureDevice {
+    /// Looks for a back video camera and returns it if found
+    ///
+    /// - Throws: an error if no back video camera was found
+    /// - Returns: an instance of `AVCaptureDevice` representing a back video camera
+    ///
     static func backVideoCamera() throws -> AVCaptureDevice {
         #if !os(macOS)
         if #available(iOS 13, *) {

@@ -8,7 +8,7 @@
 
 import Photos
 
-/// Type for Audio media
+/// Wrapper type for around `PHAsset`s of type `audio`
 ///
 public struct Audio: MediaProtocol {
     public typealias MediaSubtype = Audio.Subtype
@@ -16,7 +16,14 @@ public struct Audio: MediaProtocol {
 
     private var phAsset: PHAsset? { phAssetWrapper.value }
 
+    /// Box type internally used to store a reference
+    /// to the underlying `PHAsset`
     public let phAssetWrapper: PHAssetWrapper
+
+    /// `PHAssetMediaType` for the `Audio` type
+    ///
+    /// Used for the implementation of some generic
+    /// property wrappers
     public static let type: MediaType = .audio
 
     /// Locally available metadata of the `Audio`
@@ -33,6 +40,8 @@ public struct Audio: MediaProtocol {
             isHidden: phAsset.isHidden)
     }
 
+    /// Initializes an `Audio` using the given asset
+    /// - Parameter phAsset: an `PHAsset` which represents the audio
     public init(phAsset: PHAsset) {
         self.phAssetWrapper = PHAssetWrapper(value: phAsset)
     }

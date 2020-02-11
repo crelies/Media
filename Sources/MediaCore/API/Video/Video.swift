@@ -8,7 +8,8 @@
 
 import Photos
 
-/// Represents `Video`s
+/// Wrapper type around `PHAsset`s of type
+/// `video`
 ///
 public struct Video: MediaProtocol {
     public typealias ProgressHandler = (Video.ExportProgress) -> Void
@@ -20,7 +21,15 @@ public struct Video: MediaProtocol {
     public typealias MediaSubtype = Video.Subtype
     public typealias MediaFileType = Video.FileType
 
+    /// Box type internally used to store
+    /// a reference to the underlying `PHAsset` instance
+    ///
     public let phAssetWrapper: PHAssetWrapper
+
+    /// Represents the `PHAssetMediaType` of the `Video` type
+    /// Used for the implementation of some generic property
+    /// wrappers
+    ///
     public static let type: MediaType = .video
 
     /// Locally available metadata of the `Video`
@@ -40,6 +49,10 @@ public struct Video: MediaProtocol {
             duration: phAsset.duration)
     }
 
+    /// Initializes a `Video` using the given `PHAsset`
+    ///
+    /// - Parameter phAsset: a `PHAsset` of type `video`
+    ///
     public init(phAsset: PHAsset) {
         phAssetWrapper = PHAssetWrapper(value: phAsset)
     }

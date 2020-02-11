@@ -8,6 +8,9 @@
 
 import Photos
 
+/// Convenience type for easily fetching different
+/// types of albums
+///
 public struct Albums {
     /// All albums in the photo library
     /// sorted by `localizedTitle ascending`

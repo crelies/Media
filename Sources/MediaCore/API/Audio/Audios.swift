@@ -7,6 +7,9 @@
 
 import Photos
 
+/// Convenience wrapper type for fetching
+/// audios
+///
 public struct Audios {
     /// All audios in the photo library
     /// sorted by `creationDate descending`

@@ -18,6 +18,6 @@ final class AlbumIdentifierTests: XCTestCase {
     func testDescription() {
         let identifier = "Test"
         let albumIdentifier = Album.Identifier(stringLiteral: identifier)
-        XCTAssertEqual(albumIdentifier.description, identifier)
+        XCTAssertEqual(albumIdentifier.localIdentifier, identifier)
     }
 }

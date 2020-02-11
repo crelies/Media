@@ -7,6 +7,9 @@
 
 import Photos
 
+/// Convenience wrapper type for fetching
+/// different types of videos
+///
 public struct Videos {
     /// All videos in the library
     /// sorted by `creationDate descending`

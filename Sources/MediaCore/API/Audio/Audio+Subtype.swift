@@ -6,9 +6,11 @@
 //
 
 extension Audio {
+    /// Type representing subtypes of an `Audio`
     public enum Subtype {}
 }
 
 extension Audio.Subtype: MediaSubtypeProvider {
+    /// Returns the `PHAssetMediaSubtype` of the receiver
     public var mediaSubtype: MediaSubtype? { nil }
 }

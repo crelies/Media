@@ -8,6 +8,8 @@
 
 import Photos
 
+/// Convenience wrapper type around `PHAssetCollection`
+///
 public struct Album {
     static var phAsset: PHAsset.Type = PHAsset.self
 
@@ -17,7 +19,14 @@ public struct Album {
     /// `PHAssetCollection`
     ///
     public var identifier: String { phAssetCollection.localIdentifier }
+
+    /// Resolves to the `localizedTitle` of the underlying
+    /// `PHAssetCollection`
+    ///
     public var localizedTitle: String? { phAssetCollection.localizedTitle }
+
+    /// Metadata of the album
+    ///
     public var metadata: Metadata { Metadata(phAssetCollection: phAssetCollection) }
 
     /// All audios contained in the receiver

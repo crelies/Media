@@ -6,7 +6,10 @@
 //
 
 extension Album {
+    /// Identifier type for an album
+    ///
     public struct Identifier {
+        /// Local identifier of the underlying `PHAssetCollection`
         public let localIdentifier: String
     }
 }
@@ -17,8 +20,4 @@ extension Album.Identifier: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         localIdentifier = value
     }
-}
-
-extension Album.Identifier: CustomStringConvertible {
-    public var description: String { localIdentifier }
 }

@@ -8,6 +8,8 @@
 import Foundation
 
 extension Media.URL {
+    /// Errors occurring during `Media.URL` initialization
+    ///
     public enum Error: Swift.Error {
         /// Thrown if a file type could not be created
         case couldNotCreateFileType

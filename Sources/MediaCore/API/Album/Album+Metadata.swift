@@ -8,6 +8,8 @@
 import Photos
 
 extension Album {
+    /// Type representing metadata of an album
+    ///
     public struct Metadata {
         /// The type of the asset collection, such as an album or a moment.
         public let assetCollectionType: PHAssetCollectionType
