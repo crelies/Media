@@ -256,7 +256,7 @@ final class AlbumTests: XCTestCase {
         mockAssetCollection.assetCollectionTypeToReturn = .album
 
         let metadata = album.metadata
-        XCTAssertEqual(metadata.assetCollectionType, .album)
+        XCTAssertEqual(metadata?.assetCollectionType, .album)
     }
 
     func testAddMediaSuccess() {
