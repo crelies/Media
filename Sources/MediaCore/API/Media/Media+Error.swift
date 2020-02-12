@@ -14,6 +14,8 @@ extension Media {
     public enum Error: Swift.Error {
         /// the operation was cancelled
         case cancelled
+        /// the album has no related underlying PHAssetCollection object, maybe it was deleted
+        case noUnderlyingPHAssetCollectionFound
         /// the media object has no related underlying PHAsset object, maybe it was deleted
         case noUnderlyingPHAssetFound
         /// an unknown error occurred

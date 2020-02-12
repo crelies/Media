@@ -13,21 +13,26 @@ import Photos
 public struct Album {
     static var phAsset: PHAsset.Type = PHAsset.self
 
-    let phAssetCollection: PHAssetCollection
+    let phAssetCollectionWrapper: PHAssetCollectionWrapper
+
+    var phAssetCollection: PHAssetCollection? { phAssetCollectionWrapper.value }
 
     /// Identifier resolves to the local identifier of the underlying
     /// `PHAssetCollection`
     ///
-    public var identifier: String { phAssetCollection.localIdentifier }
+    public var identifier: String? { phAssetCollection?.localIdentifier }
 
     /// Resolves to the `localizedTitle` of the underlying
     /// `PHAssetCollection`
     ///
-    public var localizedTitle: String? { phAssetCollection.localizedTitle }
+    public var localizedTitle: String? { phAssetCollection?.localizedTitle }
 
     /// Metadata of the album
     ///
-    public var metadata: Metadata { Metadata(phAssetCollection: phAssetCollection) }
+    public var metadata: Metadata? {
+        guard let phAssetCollection = phAssetCollection else { return nil }
+        return Metadata(phAssetCollection: phAssetCollection)
+    }
 
     /// All audios contained in the receiver
     /// sorted by `creationDate descending`
@@ -55,7 +60,7 @@ public struct Album {
     public var livePhotos: [LivePhoto]
 
     init(phAssetCollection: PHAssetCollection) {
-        self.phAssetCollection = phAssetCollection
+        phAssetCollectionWrapper = PHAssetCollectionWrapper(phAssetCollection: phAssetCollection)
     }
 }
 
@@ -64,6 +69,8 @@ public extension Album {
     /// sorted by `creationDate descending`
     ///
     var allMedia: [AnyMedia] {
+        guard let phAssetCollection = phAssetCollection else { return [] }
+
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result = Self.phAsset.fetchAssets(in: phAssetCollection, options: options)
@@ -104,11 +111,24 @@ public extension Album {
     /// - Parameter completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete(completion: @escaping ResultVoidCompletion) {
+        guard let phAssetCollection = phAssetCollection else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
+            return
+        }
+
         PHChanger.request({
-            let assetCollections: NSArray = [self.phAssetCollection]
+            let assetCollections: NSArray = [phAssetCollection]
             PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollections)
             return nil
-        }, completion)
+        }) { result in
+            switch result {
+            case .success:
+                self.phAssetCollectionWrapper.value = nil
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }
 
@@ -156,6 +176,11 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func add<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
+        guard let phAssetCollection = phAssetCollection else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
+            return
+        }
+
         guard let phAsset = media.phAssetWrapper.value else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -167,7 +192,7 @@ public extension Album {
         }
 
         PHChanger.request({
-            let addAssetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
+            let addAssetRequest = PHAssetCollectionChangeRequest(for: phAssetCollection)
             let assets: NSArray = [phAsset]
             addAssetRequest?.addAssets(assets)
             return addAssetRequest
@@ -183,6 +208,11 @@ public extension Album {
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     func delete<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
+        guard let phAssetCollection = phAssetCollection else {
+            completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
+            return
+        }
+
         guard let phAsset = media.phAssetWrapper.value else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -194,7 +224,7 @@ public extension Album {
         }
 
         PHChanger.request({
-            let assetRequest = PHAssetCollectionChangeRequest(for: self.phAssetCollection)
+            let assetRequest = PHAssetCollectionChangeRequest(for: phAssetCollection)
             let assets: NSArray = [phAsset]
             assetRequest?.removeAssets(assets)
             return assetRequest
