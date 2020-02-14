@@ -10,71 +10,157 @@ import CoreLocation
 import UIKit
 
 extension Photo {
+    /// Represents properties / metadata of the underlying
+    /// image file, including EXIF, GPS and TIFF data
+    ///
     public struct Properties {
+        /// The resolution, in dots per inch, in the y dimension.
+        /// If present, this key is a CFNumber value.
+        ///
         public let dpiWidth: Int?
+        /// The resolution, in dots per inch, in the x dimension.
+        /// If present, this key is a CFNumber value.
+        ///
         public let dpiHeight: Int?
+        /// The number of pixels in the x dimension.
+        /// If present, this key is a CFNumber value.
+        ///
         public let pixelWidth: Int?
+        /// The number of pixels in the y dimension.
+        /// If present, this key is a CFNumber value.
+        ///
         public let pixelHeight: Int?
+        /// No overview available
         public var primaryImage: Int?
+        /// The color model of the image such as, RGB, CMYK, Gray, or Lab.
+        /// The value of this key is of type CFStringRef.
         public let colorModel: String?
+        /// The name of the optional ICC profile embedded in the image, if known.
+        /// If present, the value of this key is of type CFStringRef.
         public let profileName: String?
+        /// Exchangeable Image File Format data
         public let exif: EXIF
+        /// Global Positioning System (GPS) data
         public let gps: GPS
+        /// Tagged Image File Format data
         public let tiff: TIFF
 
+        /// Keys for an image that uses Exchangeable Image File Format (EXIF).
+        ///
         public struct EXIF {
+            /// The aperture value.
             public let apertureValue: Double?
+            /// The brightness value.
             public let brightnessValue: Double?
+            /// The color space.
             public let colorSpace: Int?
+            /// The components configuration. For compressed data, specifies that
+            /// the channels of each component are arranged in increasing
+            ///  numeric order (from first component to the fourth).
+            ///
             public let componentsConfiguration: [Int]?
+            /// No overview available
             public var compositeImage: Int?
+            /// The digitized date and time.
             public let dateTimeDigitized: String?
+            /// The original date and time.
             public let dateTimeOriginal: String?
+            /// The Exif version.
             public let exifVersion: [Int]?
+            /// The exposure bias value.
             public let exposureBiasValue: Int?
+            /// The exposure mode setting.
             public let exposureMode: Int?
+            /// The exposure program.
             public let exposureProgram: Int?
+            /// The exposure time.
             public let exposureTime: Double?
+            /// The F-number.
             public let fNumber: Double?
+            /// The flash status when the image was shot.
             public let flash: Int?
+            /// The FlashPix version supported by an FPXR file. FlashPix is a
+            /// format for multiresolution tiled images that facilitates
+            /// fast onscreen viewing.
+            ///
             public let flashPixVersion: [Int]?
+            /// The equivalent focal length in 35 mm film.
             public let focalLenIn35mmFilm: Int?
+            /// The focal length.
             public let focalLength: Double?
+            /// The ISO speed ratings.
             public let isoSpeedRatings: [Int]?
+            /// The value associated with this key is a string that provides the name of the lens’s manufacturer.
             public let lensMake: String?
+            /// The value associated with this key is a string that provides the lens’s model.
             public let lensModel: String?
+            /// The values associated with this key provide the specification information for
+            /// the lens used to photograph the image.
+            ///
             public let lensSpecification: [Double]?
+            /// The metering mode.
             public let meteringMode: Int?
+            /// No overview available
             public var offsetTime: String?
+            /// No overview available
             public var offsetTimeDigitized: String?
+            /// No overview available
             public var offsetTimeOriginal: String?
+            /// The x dimension of a pixel.
             public let pixelXDimension: Int?
+            /// The y dimension of a pixel.
             public let pixelYDimension: Int?
+            /// The scene capture type (standard, landscape, portrait, night).
             public let sceneCaptureType: Int?
+            /// The scene type.
             public let sceneType: Int?
+            /// The sensor type of the camera or input device.
             public let sensingMethod: Int?
+            /// The shutter speed value.
             public let shutterSpeedValue: Double?
+            /// The subject area.
             public let subjectArea: [Int]?
+            /// The fraction of seconds for the digitized time and date tag.
             public let subsecTimeDigitized: String?
+            /// The fraction of seconds for the original date and time tag.
             public let subsecTimeOriginal: String?
+            /// The white balance mode.
             public let whiteBalance: Int?
         }
 
+        /// Keys for an image that has Global Positioning System (GPS) information.
+        ///
         public struct GPS {
+            /// The altitude.
             public let altitude: Double?
+            /// The reference altitude.
             public let altitudeRef: Int?
+            /// The bearing to the destination point.
             public let destBearing: Double?
+            /// The reference for giving the bearing to the destination point.
             public let destBearingRef: String?
+            /// No overview available
             public let hPositioningError: Int?
+            /// The direction of the image.
             public let imgDirection: Double?
+            /// The reference for the direction of the image.
             public let imgDirectionRef: String?
+            /// The latitude.
             public let latitude: Double?
+            /// Whether the latitude is north or south.
             public let latitudeRef: String?
+            /// The longitude.
             public let longitude: Double?
+            /// Whether the longitude is east or west.
             public let longitudeRef: String?
+            /// The GPS receiver speed of movement.
             public let speed: Int?
+            /// The unit for expressing the GPS receiver speed of movement.
             public let speedRef: String?
 
+            /// Computes a `CLLocation` if the underlying
+            /// latitude and longitude values are present
+            ///
             public var location: CLLocation? {
                 guard let latitude = latitude else { return nil }
                 guard let longitude = longitude else { return nil }
@@ -82,16 +168,28 @@ extension Photo {
             }
         }
 
+        /// Keys for an image that uses Tagged Image File Format (TIFF).
+        ///
         public struct TIFF {
+            /// The date and time that the image was created.
             public let dateTime: String?
+            /// The name of the manufacturer of the camera or input device.
             public let make: String?
+            /// The camera or input device model.
             public let model: String?
+            /// The image orientation.
             public let orientation: Int?
+            /// The units of resolution.
             public let resolutionUnit: Int?
+            /// The name and version of the software used for image creation.
             public let software: String?
+            /// No overview available
             public let tileLength: Int?
+            /// No overview available
             public let tileWidth: Int?
+            /// The number of pixels per resolution unit in the image width direction.
             public let xResolution: Int?
+            /// The number of pixels per resolution unit in the image height direction.
             public let yResolution: Int?
         }
     }

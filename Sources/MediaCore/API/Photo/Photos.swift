@@ -8,6 +8,9 @@
 import Photos
 
 extension Media {
+    /// Wrapper for easily fetching different kinds of
+    /// photos from the photo library
+    ///
     public struct Photos {
         /// All photos in the library
         /// sorted by `creationDate descending`

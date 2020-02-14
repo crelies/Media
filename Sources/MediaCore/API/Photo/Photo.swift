@@ -11,7 +11,9 @@ import UIKit
 #endif
 import Photos
 
-/// Represents `Photo`s
+/// Convenience wrapper for `PHAsset`s
+/// with the type `image` which represents
+/// a photo
 ///
 public struct Photo: MediaProtocol {
     static var imageManager: ImageManager = PHImageManager.default()
@@ -21,7 +23,15 @@ public struct Photo: MediaProtocol {
     public typealias MediaSubtype = Photo.Subtype
     public typealias MediaFileType = Photo.FileType
 
+    /// Box type for storing a reference to the
+    /// underlying `PHAsset`
+    ///
+    /// Only used internally
+    ///
     public let phAssetWrapper: PHAssetWrapper
+
+    /// `PHAssetMediaType` represented by a `Photo`
+    ///
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `Photo`
@@ -40,6 +50,10 @@ public struct Photo: MediaProtocol {
             pixelHeight: phAsset.pixelHeight)
     }
 
+    /// Initializes a photo using the given `PHAsset` instance
+    ///
+    /// - Parameter phAsset: a `PHAsset` instance with the type `image`
+    ///
     public init(phAsset: PHAsset) {
         phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
