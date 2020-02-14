@@ -6,11 +6,18 @@
 //
 
 extension LivePhoto {
+    /// Convenience type representing the
+    /// available subtypes of a live photo
+    /// used by this Swift package
+    ///
     public enum Subtype {
         case live
     }
 }
 
 extension LivePhoto.Subtype: MediaSubtypeProvider {
+    /// Returns the related `PHAssetMediaSubtype`
+    /// of the receiving subtype
+    ///
     public var mediaSubtype: MediaSubtype? { .photoLive }
 }

@@ -7,6 +7,9 @@
 
 import Photos
 
+/// Wrapper for easily fetching all live photos
+/// from the photo library
+///
 public struct LivePhotos {
     /// All live photos in the photo library
     /// sorted by `creationDate descending`

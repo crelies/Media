@@ -8,7 +8,8 @@
 
 import Photos
 
-/// Represents `LivePhoto` media
+/// Convenience wrapper around a `PHAsset`
+/// with the type `image` and subtype `photoLive`
 ///
 public struct LivePhoto: MediaProtocol {
     public typealias ResultDisplayRepresentationCompletion = (Result<Media.DisplayRepresentation<PHLivePhotoProtocol>, Error>) -> Void
@@ -20,7 +21,17 @@ public struct LivePhoto: MediaProtocol {
     public typealias MediaSubtype = LivePhoto.Subtype
     public typealias MediaFileType = LivePhoto.FileType
 
+    /// Box type for storing a reference to the
+    /// underlying `PHAsset`
+    /// Only used internally
+    ///
     public let phAssetWrapper: PHAssetWrapper
+
+    /// Related `PHAssetMediaType` for this live photo
+    /// wrapper
+    /// Used for the implementation of some
+    /// generic property wrappers
+    ///
     public static let type: MediaType = .image
 
     /// Locally available metadata of the `LivePhoto`
@@ -37,6 +48,10 @@ public struct LivePhoto: MediaProtocol {
             isHidden: phAsset.isHidden)
     }
 
+    /// Initializes a live photo using the given `PHAsset`
+    ///
+    /// - Parameter phAsset: a `PHAsset` instance with the type `image` and the subtype `photoLive`
+    ///
     public init(phAsset: PHAsset) {
         phAssetWrapper = PHAssetWrapper(value: phAsset)
     }
