@@ -5,10 +5,10 @@
 //  Created by Christian Elies on 04.12.19.
 //
 
-/// Represents the supported keys
-/// for sorting media (`Audio`, `LivePhoto`, `Photo` or `Video`)
-///
 extension Media {
+    /// Represents the supported keys
+    /// for sorting media (`Audio`, `LivePhoto`, `Photo` or `Video`)
+    ///
     public enum SortKey: String {
         case localIdentifier
         case creationDate

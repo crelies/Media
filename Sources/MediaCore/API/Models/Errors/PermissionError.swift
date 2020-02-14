@@ -22,6 +22,8 @@ public enum PermissionError: Error {
 }
 
 extension PermissionError: LocalizedError {
+    /// Description for the receiving error
+    ///
     public var errorDescription: String? {
         switch self {
         case .denied:
