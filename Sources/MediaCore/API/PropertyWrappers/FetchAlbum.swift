@@ -13,6 +13,7 @@ import Photos
 public struct FetchAlbum {
     private let options = PHFetchOptions().fetchLimit(1)
 
+    /// Wrapped album value
     public var wrappedValue: Album? {
         try? AlbumFetcher.fetchAlbum(with: .album, subtype: .any, options: options)
     }

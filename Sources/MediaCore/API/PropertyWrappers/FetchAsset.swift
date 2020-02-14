@@ -14,6 +14,7 @@ public struct FetchAsset<T: MediaProtocol> {
     private let options = PHFetchOptions().fetchLimit(1)
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
 
+    /// Wrapped object conforming to the `MediaProtocol`
     public var wrappedValue: T? {
         try? PHAssetFetcher.fetchAsset(options: options) { asset in
             asset.mediaType == T.type

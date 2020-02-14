@@ -16,6 +16,7 @@ public struct FetchAssets<T: MediaProtocol> {
     private let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", T.type.rawValue)
     private let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
 
+    /// Wrapped array of objects conforming to the `MediaProtocol`
     public var wrappedValue: [T] { (try? PHAssetFetcher.fetchAssets(options: options)) ?? [] }
 
     /// Initializes the property wrapper using a default sort descriptor

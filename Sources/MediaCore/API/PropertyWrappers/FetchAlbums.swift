@@ -16,6 +16,7 @@ public struct FetchAlbums {
 
     private let albumType: AlbumType?
 
+    /// Wrapped album array
     public var wrappedValue: [Album] {
         (try? AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
                                  subtype: .any,
