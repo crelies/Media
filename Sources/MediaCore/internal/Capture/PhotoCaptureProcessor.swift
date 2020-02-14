@@ -33,7 +33,7 @@ final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
         delegate?.didCapturePhoto(data: stillImageData)
     }
 
-    #if !os(macOS)
+    #if !os(macOS) && !targetEnvironment(macCatalyst)
     /*
        Image portion
     */
