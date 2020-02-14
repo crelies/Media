@@ -1,6 +1,6 @@
 //
 //  MediaSubtypeProvider.swift
-//  
+//  Media
 //
 //  Created by Christian Elies on 04.12.19.
 //
@@ -9,5 +9,6 @@
 /// representing media subtypes
 ///
 public protocol MediaSubtypeProvider {
+    /// `PHAssetMediaSubtype` representation of the receiver
     var mediaSubtype: MediaSubtype? { get }
 }

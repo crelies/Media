@@ -9,5 +9,6 @@
 /// provider
 ///
 public protocol PathExtensionsProvider {
+    /// Path extensions of the receiver
     var pathExtensions: [String] { get }
 }
