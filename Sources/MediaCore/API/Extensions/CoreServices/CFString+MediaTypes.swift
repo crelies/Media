@@ -14,8 +14,11 @@ import MobileCoreServices
 #endif
 
 public extension CFString {
+    /// Resolves to the kUTTypeImage CFString
     static var image: CFString { kUTTypeImage }
+    /// Resolves to the kUTTypeLivePhoto CFString
     static var livePhoto: CFString { kUTTypeLivePhoto }
+    /// Resolves to the kUTTypeMovie CFString
     static var movie: CFString { kUTTypeMovie }
 }
 #endif

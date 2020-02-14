@@ -11,6 +11,8 @@ import SwiftUI
 import UIKit
 
 @available(iOS 13, macOS 10.15, *)
+/// Type which provides a ready-to-use SwiftUI view
+///
 public struct Camera {
     /// A ready-to-use `SwiftUI` camera view which returns the URL to the
     /// captured media on `success`

@@ -9,6 +9,14 @@
 import UIKit
 
 public extension UIImagePickerController {
+    /// Determines the supported media types for a given
+    /// source type using the preferred media types
+    ///
+    /// - Parameters:
+    ///   - mediaTypes: a set of preferred media types
+    ///   - sourceType: the related source type
+    /// - Returns: an array of Strings (convertible to CFString) representing the supported media types
+    ///
     static func supportedMediaTypes(from mediaTypes: Set<UIImagePickerController.MediaType>,
                                     sourceType: UIImagePickerController.SourceType) -> [String]? {
         guard let availableMediaTypes = Self.availableMediaTypes(for: sourceType) else {

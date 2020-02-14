@@ -9,6 +9,9 @@
 import UIKit
 
 public extension UIImagePickerController {
+    /// Returns an available source type
+    /// Looks for photo library and saved photos album
+    ///
     static var availableSourceType: UIImagePickerController.SourceType? {
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             return .photoLibrary
