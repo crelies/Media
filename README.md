@@ -1,6 +1,6 @@
 # 🖼️ Media
 
-A **beautiful**, **simple**, **declarative**, **convenient** and **unit-tested** *wrapper API* for Apple's `PhotoKit`
+A **beautiful**, **simple**, **declarative**, **convenient**, **cross-platform (iOS, macOS & tvOS)** and **unit-tested** *wrapper API* for Apple's `PhotoKit`
 
 [![Swift 5.1](https://img.shields.io/badge/swift-5.1-green.svg?longCache=true&style=flat-square)](https://developer.apple.com/swift)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS-lightgrey.svg?longCache=true&style=flat-square)](https://www.apple.com)
