@@ -18,12 +18,14 @@ Easily fetch media from the photo library with `Albums.all`, `album.photos` or `
 
 Additionally you can perform many operations on the photo library in a very easy and robust way, like
 
-- changing the *favorite* state of media,
+- changing the *favorite* state of a media object,
 - fetching metadata or
 - deleting media
 - ...
 
-Check out the below **API** section.
+Check out the below **API** section for more.
+
+**And please feel free to contribute.** **Any kind of contribution is more than welcome!** I can guarantee you that even with a good unit test coverage there are still bugs hiding somewhere 🐛.
 
 ## ℹ️ Installation
 
@@ -40,20 +42,20 @@ This Swift package provides its functionality through wrapper types for many com
 - Album(s)
 - Audio(s)
 - LivePhoto(s)
-- Photo(s)
+- (Media.)Photo(s)
 - Video(s)
 
 Many types implement static factory methods to make it easy for the developer to access and manage the photo library.
 
 In addition to that this Swift package contains some simple and ready-to-use **SwiftUI views** for interacting with the photo library, like a `Camera` view or a view for an instance of  `LivePhoto`, `Photo` and `Video`.
 
-The core functionality is available through `import MediaCore`. If you want to use the included **SwiftUI** views `import MediaSwiftUI`.
+The core functionality is available through `import MediaCore`. If you want to use the included **SwiftUI** views `import MediaSwiftUI` as well.
 
 That's all you need to know. Now let's take a look at the **API**.
 
 ## 🧭 API
 
-This section gives you an overview of the currently available functionality. Most of the following should be self-explanatory. Nevertheless every public type, function and property is documented. *If the Xcode autocompletion works* you should get the information you need when using the *APIs* provided by this Swift package 🚀
+This section gives you an overview of the currently available functionality. Most of the following should be self-explanatory. Nevertheless every public type, function and property is documented. *If the Xcode autocompletion works* you should get the information you need when using the *APIs* provided by this Swift package 🚀.
 
 ### Media
 
@@ -395,3 +397,6 @@ The `Media` package also includes some generic property wrappers you can use to 
 
   *Fetch a single album which matches the given filter*
 
+## Contributions
+
+This a another open source project I created in my free time. Even with a full time job and a family I'm highly motivated to create software for the community. I trust the community in pushing things forward. So feel free to contribute in any way. Fix bugs, add more documentation or add a completely new feature. Just create a pull request if you are finished and I will take a look at it. Be advised that I will give feedback to assure the highest quality possible 🙂
