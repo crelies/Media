@@ -12,6 +12,8 @@ import SwiftUI
 
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct VideoView: View {
+    private let viewWrapper = ViewWrapper<AVPlayerView>()
+
     @State private var avPlayerItem: AVPlayerItem?
     @State private var error: Error?
 
@@ -21,9 +23,15 @@ struct VideoView: View {
         fetchPlayerItem()
 
         return Group {
-            avPlayerItem.map { AVPlayerView(avPlayerItem: $0) }
+            avPlayerItem.map { item -> AVPlayerView in
+                let player = AVPlayerView(avPlayerItem: item)
+                viewWrapper.value = player
+                return player
+            }
 
             error.map { Text($0.localizedDescription) }
+        }.onDisappear {
+            self.viewWrapper.value?.pause()
         }
     }
 }
