@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 02.12.19.
 //
 
-#if canImport(SwiftUI) && !os(macOS)
+#if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
 import MediaCore
 import SwiftUI
 
