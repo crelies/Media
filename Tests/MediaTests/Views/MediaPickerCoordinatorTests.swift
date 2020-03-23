@@ -11,12 +11,12 @@ import XCTest
 @available(iOS 13, *)
 final class MediaPickerCoordinatorTests: XCTestCase {
     func testPhotoCameraMediaPickerValueSuccess() {
-        let imageURL = URL(fileURLWithPath: "\(FileManager.default.currentDirectoryPath)/test.jpeg")
+        let originalImage = UIImage()
 
         let mediaPickerValue = MediaPicker.Coordinator.mediaPickerValue(
             forSourceType: .camera,
             mediaType: .image,
-            info: [UIImagePickerController.InfoKey.imageURL: imageURL])
+            info: [UIImagePickerController.InfoKey.originalImage: originalImage])
         XCTAssertNotNil(mediaPickerValue)
     }
 

@@ -12,14 +12,26 @@ import SwiftUI
 #if !os(tvOS)
 @available (iOS 13, macOS 10.15, *)
 public extension Photo {
-    typealias ResultMediaURLPhotoCompletion = (Result<Media.URL<Photo>, Swift.Error>) -> Void
+    typealias ResultPhotoCameraResultCompletion = (Result<Camera.Result, Swift.Error>) -> Void
 
     /// Creates a ready-to-use `SwiftUI` view for capturing `Photo`s
     ///
-    /// - Parameter completion: a closure which gets a `Result` (`Media.URL<Photo>` on `success` or `Error` on `failure`)
+    /// - Parameter completion: a closure which gets a `Result` (`Photo.Camera.Result` on `success` or `Error` on `failure`)
     ///
-    static func camera(_ completion: @escaping ResultMediaURLPhotoCompletion) throws -> some View {
-        try ViewCreator.camera(for: [.image], completion)
+    static func camera(_ completion: @escaping ResultPhotoCameraResultCompletion) throws -> some View {
+        try ViewCreator.camera(for: [.image]) { result in
+            switch result {
+            case .success(let cameraResult):
+                switch cameraResult {
+                case .tookPhoto(let image):
+                    completion(.success(.tookPhoto(image: image)))
+                default:
+                    completion(.failure(Photo.Error.unsupportedCameraResult))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library

@@ -12,26 +12,25 @@ import UIKit
 
 @available(iOS 13, macOS 10.15, *)
 struct ViewCreator {
-    static func camera<T: MediaProtocol>(
+    static func camera(
         for mediaTypes: Set<UIImagePickerController.MediaType>,
-        _ completion: @escaping ResultMediaURLCompletion<T>) throws -> some View {
+        _ completion: @escaping (Result<Camera.Result, Swift.Error>) -> Void) throws -> some View {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             throw Camera.Error.noCameraAvailable
         }
 
-        return MediaPicker(sourceType: .camera, mediaTypes: mediaTypes) { value in
+        return MediaPicker(sourceType: .camera, mediaTypes: mediaTypes, onSelection: { value in
             switch value {
-            case .tookPhoto(let url), .tookVideo(let url):
-                do {
-                    let mediaURL = try Media.URL<T>(url: url)
-                    completion(.success(mediaURL))
-                } catch {
-                    completion(.failure(error))
-                }
+            case .tookPhoto(let image):
+                completion(.success(.tookPhoto(image: image)))
+            case .tookVideo(let url):
+                completion(.success(.tookVideo(url: url)))
             default:
                 completion(.failure(MediaPicker.Error.unsupportedValue))
             }
-        }
+        }, onFailure: { error in
+            completion(.failure(error))
+        })
     }
 
     static func browser<T: MediaProtocol>(mediaTypes: Set<UIImagePickerController.MediaType>,
@@ -40,14 +39,16 @@ struct ViewCreator {
             throw MediaPicker.Error.noBrowsingSourceTypeAvailable
         }
 
-        return MediaPicker(sourceType: sourceType, mediaTypes: mediaTypes) { value in
+        return MediaPicker(sourceType: sourceType, mediaTypes: mediaTypes, onSelection: { value in
             guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
                 completion(.failure(MediaPicker.Error.unsupportedValue))
                 return
             }
             let media = T.init(phAsset: phAsset)
             completion(.success(media))
-        }
+        }, onFailure: { error in
+            completion(.failure(error))
+        })
     }
 }
 #endif

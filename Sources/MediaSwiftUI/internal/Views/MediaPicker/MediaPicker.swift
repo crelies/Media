@@ -17,6 +17,7 @@ struct MediaPicker: UIViewControllerRepresentable {
     let sourceType: UIImagePickerController.SourceType
     let mediaTypes: Set<UIImagePickerController.MediaType>
     let onSelection: (MediaPickerValue) -> Void
+    let onFailure: (MediaPicker.Error) -> Void
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<MediaPicker>) -> UIImagePickerController {
         let imagePickerViewController = Self.imagePickerControllerType.init()
@@ -44,9 +45,7 @@ struct MediaPicker: UIViewControllerRepresentable {
 @available(iOS 13, macOS 10.15, *)
 struct MediaPicker_Previews: PreviewProvider {
     static var previews: some View {
-        MediaPicker(sourceType: .savedPhotosAlbum, mediaTypes: []) { value in
-
-        }
+        MediaPicker(sourceType: .savedPhotosAlbum, mediaTypes: [], onSelection: { _ in }, onFailure: { _ in })
     }
 }
 #endif
