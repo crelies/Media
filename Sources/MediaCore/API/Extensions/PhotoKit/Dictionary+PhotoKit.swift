@@ -31,6 +31,10 @@ extension Dictionary where Key == UIImagePickerController.InfoKey {
     ///
     public var imageURL: URL? { self[Key.imageURL] as? URL }
 
+    /// Convenience access to the UIImage in the info dictionary
+    ///
+    public var originalImage: UIImage? { self[Key.originalImage] as? UIImage }
+
     /// Convenience access to the PHLivePhoto in the info dictionary
     ///
     public var phLivePhoto: PHLivePhoto? { self[Key.livePhoto] as? PHLivePhoto }

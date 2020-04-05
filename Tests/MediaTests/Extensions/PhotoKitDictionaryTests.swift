@@ -6,6 +6,9 @@
 //
 
 @testable import MediaCore
+#if canImport(UIKit)
+import UIKit
+#endif
 import XCTest
 
 final class PhotoKitDictionaryTests: XCTestCase {
@@ -36,6 +39,16 @@ final class PhotoKitDictionaryTests: XCTestCase {
 
         XCTAssertEqual(dictionary.imageURL, imageURL)
     }
+
+    #if canImport(UIKit)
+    func testOriginalImage() {
+        let image = UIImage()
+
+        dictionary[.originalImage] = image
+
+        XCTAssertEqual(dictionary.originalImage, image)
+    }
+    #endif
 
     func testMediaURL() {
         let mediaURL = URL(fileURLWithPath: "file://test.mov")

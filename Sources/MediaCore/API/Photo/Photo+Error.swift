@@ -13,5 +13,7 @@ extension Photo {
         case couldNotCreateCIImage
         /// Thrown if a full size image URL is missing
         case missingFullSizeImageURL
+        /// Thrown if the camera produced an unsupported result
+        case unsupportedCameraResult
     }
 }

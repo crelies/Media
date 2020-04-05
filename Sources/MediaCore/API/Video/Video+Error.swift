@@ -11,6 +11,8 @@ extension Video {
     public enum Error: Swift.Error {
         /// AVAsset is missing in the response
         case noAVAssetInResponse
+        /// Camera returned unsupported result
+        case unsupportedCameraResult
         /// Thrown if the given export preset is not supported for the current os version
         case unsupportedExportPreset
         /// Thrown if the file type of the output URL is not supported by the export session
