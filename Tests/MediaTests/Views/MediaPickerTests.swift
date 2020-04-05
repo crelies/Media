@@ -18,10 +18,12 @@ final class MediaPickerTests: XCTestCase {
     }
 
     func testInitPhotoLibraryMediaPicker() {
-        let selection: (MediaPickerValue) -> Void = { value in }
+        let selection: (MediaPickerValue) -> Void = { _ in }
+        let onFailure: (MediaPicker.Error) -> Void = { _ in }
         _ = MediaPicker(sourceType: .photoLibrary,
                         mediaTypes: [],
-                        onSelection: selection)
+                        onSelection: selection,
+                        onFailure: onFailure)
     }
 }
 #endif

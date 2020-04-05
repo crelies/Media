@@ -35,6 +35,8 @@ extension MediaPicker {
 
             if let mediaPickerValue = Self.mediaPickerValue(forSourceType: picker.sourceType, mediaType: mediaType, info: info) {
                 mediaPicker.onSelection(mediaPickerValue)
+            } else {
+                mediaPicker.onFailure(.missingValue)
             }
 
             picker.dismiss(animated: true, completion: nil)
@@ -51,11 +53,11 @@ extension MediaPicker.Coordinator {
 
         switch (sourceType, mediaType) {
         case (.camera, .image):
-            guard let imageURL = info.imageURL else {
+            guard let originalImage = info.originalImage else {
                 return nil
             }
 
-            return .tookPhoto(url: imageURL)
+            return .tookPhoto(image: originalImage)
 
         case (.camera, .movie):
             guard let mediaURL = info.mediaURL else {

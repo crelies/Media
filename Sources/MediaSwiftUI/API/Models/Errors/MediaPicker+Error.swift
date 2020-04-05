@@ -11,6 +11,8 @@ extension MediaPicker {
     /// Errors thrown by the `MediaPicker`
     ///
     public enum Error: Swift.Error {
+        /// no value found in `UIImagePickerController` result
+        case missingValue
         /// browsing the photo library is not supported on the current device
         case noBrowsingSourceTypeAvailable
         /// picker value is not supported by the caller

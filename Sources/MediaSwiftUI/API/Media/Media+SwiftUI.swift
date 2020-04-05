@@ -21,13 +21,15 @@ public extension Media {
             throw MediaPicker.Error.noBrowsingSourceTypeAvailable
         }
 
-        return MediaPicker(sourceType: sourceType, mediaTypes: []) { value in
+        return MediaPicker(sourceType: sourceType, mediaTypes: [], onSelection: { value in
             guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
                 completion(.failure(MediaPicker.Error.unsupportedValue))
                 return
             }
             completion(.success(phAsset))
-        }
+        }, onFailure: { error in
+            completion(.failure(error))
+        })
     }
 }
 #endif
