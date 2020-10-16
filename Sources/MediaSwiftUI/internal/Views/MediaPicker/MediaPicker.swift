@@ -36,9 +36,10 @@ struct MediaPicker: UIViewControllerRepresentable {
         Coordinator(mediaPicker: self)
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<MediaPicker>) {
-
-    }
+    func updateUIViewController(
+        _ uiViewController: UIImagePickerController,
+        context: UIViewControllerRepresentableContext<MediaPicker>
+    ) {}
 }
 
 #if DEBUG

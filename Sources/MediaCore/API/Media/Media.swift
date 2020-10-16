@@ -33,9 +33,9 @@ public struct Media {
     /// - Parameter completion: a closure which gets a `Result` (`Void` on `success` and `Error` on `failure`)
     ///
     public static func requestPermission(_ completion: @escaping RequestPermissionCompletion) {
-        photoLibrary.requestAuthorization { authorizationStatus in
+        let handler: (PHAuthorizationStatus) -> Void = { authorizationStatus in
             switch authorizationStatus {
-            case .authorized:
+            case .authorized, .limited:
                 completion(.success(()))
             case .denied:
                 completion(.failure(.denied))
@@ -46,6 +46,12 @@ public struct Media {
             @unknown default:
                 completion(.failure(.unknown))
             }
+        }
+
+        if #available(iOS 14, macOS 11, macCatalyst 14, *) {
+            photoLibrary.requestAuthorization(for: .readWrite, handler: handler)
+        } else {
+            photoLibrary.requestAuthorization(handler)
         }
     }
 }
