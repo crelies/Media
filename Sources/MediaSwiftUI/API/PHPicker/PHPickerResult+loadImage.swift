@@ -21,9 +21,13 @@ extension PHPickerResult {
 
         itemProvider.loadObject(ofClass: UIImage.self) { newImage, error in
             if let error = error {
-                completion(.failure(Error.couldNotLoadObject(underlying: error)))
+                DispatchQueue.main.async {
+                    completion(.failure(Error.couldNotLoadObject(underlying: error)))
+                }
             } else if let newImage = newImage {
-                completion(.success(newImage as! UIImage))
+                DispatchQueue.main.async {
+                    completion(.success(newImage as! UIImage))
+                }
             }
         }
     }
