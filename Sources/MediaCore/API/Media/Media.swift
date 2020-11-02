@@ -48,7 +48,7 @@ public struct Media {
             }
         }
 
-        if #available(iOS 14, macOS 11, macCatalyst 14, *) {
+        if #available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *) {
             photoLibrary.requestAuthorization(for: .readWrite, handler: handler)
         } else {
             photoLibrary.requestAuthorization(handler)

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 14.10.20.
 //
 
+#if !os(tvOS)
 import MediaCore
 import PhotosUI
 import SwiftUI
@@ -58,4 +59,6 @@ struct PHPicker_Previews: PreviewProvider {
         PHPicker(configuration: .init(), { _ in })
     }
 }
+#endif
+
 #endif
