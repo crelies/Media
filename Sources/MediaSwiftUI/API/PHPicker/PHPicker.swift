@@ -5,12 +5,12 @@
 //  Created by Christian Elies on 14.10.20.
 //
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 import MediaCore
 import PhotosUI
 import SwiftUI
 
-@available(iOS 14, macOS 11, macCatalyst 14, *)
+@available(iOS 14, macCatalyst 14, *)
 public struct PHPicker: UIViewControllerRepresentable {
     public final class Coordinator: NSObject, PHPickerViewControllerDelegate {
         private let picker: PHPicker
@@ -53,7 +53,7 @@ public struct PHPicker: UIViewControllerRepresentable {
 }
 
 #if DEBUG
-@available(iOS 14, macOS 11, macCatalyst 14, *)
+@available(iOS 14, macCatalyst 14, *)
 struct PHPicker_Previews: PreviewProvider {
     static var previews: some View {
         PHPicker(configuration: .init(), { _ in })
