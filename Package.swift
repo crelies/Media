@@ -1,15 +1,10 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "Media",
-    platforms: [
-        .iOS("9.1"),
-        .macOS(.v10_15),
-        .tvOS(.v10)
-    ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
@@ -34,3 +29,17 @@ let package = Package(
             dependencies: ["MediaSwiftUI"])
     ]
 )
+
+if #available(iOS 13, tvOS 13, *) {
+    package.platforms = [
+        .iOS(.v13),
+        .macOS(.v10_15),
+        .tvOS(.v13)
+    ]
+} else {
+    package.platforms = [
+        .iOS("9.1"),
+        .macOS(.v10_15),
+        .tvOS(.v10)
+    ]
+}
