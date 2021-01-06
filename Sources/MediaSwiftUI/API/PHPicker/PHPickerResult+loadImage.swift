@@ -12,11 +12,12 @@ import PhotosUI
 extension PHPickerResult {
     public enum Error: Swift.Error {
         case couldNotLoadObject(underlying: Swift.Error)
+        case unknown
     }
 
     public func loadImage(_ completion: @escaping (Result<UIImage, Swift.Error>) -> Void) {
         guard itemProvider.canLoadObject(ofClass: UIImage.self) else {
-            // TODO:
+            completion(.failure(Error.couldNotLoadObject(underlying: Error.unknown)))
             return
         }
 
