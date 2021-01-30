@@ -162,7 +162,6 @@ public extension Photo {
 }
 #endif
 
-#if !os(macOS)
 public extension Photo {
     /// Data representation of the receiver
     ///
@@ -198,7 +197,6 @@ public extension Photo {
         }
     }
 }
-#endif
 
 #if canImport(UIKit)
 public extension Photo {
@@ -248,18 +246,16 @@ public extension Photo {
                                      completion)
     }
 
-    #if canImport(UIKit)
-    /// Saves the given `UIImage` if the access to the photo library is allowed
+    /// Saves the given `UIImage` / `NSImage` if the access to the photo library is allowed
     ///
     /// - Parameters:
     ///   - image: the `UIImage` which should be saved
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
-    static func save(_ image: UIImage, completion: @escaping ResultPhotoCompletion) {
+    static func save(_ image: UniversalImage, completion: @escaping ResultPhotoCompletion) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)
     }
-    #endif
 
     /// Updates the `favorite` state of the receiver
     ///
