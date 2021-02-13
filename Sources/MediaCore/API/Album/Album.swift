@@ -11,8 +11,6 @@ import Photos
 /// Convenience wrapper type around `PHAssetCollection`
 ///
 public struct Album {
-    static var phAsset: PHAsset.Type = PHAsset.self
-
     let phAssetCollectionWrapper: PHAssetCollectionWrapper
 
     var phAssetCollection: PHAssetCollection? { phAssetCollectionWrapper.value }
@@ -58,6 +56,12 @@ public struct Album {
     @FetchAssets
     public var livePhotos: [LivePhoto]
 
+    /// All media (audios, live photos, photos, videos and more?) contained in the receiver
+    /// sorted by `creationDate descending`.
+    ///
+    @FetchAllAssets
+    public var allMedia: [AnyMedia]
+
     init(phAssetCollection: PHAssetCollection) {
         _audios = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
         _photos = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
@@ -67,28 +71,8 @@ public struct Album {
             filter: [.mediaSubtypes([.live])],
             sort: [Media.Sort(key: .creationDate, ascending: false)]
         )
+        _allMedia = FetchAllAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
         phAssetCollectionWrapper = PHAssetCollectionWrapper(phAssetCollection: phAssetCollection)
-    }
-}
-
-public extension Album {
-    /// All media (audios, live photos, photos, videos and more?) contained in the receiver
-    /// sorted by `creationDate descending`
-    ///
-    var allMedia: [AnyMedia] {
-        guard let phAssetCollection = phAssetCollection else { return [] }
-
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = Self.phAsset.fetchAssets(in: phAssetCollection, options: options)
-        var media: [AnyMedia] = []
-        result.enumerateObjects { asset, _, _ in
-            guard let anyMedia = asset.anyMedia else {
-                return
-            }
-            media.append(anyMedia)
-        }
-        return media
     }
 }
 
