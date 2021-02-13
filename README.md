@@ -381,6 +381,8 @@ This section gives you an overview of the currently available functionality. Mos
 
 The `Media` package also includes some generic property wrappers you can use to interact with the photo library.
 
+- `@FetchAllAssets(sort:fetchLimit:includeAllBurstAssets:includeHiddenAssets) var assets: [AnyMedia]`
+
 - `@FetchAssets(filter:sort:fetchLimit:includeAllBurstAssets:includeHiddenAssets) var assets: [ <Audio | LivePhoto | Photo | Video> ]`
 
   *Fetch audios, live photos, photos or videos matching the given filter and sorted by the given sort*

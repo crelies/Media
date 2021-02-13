@@ -13,7 +13,7 @@ final class AlbumTests: XCTestCase {
     lazy var album = Album(phAssetCollection: mockAssetCollection)
 
     override func setUp() {
-        Album.phAsset = MockPHAsset.self
+        FetchAllAssets.phAsset = MockPHAsset.self
         PHAssetFetcher.asset = MockPHAsset.self
         MockPHAsset.fetchResult.mockAssets.removeAll()
         AlbumFetcher.assetCollection = MockPHAssetCollection.self

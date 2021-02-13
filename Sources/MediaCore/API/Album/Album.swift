@@ -11,8 +11,6 @@ import Photos
 /// Convenience wrapper type around `PHAssetCollection`
 ///
 public struct Album {
-    static var phAsset: PHAsset.Type = PHAsset.self
-
     let phAssetCollectionWrapper: PHAssetCollectionWrapper
 
     var phAssetCollection: PHAssetCollection? { phAssetCollectionWrapper.value }
@@ -37,51 +35,44 @@ public struct Album {
     /// All audios contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var audios: [Audio]
 
     /// All photos contained in the receiver (including `LivePhoto`s)
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var photos: [Photo]
 
     /// All videos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var videos: [Video]
 
     /// All live photos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaSubtypes([.live])],
-                 sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var livePhotos: [LivePhoto]
 
-    init(phAssetCollection: PHAssetCollection) {
-        phAssetCollectionWrapper = PHAssetCollectionWrapper(phAssetCollection: phAssetCollection)
-    }
-}
-
-public extension Album {
     /// All media (audios, live photos, photos, videos and more?) contained in the receiver
-    /// sorted by `creationDate descending`
+    /// sorted by `creationDate descending`.
     ///
-    var allMedia: [AnyMedia] {
-        guard let phAssetCollection = phAssetCollection else { return [] }
+    @FetchAllAssets
+    public var allMedia: [AnyMedia]
 
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = Self.phAsset.fetchAssets(in: phAssetCollection, options: options)
-        var media: [AnyMedia] = []
-        result.enumerateObjects { asset, _, _ in
-            guard let anyMedia = asset.anyMedia else {
-                return
-            }
-            media.append(anyMedia)
-        }
-        return media
+    init(phAssetCollection: PHAssetCollection) {
+        _audios = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _photos = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _videos = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _livePhotos = FetchAssets(
+            in: phAssetCollection,
+            filter: [.mediaSubtypes([.live])],
+            sort: [Media.Sort(key: .creationDate, ascending: false)]
+        )
+        _allMedia = FetchAllAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        phAssetCollectionWrapper = PHAssetCollectionWrapper(phAssetCollection: phAssetCollection)
     }
 }
 
