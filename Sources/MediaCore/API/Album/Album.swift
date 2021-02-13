@@ -37,29 +37,36 @@ public struct Album {
     /// All audios contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var audios: [Audio]
 
     /// All photos contained in the receiver (including `LivePhoto`s)
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var photos: [Photo]
 
     /// All videos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var videos: [Video]
 
     /// All live photos contained in the receiver
     /// sorted by `creationDate descending`
     ///
-    @FetchAssets(filter: [.mediaSubtypes([.live])],
-                 sort: [Media.Sort(key: .creationDate, ascending: false)])
+    @FetchAssets
     public var livePhotos: [LivePhoto]
 
     init(phAssetCollection: PHAssetCollection) {
+        _audios = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _photos = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _videos = FetchAssets(in: phAssetCollection, sort: [Media.Sort(key: .creationDate, ascending: false)])
+        _livePhotos = FetchAssets(
+            in: phAssetCollection,
+            filter: [.mediaSubtypes([.live])],
+            sort: [Media.Sort(key: .creationDate, ascending: false)]
+        )
         phAssetCollectionWrapper = PHAssetCollectionWrapper(phAssetCollection: phAssetCollection)
     }
 }
