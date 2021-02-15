@@ -1,6 +1,6 @@
 //
 //  Photo.swift
-//  Media
+//  MediaCore
 //
 //  Created by Christian Elies on 21.11.19.
 //  Copyright © 2019 Christian Elies. All rights reserved.
@@ -175,6 +175,7 @@ public extension Photo {
 
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
+
         if #available(iOS 13, macOS 10.15, tvOS 13, *) {
             Self.imageManager.requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
                 PHImageManager.handleResult(result: (data, info), completion)

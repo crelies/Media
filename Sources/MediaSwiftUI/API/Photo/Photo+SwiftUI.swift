@@ -1,6 +1,6 @@
 //
 //  Photo+SwiftUI.swift
-//  Media
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 02.12.19.
 //
@@ -48,10 +48,12 @@ public extension Photo {
 public extension Photo {
     /// Creates a ready-to-use `SwiftUI` view representation of the receiver
     ///
-    /// - Parameter imageView: a post processing closure which gets the `SwiftUI` `Image` view for further modification, like applying modifiers
+    /// - Parameter targetSize: specifies the desired size of the photo (width and height).
+    /// - Parameter imageView: a post processing closure which gets the `SwiftUI` `Image` view for further modification, like applying modifiers.
     ///
-    func view<ImageView: View>(@ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
-        PhotoView(photo: self, imageView: imageView)
+    /// - Returns: some `View`
+    func view<ImageView: View>(targetSize: CGSize? = nil, @ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
+        PhotoView(photo: self, targetSize: targetSize, imageView: imageView)
     }
 }
 
