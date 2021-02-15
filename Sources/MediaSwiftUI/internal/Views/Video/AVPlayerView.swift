@@ -22,9 +22,7 @@ struct AVPlayerView: UIViewControllerRepresentable {
         return viewController
     }
 
-    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: UIViewControllerRepresentableContext<AVPlayerView>) {
-
-    }
+    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: UIViewControllerRepresentableContext<AVPlayerView>) {}
 
     func pause() {
         wrapper.value?.player?.pause()

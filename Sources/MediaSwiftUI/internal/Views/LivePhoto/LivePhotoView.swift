@@ -10,6 +10,7 @@ import MediaCore
 import Photos
 import SwiftUI
 
+// TODO: refactor
 @available(iOS 13, tvOS 13, *)
 struct LivePhotoView: View {
     @State private var phLivePhoto: PHLivePhoto?

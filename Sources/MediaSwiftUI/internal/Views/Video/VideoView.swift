@@ -15,6 +15,8 @@ import SwiftUI
 struct VideoView: View {
     @State private var state: ViewState<AVPlayerItem> = .loading
 
+    private let player: ReferenceWrapper<AVPlayer> = ReferenceWrapper(value: AVPlayer())
+
     let video: Video
 
     var body: some View {
@@ -22,17 +24,15 @@ struct VideoView: View {
         case .loading:
             UniversalProgressView()
                 .onAppear(perform: fetchPlayerItem)
-        case .loaded(let item):
-            if #available(iOS 15, *) {
-                let player = AVPlayer(playerItem: item)
-
-                VideoPlayer(player: player)
+        case .loaded(let avPlayerItem):
+            if #available(iOS 14, macOS 11, tvOS 14, *) {
+                VideoPlayer(player: player.value)
                     .onDisappear {
-                        player.pause()
+                        player.value.pause()
                         state = .loading
                     }
             } else {
-                let player = AVPlayerView(avPlayerItem: item)
+                let player = AVPlayerView(avPlayerItem: avPlayerItem)
 
                 player
                     .onDisappear {
@@ -61,6 +61,14 @@ private extension VideoView {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let avPlayerItem):
+                        if #available(iOS 14, macOS 11, tvOS 14, *) {
+                            if player.value.currentItem == nil {
+                                player.value = AVPlayer(playerItem: avPlayerItem)
+                            } else {
+                                player.value.pause()
+                                player.value.replaceCurrentItem(with: avPlayerItem)
+                            }
+                        }
                         state = .loaded(value: avPlayerItem)
                     case .failure(let error):
                         state = .failed(error: error)

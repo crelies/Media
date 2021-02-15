@@ -125,6 +125,36 @@ public extension Video {
     typealias ResultAVPlayerItemCompletion = (Result<AVPlayerItem, Swift.Error>) -> Void
     typealias ResultAVAssetCompletion = (Result<AVAsset, Swift.Error>) -> Void
 
+    /// Generates a preview image for the receiving video.
+    /// The process runs on a background thread.
+    ///
+    /// - Parameter requestedTime: The time at which the image of the asset is to be created, defaults to `.init(seconds: 1, preferredTimescale: 60)`.
+    /// - Parameter completion: a closure which gets an `UniversalImage` on `success` and `Error` on `failure`.
+    func previewImage(at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60), _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            avAsset { avAssetResult in
+                switch avAssetResult {
+                case let .success(asset):
+                    let generator = AVAssetImageGenerator(asset: asset)
+                    generator.appliesPreferredTrackTransform = true
+
+                    let copyCGImageResult: Result<UniversalImage, Swift.Error> = Result {
+                        let cgImage = try generator.copyCGImage(at: requestedTime, actualTime: nil)
+                        return UniversalImage(cgImage: cgImage)
+                    }
+
+                    DispatchQueue.main.async {
+                        completion(copyCGImageResult)
+                    }
+                case let .failure(error):
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
+    }
+
     /// Creates a `AVPlayerItem` representation of the receiver
     ///
     /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`

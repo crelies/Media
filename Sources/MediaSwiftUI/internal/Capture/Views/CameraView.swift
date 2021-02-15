@@ -1,6 +1,6 @@
 //
 //  CameraView.swift
-//  
+//  SwiftUI
 //
 //  Created by Christian Elies on 17.01.20.
 //
@@ -11,6 +11,7 @@ import MediaCore
 import SwiftUI
 import UIKit
 
+// TODO: refactor
 @available(iOS 13, *)
 struct CameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
