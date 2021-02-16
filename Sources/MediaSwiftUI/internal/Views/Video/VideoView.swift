@@ -14,8 +14,7 @@ import SwiftUI
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct VideoView: View {
     @State private var state: ViewState<AVPlayerItem> = .loading
-
-    private let player: ReferenceWrapper<AVPlayer> = ReferenceWrapper(value: AVPlayer())
+    @State private var player = AVPlayer()
 
     let video: Video
 
@@ -26,9 +25,9 @@ struct VideoView: View {
                 .onAppear(perform: fetchPlayerItem)
         case .loaded(let avPlayerItem):
             if #available(iOS 14, macOS 11, tvOS 14, *) {
-                VideoPlayer(player: player.value)
+                VideoPlayer(player: player(for: avPlayerItem))
                     .onDisappear {
-                        player.value.pause()
+                        player.pause()
                         state = .loading
                     }
             } else {
@@ -51,6 +50,13 @@ struct VideoView: View {
 
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 private extension VideoView {
+    func player(for item: AVPlayerItem) -> AVPlayer {
+        if player.currentItem == nil || player.currentItem != item {
+            player.replaceCurrentItem(with: item)
+        }
+        return player
+    }
+
     func fetchPlayerItem() {
         guard state == .loading else {
             return
@@ -61,14 +67,6 @@ private extension VideoView {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let avPlayerItem):
-                        if #available(iOS 14, macOS 11, tvOS 14, *) {
-                            if player.value.currentItem == nil {
-                                player.value = AVPlayer(playerItem: avPlayerItem)
-                            } else {
-                                player.value.pause()
-                                player.value.replaceCurrentItem(with: avPlayerItem)
-                            }
-                        }
                         state = .loaded(value: avPlayerItem)
                     case .failure(let error):
                         state = .failed(error: error)
