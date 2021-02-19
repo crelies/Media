@@ -1,6 +1,6 @@
 //
 //  CameraView.swift
-//  SwiftUI
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 17.01.20.
 //
@@ -11,7 +11,6 @@ import MediaCore
 import SwiftUI
 import UIKit
 
-// TODO: refactor
 @available(iOS 13, *)
 struct CameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
@@ -41,116 +40,112 @@ struct CameraView: View {
         GeometryReader { geometry in
             VStack {
                 ZStack(alignment: .bottom) {
-                    if self.stillImageData == nil {
+                    if let stillImageData = stillImageData, let uiImage = UIImage(data: stillImageData) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                    } else {
                         ZStack(alignment: .topLeading) {
-                            Button(action: {
-                                self.isFlashActive.toggle()
-                                self.captureSettings.flashMode = self.isFlashActive ? .on : .off
-                            }) {
-                                Image(systemName: self.isFlashActive ? "bolt.fill" : "bolt.slash.fill")
+                            Button(action: toggleFlashMode) {
+                                Image(systemName: isFlashActive ? "bolt.fill" : "bolt.slash.fill")
                                     .frame(width: 48, height: 48)
-                            }.padding([.leading, .vertical])
+                            }
+                            .padding([.leading, .vertical])
                             .zIndex(1)
 
-                            VideoPreview(captureSession: self.captureSession)
+                            VideoPreview(captureSession: captureSession)
                                 .onAppear {
                                     DispatchQueue.global(qos: .userInitiated).async {
-                                        self.captureSession.startRunning()
+                                        captureSession.startRunning()
                                     }
                                 }
                         }
                     }
 
-                    self.stillImageData.map {
-                        UIImage(data: $0).map {
-                            Image(uiImage: $0)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                        }
-                    }
-
-                    HStack {
-                        ZStack(alignment: .center) {
-                            Button(action: {
-                                self.capture()
-                            }) {
-                                Image(systemName: "arrow.up.circle.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 60, height: 60)
-                            }
-
-                            HStack {
-                                if self.stillImageData == nil {
-                                    Button(action: {
-                                        self.finish()
-                                    }) {
-                                        Text("Cancel")
-                                    }
-                                } else {
-                                    Button(action: {
-                                        self.reset()
-                                    }) {
-                                        Text("Retake")
-                                    }
-                                }
-
-                                Spacer()
-
-                                Button(action: {
-                                    self.useLivePhoto()
-                                }) {
-                                    Text("Use LivePhoto")
-                                }.disabled(!self.isLivePhotoAvailable)
-                            }.padding(.horizontal)
-                        }
-                    }
+                    toolbar()
                     .frame(width: geometry.size.width)
                 }
             }
-            .onDisappear {
-                self.onDisappear()
+            .onDisappear(perform: onDisappear)
+        }
+    }
+}
+
+@available(iOS 13, *)
+private extension CameraView {
+    func toolbar() -> some View {
+        HStack {
+            ZStack(alignment: .center) {
+                Button(action: capture) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 60, height: 60)
+                }
+
+                HStack {
+                    if stillImageData == nil {
+                        Button(action: finish) {
+                            Text("Cancel")
+                        }
+                    } else {
+                        Button(action: reset) {
+                            Text("Retake")
+                        }
+                    }
+
+                    Spacer()
+
+                    Button(action: useLivePhoto) {
+                        Text("Use LivePhoto")
+                    }.disabled(!isLivePhotoAvailable)
+                }.padding(.horizontal)
             }
         }
     }
 }
 
 @available(iOS 13, *)
-extension CameraView {
-    private func onDisappear() {
-        self.reset()
-        self.captureSession.stopRunning()
+private extension CameraView {
+    func onDisappear() {
+        reset()
+        captureSession.stopRunning()
     }
 
-    private func capture() {
+    func toggleFlashMode() {
+        isFlashActive.toggle()
+        captureSettings.flashMode = isFlashActive ? .on : .off
+    }
+
+    func capture() {
         reset()
 
         photograph.shootPhoto(stillImageCompletion: { stillImageResult in
             switch stillImageResult {
             case .success(let data):
-                self.stillImageData = data
+                stillImageData = data
             case .failure:
-                self.stillImageData = nil
+                stillImageData = nil
             }
         }) { livePhotoResult in
             switch livePhotoResult {
             case .success(let data):
-                self.livePhotoData = data
-                self.isLivePhotoAvailable = true
+                livePhotoData = data
+                isLivePhotoAvailable = true
             case .failure:
-                self.livePhotoData = nil
-                self.isLivePhotoAvailable = false
+                livePhotoData = nil
+                isLivePhotoAvailable = false
             }
         }
     }
 
-    private func finish() {
+    func finish() {
         reset()
         dismiss()
     }
 
-    private func useLivePhoto() {
+    func useLivePhoto() {
         if let livePhotoData = livePhotoData {
             completion(.success(livePhotoData))
             finish()
@@ -159,18 +154,18 @@ extension CameraView {
 }
 
 @available(iOS 13, *)
-extension CameraView {
-    private func dismiss() {
+private extension CameraView {
+    func dismiss() {
         DispatchQueue.global(qos: .userInitiated).async {
-            self.captureSession.stopRunning()
+            captureSession.stopRunning()
 
             DispatchQueue.main.async {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }
         }
     }
 
-    private func reset() {
+    func reset() {
         stillImageData = nil
         livePhotoData = nil
         isLivePhotoAvailable = false
