@@ -8,25 +8,45 @@
 import Photos
 
 /// <#Description#>
-public final class LazyAlbum {
-    private var _album: Album?
-
-    /// <#Description#>
+public final class LazyAlbum: Identifiable {
+    /// Description
     public enum Error: Swift.Error {
         ///
         case notFound
     }
 
-    /// <#Description#>
-    public let identifier: Album.Identifier
+    private let albumType: AlbumType?
+    private let assetCollectionProvider: () -> PHAssetCollection
+    private lazy var album: Album? = {
+        let assetCollection = assetCollectionProvider()
+        if let albumType = albumType {
+            guard albumType.subtypes.contains(assetCollection.assetCollectionSubtype) else {
+                return nil
+            }
+        }
+        return Album(phAssetCollection: assetCollection)
+    }()
+
+    public private(set) lazy var id: String = { album?.identifier ?? UUID().uuidString }()
 
     /// <#Description#>
-    public var audios: [LazyAudio] {
-        guard let album = try? album() else {
-            return []
+    public var estimatedAssetCount: Int {
+        guard let estimatedAssetCount = album?.phAssetCollection?.estimatedAssetCount else {
+            return 0
         }
-        guard let assetCollection = album.phAssetCollection else {
-            return []
+        return estimatedAssetCount != NSNotFound ? estimatedAssetCount : 1
+    }
+
+    /// <#Description#>
+    public var localizedTitle: String? { album?.localizedTitle }
+
+    /// <#Description#>
+    public var audios: LazyAudios? {
+        guard Media.isAccessAllowed else {
+            return nil
+        }
+        guard let assetCollection = album?.phAssetCollection else {
+            return nil
         }
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Audio.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -34,17 +54,17 @@ public final class LazyAlbum {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let assets: [Audio] = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? []
-        return assets.compactMap(LazyAudio.init)
+        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        return .init(result: result)
     }
 
     /// <#Description#>
-    public var photos: [LazyPhoto] {
-        guard let album = try? album() else {
-            return []
+    public var photos: Media.LazyPhotos? {
+        guard Media.isAccessAllowed else {
+            return nil
         }
-        guard let assetCollection = album.phAssetCollection else {
-            return []
+        guard let assetCollection = album?.phAssetCollection else {
+            return nil
         }
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -52,17 +72,17 @@ public final class LazyAlbum {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let assets: [Photo] = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? []
-        return assets.compactMap(LazyPhoto.init)
+        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        return .init(result: result)
     }
 
     /// <#Description#>
-    public var videos: [LazyVideo] {
-        guard let album = try? album() else {
-            return []
+    public var videos: LazyVideos? {
+        guard Media.isAccessAllowed else {
+            return nil
         }
-        guard let assetCollection = album.phAssetCollection else {
-            return []
+        guard let assetCollection = album?.phAssetCollection else {
+            return nil
         }
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -70,17 +90,17 @@ public final class LazyAlbum {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let assets: [Video] = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? []
-        return assets.compactMap(LazyVideo.init)
+        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        return .init(result: result)
     }
 
     /// <#Description#>
-    public var livePhotos: [LazyLivePhoto] {
-        guard let album = try? album() else {
-            return []
+    public var livePhotos: LazyLivePhotos? {
+        guard Media.isAccessAllowed else {
+            return nil
         }
-        guard let assetCollection = album.phAssetCollection else {
-            return []
+        guard let assetCollection = album?.phAssetCollection else {
+            return nil
         }
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", LivePhoto.type.rawValue)
         let mediaSubtypeFilter: Media.Filter<LivePhoto.MediaSubtype> = Media.Filter.mediaSubtypes([.live])
@@ -90,36 +110,21 @@ public final class LazyAlbum {
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate] + [mediaSubtypePredicate])
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let assets: [LivePhoto] = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? []
-        return assets.compactMap(LazyLivePhoto.init)
+        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        return .init(result: result)
     }
 
-    init(identifier: Album.Identifier) {
-        self.identifier = identifier
+    init(albumType: AlbumType?, assetCollectionProvider: @autoclosure @escaping () -> PHAssetCollection) {
+        self.albumType = albumType
+        self.assetCollectionProvider = assetCollectionProvider
     }
+}
 
-    init?(album: Album) {
-        guard let localIdentifier = album.identifier else {
-            return nil
-        }
-        self.identifier = .init(localIdentifier: localIdentifier)
-    }
-
+public extension LazyAlbum {
     /// <#Description#>
-    /// 
-    /// - Throws: <#description#>
-    /// - Returns: <#description#>
-    public func album() throws -> Album {
-        if let _album = _album {
-            return _album
-        }
-
-        guard let album = try Album.with(identifier: identifier) else {
-            throw Error.notFound
-        }
-
-        _album = album
-
-        return album
+    ///
+    /// - Parameter completion: <#completion description#>
+    func delete(completion: @escaping ResultVoidCompletion) {
+        album?.delete(completion: completion)
     }
 }
