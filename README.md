@@ -399,6 +399,10 @@ The `Media` package also includes some generic property wrappers you can use to 
 
   *Fetch a single album which matches the given filter*
 
+## Example
+
+Examples for some use cases can be found [here](https://github.com/crelies/Media-Example)
+
 ## Contributions
 
 This a another open source project I created in my free time. Even with a full time job and a family I'm highly motivated to create software for the community. I trust the community in pushing things forward. So feel free to contribute in any way. Fix bugs, add more documentation or add a completely new feature. Just create a pull request if you are finished and I will take a look at it. Be advised that I will give feedback to assure the highest quality possible 🙂
