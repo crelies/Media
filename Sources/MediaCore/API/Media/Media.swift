@@ -42,17 +42,19 @@ public struct Media {
     ///
     public static func requestPermission(_ completion: @escaping RequestPermissionCompletion) {
         let handler: (PHAuthorizationStatus) -> Void = { authorizationStatus in
-            switch authorizationStatus {
-            case .authorized, .limited:
-                completion(.success(()))
-            case .denied:
-                completion(.failure(.denied))
-            case .restricted:
-                completion(.failure(.restricted))
-            case .notDetermined:
-                completion(.failure(.notDetermined))
-            @unknown default:
-                completion(.failure(.unknown))
+            DispatchQueue.main.async {
+                switch authorizationStatus {
+                case .authorized, .limited:
+                    completion(.success(()))
+                case .denied:
+                    completion(.failure(.denied))
+                case .restricted:
+                    completion(.failure(.restricted))
+                case .notDetermined:
+                    completion(.failure(.notDetermined))
+                @unknown default:
+                    completion(.failure(.unknown))
+                }
             }
         }
 
@@ -60,6 +62,21 @@ public struct Media {
             photoLibrary.requestAuthorization(for: .readWrite, handler: handler)
         } else {
             photoLibrary.requestAuthorization(handler)
+        }
+    }
+
+    /// Requests the user's permission to access the camera.
+    ///
+    /// - Parameter completion: A closure which gets a `Result` (`Void` on `success` and `Error` on `failure`).
+    public static func requestCameraPermission(_ completion: @escaping RequestPermissionCompletion) {
+        AVCaptureDevice.requestAccess(for: .video) { success in
+            DispatchQueue.main.async {
+                if success {
+                    completion(.success(()))
+                } else {
+                    completion(.failure(.denied))
+                }
+            }
         }
     }
 }
