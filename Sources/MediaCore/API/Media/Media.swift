@@ -19,13 +19,21 @@ public struct Media {
     /// Indicates that the access to the photo library is granted
     ///
     public static var isAccessAllowed: Bool {
-        Media.currentPermission == .authorized
+        if #available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *) {
+            return Media.currentPermission == .authorized || Media.currentPermission == .limited
+        } else {
+            return Media.currentPermission == .authorized
+        }
     }
 
     /// Returns the current permission to the photo library
     ///
     public static var currentPermission: PHAuthorizationStatus {
-        return photoLibrary.authorizationStatus()
+        if #available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *) {
+            return photoLibrary.authorizationStatus(for: .readWrite)
+        } else {
+            return photoLibrary.authorizationStatus()
+        }
     }
 
     /// Requests the user's permission to the photo library
