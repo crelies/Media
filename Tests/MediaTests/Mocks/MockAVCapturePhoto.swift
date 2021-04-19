@@ -8,6 +8,7 @@
 import AVFoundation
 
 @available(iOS 11, *)
+@available(tvOS, unavailable)
 final class MockAVCapturePhoto: AVCapturePhoto {
     private let id: String
 

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 02.02.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 @testable import MediaCore
 import XCTest
@@ -63,3 +64,4 @@ final class PhotographTests: XCTestCase {
         }
     }
 }
+#endif

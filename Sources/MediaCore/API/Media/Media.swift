@@ -68,6 +68,7 @@ public struct Media {
     /// Requests the user's permission to access the camera.
     ///
     /// - Parameter completion: A closure which gets a `Result` (`Void` on `success` and `Error` on `failure`).
+    @available(tvOS, unavailable)
     public static func requestCameraPermission(_ completion: @escaping RequestPermissionCompletion) {
         AVCaptureDevice.requestAccess(for: .video) { success in
             DispatchQueue.main.async {

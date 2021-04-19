@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 08.02.20.
 //
 
+#if !os(tvOS)
 @testable import MediaCore
 import XCTest
 
@@ -48,6 +49,7 @@ final class PhotoCaptureProcessorTests: XCTestCase {
         XCTAssertFalse(captureProcessorDelegate.didCapturePhotoCalled)
     }
 
+    #if  !targetEnvironment(macCatalyst)
     func testLivePhotoVideoPortionSuccess() {
         capturePhoto.fileDataRepresentationData = Data()
 
@@ -103,4 +105,6 @@ final class PhotoCaptureProcessorTests: XCTestCase {
                                           error: Media.Error.unknown)
         XCTAssertFalse(captureProcessorDelegate.didCaptureLivePhotoCalled)
     }
+    #endif
 }
+#endif

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 08.02.20.
 //
 
+#if !os(tvOS)
 import Foundation
 @testable import MediaCore
 
@@ -26,3 +27,4 @@ final class MockCaptureProcessorDelegate: CaptureProcessorDelegate {
         didCapturePhotoCalled = false
     }
 }
+#endif

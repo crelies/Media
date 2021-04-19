@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 02.02.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 
 @available(iOS 11, *)
@@ -27,3 +28,4 @@ final class MockAVCapturePhotoOutput: AVCapturePhotoOutput {
         }
     }
 }
+#endif
