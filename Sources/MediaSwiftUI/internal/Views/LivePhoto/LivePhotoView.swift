@@ -20,7 +20,7 @@ struct LivePhotoView: View {
     var body: some View {
         switch state {
         case .loading:
-            ActivityIndicatorView()
+            UniversalProgressView()
                 .onAppear(perform: fetchDisplayRepresentation)
         case let .loaded(phLivePhoto):
             PhotosUILivePhotoView(phLivePhoto: phLivePhoto)
