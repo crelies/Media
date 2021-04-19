@@ -8,11 +8,11 @@
 import Photos
 
 extension Media {
-    /// <#Description#>
+    /// Wrapper type for lazily fetching photos.
     public final class LazyPhotos {
         private let result: PHFetchResult<PHAsset>
 
-        /// <#Description#>
+        /// The number of objects in the underlying fetch result.
         public var count: Int { result.count }
 
         init(result: PHFetchResult<PHAsset>) {
@@ -30,7 +30,8 @@ extension Media {
 }
 
 public extension Media.LazyPhotos {
-    /// <#Description#>
+    /// All photos in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var all: Media.LazyPhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -45,7 +46,8 @@ public extension Media.LazyPhotos {
         }
     }()
 
-    /// <#Description#>
+    /// All live photos in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var live: LazyLivePhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", LivePhoto.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<LivePhoto.MediaSubtype>.mediaSubtypes([.live])
@@ -61,7 +63,8 @@ public extension Media.LazyPhotos {
         }
     }()
 
-    /// <#Description#>
+    /// All panorama photos in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var panorama: Media.LazyPhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Photo.MediaSubtype>.mediaSubtypes([.panorama])
@@ -77,7 +80,8 @@ public extension Media.LazyPhotos {
         }
     }()
 
-    /// <#Description#>
+    /// All hdr photos in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var hdr: Media.LazyPhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Photo.MediaSubtype>.mediaSubtypes([.hdr])
@@ -93,7 +97,8 @@ public extension Media.LazyPhotos {
         }
     }()
 
-    /// <#Description#>
+    /// All screenshots in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var screenshot: Media.LazyPhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Photo.MediaSubtype>.mediaSubtypes([.screenshot])
@@ -110,7 +115,8 @@ public extension Media.LazyPhotos {
     }()
 
     @available(iOS 10.2, macOS 10.15, tvOS 10.1, *)
-    /// <#Description#>
+    /// All depth effect photos in the library
+    /// sorted by `creationDate descending`, provided in a lazy container.
     static var depthEffect: Media.LazyPhotos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Photo.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Photo.MediaSubtype>.mediaSubtypes([.depthEffect])

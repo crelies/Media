@@ -7,11 +7,11 @@
 
 import Photos
 
-/// <#Description#>
+/// Wrapper type for lazily fetching live photos.
 public final class LazyLivePhotos {
     private let result: PHFetchResult<PHAsset>
 
-    /// <#Description#>
+    /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }
 
     init(result: PHFetchResult<PHAsset>) {

@@ -5,15 +5,15 @@
 //  Created by Christian Elies on 20.02.21.
 //
 
-/// <#Description#>
+/// Wrapper type for lazily fetching an audio.
 public final class LazyAudio {
-    /// <#Description#>
+    /// Represents the errors thrown by this type.
     public enum Error: Swift.Error {
-        ///
+        /// Thrown if no audio with a given identifier was found.
         case notFound
     }
 
-    /// <#Description#>
+    /// The identifier of the audio.
     public let identifier: Media.Identifier<Audio>
 
     init(identifier: Media.Identifier<Audio>) {
@@ -27,10 +27,10 @@ public final class LazyAudio {
         self.identifier = identifier
     }
 
-    /// <#Description#>
+    /// Fetches the audio with the given identifier if it exists.
     ///
-    /// - Throws: <#description#>
-    /// - Returns: <#description#>
+    /// - Throws: An error if not found.
+    /// - Returns: An `Audio` if found.
     public func audio() throws -> Audio {
         guard let audio = try Audio.with(identifier: identifier) else {
             throw Error.notFound

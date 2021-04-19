@@ -7,12 +7,12 @@
 
 import Photos
 
-/// <#Description#>
+/// Wrapper type for lazily fetching different types of albums.
 public final class LazyAlbums {
     private let albumType: AlbumType?
     private let result: PHFetchResult<PHAssetCollection>
 
-    /// <#Description#>
+    /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }
 
     init(albumType: AlbumType?, result: PHFetchResult<PHAssetCollection>) {
@@ -29,7 +29,8 @@ public final class LazyAlbums {
 }
 
 public extension LazyAlbums {
-    /// <#Description#>
+    /// All albums in the photo library
+    /// sorted by `localizedTitle ascending` provided in a lazy container.
     static var all: LazyAlbums? = {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
@@ -42,7 +43,8 @@ public extension LazyAlbums {
         }
     }()
 
-    /// <#Description#>
+    /// All user albums in the photo library
+    /// sorted by `localizedTitle ascending` provided in a lazy container.
     static var user: LazyAlbums? = {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
@@ -56,7 +58,8 @@ public extension LazyAlbums {
         }
     }()
 
-    /// <#Description#>
+    /// All smart albums in the photo library
+    /// sorted by `localizedTitle ascending` provided in a lazy container.
     static var smart: LazyAlbums? = {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
@@ -70,7 +73,8 @@ public extension LazyAlbums {
         }
     }()
 
-    /// <#Description#>
+    /// All cloud albums in the photo library
+    /// sorted by `localizedTitle ascending` provided in a lazy container.
     static var cloud: LazyAlbums? = {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)

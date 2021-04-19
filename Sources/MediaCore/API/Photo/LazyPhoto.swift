@@ -5,15 +5,15 @@
 //  Created by Christian Elies on 20.02.21.
 //
 
-/// <#Description#>
+/// Wrapper type for lazily fetching an photo.
 public final class LazyPhoto {
-    /// <#Description#>
+    /// Represents the errors thrown by this type.
     public enum Error: Swift.Error {
-        ///
+        /// Thrown if no photo with a given identifier was found.
         case notFound
     }
 
-    /// <#Description#>
+    /// The identifier of the photo.
     public let identifier: Media.Identifier<Photo>
 
     init(identifier: Media.Identifier<Photo>) {
@@ -27,10 +27,10 @@ public final class LazyPhoto {
         self.identifier = identifier
     }
 
-    /// <#Description#>
+    /// Fetches the Photo with the given identifier if it exists.
     ///
-    /// - Throws: <#description#>
-    /// - Returns: <#description#>
+    /// - Throws: An error if not found.
+    /// - Returns: A `Photo` if found.
     public func photo() throws -> Photo {
         guard let photo = try Photo.with(identifier: identifier) else {
             throw Error.notFound

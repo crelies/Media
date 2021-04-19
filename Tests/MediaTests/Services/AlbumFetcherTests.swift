@@ -20,7 +20,7 @@ final class AlbumFetcherTests: XCTestCase {
     func testFetchAlbumsWithNoAlbums() {
         do {
             let options = PHFetchOptions()
-            let albums = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options)
+            let albums: [Album] = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options)
             XCTAssertEqual(albums.count, 0)
         } catch {
             XCTFail(error.localizedDescription)
@@ -31,7 +31,7 @@ final class AlbumFetcherTests: XCTestCase {
         do {
             let options = PHFetchOptions()
             MockPHAssetCollection.fetchResult.mockAssetCollections = [MockPHAssetCollection()]
-            let albums = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options)
+            let albums: [Album] = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options)
             XCTAssertEqual(albums.count, 1)
         } catch {
             XCTFail(error.localizedDescription)
@@ -44,7 +44,7 @@ final class AlbumFetcherTests: XCTestCase {
             assetCollection.assetCollectionSubtypeToReturn = .albumRegular
             MockPHAssetCollection.fetchResult.mockAssetCollections = [assetCollection]
             let options = PHFetchOptions()
-            let albums = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { $0.assetCollectionSubtype == .albumRegular }
+            let albums: [Album] = try AlbumFetcher.fetchAlbums(with: .album, subtype: .any, options: options) { $0.assetCollectionSubtype == .albumRegular }
             XCTAssertFalse(albums.isEmpty)
         } catch {
             XCTFail(error.localizedDescription)

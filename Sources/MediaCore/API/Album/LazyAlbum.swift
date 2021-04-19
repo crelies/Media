@@ -7,14 +7,8 @@
 
 import Photos
 
-/// <#Description#>
+/// Wrapper type for lazily fetching an album.
 public final class LazyAlbum: Identifiable {
-    /// Description
-    public enum Error: Swift.Error {
-        ///
-        case notFound
-    }
-
     private let albumType: AlbumType?
     private let assetCollectionProvider: () -> PHAssetCollection
     private lazy var album: Album? = {
@@ -29,7 +23,7 @@ public final class LazyAlbum: Identifiable {
 
     public private(set) lazy var id: String = { album?.identifier ?? UUID().uuidString }()
 
-    /// <#Description#>
+    /// The estimated number of assets in the underlying asset collection.
     public var estimatedAssetCount: Int {
         guard let estimatedAssetCount = album?.phAssetCollection?.estimatedAssetCount else {
             return 0
@@ -37,10 +31,10 @@ public final class LazyAlbum: Identifiable {
         return estimatedAssetCount != NSNotFound ? estimatedAssetCount : 1
     }
 
-    /// <#Description#>
+    /// The localizedTitle of the underlying `PHAssetCollection`.
     public var localizedTitle: String? { album?.localizedTitle }
 
-    /// <#Description#>
+    /// The audios of the album, provided in a lazy container.
     public var audios: LazyAudios? {
         guard Media.isAccessAllowed else {
             return nil
@@ -58,7 +52,7 @@ public final class LazyAlbum: Identifiable {
         return .init(result: result)
     }
 
-    /// <#Description#>
+    /// The photos of the album, provided in a lazy container.
     public var photos: Media.LazyPhotos? {
         guard Media.isAccessAllowed else {
             return nil
@@ -76,7 +70,7 @@ public final class LazyAlbum: Identifiable {
         return .init(result: result)
     }
 
-    /// <#Description#>
+    /// The videos of the album, provided in a lazy container.
     public var videos: LazyVideos? {
         guard Media.isAccessAllowed else {
             return nil
@@ -94,7 +88,7 @@ public final class LazyAlbum: Identifiable {
         return .init(result: result)
     }
 
-    /// <#Description#>
+    /// The live photos of the album, provided in a lazy container.
     public var livePhotos: LazyLivePhotos? {
         guard Media.isAccessAllowed else {
             return nil
@@ -121,9 +115,9 @@ public final class LazyAlbum: Identifiable {
 }
 
 public extension LazyAlbum {
-    /// <#Description#>
+    /// Deletes the receiver if access to the photo library is allowed.
     ///
-    /// - Parameter completion: <#completion description#>
+    /// - Parameter completion: A closure which gets the Result (`Void` on success and `Error` on failure).
     func delete(completion: @escaping ResultVoidCompletion) {
         album?.delete(completion: completion)
     }

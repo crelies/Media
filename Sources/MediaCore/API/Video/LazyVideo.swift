@@ -5,15 +5,15 @@
 //  Created by Christian Elies on 20.02.21.
 //
 
-/// <#Description#>
+/// Wrapper type for lazily fetching a video.
 public final class LazyVideo {
-    /// <#Description#>
+    /// Represents the errors thrown by this type.
     public enum Error: Swift.Error {
-        ///
+        /// Thrown if a video with a given identifier was not found.
         case notFound
     }
 
-    /// <#Description#>
+    /// The identifier of the video.
     public let identifier: Media.Identifier<Video>
 
     init(identifier: Media.Identifier<Video>) {
@@ -27,10 +27,10 @@ public final class LazyVideo {
         self.identifier = identifier
     }
 
-    /// <#Description#>
+    /// Fetches the Video with the given identifier if it exists.
     ///
-    /// - Throws: <#description#>
-    /// - Returns: <#description#>
+    /// - Throws: An error if not found.
+    /// - Returns: A `Video` if found.
     public func video() throws -> Video {
         guard let video = try Video.with(identifier: identifier) else {
             throw Error.notFound

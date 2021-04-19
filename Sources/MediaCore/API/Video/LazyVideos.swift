@@ -7,11 +7,11 @@
 
 import Photos
 
-/// <#Description#>
+/// Wrapper type for lazily fetching videos.
 public final class LazyVideos {
     private let result: PHFetchResult<PHAsset>
 
-    /// <#Description#>
+    /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }
 
     init(result: PHFetchResult<PHAsset>) {
@@ -28,7 +28,8 @@ public final class LazyVideos {
 }
 
 public extension LazyVideos {
-    /// <#Description#>
+    /// All videos in the library
+    /// sorted by `creationDate descending` provided in a lazy container.
     static var all: LazyVideos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -43,7 +44,8 @@ public extension LazyVideos {
         }
     }()
 
-    /// <#Description#>
+    /// All streams in the library
+    /// sorted by `creationDate descending` provided in a lazy container.
     static var streams: LazyVideos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.streamed])
@@ -59,7 +61,8 @@ public extension LazyVideos {
         }
     }()
 
-    /// <#Description#>
+    /// All high frame rate videos in the library
+    /// sorted by `creationDate descending` provided in a lazy container.
     static var highFrameRates: LazyVideos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.highFrameRate])
@@ -75,7 +78,8 @@ public extension LazyVideos {
         }
     }()
 
-    /// <#Description#>
+    /// All timelapse videos in the library
+    /// sorted by `creationDate descending` provided in a lazy container.
     static var timelapses: LazyVideos? = {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.timelapse])

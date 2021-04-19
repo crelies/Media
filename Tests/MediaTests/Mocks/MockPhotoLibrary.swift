@@ -23,6 +23,11 @@ final class MockPhotoLibrary: PhotoLibrary {
         authorizationStatusToReturn
     }
 
+    @available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)
+    static func authorizationStatus(for accessLevel: PHAccessLevel) -> PHAuthorizationStatus {
+        authorizationStatusToReturn
+    }
+
     static func requestAuthorization(_ handler: @escaping (PHAuthorizationStatus) -> Void) {
         handler(authorizationStatusToReturn)
     }
