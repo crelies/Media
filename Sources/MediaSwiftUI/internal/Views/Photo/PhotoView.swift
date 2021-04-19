@@ -7,6 +7,7 @@
 
 #if canImport(SwiftUI) && canImport(UIKit)
 import MediaCore
+import Photos
 import SwiftUI
 import UIKit
 
@@ -21,6 +22,7 @@ struct PhotoView<ImageView: View>: View {
 
     let photo: Photo
     var targetSize: CGSize?
+    let contentMode: PHImageContentMode
 
     var body: some View {
         switch state {
@@ -40,9 +42,10 @@ struct PhotoView<ImageView: View>: View {
         }
     }
 
-    init(photo: Photo, targetSize: CGSize? = nil, @ViewBuilder imageView: @escaping (Image) -> ImageView) {
+    init(photo: Photo, targetSize: CGSize? = nil, contentMode: PHImageContentMode = .aspectFit, @ViewBuilder imageView: @escaping (Image) -> ImageView) {
         self.photo = photo
         self.targetSize = targetSize
+        self.contentMode = contentMode
         self.imageView = imageView
     }
 }
@@ -55,7 +58,7 @@ private extension PhotoView {
         }
         DispatchQueue.global(qos: .userInitiated).async {
             if let targetSize = targetSize {
-                photo.uiImage(targetSize: targetSize, contentMode: .aspectFit) { result in
+                photo.uiImage(targetSize: targetSize, contentMode: contentMode) { result in
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let representation):
