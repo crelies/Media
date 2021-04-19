@@ -7,11 +7,11 @@
 
 import Photos
 
-/// <#Description#>
+/// Wrapper type for lazily fetching audios.
 public final class LazyAudios {
     private let result: PHFetchResult<PHAsset>
 
-    /// <#Description#>
+    /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }
 
     init(result: PHFetchResult<PHAsset>) {
@@ -28,9 +28,19 @@ public final class LazyAudios {
 }
 
 public extension LazyAudios {
-    /// <#Description#>
+    /// All audios in the photo library
+    /// sorted by `creationDate descending` provided in a lazy container.
     static var all: LazyAudios? = {
-        // TODO:
-        return nil
+        let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Audio.type.rawValue)
+        let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
+        let options = PHFetchOptions()
+        options.predicate = mediaTypePredicate
+        options.sortDescriptors = [defaultSort.sortDescriptor]
+        options.fetchLimit = 0
+        if let result = try? PHAssetFetcher.fetchAssets(options: options) {
+            return .init(result: result)
+        } else {
+            return nil
+        }
     }()
 }
