@@ -30,7 +30,7 @@ public final class LazyAudios {
 public extension LazyAudios {
     /// All audios in the photo library
     /// sorted by `creationDate descending` provided in a lazy container.
-    static var all: LazyAudios? = {
+    static var all: LazyAudios? {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Audio.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
         let options = PHFetchOptions()
@@ -42,5 +42,5 @@ public extension LazyAudios {
         } else {
             return nil
         }
-    }()
+    }
 }

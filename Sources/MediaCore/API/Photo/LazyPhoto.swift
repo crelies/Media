@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 20.02.21.
 //
 
-/// Wrapper type for lazily fetching an photo.
+/// Wrapper type for lazily fetching a photo.
 public final class LazyPhoto {
     /// Represents the errors thrown by this type.
     public enum Error: Swift.Error {

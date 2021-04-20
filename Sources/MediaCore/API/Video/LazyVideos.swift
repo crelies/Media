@@ -30,7 +30,7 @@ public final class LazyVideos {
 public extension LazyVideos {
     /// All videos in the library
     /// sorted by `creationDate descending` provided in a lazy container.
-    static var all: LazyVideos? = {
+    static var all: LazyVideos? {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
         let options = PHFetchOptions()
@@ -42,11 +42,11 @@ public extension LazyVideos {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All streams in the library
     /// sorted by `creationDate descending` provided in a lazy container.
-    static var streams: LazyVideos? = {
+    static var streams: LazyVideos? {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.streamed])
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -59,11 +59,11 @@ public extension LazyVideos {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All high frame rate videos in the library
     /// sorted by `creationDate descending` provided in a lazy container.
-    static var highFrameRates: LazyVideos? = {
+    static var highFrameRates: LazyVideos? {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.highFrameRate])
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -76,11 +76,11 @@ public extension LazyVideos {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All timelapse videos in the library
     /// sorted by `creationDate descending` provided in a lazy container.
-    static var timelapses: LazyVideos? = {
+    static var timelapses: LazyVideos? {
         let mediaTypePredicate: NSPredicate = NSPredicate(format: "mediaType = %d", Video.type.rawValue)
         let mediaSubtypeFilter = Media.Filter<Video.MediaSubtype>.mediaSubtypes([.timelapse])
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
@@ -93,5 +93,5 @@ public extension LazyVideos {
         } else {
             return nil
         }
-    }()
+    }
 }

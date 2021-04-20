@@ -31,7 +31,7 @@ public final class LazyAlbums {
 public extension LazyAlbums {
     /// All albums in the photo library
     /// sorted by `localizedTitle ascending` provided in a lazy container.
-    static var all: LazyAlbums? = {
+    static var all: LazyAlbums? {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
         options.sortDescriptors = [defaultSort.sortDescriptor]
@@ -41,11 +41,11 @@ public extension LazyAlbums {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All user albums in the photo library
     /// sorted by `localizedTitle ascending` provided in a lazy container.
-    static var user: LazyAlbums? = {
+    static var user: LazyAlbums? {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
         options.sortDescriptors = [defaultSort.sortDescriptor]
@@ -56,11 +56,11 @@ public extension LazyAlbums {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All smart albums in the photo library
     /// sorted by `localizedTitle ascending` provided in a lazy container.
-    static var smart: LazyAlbums? = {
+    static var smart: LazyAlbums? {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
         options.sortDescriptors = [defaultSort.sortDescriptor]
@@ -71,11 +71,11 @@ public extension LazyAlbums {
         } else {
             return nil
         }
-    }()
+    }
 
     /// All cloud albums in the photo library
     /// sorted by `localizedTitle ascending` provided in a lazy container.
-    static var cloud: LazyAlbums? = {
+    static var cloud: LazyAlbums? {
         let options = PHFetchOptions()
         let defaultSort: Media.Sort<Album.SortKey> = Media.Sort(key: .localizedTitle, ascending: true)
         options.sortDescriptors = [defaultSort.sortDescriptor]
@@ -86,5 +86,5 @@ public extension LazyAlbums {
         } else {
             return nil
         }
-    }()
+    }
 }
