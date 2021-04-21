@@ -39,11 +39,15 @@ Just add this Swift package as a dependency to your `Package.swift`
 
 This Swift package provides its functionality through wrapper types for many common `PhotoKit` media types:
 
-- Album(s)
+- (Lazy)Album(s)
 - Audio(s)
+  - LazyAudios
 - LivePhoto(s)
+  - LazyLivePhotos
 - (Media.)Photo(s)
+  - Media.LazyPhotos
 - Video(s)
+  - LazyVideos
 
 Many types implement static factory methods to make it easy for the developer to access and manage the photo library.
 
