@@ -30,6 +30,8 @@ public final class LazyAlbum: Identifiable {
         guard let estimatedAssetCount = album?.phAssetCollection?.estimatedAssetCount else {
             return 0
         }
+        // We return 1 as a fallback here to declare that an asset collection is available but the
+        // estimated asset count could not be determined.
         return estimatedAssetCount != NSNotFound ? estimatedAssetCount : 1
     }
 
