@@ -21,7 +21,9 @@ public final class LazyAlbum: Identifiable {
         return Album(phAssetCollection: assetCollection)
     }()
 
-    public private(set) lazy var id: String = { album?.identifier ?? UUID().uuidString }()
+    private let uuid = UUID().uuidString
+
+    public var id: String { uuid }
 
     /// The estimated number of assets in the underlying asset collection.
     public var estimatedAssetCount: Int {
