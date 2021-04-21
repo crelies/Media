@@ -59,6 +59,19 @@ public struct Photo: MediaProtocol {
     }
 }
 
+extension Photo: Equatable {
+    public static func == (lhs: Photo, rhs: Photo) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension Photo: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
+    }
+}
+
 public extension Photo {
     /// Subtypes of the receiver
     /// Similar to tags, like `hdr`, `panorama` or `screenshot`

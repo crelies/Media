@@ -58,6 +58,19 @@ public struct Video: MediaProtocol {
     }
 }
 
+extension Video: Equatable {
+    public static func == (lhs: Video, rhs: Video) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension Video: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
+    }
+}
+
 public extension Video {
     /// Computes the subtypes of the receiver
     /// Similar to tags, like `highFrameRate` or `timelapse`

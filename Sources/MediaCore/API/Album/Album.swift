@@ -76,6 +76,19 @@ public struct Album {
     }
 }
 
+extension Album: Equatable {
+    public static func == (lhs: Album, rhs: Album) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAssetCollection == rhs.phAssetCollection
+    }
+}
+
+extension Album: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAssetCollection)
+    }
+}
+
 public extension Album {
     /// Creates an album with the given title
     ///
