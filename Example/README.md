@@ -6,5 +6,5 @@ This example app shows the simplicity of browsing and manipulating a users photo
 
 ## Example
 
-![Animated examples app image](https://github.com/crelies/Media/Example/blob/dev/example.gif)
+![Animated examples app image](https://github.com/crelies/Media/blob/dev/Example/example.gif)
 
