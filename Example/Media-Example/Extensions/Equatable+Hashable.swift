@@ -56,18 +56,6 @@ extension Media.LazyPhotos: Hashable {
     }
 }
 
-extension LazyPhoto: Equatable {
-    public static func == (lhs: LazyPhoto, rhs: LazyPhoto) -> Bool {
-        lhs.identifier == rhs.identifier
-    }
-}
-
-extension LazyPhoto: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-}
-
 extension Photo: Equatable {
     public static func == (lhs: Photo, rhs: Photo) -> Bool {
         lhs.id == rhs.id
@@ -89,18 +77,6 @@ extension LazyVideos: Equatable {
 extension LazyVideos: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(count)
-    }
-}
-
-extension LazyVideo: Equatable {
-    public static func == (lhs: LazyVideo, rhs: LazyVideo) -> Bool {
-        lhs.identifier == rhs.identifier
-    }
-}
-
-extension LazyVideo: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
     }
 }
 
@@ -128,18 +104,6 @@ extension LazyLivePhotos: Hashable {
     }
 }
 
-extension LazyLivePhoto: Equatable {
-    public static func == (lhs: LazyLivePhoto, rhs: LazyLivePhoto) -> Bool {
-        lhs.identifier == rhs.identifier
-    }
-}
-
-extension LazyLivePhoto: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-}
-
 extension LivePhoto: Equatable {
     public static func == (lhs: LivePhoto, rhs: LivePhoto) -> Bool {
         lhs.id == rhs.id
@@ -161,18 +125,6 @@ extension LazyAudios: Equatable {
 extension LazyAudios: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(count)
-    }
-}
-
-extension LazyAudio: Equatable {
-    public static func == (lhs: LazyAudio, rhs: LazyAudio) -> Bool {
-        lhs.identifier == rhs.identifier
-    }
-}
-
-extension LazyAudio: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
     }
 }
 
