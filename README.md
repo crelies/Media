@@ -62,6 +62,10 @@ This section gives you an overview of the currently available functionality. Mos
 - `Media.requestPermission { result in }`
 
   *Request the users permission to access his photo library*
+  
+- `Media.requestCameraPermission { result in }`
+
+  *Requests the user's permission to access the camera*
 
 - `Media.isAccessAllowed`
 
@@ -299,7 +303,7 @@ This section gives you an overview of the currently available functionality. Mos
 
   *Creates a ready-to-use **SwiftUI** view for browsing photos in the library (UIImagePickerController)*
 
-- **SwiftUI only**: `photo.view { image in image.resizable().aspectRatio(contentMode: .fit) }` (*some View*)
+- **SwiftUI only**: `photo.view(targetSize:contentMode:) { image in image.resizable().aspectRatio(contentMode: .fit) }` (*some View*)
 
   *Get a ready-to-use **SwiftUI** view for displaying the photo in your UI*
 
@@ -342,6 +346,10 @@ This section gives you an overview of the currently available functionality. Mos
 - `video.avAsset(deliveryMode:) { result in }`
 
   *Fetch an AVAsset representation of the video*
+  
+- `video.previewImage(at:) { result in }`
+
+  *Generates a preview image for the receiving video*
 
 - `video.export(options, progress: { progress in }) { result in }`
 
