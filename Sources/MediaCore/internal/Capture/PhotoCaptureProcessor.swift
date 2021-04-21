@@ -37,6 +37,7 @@ final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
     /*
        Image portion
     */
+    @available(iOS, deprecated: 11, message: "'jpegPhotoDataRepresentation(forJPEGSampleBuffer:previewPhotoSampleBuffer:)' was deprecated in iOS 11.0")
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?,
                      previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?,
