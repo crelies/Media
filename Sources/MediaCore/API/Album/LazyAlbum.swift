@@ -101,7 +101,7 @@ public final class LazyAlbum: Identifiable {
         let mediaSubtypePredicate = mediaSubtypeFilter.predicate
         let defaultSort: Media.Sort<Media.SortKey> = Media.Sort(key: .creationDate, ascending: false)
         let options = PHFetchOptions()
-        options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate] + [mediaSubtypePredicate])
+        options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, mediaSubtypePredicate])
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
         let result = PHAsset.fetchAssets(in: assetCollection, options: options)
