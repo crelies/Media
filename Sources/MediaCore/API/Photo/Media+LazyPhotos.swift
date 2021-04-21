@@ -1,5 +1,5 @@
 //
-//  LazyPhotos.swift
+//  Media+LazyPhotos.swift
 //  MediaCore
 //
 //  Created by Christian Elies on 21.02.21.
