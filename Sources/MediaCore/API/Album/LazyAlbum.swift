@@ -40,9 +40,6 @@ public final class LazyAlbum: Identifiable {
 
     /// The audios of the album, provided in a lazy container.
     public var audios: LazyAudios? {
-        guard Media.isAccessAllowed else {
-            return nil
-        }
         guard let assetCollection = album?.phAssetCollection else {
             return nil
         }
@@ -58,9 +55,6 @@ public final class LazyAlbum: Identifiable {
 
     /// The photos of the album, provided in a lazy container.
     public var photos: Media.LazyPhotos? {
-        guard Media.isAccessAllowed else {
-            return nil
-        }
         guard let assetCollection = album?.phAssetCollection else {
             return nil
         }
@@ -76,9 +70,6 @@ public final class LazyAlbum: Identifiable {
 
     /// The videos of the album, provided in a lazy container.
     public var videos: LazyVideos? {
-        guard Media.isAccessAllowed else {
-            return nil
-        }
         guard let assetCollection = album?.phAssetCollection else {
             return nil
         }
@@ -94,9 +85,6 @@ public final class LazyAlbum: Identifiable {
 
     /// The live photos of the album, provided in a lazy container.
     public var livePhotos: LazyLivePhotos? {
-        guard Media.isAccessAllowed else {
-            return nil
-        }
         guard let assetCollection = album?.phAssetCollection else {
             return nil
         }
