@@ -52,7 +52,7 @@ public final class LazyAlbum: Identifiable {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        let result = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? .init()
         return .init(result: result)
     }
 
@@ -70,7 +70,7 @@ public final class LazyAlbum: Identifiable {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        let result = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? .init()
         return .init(result: result)
     }
 
@@ -88,7 +88,7 @@ public final class LazyAlbum: Identifiable {
         options.predicate = mediaTypePredicate
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        let result = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? .init()
         return .init(result: result)
     }
 
@@ -108,7 +108,7 @@ public final class LazyAlbum: Identifiable {
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [mediaTypePredicate, mediaSubtypePredicate])
         options.sortDescriptors = [defaultSort.sortDescriptor]
         options.fetchLimit = 0
-        let result = PHAsset.fetchAssets(in: assetCollection, options: options)
+        let result = (try? PHAssetFetcher.fetchAssets(in: assetCollection, options: options)) ?? .init()
         return .init(result: result)
     }
 
