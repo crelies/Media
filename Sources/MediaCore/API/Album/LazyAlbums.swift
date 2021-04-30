@@ -8,9 +8,13 @@
 import Photos
 
 /// Wrapper type for lazily fetching different types of albums.
-public final class LazyAlbums {
+public final class LazyAlbums: Identifiable {
     private let albumType: AlbumType?
     private let result: PHFetchResult<PHAssetCollection>
+
+    private let uuid = UUID().uuidString
+
+    public var id: String { uuid }
 
     /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }

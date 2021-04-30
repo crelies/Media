@@ -8,8 +8,12 @@
 import Photos
 
 /// Wrapper type for lazily fetching live photos.
-public final class LazyLivePhotos {
+public final class LazyLivePhotos: Identifiable {
     private let result: PHFetchResult<PHAsset>
+
+    private let uuid = UUID().uuidString
+
+    public var id: String { uuid }
 
     /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }

@@ -8,8 +8,12 @@
 import Photos
 
 /// Wrapper type for lazily fetching videos.
-public final class LazyVideos {
+public final class LazyVideos: Identifiable {
     private let result: PHFetchResult<PHAsset>
+
+    private let uuid = UUID().uuidString
+
+    public var id: String { uuid }
 
     /// The number of objects in the underlying fetch result.
     public var count: Int { result.count }

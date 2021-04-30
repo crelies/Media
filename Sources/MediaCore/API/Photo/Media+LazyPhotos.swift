@@ -9,8 +9,12 @@ import Photos
 
 extension Media {
     /// Wrapper type for lazily fetching photos.
-    public final class LazyPhotos {
+    public final class LazyPhotos: Identifiable {
         private let result: PHFetchResult<PHAsset>
+
+        private let uuid = UUID().uuidString
+
+        public var id: String { uuid }
 
         /// The number of objects in the underlying fetch result.
         public var count: Int { result.count }
