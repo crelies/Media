@@ -47,7 +47,7 @@ struct LazyTree<N: Node>: View {
             ExpandableView(title: {
                 node.view
             }) {
-                ForEach(childs, id: \.self) { child in
+                ForEach(childs) { child in
                     LazyTree(node: child, children: \.children)
                 }
                 .padding(.leading)

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-protocol Node: Hashable, Identifiable {
+protocol Node: Identifiable {
     associatedtype V: View
     var children: [Self]? { get }
     var view: V { get }
