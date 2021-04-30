@@ -119,7 +119,11 @@ extension Item: Node {
             LazyView(data: { livePhotos[index] }) { livePhoto in
                 if let livePhoto = livePhotos[index] {
                     NavigationLink(destination: LivePhotoView(livePhoto: livePhoto)) {
-                        Text(livePhoto.identifier?.localIdentifier ?? "")
+                        if let creationDate = livePhoto.metadata?.creationDate {
+                            Text(creationDate, style: .date)
+                        } else {
+                            Text(livePhoto.identifier?.localIdentifier ?? "")
+                        }
                     }
                 }
             }
@@ -131,7 +135,11 @@ extension Item: Node {
             LazyView(data: { photos[index] }) { photo in
                 if let photo = photos[index] {
                     NavigationLink(destination: PhotoView(photo: photo)) {
-                        Text(photo.identifier?.localIdentifier ?? "")
+                        if let creationDate = photo.metadata?.creationDate {
+                            Text(creationDate, style: .date)
+                        } else {
+                            Text(photo.identifier?.localIdentifier ?? "")
+                        }
                     }
                 }
             }
@@ -143,7 +151,11 @@ extension Item: Node {
             LazyView(data: { videos[index] }) { video in
                 if let video = videos[index] {
                     NavigationLink(destination: VideoView(video: video)) {
-                        Text(video.identifier?.localIdentifier ?? "")
+                        if let creationDate = video.metadata?.creationDate {
+                            Text(creationDate, style: .date)
+                        } else {
+                            Text(video.identifier?.localIdentifier ?? "")
+                        }
                     }
                 }
             }
