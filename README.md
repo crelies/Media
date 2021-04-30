@@ -89,6 +89,8 @@ This section gives you an overview of the currently available functionality. Mos
 
 ### Albums
 
+Use the `LazyAlbums` wrapper if you want to fetch albums only on demand (request an album through the provided `subscript` on the `LazyAlbums` type).
+
 - `Albums.all`
 
   *Fetch all albums in the photo library*
@@ -163,6 +165,8 @@ This section gives you an overview of the currently available functionality. Mos
 
 ### Audios
 
+Use the `LazyAudios` wrapper if you want to fetch audios only on demand (request an audio through the provided `subscript` on the `LazyAudios` type).
+
 - `Audios.all`
 
   *Get all audios in the photo library*
@@ -188,6 +192,8 @@ This section gives you an overview of the currently available functionality. Mos
   *Creates a ready-to-use camera **SwiftUI** view (UIImagePickerController) for capturing photos and videos*
 
 ### LivePhotos
+
+Use the `LazyLivePhotos` wrapper if you want to fetch live photos only on demand (request a live photo through the provided `subscript` on the `LazyLivePhotos` type).
 
 - `LivePhotos.all`
 
@@ -234,6 +240,8 @@ This section gives you an overview of the currently available functionality. Mos
   *Get a ready-to-use **SwiftUI** view for displaying the receiving live photo in your UI*
 
 ### Photos
+
+Use the `Media.LazyPhotos` wrapper if you want to fetch photos only on demand (request a photo through the provided `subscript` on the `Media.LazyPhotos` type).
 
 - `Media.Photos.all (includes livePhotos)`
 
@@ -316,6 +324,8 @@ This section gives you an overview of the currently available functionality. Mos
   *Get a ready-to-use **SwiftUI** view for displaying the photo in your UI*
 
 ### Videos
+
+Use the `LazyVideos` wrapper if you want to fetch videos only on demand (request a video through the provided `subscript` on the `LazyVideos` type).
 
 - `Videos.all`
 
