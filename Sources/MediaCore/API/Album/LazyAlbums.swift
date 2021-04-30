@@ -17,6 +17,7 @@ public final class LazyAlbums: Identifiable {
     public var id: String { uuid }
 
     /// The number of objects in the underlying fetch result.
+    /// **Warning: Albums are filtered lazily by subtype on first access so this count may be incorrect.**
     public var count: Int { result.count }
 
     init(albumType: AlbumType?, result: PHFetchResult<PHAssetCollection>) {
