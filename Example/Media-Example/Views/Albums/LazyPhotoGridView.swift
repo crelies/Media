@@ -1,5 +1,5 @@
 //
-//  PhotoGridView.swift
+//  LazyPhotoGridView.swift
 //  Media-Example
 //
 //  Created by Christian Elies on 14.02.21.
@@ -9,7 +9,7 @@
 import MediaCore
 import SwiftUI
 
-struct PhotoGridView: View {
+struct LazyPhotoGridView: View {
     let photos: Media.LazyPhotos
 
     var body: some View {

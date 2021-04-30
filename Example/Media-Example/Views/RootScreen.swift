@@ -82,20 +82,18 @@ struct RootScreen: View {
                     }
 
                     Section {
-                        // TODO:
-//                        NavigationLink(destination: VideosView(videos: videos)) {
-//                            Text("@FetchAssets videos")
-//                        }
+                        NavigationLink(destination: VideosView(videos: videos)) {
+                            Text("@FetchAssets videos")
+                        }
 
-                        // TODO:
-//                        NavigationLink(destination: AlbumsView(albums: albums)) {
-//                            Text("@FetchAlbums smart")
-//                        }
+                        NavigationLink(destination: AlbumsView(albums: albums)) {
+                            Text("@FetchAlbums smart")
+                        }
                     }
 
                     Section {
                         if let userAlbums = userAlbums {
-                            NavigationLink(destination: AlbumsView(albums: userAlbums)) {
+                            NavigationLink(destination: LazyAlbumsView(albums: userAlbums)) {
                                 Text("User albums (\(userAlbums.count))")
                             }
 
@@ -108,13 +106,13 @@ struct RootScreen: View {
                         }
 
                         if let cloudAlbums = cloudAlbums {
-                            NavigationLink(destination: AlbumsView(albums: cloudAlbums)) {
+                            NavigationLink(destination: LazyAlbumsView(albums: cloudAlbums)) {
                                 Text("Cloud albums (\(cloudAlbums.count))")
                             }
                         }
 
                         if let smartAlbums = smartAlbums {
-                            NavigationLink(destination: AlbumsView(albums: smartAlbums)) {
+                            NavigationLink(destination: LazyAlbumsView(albums: smartAlbums)) {
                                 Text("Smart albums (\(smartAlbums.count))")
                             }
                         }
@@ -122,7 +120,7 @@ struct RootScreen: View {
 
                     if let audios = LazyAudios.all {
                         Section {
-                            NavigationLink(destination: AudiosView(audios: audios)) {
+                            NavigationLink(destination: LazyAudiosView(audios: audios)) {
                                 Text("Audios.all (\(audios.count))")
                             }
                         }

@@ -1,25 +1,25 @@
 //
-//  AlbumView.swift
+//  LazyAlbumView.swift
 //  Media-Example
 //
-//  Created by Christian Elies on 01.05.21.
-//  Copyright © 2021 Christian Elies. All rights reserved.
+//  Created by Christian Elies on 23.11.19.
+//  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
 import MediaCore
 import SwiftUI
 
-struct AlbumView: View {
-    let album: Album
+struct LazyAlbumView: View {
+    let album: LazyAlbum
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("\(album.allMedia.count) media items").font(.footnote).padding(.vertical)
+            Text("\(album.estimatedAssetCount) estimated media items").font(.footnote).padding(.vertical)
 
             List {
                 if let audios = album.audios, audios.count > 0 {
                     Section {
-                        NavigationLink(destination: AudiosView(audios: audios)) {
+                        NavigationLink(destination: LazyAudiosView(audios: audios)) {
                             Text("Audios (\(audios.count))")
                         }
                     }
@@ -27,7 +27,7 @@ struct AlbumView: View {
 
                 if let livePhotos = album.livePhotos, livePhotos.count > 0 {
                     Section {
-                        NavigationLink(destination: LivePhotosView(livePhotos: livePhotos)) {
+                        NavigationLink(destination: LazyLivePhotosView(livePhotos: livePhotos)) {
                             Text("Live Photos (\(livePhotos.count))")
                         }
                     }
@@ -35,15 +35,21 @@ struct AlbumView: View {
 
                 if let photos = album.photos, photos.count > 0 {
                     Section {
-                        NavigationLink(destination: PhotosView(photos: photos)) {
+                        NavigationLink(destination: LazyPhotosView(photos: photos)) {
                             Text("Photos (\(photos.count))")
+                        }
+                    }
+
+                    Section {
+                        NavigationLink(destination: LazyPhotoGridView(photos: photos)) {
+                            Text("Photo GridView")
                         }
                     }
                 }
 
                 if let videos = album.videos, videos.count > 0 {
                     Section {
-                        NavigationLink(destination: VideosView(videos: videos)) {
+                        NavigationLink(destination: LazyVideosView(videos: videos)) {
                             Text("Videos (\(videos.count))")
                         }
                     }

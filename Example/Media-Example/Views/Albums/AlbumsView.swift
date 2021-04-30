@@ -2,29 +2,19 @@
 //  AlbumsView.swift
 //  Media-Example
 //
-//  Created by Christian Elies on 23.11.19.
-//  Copyright © 2019 Christian Elies. All rights reserved.
+//  Created by Christian Elies on 01.05.21.
+//  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
 import MediaCore
 import SwiftUI
 
-extension IndexSet: Identifiable {
-    public var id: Self { self }
-}
-
-enum ViewState<T: Hashable> {
-    case loading
-    case loaded(value: T)
-    case failed(error: Swift.Error)
-}
-
 struct AlbumsView: View {
-    @State private var viewState: ViewState<LazyAlbums> = .loading
+    @State private var viewState: ViewState<[Album]> = .loading
     @State private var isAddViewVisible = false
     @State private var indexSetToDelete: IndexSet?
 
-    let albums: LazyAlbums
+    let albums: [Album]
 
     var body: some View {
         switch viewState {
@@ -35,22 +25,24 @@ struct AlbumsView: View {
             ScrollView {
                 LazyVStack(alignment: .leading) {
                     ForEach(0..<albums.count, id: \.self) { index in
-                        if let album = albums[index], album.estimatedAssetCount > 0 {
-                            NavigationLink(destination: AlbumView(album: album)) {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text("\(album.localizedTitle ?? album.id)")
-                                        Text("(estimated assets: \(album.estimatedAssetCount))").font(.footnote)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
+                        let album = albums[index]
+                        NavigationLink(destination: AlbumView(album: album)) {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("\(album.localizedTitle ?? album.id)")
+                                    Text("(asset count: \(album.allMedia.count))").font(.footnote)
                                 }
+                                Spacer()
+                                Image(systemName: "chevron.right")
                             }
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(16)
                         }
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(16)
+                    }
+                    .onDelete { indexSet in
+                        indexSetToDelete = indexSet
                     }
                 }
                 .padding()
@@ -73,10 +65,6 @@ struct AlbumsView: View {
         case let .failed(error):
             Text(error.localizedDescription)
         }
-        // TODO: onDelete
-//            .onDelete { indexSet in
-//                indexSetToDelete = indexSet
-//            }
     }
 }
 
@@ -86,15 +74,13 @@ private extension AlbumsView {
     }
 
     func deleteConfirmationAlert(indexSetToDelete: IndexSet) -> Alert {
-        var albumsToDelete: [LazyAlbum] = []
+        var albumsToDelete: [Album] = []
         for index in indexSetToDelete {
             guard index >= 0, index < albums.count else {
                 continue
             }
 
-            guard let album = albums[index] else {
-                continue
-            }
+            let album = albums[index]
             albumsToDelete.append(album)
         }
 
@@ -118,7 +104,7 @@ private extension AlbumsView {
 #if DEBUG
 struct AlbumsView_Previews: PreviewProvider {
     static var previews: some View {
-        AlbumsView(albums: LazyAlbums.cloud!)
+        AlbumsView(albums: Albums.cloud)
     }
 }
 #endif

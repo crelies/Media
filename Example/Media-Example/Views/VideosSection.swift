@@ -13,25 +13,25 @@ struct VideosSection: View {
     var body: some View {
         Section {
             if let allVideos = LazyVideos.all {
-                NavigationLink(destination: VideosView(videos: allVideos)) {
+                NavigationLink(destination: LazyVideosView(videos: allVideos)) {
                     Text("Videos.all (\(allVideos.count))")
                 }
             }
 
             if let highFrameRatesVideos = LazyVideos.highFrameRates {
-                NavigationLink(destination: VideosView(videos: highFrameRatesVideos)) {
+                NavigationLink(destination: LazyVideosView(videos: highFrameRatesVideos)) {
                     Text("Videos.highFrameRates (\(highFrameRatesVideos.count))")
                 }
             }
 
             if let streamsVideos = LazyVideos.streams {
-                NavigationLink(destination: VideosView(videos: streamsVideos)) {
+                NavigationLink(destination: LazyVideosView(videos: streamsVideos)) {
                     Text("Videos.streams (\(streamsVideos.count))")
                 }
             }
 
             if let timelapsesVideos = LazyVideos.timelapses {
-                NavigationLink(destination: VideosView(videos: timelapsesVideos)) {
+                NavigationLink(destination: LazyVideosView(videos: timelapsesVideos)) {
                     Text("Videos.timelapses (\(timelapsesVideos.count))")
                 }
             }
