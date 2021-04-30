@@ -17,9 +17,12 @@ struct RootScreen: View {
         case failed(_ error: NSError)
     }
 
-    @State private var userAlbums: LazyAlbums?
-    @State private var cloudAlbums: LazyAlbums?
-    @State private var smartAlbums: LazyAlbums?
+    @State private var lazyUserAlbums: LazyAlbums?
+    @State private var userAlbums: [Album] = []
+    @State private var lazyCloudAlbums: LazyAlbums?
+    @State private var cloudAlbums: [Album] = []
+    @State private var lazySmartAlbums: LazyAlbums?
+    @State private var smartAlbums: [Album] = []
 
     @State private var permissionState: PermissionState = .loading
     @State private var isLimitedLibraryPickerPresented = false
@@ -40,10 +43,7 @@ struct RootScreen: View {
                             requestPermission()
                         } else {
                             permissionState = .granted
-
-                            userAlbums = LazyAlbums.user
-                            cloudAlbums = LazyAlbums.cloud
-                            smartAlbums = LazyAlbums.smart
+                            fetchAlbums()
                         }
                     }
             case .granted:
@@ -92,36 +92,48 @@ struct RootScreen: View {
                     }
 
                     Section {
-                        if let userAlbums = userAlbums {
-                            NavigationLink(destination: LazyAlbumsView(albums: userAlbums)) {
-                                Text("User albums (\(userAlbums.count))")
-                            }
-
+                        if let userAlbums = lazyUserAlbums {
                             let item = Item.albums(albums: userAlbums)
                             NavigationLink(destination: ScrollView {
                                 LazyTree(node: item, children: \.children)
                             }) {
-                                Text("Lazy Tree")
+                                Text("Lazy Tree (with user albums)")
+                            }
+
+                            NavigationLink(destination: LazyAlbumsView(albums: userAlbums)) {
+                                Text("Lazy User albums (\(userAlbums.count))")
                             }
                         }
 
-                        if let cloudAlbums = cloudAlbums {
-                            NavigationLink(destination: LazyAlbumsView(albums: cloudAlbums)) {
-                                Text("Cloud albums (\(cloudAlbums.count))")
+                        NavigationLink(destination: AlbumsView(albums: userAlbums)) {
+                            Text("User albums (\(userAlbums.count))")
+                        }
+
+                        if let lazyCloudAlbums = lazyCloudAlbums {
+                            NavigationLink(destination: LazyAlbumsView(albums: lazyCloudAlbums)) {
+                                Text("Lazy Cloud albums (\(lazyCloudAlbums.count))")
                             }
                         }
 
-                        if let smartAlbums = smartAlbums {
+                        NavigationLink(destination: AlbumsView(albums: cloudAlbums)) {
+                            Text("Cloud albums (\(cloudAlbums.count))")
+                        }
+
+                        if let smartAlbums = lazySmartAlbums {
                             NavigationLink(destination: LazyAlbumsView(albums: smartAlbums)) {
-                                Text("Smart albums (\(smartAlbums.count))")
+                                Text("Lazy Smart albums (\(smartAlbums.count))")
                             }
+                        }
+
+                        NavigationLink(destination: AlbumsView(albums: smartAlbums)) {
+                            Text("Smart albums (\(smartAlbums.count))")
                         }
                     }
 
                     if let audios = LazyAudios.all {
                         Section {
                             NavigationLink(destination: LazyAudiosView(audios: audios)) {
-                                Text("Audios.all (\(audios.count))")
+                                Text("LazyAudios.all (\(audios.count))")
                             }
                         }
                     }
@@ -155,14 +167,20 @@ private extension RootScreen {
             switch result {
             case .success:
                 permissionState = .granted
-
-                userAlbums = LazyAlbums.user
-                cloudAlbums = LazyAlbums.cloud
-                smartAlbums = LazyAlbums.smart
+                fetchAlbums()
             case .failure(let error):
                 permissionState = .failed(error as NSError)
             }
         }
+    }
+
+    func fetchAlbums() {
+        lazyUserAlbums = LazyAlbums.user
+        userAlbums = Albums.user
+        lazyCloudAlbums = LazyAlbums.cloud
+        cloudAlbums = Albums.cloud
+        lazySmartAlbums = LazyAlbums.smart
+        smartAlbums = Albums.smart
     }
 }
 
