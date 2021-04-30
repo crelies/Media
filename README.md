@@ -57,6 +57,10 @@ The core functionality is available through `import MediaCore`. If you want to u
 
 That's all you need to know. Now let's take a look at the **API**.
 
+## 🕹️ Examples
+
+Check out the example project in the `Example` directory to explore the power of this Swift package.
+
 ## 🧭 API
 
 This section gives you an overview of the currently available functionality. Most of the following should be self-explanatory. Nevertheless every public type, function and property is documented. *If the Xcode autocompletion works* you should get the information you need when using the *APIs* provided by this Swift package 🚀.
