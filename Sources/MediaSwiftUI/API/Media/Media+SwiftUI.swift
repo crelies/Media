@@ -16,7 +16,7 @@ public extension Media {
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
-    /// - Parameter selectionLimit: Specifies the number of items which can be selected.
+    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood.
     /// - Parameter completion: A closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`.
     ///
     /// - Returns: some View
@@ -27,7 +27,7 @@ public extension Media {
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
-    /// - Parameter selectionLimit: Specifies the number of items which can be selected.
+    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter completion: A closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`.
     ///
