@@ -26,7 +26,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isLivePhotoBrowserViewVisible, onDismiss: {
                 isLivePhotoBrowserViewVisible = false
             }) {
-                LivePhoto.browser { _ in }
+                LivePhoto.browser(selectionLimit: 0) { _ in }
             }
 
             Button(action: {
@@ -37,7 +37,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
                 isMediaBrowserViewVisible = false
             }) {
-                Media.browser { _ in }
+                Media.browser(selectionLimit: 0) { _ in }
             }
 
             Button(action: {
@@ -48,7 +48,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isPhotoBrowserViewVisible, onDismiss: {
                 isPhotoBrowserViewVisible = false
             }) {
-                Photo.browser { _ in }
+                Photo.browser(selectionLimit: 0) { _ in }
             }
 
             Button(action: {
@@ -59,7 +59,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isVideoBrowserViewVisible, onDismiss: {
                 isVideoBrowserViewVisible = false
             }) {
-                Video.browser { _ in }
+                Video.browser(selectionLimit: 0) { _ in }
             }
         }
     }
