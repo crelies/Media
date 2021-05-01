@@ -21,7 +21,7 @@ public extension Media {
     ///
     /// - Returns: some View
     static func browser(selectionLimit: Int = 1, _ completion: @escaping ResultPHAssetsCompletion) -> some View {
-        browser(errorView: { error in Text(error.localizedDescription) }, completion)
+        browser(selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
