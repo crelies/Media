@@ -83,7 +83,7 @@ This section gives you an overview of the currently available functionality. Mos
 
   *Get the current permission*
 
-- **SwiftUI only**: `Media.browser { result in }` (*some View*)
+- **SwiftUI only**: `Media.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use media browser **SwiftUI** view (UIImagePickerController) for photos and videos*
 
@@ -231,7 +231,7 @@ Use the `LazyLivePhotos` wrapper if you want to fetch live photos only on demand
 
   *Creates a ready-to-use **SwiftUI** camera view for capturing live photos (this is not a UIImagePickerController)*
 
-- **SwiftUI only**: `LivePhoto.browser { result in }` (*some View*)
+- **SwiftUI only**: `LivePhoto.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing live photos in the library (UIImagePickerController)*
 
@@ -315,7 +315,7 @@ Use the `Media.LazyPhotos` wrapper if you want to fetch photos only on demand (r
 
   *Creates a ready-to-use camera **SwiftUI** view for capturing photos (UIImagePickerController)*
 
-- **SwiftUI only**: `Photo.browser { result in }` (*some View*)
+- **SwiftUI only**: `Photo.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing photos in the library (UIImagePickerController)*
 
@@ -395,7 +395,7 @@ Use the `LazyVideos` wrapper if you want to fetch videos only on demand (request
 
   *Creates a ready-to-use video camera **SwiftUI** view for capturing videos (UIImagePickerController)*
 
-- **SwiftUI only**: `Video.browser { result in }` (*some View*)
+- **SwiftUI only**: `Video.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing videos in the library*
 
