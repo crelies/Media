@@ -57,6 +57,19 @@ public struct LivePhoto: MediaProtocol {
     }
 }
 
+extension LivePhoto: Equatable {
+    public static func == (lhs: LivePhoto, rhs: LivePhoto) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension LivePhoto: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
+    }
+}
+
 #if !os(macOS) && !targetEnvironment(macCatalyst)
 public extension LivePhoto {
     /// Fetches a display representation of the receiver

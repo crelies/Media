@@ -1,6 +1,6 @@
 //
 //  Photo.swift
-//  Media
+//  MediaCore
 //
 //  Created by Christian Elies on 21.11.19.
 //  Copyright © 2019 Christian Elies. All rights reserved.
@@ -56,6 +56,19 @@ public struct Photo: MediaProtocol {
     ///
     public init(phAsset: PHAsset) {
         phAssetWrapper = PHAssetWrapper(value: phAsset)
+    }
+}
+
+extension Photo: Equatable {
+    public static func == (lhs: Photo, rhs: Photo) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension Photo: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
     }
 }
 
@@ -175,6 +188,7 @@ public extension Photo {
 
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
+
         if #available(iOS 13, macOS 10.15, tvOS 13, *) {
             Self.imageManager.requestImageDataAndOrientation(for: phAsset, options: options, resultHandler: { data, _, _, info in
                 PHImageManager.handleResult(result: (data, info), completion)

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 09.02.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 @testable import MediaCore
 
@@ -46,3 +47,4 @@ final class MockAVAssetExportSession: AVAssetExportSession {
         handler()
     }
 }
+#endif

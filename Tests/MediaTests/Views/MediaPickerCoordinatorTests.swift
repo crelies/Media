@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 04.02.20.
 //
 
+#if !os(tvOS)
 @testable import MediaSwiftUI
 import XCTest
 
@@ -60,3 +61,4 @@ final class MediaPickerCoordinatorTests: XCTestCase {
         // ph asset, ph live photo
     }
 }
+#endif

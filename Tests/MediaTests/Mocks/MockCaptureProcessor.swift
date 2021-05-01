@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 02.02.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 import Foundation
 @testable import MediaCore
@@ -47,3 +48,4 @@ final class MockCaptureProcessor: NSObject, CaptureProcessor {
         }
     }
 }
+#endif

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 04.02.20.
 //
 
+#if !os(tvOS)
 @testable import MediaCore
 import XCTest
 
@@ -36,3 +37,4 @@ final class VideoRecorderTests: XCTestCase {
         }
     }
 }
+#endif

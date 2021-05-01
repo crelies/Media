@@ -39,11 +39,15 @@ Just add this Swift package as a dependency to your `Package.swift`
 
 This Swift package provides its functionality through wrapper types for many common `PhotoKit` media types:
 
-- Album(s)
+- (Lazy)Album(s)
 - Audio(s)
+  - LazyAudios
 - LivePhoto(s)
+  - LazyLivePhotos
 - (Media.)Photo(s)
+  - Media.LazyPhotos
 - Video(s)
+  - LazyVideos
 
 Many types implement static factory methods to make it easy for the developer to access and manage the photo library.
 
@@ -52,6 +56,10 @@ In addition to that this Swift package contains some simple and ready-to-use **S
 The core functionality is available through `import MediaCore`. If you want to use the included **SwiftUI** views `import MediaSwiftUI` as well.
 
 That's all you need to know. Now let's take a look at the **API**.
+
+## 🕹️ Examples
+
+Check out the example project in the `Example` directory to explore the power of this Swift package.
 
 ## 🧭 API
 
@@ -62,6 +70,10 @@ This section gives you an overview of the currently available functionality. Mos
 - `Media.requestPermission { result in }`
 
   *Request the users permission to access his photo library*
+  
+- `Media.requestCameraPermission { result in }`
+
+  *Requests the user's permission to access the camera*
 
 - `Media.isAccessAllowed`
 
@@ -70,12 +82,18 @@ This section gives you an overview of the currently available functionality. Mos
 - `Media.currentPermission`
 
   *Get the current permission*
+  
+- `Media.currentCameraPermission`
 
-- **SwiftUI only**: `Media.browser { result in }` (*some View*)
+  *Get the current camera permission*
+
+- **SwiftUI only**: `Media.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use media browser **SwiftUI** view (UIImagePickerController) for photos and videos*
 
 ### Albums
+
+Use the `LazyAlbums` wrapper if you want to fetch albums only on demand (request an album through the provided `subscript` on the `LazyAlbums` type).
 
 - `Albums.all`
 
@@ -151,6 +169,8 @@ This section gives you an overview of the currently available functionality. Mos
 
 ### Audios
 
+Use the `LazyAudios` wrapper if you want to fetch audios only on demand (request an audio through the provided `subscript` on the `LazyAudios` type).
+
 - `Audios.all`
 
   *Get all audios in the photo library*
@@ -176,6 +196,8 @@ This section gives you an overview of the currently available functionality. Mos
   *Creates a ready-to-use camera **SwiftUI** view (UIImagePickerController) for capturing photos and videos*
 
 ### LivePhotos
+
+Use the `LazyLivePhotos` wrapper if you want to fetch live photos only on demand (request a live photo through the provided `subscript` on the `LazyLivePhotos` type).
 
 - `LivePhotos.all`
 
@@ -213,7 +235,7 @@ This section gives you an overview of the currently available functionality. Mos
 
   *Creates a ready-to-use **SwiftUI** camera view for capturing live photos (this is not a UIImagePickerController)*
 
-- **SwiftUI only**: `LivePhoto.browser { result in }` (*some View*)
+- **SwiftUI only**: `LivePhoto.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing live photos in the library (UIImagePickerController)*
 
@@ -222,6 +244,8 @@ This section gives you an overview of the currently available functionality. Mos
   *Get a ready-to-use **SwiftUI** view for displaying the receiving live photo in your UI*
 
 ### Photos
+
+Use the `Media.LazyPhotos` wrapper if you want to fetch photos only on demand (request a photo through the provided `subscript` on the `Media.LazyPhotos` type).
 
 - `Media.Photos.all (includes livePhotos)`
 
@@ -295,15 +319,17 @@ This section gives you an overview of the currently available functionality. Mos
 
   *Creates a ready-to-use camera **SwiftUI** view for capturing photos (UIImagePickerController)*
 
-- **SwiftUI only**: `Photo.browser { result in }` (*some View*)
+- **SwiftUI only**: `Photo.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing photos in the library (UIImagePickerController)*
 
-- **SwiftUI only**: `photo.view { image in image.resizable().aspectRatio(contentMode: .fit) }` (*some View*)
+- **SwiftUI only**: `photo.view(targetSize:contentMode:) { image in image.resizable().aspectRatio(contentMode: .fit) }` (*some View*)
 
   *Get a ready-to-use **SwiftUI** view for displaying the photo in your UI*
 
 ### Videos
+
+Use the `LazyVideos` wrapper if you want to fetch videos only on demand (request a video through the provided `subscript` on the `LazyVideos` type).
 
 - `Videos.all`
 
@@ -342,6 +368,10 @@ This section gives you an overview of the currently available functionality. Mos
 - `video.avAsset(deliveryMode:) { result in }`
 
   *Fetch an AVAsset representation of the video*
+  
+- `video.previewImage(at:) { result in }`
+
+  *Generates a preview image for the receiving video*
 
 - `video.export(options, progress: { progress in }) { result in }`
 
@@ -369,7 +399,7 @@ This section gives you an overview of the currently available functionality. Mos
 
   *Creates a ready-to-use video camera **SwiftUI** view for capturing videos (UIImagePickerController)*
 
-- **SwiftUI only**: `Video.browser { result in }` (*some View*)
+- **SwiftUI only**: `Video.browser(selectionLimit:) { result in }` (*some View*)
 
   *Creates a ready-to-use **SwiftUI** view for browsing videos in the library*
 

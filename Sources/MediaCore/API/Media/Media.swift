@@ -19,13 +19,27 @@ public struct Media {
     /// Indicates that the access to the photo library is granted
     ///
     public static var isAccessAllowed: Bool {
-        Media.currentPermission == .authorized
+        if #available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *) {
+            return Media.currentPermission == .authorized || Media.currentPermission == .limited
+        } else {
+            return Media.currentPermission == .authorized
+        }
     }
 
     /// Returns the current permission to the photo library
     ///
     public static var currentPermission: PHAuthorizationStatus {
-        return photoLibrary.authorizationStatus()
+        if #available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *) {
+            return photoLibrary.authorizationStatus(for: .readWrite)
+        } else {
+            return photoLibrary.authorizationStatus()
+        }
+    }
+
+    /// Returns the current camera permission.
+    ///
+    public static var currentCameraPermission: AVAuthorizationStatus {
+        AVCaptureDevice.authorizationStatus(for: .video)
     }
 
     /// Requests the user's permission to the photo library
@@ -34,17 +48,19 @@ public struct Media {
     ///
     public static func requestPermission(_ completion: @escaping RequestPermissionCompletion) {
         let handler: (PHAuthorizationStatus) -> Void = { authorizationStatus in
-            switch authorizationStatus {
-            case .authorized, .limited:
-                completion(.success(()))
-            case .denied:
-                completion(.failure(.denied))
-            case .restricted:
-                completion(.failure(.restricted))
-            case .notDetermined:
-                completion(.failure(.notDetermined))
-            @unknown default:
-                completion(.failure(.unknown))
+            DispatchQueue.main.async {
+                switch authorizationStatus {
+                case .authorized, .limited:
+                    completion(.success(()))
+                case .denied:
+                    completion(.failure(.denied))
+                case .restricted:
+                    completion(.failure(.restricted))
+                case .notDetermined:
+                    completion(.failure(.notDetermined))
+                @unknown default:
+                    completion(.failure(.unknown))
+                }
             }
         }
 
@@ -52,6 +68,22 @@ public struct Media {
             photoLibrary.requestAuthorization(for: .readWrite, handler: handler)
         } else {
             photoLibrary.requestAuthorization(handler)
+        }
+    }
+
+    /// Requests the user's permission to access the camera.
+    ///
+    /// - Parameter completion: A closure which gets a `Result` (`Void` on `success` and `Error` on `failure`).
+    @available(tvOS, unavailable)
+    public static func requestCameraPermission(_ completion: @escaping RequestPermissionCompletion) {
+        AVCaptureDevice.requestAccess(for: .video) { success in
+            DispatchQueue.main.async {
+                if success {
+                    completion(.success(()))
+                } else {
+                    completion(.failure(.denied))
+                }
+            }
         }
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 02.02.20.
 //
 
+#if !os(tvOS)
 @testable import MediaCore
 #if canImport(UIKit)
 import UIKit
@@ -62,3 +63,4 @@ final class PhotoKitDictionaryTests: XCTestCase {
         XCTAssertNil(dictionary.phLivePhoto)
     }
 }
+#endif

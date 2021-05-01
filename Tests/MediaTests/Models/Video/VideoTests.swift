@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 14.12.19.
 //
 
+#if !os(tvOS)
 import AVFoundation
 @testable import MediaCore
 import Photos
@@ -375,3 +376,4 @@ final class VideoTests: XCTestCase {
         }
     }
 }
+#endif

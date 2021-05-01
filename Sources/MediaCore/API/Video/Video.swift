@@ -58,6 +58,19 @@ public struct Video: MediaProtocol {
     }
 }
 
+extension Video: Equatable {
+    public static func == (lhs: Video, rhs: Video) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension Video: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
+    }
+}
+
 public extension Video {
     /// Computes the subtypes of the receiver
     /// Similar to tags, like `highFrameRate` or `timelapse`
@@ -124,6 +137,36 @@ public extension Video {
 public extension Video {
     typealias ResultAVPlayerItemCompletion = (Result<AVPlayerItem, Swift.Error>) -> Void
     typealias ResultAVAssetCompletion = (Result<AVAsset, Swift.Error>) -> Void
+
+    /// Generates a preview image for the receiving video.
+    /// The process runs on a background thread.
+    ///
+    /// - Parameter requestedTime: The time at which the image of the asset is to be created, defaults to `.init(seconds: 1, preferredTimescale: 60)`.
+    /// - Parameter completion: a closure which gets an `UniversalImage` on `success` and `Error` on `failure`.
+    func previewImage(at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60), _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            avAsset { avAssetResult in
+                switch avAssetResult {
+                case let .success(asset):
+                    let generator = AVAssetImageGenerator(asset: asset)
+                    generator.appliesPreferredTrackTransform = true
+
+                    let copyCGImageResult: Result<UniversalImage, Swift.Error> = Result {
+                        let cgImage = try generator.copyCGImage(at: requestedTime, actualTime: nil)
+                        return UniversalImage(cgImage: cgImage)
+                    }
+
+                    DispatchQueue.main.async {
+                        completion(copyCGImageResult)
+                    }
+                case let .failure(error):
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }
+    }
 
     /// Creates a `AVPlayerItem` representation of the receiver
     ///

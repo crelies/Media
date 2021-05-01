@@ -38,7 +38,7 @@ final class LivePhotoTests: XCTestCase {
         livePhoto.phAssetWrapper.value = asset
     }
 
-    #if !os(macOS)
+    #if !os(macOS) && !targetEnvironment(macCatalyst)
     @available(iOS 10, *)
     func testDisplayRepresentationHighQualitySuccess() {
         livePhotoManager.livePhotoToReturn = MockPHLivePhoto()
@@ -207,7 +207,9 @@ final class LivePhotoTests: XCTestCase {
         XCTAssertNotNil(metadata)
     }
 
+    #if !targetEnvironment(macCatalyst)
     @available(iOS 10, *)
+    @available(tvOS, unavailable)
     func testSaveFailure() {
         do {
             MockPhotoLibrary.authorizationStatusToReturn = .denied
@@ -238,4 +240,5 @@ final class LivePhotoTests: XCTestCase {
             XCTFail("\(error)")
         }
     }
+    #endif
 }

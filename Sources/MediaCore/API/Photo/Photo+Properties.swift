@@ -123,7 +123,8 @@ extension Photo {
             /// The fraction of seconds for the digitized time and date tag.
             public let subsecTimeDigitized: String?
             /// The fraction of seconds for the original date and time tag.
-            public let subsecTimeOriginal: String?
+            @available(iOS, deprecated: 10, message: "'kCGImagePropertyExifSubsecTimeOrginal' was deprecated in iOS 10.0: No longer supported")
+            public var subsecTimeOriginal: String?
             /// The white balance mode.
             public let whiteBalance: Int?
         }
@@ -228,9 +229,13 @@ extension Photo.Properties {
             shutterSpeedValue: exifDictionary?[kCGImagePropertyExifShutterSpeedValue as String] as? Double,
             subjectArea: exifDictionary?[kCGImagePropertyExifSubjectArea as String] as? [Int],
             subsecTimeDigitized: exifDictionary?[kCGImagePropertyExifSubsecTimeDigitized as String] as? String,
-            subsecTimeOriginal: exifDictionary?[kCGImagePropertyExifSubsecTimeOrginal as String] as? String,
+            subsecTimeOriginal: nil,
             whiteBalance: exifDictionary?[kCGImagePropertyExifWhiteBalance as String] as? Int
         )
+
+        if #available(iOS 10, *) {} else {
+            exif.subsecTimeOriginal = exifDictionary?[kCGImagePropertyExifSubsecTimeOrginal as String] as? String
+        }
 
         if #available(iOS 13.1, macOS 10.15, tvOS 13.1, *) {
             exif.compositeImage = exifDictionary?[kCGImagePropertyExifCompositeImage as String] as? Int

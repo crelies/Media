@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 04.02.20.
 //
 
+#if !os(tvOS)
 import AVFoundation
 
 final class MockAVCaptureMovieFileOutput: AVCaptureMovieFileOutput {
@@ -23,3 +24,4 @@ final class MockAVCaptureMovieFileOutput: AVCaptureMovieFileOutput {
         }
     }
 }
+#endif

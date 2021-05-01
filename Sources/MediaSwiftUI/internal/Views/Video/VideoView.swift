@@ -1,52 +1,75 @@
 //
 //  VideoView.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 28.11.19.
 //
 
 #if canImport(SwiftUI) && !os(macOS)
 import AVFoundation
+import AVKit
 import MediaCore
 import SwiftUI
 
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct VideoView: View {
-    private let viewWrapper = ViewWrapper<AVPlayerView>()
-
-    @State private var avPlayerItem: AVPlayerItem?
-    @State private var error: Error?
+    @State private var state: ViewState<AVPlayerItem> = .loading
+    @State private var player = AVPlayer()
 
     let video: Video
 
     var body: some View {
-        fetchPlayerItem()
+        switch state {
+        case .loading:
+            UniversalProgressView()
+                .onAppear(perform: fetchPlayerItem)
+        case .loaded(let avPlayerItem):
+            if #available(iOS 14, macOS 11, tvOS 14, *) {
+                VideoPlayer(player: player(for: avPlayerItem))
+                    .onDisappear {
+                        player.pause()
+                        state = .loading
+                    }
+            } else {
+                let player = AVPlayerView(avPlayerItem: avPlayerItem)
 
-        return Group {
-            avPlayerItem.map { item -> AVPlayerView in
-                let player = AVPlayerView(avPlayerItem: item)
-                viewWrapper.value = player
-                return player
+                player
+                    .onDisappear {
+                        player.pause()
+                        state = .loading
+                    }
             }
-
-            error.map { Text($0.localizedDescription) }
-        }.onDisappear {
-            self.viewWrapper.value?.pause()
+        case .failed(let error):
+            Text(error.localizedDescription)
+                .onDisappear {
+                    state = .loading
+                }
         }
     }
 }
 
 @available(iOS 13, macOS 10.15, tvOS 13, *)
-extension VideoView {
-    private func fetchPlayerItem() {
-        if avPlayerItem == nil && error == nil {
-            self.video.playerItem { result in
+private extension VideoView {
+    func player(for item: AVPlayerItem) -> AVPlayer {
+        if player.currentItem == nil || player.currentItem != item {
+            player.replaceCurrentItem(with: item)
+        }
+        return player
+    }
+
+    func fetchPlayerItem() {
+        guard state == .loading else {
+            return
+        }
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            video.playerItem { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let avPlayerItem):
-                        self.avPlayerItem = avPlayerItem
+                        state = .loaded(value: avPlayerItem)
                     case .failure(let error):
-                        self.error = error
+                        state = .failed(error: error)
                     }
                 }
             }

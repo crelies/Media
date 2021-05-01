@@ -47,6 +47,19 @@ public struct Audio: MediaProtocol {
     }
 }
 
+extension Audio: Equatable {
+    public static func == (lhs: Audio, rhs: Audio) -> Bool {
+        lhs.identifier == rhs.identifier && lhs.phAsset == rhs.phAsset
+    }
+}
+
+extension Audio: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(phAsset)
+    }
+}
+
 public extension Audio {
     /// Fetches the audio with the given identifier if it exists
     ///
