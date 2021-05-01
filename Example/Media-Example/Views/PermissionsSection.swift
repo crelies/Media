@@ -22,9 +22,10 @@ struct PermissionsSection: View {
                     debugPrint(result)
                 }
             }) {
-                VStack(alignment: .leading) {
+                HStack {
                     Text("Trigger camera permission request")
-                    Text("\(String(describing: Media.currentCameraPermission))").font(.footnote)
+                    Toggle("", isOn: .constant(Media.currentCameraPermission == .authorized))
+                        .disabled(true)
                 }
             }
 
@@ -35,9 +36,10 @@ struct PermissionsSection: View {
                     requestPermission()
                 }
             }) {
-                VStack(alignment: .leading) {
+                HStack {
                     Text("Trigger photo library permission request")
-                    Text("\(String(describing: Media.currentPermission))").font(.footnote)
+                    Toggle("", isOn: .constant(Media.currentPermission == .authorized))
+                        .disabled(true)
                 }
             }
             .background(PHPicker(isPresented: $isLimitedLibraryPickerPresented))
