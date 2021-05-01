@@ -50,7 +50,7 @@ public extension LivePhoto {
     /// Creates a ready-to-use `SwiftUI` view for browsing `LivePhoto`s in the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
-    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood.
+    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter completion: A closure which gets the selected `LivePhoto` on `success` or `Error` on `failure`.
     ///
     /// - Returns: some View
@@ -61,7 +61,7 @@ public extension LivePhoto {
     /// Creates a ready-to-use `SwiftUI` view for browsing `LivePhoto`s in the photo library
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
-    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood.
+    /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter completion: A closure which gets the selected `LivePhoto` on `success` or `Error` on `failure`.
     ///
