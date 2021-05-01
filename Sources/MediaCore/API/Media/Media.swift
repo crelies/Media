@@ -36,6 +36,12 @@ public struct Media {
         }
     }
 
+    /// Returns the current camera permission.
+    ///
+    public static var currentCameraPermission: AVAuthorizationStatus {
+        AVCaptureDevice.authorizationStatus(for: .video)
+    }
+
     /// Requests the user's permission to the photo library
     ///
     /// - Parameter completion: a closure which gets a `Result` (`Void` on `success` and `Error` on `failure`)

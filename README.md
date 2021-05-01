@@ -82,6 +82,10 @@ This section gives you an overview of the currently available functionality. Mos
 - `Media.currentPermission`
 
   *Get the current permission*
+  
+- `Media.currentCameraPermission`
+
+  *Get the current camera permission*
 
 - **SwiftUI only**: `Media.browser(selectionLimit:) { result in }` (*some View*)
 
