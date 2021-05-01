@@ -91,7 +91,7 @@ public extension LivePhoto {
             }
         } else {
             let result = Result {
-                try ViewCreator.browser(mediaTypes: [.livePhoto]) { (result: Result<LivePhoto, Error>) in
+                try ViewCreator.browser(mediaTypes: [.image, .livePhoto]) { (result: Result<LivePhoto, Error>) in
                     switch result {
                     case let .success(livePhoto):
                         completion(.success([livePhoto]))
