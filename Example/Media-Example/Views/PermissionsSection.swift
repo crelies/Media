@@ -36,15 +36,7 @@ struct PermissionsSection: View {
             .fullScreenCover(isPresented: $isLimitedLibraryPickerPresented, onDismiss: {
                 isLimitedLibraryPickerPresented = false
             }) {
-                let result = Result {
-                    try Media.browser { _ in }
-                }
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Media.browser { _ in }
             }
         }
     }

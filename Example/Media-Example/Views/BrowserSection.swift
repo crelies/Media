@@ -26,16 +26,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isLivePhotoBrowserViewVisible, onDismiss: {
                 isLivePhotoBrowserViewVisible = false
             }) {
-                let result = Result {
-                    try LivePhoto.browser { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                LivePhoto.browser { _ in }
             }
 
             Button(action: {
@@ -46,16 +37,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
                 isMediaBrowserViewVisible = false
             }) {
-                let result = Result {
-                    try Media.browser { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Media.browser { _ in }
             }
 
             Button(action: {
@@ -66,16 +48,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isPhotoBrowserViewVisible, onDismiss: {
                 isPhotoBrowserViewVisible = false
             }) {
-                let result = Result {
-                    try Photo.browser { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Photo.browser { _ in }
             }
 
             Button(action: {
@@ -86,16 +59,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isVideoBrowserViewVisible, onDismiss: {
                 isVideoBrowserViewVisible = false
             }) {
-                let result = Result {
-                    try Video.browser { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Video.browser { _ in }
             }
         }
     }

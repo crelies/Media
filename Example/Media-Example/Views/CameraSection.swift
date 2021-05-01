@@ -26,16 +26,7 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isCameraViewVisible, onDismiss: {
                 isCameraViewVisible = false
             }) {
-                let result = Result {
-                    try Camera.view { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Camera.view { _ in }
             }
 
             #if !targetEnvironment(macCatalyst)
@@ -47,27 +38,18 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isLivePhotoCameraViewVisible, onDismiss: {
                 isLivePhotoCameraViewVisible = false
             }) {
-                let result = Result {
-                    try LivePhoto.camera { result in
-                        guard let livePhotoData = try? result.get() else {
-                            return
-                        }
+                LivePhoto.camera { result in
+                    guard let livePhotoData = try? result.get() else {
+                        return
+                    }
 
-                        try? LivePhoto.save(data: livePhotoData) { result in
-                            switch result {
-                            case .failure(let error):
-                                debugPrint("Live photo save error: \(error)")
-                            default: ()
-                            }
+                    try? LivePhoto.save(data: livePhotoData) { result in
+                        switch result {
+                        case .failure(let error):
+                            debugPrint("Live photo save error: \(error)")
+                        default: ()
                         }
                     }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
                 }
             }
             #endif
@@ -80,16 +62,7 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isPhotoCameraViewVisible, onDismiss: {
                 isPhotoCameraViewVisible = false
             }) {
-                let result = Result {
-                    try Photo.camera { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Photo.camera { _ in }
             }
 
             Button(action: {
@@ -100,16 +73,7 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isVideoCameraViewVisible, onDismiss: {
                 isVideoCameraViewVisible = false
             }) {
-                let result = Result {
-                    try Video.camera { _ in }
-                }
-
-                switch result {
-                case let .success(view):
-                    view
-                case let .failure(error):
-                    Text(error.localizedDescription)
-                }
+                Video.camera { _ in }
             }
         }
     }
