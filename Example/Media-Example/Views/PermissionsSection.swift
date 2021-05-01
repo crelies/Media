@@ -6,6 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
+import AVFoundation
 import MediaCore
 import SwiftUI
 
@@ -21,7 +22,10 @@ struct PermissionsSection: View {
                     debugPrint(result)
                 }
             }) {
-                Text("Trigger camera permission request")
+                VStack(alignment: .leading) {
+                    Text("Trigger camera permission request")
+                    Text("\(String(describing: Media.currentCameraPermission))").font(.footnote)
+                }
             }
 
             Button(action: {
@@ -31,13 +35,12 @@ struct PermissionsSection: View {
                     requestPermission()
                 }
             }) {
-                Text("Trigger photo library permission request")
+                VStack(alignment: .leading) {
+                    Text("Trigger photo library permission request")
+                    Text("\(String(describing: Media.currentPermission))").font(.footnote)
+                }
             }
-            .fullScreenCover(isPresented: $isLimitedLibraryPickerPresented, onDismiss: {
-                isLimitedLibraryPickerPresented = false
-            }) {
-                Media.browser { _ in }
-            }
+            .background(PHPicker(isPresented: $isLimitedLibraryPickerPresented))
         }
     }
 }

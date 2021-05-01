@@ -20,6 +20,7 @@
 		B99586AE263CBD3C0032EF4B /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586AD263CBD3C0032EF4B /* PhotosView.swift */; };
 		B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586B2263CBD9C0032EF4B /* LivePhotosView.swift */; };
 		B99586BA263D49850032EF4B /* PermissionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586B9263D49850032EF4B /* PermissionsSection.swift */; };
+		B99586BD263E03F90032EF4B /* PHPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586BC263E03F90032EF4B /* PHPicker.swift */; };
 		B999836823898FA200F74BC1 /* LazyAlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B999836723898FA200F74BC1 /* LazyAlbumsView.swift */; };
 		B999836A2389908900F74BC1 /* LazyAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99983692389908900F74BC1 /* LazyAlbumView.swift */; };
 		B999836C2389933300F74BC1 /* LazyPhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B999836B2389933300F74BC1 /* LazyPhotosView.swift */; };
@@ -73,6 +74,7 @@
 		B99586AD263CBD3C0032EF4B /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
 		B99586B2263CBD9C0032EF4B /* LivePhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhotosView.swift; sourceTree = "<group>"; };
 		B99586B9263D49850032EF4B /* PermissionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSection.swift; sourceTree = "<group>"; };
+		B99586BC263E03F90032EF4B /* PHPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPicker.swift; sourceTree = "<group>"; };
 		B999836723898FA200F74BC1 /* LazyAlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAlbumsView.swift; sourceTree = "<group>"; };
 		B99983692389908900F74BC1 /* LazyAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAlbumView.swift; sourceTree = "<group>"; };
 		B999836B2389933300F74BC1 /* LazyPhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyPhotosView.swift; sourceTree = "<group>"; };
@@ -173,7 +175,9 @@
 				B9B2A34D25E460B400DC3A4C /* BrowserSection.swift */,
 				B9B2A34825E4600D00DC3A4C /* CameraSection.swift */,
 				B9B2A35B25E8633E00DC3A4C /* LazyView.swift */,
+				B99586B9263D49850032EF4B /* PermissionsSection.swift */,
 				B9B2A34225E45FF500DC3A4C /* PhotosSection.swift */,
+				B99586BC263E03F90032EF4B /* PHPicker.swift */,
 				B97D915C238986DD00A617DC /* RootScreen.swift */,
 				B9B2A34525E4600600DC3A4C /* VideosSection.swift */,
 				B9B2A31525E0470400DC3A4C /* Albums */,
@@ -182,7 +186,6 @@
 				B9B2A31625E0470A00DC3A4C /* Photos */,
 				B9B2A35725E85A2500DC3A4C /* Tree */,
 				B9B2A31825E0473C00DC3A4C /* Videos */,
-				B99586B9263D49850032EF4B /* PermissionsSection.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */,
 				B9B2A35425E850C400DC3A4C /* LazyTree.swift in Sources */,
 				B999836C2389933300F74BC1 /* LazyPhotosView.swift in Sources */,
+				B99586BD263E03F90032EF4B /* PHPicker.swift in Sources */,
 				B9B2A34E25E460B400DC3A4C /* BrowserSection.swift in Sources */,
 				B9B2A34325E45FF500DC3A4C /* PhotosSection.swift in Sources */,
 				B99586AE263CBD3C0032EF4B /* PhotosView.swift in Sources */,
