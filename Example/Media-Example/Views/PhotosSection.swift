@@ -11,17 +11,44 @@ import SwiftUI
 
 struct PhotosSection: View {
     var body: some View {
-        Section {
+        Section(header: Label("Photos", systemImage: "photo")) {
+            Group {
+                let allPhotos = Media.Photos.all
+                NavigationLink(destination: PhotosView(photos: allPhotos)) {
+                    Text("Media.Photos.all (\(allPhotos.count))")
+                }
+
+                let livePhotos = Media.Photos.live
+                NavigationLink(destination: LivePhotosView(livePhotos: livePhotos)) {
+                    Text("Media.Photos.live (\(livePhotos.count))")
+                }
+
+                let depthEffectPhotos = Media.Photos.depthEffect
+                NavigationLink(destination: PhotosView(photos: depthEffectPhotos)) {
+                    Text("Media.Photos.depthEffect (\(depthEffectPhotos.count))")
+                }
+
+                let hdrPhotos = Media.Photos.hdr
+                NavigationLink(destination: PhotosView(photos: hdrPhotos)) {
+                    Text("Media.Photos.hdr (\(hdrPhotos.count))")
+                }
+
+                let panoramaPhotos = Media.Photos.panorama
+                NavigationLink(destination: PhotosView(photos: panoramaPhotos)) {
+                    Text("Media.Photos.panorama (\(panoramaPhotos.count))")
+                }
+
+                let screenshotPhotos = Media.Photos.screenshot
+                NavigationLink(destination: PhotosView(photos: screenshotPhotos)) {
+                    Text("Media.Photos.screenshot (\(screenshotPhotos.count))")
+                }
+            }
+
             Group {
                 if let lazyAllPhotos = Media.LazyPhotos.all {
                     NavigationLink(destination: LazyPhotosView(photos: lazyAllPhotos)) {
                         Text("Media.LazyPhotos.all (\(lazyAllPhotos.count))")
                     }
-                }
-
-                let allPhotos = Media.Photos.all
-                NavigationLink(destination: PhotosView(photos: allPhotos)) {
-                    Text("Media.Photos.all (\(allPhotos.count))")
                 }
 
                 if let lazyLivePhotos = Media.LazyPhotos.live {
@@ -30,20 +57,10 @@ struct PhotosSection: View {
                     }
                 }
 
-                let livePhotos = Media.Photos.live
-                NavigationLink(destination: LivePhotosView(livePhotos: livePhotos)) {
-                    Text("Media.Photos.live (\(livePhotos.count))")
-                }
-
                 if let lazyDepthEffectPhotos = Media.LazyPhotos.depthEffect {
                     NavigationLink(destination: LazyPhotosView(photos: lazyDepthEffectPhotos)) {
                         Text("Media.LazyPhotos.depthEffect (\(lazyDepthEffectPhotos.count))")
                     }
-                }
-
-                let depthEffectPhotos = Media.Photos.depthEffect
-                NavigationLink(destination: PhotosView(photos: depthEffectPhotos)) {
-                    Text("Media.Photos.depthEffect (\(depthEffectPhotos.count))")
                 }
 
                 if let lazyHdrPhotos = Media.LazyPhotos.hdr {
@@ -52,32 +69,17 @@ struct PhotosSection: View {
                     }
                 }
 
-                let hdrPhotos = Media.Photos.hdr
-                NavigationLink(destination: PhotosView(photos: hdrPhotos)) {
-                    Text("Media.Photos.hdr (\(hdrPhotos.count))")
-                }
-
                 if let lazyPanoramaPhotos = Media.LazyPhotos.panorama {
                     NavigationLink(destination: LazyPhotosView(photos: lazyPanoramaPhotos)) {
                         Text("Media.LazyPhotos.panorama (\(lazyPanoramaPhotos.count))")
                     }
                 }
 
-                let panoramaPhotos = Media.Photos.panorama
-                NavigationLink(destination: PhotosView(photos: panoramaPhotos)) {
-                    Text("Media.Photos.panorama (\(panoramaPhotos.count))")
+                if let lazyScreenshotPhotos = Media.LazyPhotos.screenshot {
+                    NavigationLink(destination: LazyPhotosView(photos: lazyScreenshotPhotos)) {
+                        Text("Media.LazyPhotos.screenshot (\(lazyScreenshotPhotos.count))")
+                    }
                 }
-            }
-
-            if let lazyScreenshotPhotos = Media.LazyPhotos.screenshot {
-                NavigationLink(destination: LazyPhotosView(photos: lazyScreenshotPhotos)) {
-                    Text("Media.LazyPhotos.screenshot (\(lazyScreenshotPhotos.count))")
-                }
-            }
-
-            let screenshotPhotos = Media.Photos.screenshot
-            NavigationLink(destination: PhotosView(photos: screenshotPhotos)) {
-                Text("Media.Photos.screenshot (\(screenshotPhotos.count))")
             }
         }
     }

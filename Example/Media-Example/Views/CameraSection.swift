@@ -17,7 +17,7 @@ struct CameraSection: View {
     @State private var isVideoCameraViewVisible = false
 
     var body: some View {
-        Section {
+        Section(header: Label("Camera", systemImage: "camera")) {
             Button(action: {
                 isCameraViewVisible = true
             }) {

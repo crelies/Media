@@ -17,7 +17,7 @@ struct BrowserSection: View {
     @State private var isVideoBrowserViewVisible = false
 
     var body: some View {
-        Section {
+        Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
             Button(action: {
                 isLivePhotoBrowserViewVisible = true
             }) {

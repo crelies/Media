@@ -19,6 +19,7 @@
 		B99586AA263CBD020032EF4B /* AudiosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586A9263CBD020032EF4B /* AudiosView.swift */; };
 		B99586AE263CBD3C0032EF4B /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586AD263CBD3C0032EF4B /* PhotosView.swift */; };
 		B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586B2263CBD9C0032EF4B /* LivePhotosView.swift */; };
+		B99586BA263D49850032EF4B /* PermissionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586B9263D49850032EF4B /* PermissionsSection.swift */; };
 		B999836823898FA200F74BC1 /* LazyAlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B999836723898FA200F74BC1 /* LazyAlbumsView.swift */; };
 		B999836A2389908900F74BC1 /* LazyAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99983692389908900F74BC1 /* LazyAlbumView.swift */; };
 		B999836C2389933300F74BC1 /* LazyPhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B999836B2389933300F74BC1 /* LazyPhotosView.swift */; };
@@ -71,6 +72,7 @@
 		B99586A9263CBD020032EF4B /* AudiosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudiosView.swift; sourceTree = "<group>"; };
 		B99586AD263CBD3C0032EF4B /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
 		B99586B2263CBD9C0032EF4B /* LivePhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePhotosView.swift; sourceTree = "<group>"; };
+		B99586B9263D49850032EF4B /* PermissionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsSection.swift; sourceTree = "<group>"; };
 		B999836723898FA200F74BC1 /* LazyAlbumsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAlbumsView.swift; sourceTree = "<group>"; };
 		B99983692389908900F74BC1 /* LazyAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAlbumView.swift; sourceTree = "<group>"; };
 		B999836B2389933300F74BC1 /* LazyPhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyPhotosView.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				B9B2A31625E0470A00DC3A4C /* Photos */,
 				B9B2A35725E85A2500DC3A4C /* Tree */,
 				B9B2A31825E0473C00DC3A4C /* Videos */,
+				B99586B9263D49850032EF4B /* PermissionsSection.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				B999836A2389908900F74BC1 /* LazyAlbumView.swift in Sources */,
 				B9B2A34625E4600600DC3A4C /* VideosSection.swift in Sources */,
 				B99586AA263CBD020032EF4B /* AudiosView.swift in Sources */,
+				B99586BA263D49850032EF4B /* PermissionsSection.swift in Sources */,
 				B99983702389934300F74BC1 /* LazyLivePhotosView.swift in Sources */,
 				B9B2A35925E85A3100DC3A4C /* Node.swift in Sources */,
 				B9B2A33725E1344400DC3A4C /* Item.swift in Sources */,

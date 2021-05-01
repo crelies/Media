@@ -25,7 +25,6 @@ struct RootScreen: View {
     @State private var smartAlbums: [Album] = []
 
     @State private var permissionState: PermissionState = .loading
-    @State private var isLimitedLibraryPickerPresented = false
 
     @FetchAssets(sort: [Media.Sort(key: .creationDate, ascending: true)])
     private var videos: [Video]
@@ -48,40 +47,9 @@ struct RootScreen: View {
                     }
             case .granted:
                 List {
-                    Section {
-                        Button(action: {
-                            Media.requestCameraPermission { result in
-                                debugPrint(result)
-                            }
-                        }) {
-                            Text("Trigger camera permission request")
-                        }
+                    PermissionsSection(requestedPermission: handleRequestPermissionResult)
 
-                        Button(action: {
-                            if Media.currentPermission == .limited {
-                                isLimitedLibraryPickerPresented = true
-                            } else {
-                                requestPermission()
-                            }
-                        }) {
-                            Text("Trigger photo library permission request")
-                        }
-                        .fullScreenCover(isPresented: $isLimitedLibraryPickerPresented, onDismiss: {
-                            isLimitedLibraryPickerPresented = false
-                        }) {
-                            let result = Result {
-                                try Media.browser { _ in }
-                            }
-                            switch result {
-                            case let .success(view):
-                                view
-                            case let .failure(error):
-                                Text(error.localizedDescription)
-                            }
-                        }
-                    }
-
-                    Section {
+                    Section(header: Text("Property wrapper")) {
                         NavigationLink(destination: VideosView(videos: videos)) {
                             Text("@FetchAssets videos")
                         }
@@ -91,7 +59,19 @@ struct RootScreen: View {
                         }
                     }
 
-                    Section {
+                    Section(header: Label("Albums", systemImage: "person.2.square.stack")) {
+                        NavigationLink(destination: AlbumsView(albums: userAlbums)) {
+                            Text("User albums (\(userAlbums.count))")
+                        }
+
+                        NavigationLink(destination: AlbumsView(albums: cloudAlbums)) {
+                            Text("Cloud albums (\(cloudAlbums.count))")
+                        }
+
+                        NavigationLink(destination: AlbumsView(albums: smartAlbums)) {
+                            Text("Smart albums (\(smartAlbums.count))")
+                        }
+
                         if let userAlbums = lazyUserAlbums {
                             let item = Item.albums(albums: userAlbums)
                             NavigationLink(destination: ScrollView {
@@ -105,18 +85,10 @@ struct RootScreen: View {
                             }
                         }
 
-                        NavigationLink(destination: AlbumsView(albums: userAlbums)) {
-                            Text("User albums (\(userAlbums.count))")
-                        }
-
                         if let lazyCloudAlbums = lazyCloudAlbums {
                             NavigationLink(destination: LazyAlbumsView(albums: lazyCloudAlbums)) {
                                 Text("Lazy Cloud albums (\(lazyCloudAlbums.count))")
                             }
-                        }
-
-                        NavigationLink(destination: AlbumsView(albums: cloudAlbums)) {
-                            Text("Cloud albums (\(cloudAlbums.count))")
                         }
 
                         if let smartAlbums = lazySmartAlbums {
@@ -124,16 +96,18 @@ struct RootScreen: View {
                                 Text("Lazy Smart albums (\(smartAlbums.count))")
                             }
                         }
-
-                        NavigationLink(destination: AlbumsView(albums: smartAlbums)) {
-                            Text("Smart albums (\(smartAlbums.count))")
-                        }
                     }
 
-                    if let audios = LazyAudios.all {
-                        Section {
-                            NavigationLink(destination: LazyAudiosView(audios: audios)) {
-                                Text("LazyAudios.all (\(audios.count))")
+
+                    Section(header: Label("Audios", systemImage: "waveform")) {
+                        let audios = Audios.all
+                        NavigationLink(destination: AudiosView(audios: audios)) {
+                            Text("Audios.all (\(audios.count))")
+                        }
+
+                        if let lazyAudios = LazyAudios.all {
+                            NavigationLink(destination: LazyAudiosView(audios: lazyAudios)) {
+                                Text("LazyAudios.all (\(lazyAudios.count))")
                             }
                         }
                     }
@@ -163,14 +137,16 @@ struct RootScreen: View {
 
 private extension RootScreen {
     func requestPermission() {
-        Media.requestPermission { result in
-            switch result {
-            case .success:
-                permissionState = .granted
-                fetchAlbums()
-            case .failure(let error):
-                permissionState = .failed(error as NSError)
-            }
+        Media.requestPermission(handleRequestPermissionResult)
+    }
+
+    func handleRequestPermissionResult(_ result: Result<Void, PermissionError>) {
+        switch result {
+        case .success:
+            permissionState = .granted
+            fetchAlbums()
+        case .failure(let error):
+            permissionState = .failed(error as NSError)
         }
     }
 
