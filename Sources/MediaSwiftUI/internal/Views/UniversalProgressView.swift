@@ -7,17 +7,21 @@
 
 import SwiftUI
 
+@available(macOS 11, *)
 struct UniversalProgressView: View {
     var body: some View {
-        if #available(iOS 14, macOS 11, tvOS 14, *) {
+        if #available(iOS 14, tvOS 14, *) {
             ProgressView()
         } else {
+            #if canImport(UIKit)
             ActivityIndicatorView()
+            #endif
         }
     }
 }
 
 #if DEBUG
+@available(macOS 11, *)
 struct UniversalProgressView_Previews: PreviewProvider {
     static var previews: some View {
         UniversalProgressView()

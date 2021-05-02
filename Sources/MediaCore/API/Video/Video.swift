@@ -153,7 +153,11 @@ public extension Video {
 
                     let copyCGImageResult: Result<UniversalImage, Swift.Error> = Result {
                         let cgImage = try generator.copyCGImage(at: requestedTime, actualTime: nil)
+                        #if os(macOS)
+                        return UniversalImage(cgImage: cgImage, size: .init(width: cgImage.width, height: cgImage.height))
+                        #else
                         return UniversalImage(cgImage: cgImage)
+                        #endif
                     }
 
                     DispatchQueue.main.async {
