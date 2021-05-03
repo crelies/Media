@@ -6,6 +6,7 @@
 //
 
 #if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
+import Combine
 import MediaCore
 import Photos
 import PhotosUI
@@ -79,22 +80,49 @@ public extension Photo {
     @ViewBuilder static func browser<ErrorView: View>(selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPhotosCompletion) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(configuration: {
-                var configuration = PHPickerConfiguration()
+                var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.filter = .images
                 configuration.selectionLimit = selectionLimit
+                configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }()) { result in
                 switch result {
                 case let .success(result):
-                    let result = Result {
-                        try result.compactMap { object -> Photo? in
-                            guard let assetIdentifier = object.assetIdentifier else {
-                                return nil
+                    if Media.currentPermission == .authorized {
+                        let result = Result {
+                            try result.compactMap { object -> BrowserResult<Photo, UniversalImage>? in
+                                guard let assetIdentifier = object.assetIdentifier else {
+                                    return nil
+                                }
+                                guard let photo = try Photo.with(identifier: .init(stringLiteral: assetIdentifier)) else {
+                                    return nil
+                                }
+                                return .media(photo)
                             }
-                            return try Photo.with(identifier: .init(stringLiteral: assetIdentifier))
+                        }
+                        completion(result)
+                    } else {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let loadVideos = result.map { $0.loadImage() }
+                            Publishers.MergeMany(loadVideos)
+                                .collect()
+                                .sink { result in
+                                    switch result {
+                                    case let .failure(error):
+                                        DispatchQueue.main.async {
+                                            completion(.failure(error))
+                                        }
+                                    case .finished: ()
+                                    }
+                                } receiveValue: { urls in
+                                    let browserResults = urls.map { BrowserResult<Photo, UniversalImage>.data($0) }
+                                    DispatchQueue.main.async {
+                                        completion(.success(browserResults))
+                                    }
+                                }
+                                .store(in: &Garbage.cancellables)
                         }
                     }
-                    completion(result)
                 case let .failure(error): ()
                     completion(.failure(error))
                 }
@@ -104,7 +132,7 @@ public extension Photo {
                 try ViewCreator.browser(mediaTypes: [.image]) { (result: Result<Photo, Swift.Error>) in
                     switch result {
                     case let .success(photo):
-                        completion(.success([photo]))
+                        completion(.success([.media(photo)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }

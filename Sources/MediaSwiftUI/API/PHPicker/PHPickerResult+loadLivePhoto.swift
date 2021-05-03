@@ -1,40 +1,31 @@
 //
-//  PHPickerResult+loadImage.swift
+//  PHPickerResult+loadLivePhoto.swift
 //  MediaSwiftUI
 //
-//  Created by Christian Elies on 14.10.20.
+//  Created by Christian Elies on 03.05.21.
 //
 
 #if !os(tvOS) && (!os(macOS) || targetEnvironment(macCatalyst))
 import Combine
-import MediaCore
 import PhotosUI
 
 @available(iOS 14, macCatalyst 14, *)
 extension PHPickerResult {
     /// <#Description#>
-    public enum Error: Swift.Error {
-        ///
-        case couldNotLoadObject(underlying: Swift.Error)
-        ///
-        case unknown
-    }
-
-    /// <#Description#>
-    ///
+    /// 
     /// - Returns: <#description#>
-    public func loadImage() -> AnyPublisher<UniversalImage, Swift.Error> {
+    public func loadLivePhoto() -> AnyPublisher<PHLivePhoto, Swift.Error> {
         Future { promise in
-            guard itemProvider.canLoadObject(ofClass: UniversalImage.self) else {
+            guard itemProvider.canLoadObject(ofClass: PHLivePhoto.self) else {
                 promise(.failure(Error.couldNotLoadObject(underlying: Error.unknown)))
                 return
             }
 
-            itemProvider.loadObject(ofClass: UniversalImage.self) { newImage, error in
+            itemProvider.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
                 if let error = error {
                     promise(.failure(Error.couldNotLoadObject(underlying: error)))
-                } else if let newImage = newImage {
-                    promise(.success(newImage as! UniversalImage))
+                } else if let livePhoto = livePhoto {
+                    promise(.success(livePhoto as! PHLivePhoto))
                 } else {
                     promise(.failure(Error.unknown))
                 }

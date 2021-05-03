@@ -35,19 +35,26 @@ public extension Media {
     @ViewBuilder static func browser<ErrorView: View>(selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPHAssetsCompletion) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(configuration: {
-                var configuration = PHPickerConfiguration()
+                var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.selectionLimit = selectionLimit
+                configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }()) { result in
                 switch result {
                 case let .success(result):
-                    let identifiers = result.compactMap { $0.assetIdentifier }
-                    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-                    var assets: [PHAsset] = []
-                    fetchResult.enumerateObjects { asset, _, _ in
-                        assets.append(asset)
+                    if Media.currentPermission == .authorized {
+                        let identifiers = result.compactMap { $0.assetIdentifier }
+                        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+                        var assets: [PHAsset] = []
+                        fetchResult.enumerateObjects { asset, _, _ in
+                            assets.append(asset)
+                        }
+                        let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0) }
+                        completion(.success(browserResults))
+                    } else {
+                        let browserResults = result.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
+                        completion(.success(browserResults))
                     }
-                    completion(.success(assets))
                 case let .failure(error): ()
                     completion(.failure(error))
                 }
@@ -59,7 +66,7 @@ public extension Media {
                         completion(.failure(MediaPicker.Error.unsupportedValue))
                         return
                     }
-                    completion(.success([phAsset]))
+                    completion(.success([.media(phAsset)]))
                 }, onFailure: { error in
                     completion(.failure(error))
                 })

@@ -6,6 +6,7 @@
 //
 
 #if canImport(SwiftUI)
+import Combine
 import MediaCore
 import PhotosUI
 import SwiftUI
@@ -69,22 +70,49 @@ public extension LivePhoto {
     @ViewBuilder static func browser<ErrorView: View>(selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultLivePhotosCompletion) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(configuration: {
-                var configuration = PHPickerConfiguration()
+                var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.filter = .livePhotos
                 configuration.selectionLimit = selectionLimit
+                configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }()) { result in
                 switch result {
                 case let .success(result):
-                    let result = Result {
-                        try result.compactMap { object -> LivePhoto? in
-                            guard let assetIdentifier = object.assetIdentifier else {
-                                return nil
+                    if Media.currentPermission == .authorized {
+                        let result = Result {
+                            try result.compactMap { object -> BrowserResult<LivePhoto, PHLivePhoto>? in
+                                guard let assetIdentifier = object.assetIdentifier else {
+                                    return nil
+                                }
+                                guard let livePhoto = try LivePhoto.with(identifier: .init(stringLiteral: assetIdentifier)) else {
+                                    return nil
+                                }
+                                return .media(livePhoto)
                             }
-                            return try LivePhoto.with(identifier: .init(stringLiteral: assetIdentifier))
+                        }
+                        completion(result)
+                    } else {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let loadVideos = result.map { $0.loadLivePhoto() }
+                            Publishers.MergeMany(loadVideos)
+                                .collect()
+                                .sink { result in
+                                    switch result {
+                                    case let .failure(error):
+                                        DispatchQueue.main.async {
+                                            completion(.failure(error))
+                                        }
+                                    case .finished: ()
+                                    }
+                                } receiveValue: { urls in
+                                    let browserResults = urls.map { BrowserResult<LivePhoto, PHLivePhoto>.data($0) }
+                                    DispatchQueue.main.async {
+                                        completion(.success(browserResults))
+                                    }
+                                }
+                                .store(in: &Garbage.cancellables)
                         }
                     }
-                    completion(result)
                 case let .failure(error): ()
                     completion(.failure(error))
                 }
@@ -94,7 +122,7 @@ public extension LivePhoto {
                 try ViewCreator.browser(mediaTypes: [.image, .livePhoto]) { (result: Result<LivePhoto, Error>) in
                     switch result {
                     case let .success(livePhoto):
-                        completion(.success([livePhoto]))
+                        completion(.success([.media(livePhoto)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }

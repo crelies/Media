@@ -6,6 +6,7 @@
 //
 
 #if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
+import Combine
 import MediaCore
 import PhotosUI
 import SwiftUI
@@ -95,22 +96,49 @@ public extension Video {
     @ViewBuilder static func browser<ErrorView: View>(selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultVideosCompletion) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(configuration: {
-                var configuration = PHPickerConfiguration()
+                var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.filter = .videos
                 configuration.selectionLimit = selectionLimit
+                configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }()) { result in
                 switch result {
                 case let .success(result):
-                    let result = Result {
-                        try result.compactMap { object -> Video? in
-                            guard let assetIdentifier = object.assetIdentifier else {
-                                return nil
+                    if Media.currentPermission == .authorized {
+                        let browserResult = Result {
+                            try result.compactMap { object -> BrowserResult<Video, URL>? in
+                                guard let assetIdentifier = object.assetIdentifier else {
+                                    return nil
+                                }
+                                guard let video = try Video.with(identifier: .init(stringLiteral: assetIdentifier)) else {
+                                    return nil
+                                }
+                                return .media(video)
                             }
-                            return try Video.with(identifier: .init(stringLiteral: assetIdentifier))
+                        }
+                        completion(browserResult)
+                    } else {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let loadVideos = result.map { $0.loadVideo() }
+                            Publishers.MergeMany(loadVideos)
+                                .collect()
+                                .sink { result in
+                                    switch result {
+                                    case let .failure(error):
+                                        DispatchQueue.main.async {
+                                            completion(.failure(error))
+                                        }
+                                    case .finished: ()
+                                    }
+                                } receiveValue: { urls in
+                                    let browserResults = urls.map { BrowserResult<Video, URL>.data($0) }
+                                    DispatchQueue.main.async {
+                                        completion(.success(browserResults))
+                                    }
+                                }
+                                .store(in: &Garbage.cancellables)
                         }
                     }
-                    completion(result)
                 case let .failure(error): ()
                     completion(.failure(error))
                 }
@@ -120,7 +148,7 @@ public extension Video {
                 try ViewCreator.browser(mediaTypes: [.movie]) { (result: Result<Video, Swift.Error>) in
                     switch result {
                     case let .success(video):
-                        completion(.success([video]))
+                        completion(.success([.media(video)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }
