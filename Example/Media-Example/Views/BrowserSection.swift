@@ -7,6 +7,8 @@
 //
 
 import AVKit
+import Combine
+import Foundation
 import MediaCore
 import MediaSwiftUI
 import Photos
@@ -22,6 +24,10 @@ extension UIImage: Identifiable {
 
 extension PHLivePhoto: Identifiable {
     public var id: PHLivePhoto { self }
+}
+
+struct Garbage {
+    static var cancellables: [AnyCancellable] = []
 }
 
 struct BrowserSection: View {
@@ -62,9 +68,7 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
                 isMediaBrowserViewVisible = false
             }) {
-                Media.browser(isPresented: $isMediaBrowserViewVisible, selectionLimit: 0) { result in
-                    debugPrint(result)
-                }
+                Media.browser(isPresented: $isMediaBrowserViewVisible, selectionLimit: 0, handleMediaBrowserResult)
             }
 
             Button(action: {
@@ -141,6 +145,39 @@ private extension BrowserSection {
             switch browserResult.first {
             case let .data(phLivePhoto):
                 livePhoto = phLivePhoto
+            default: ()
+            }
+        default: ()
+        }
+    }
+
+    func handleMediaBrowserResult(_ result: Result<[BrowserResult<PHAsset, NSItemProvider>], Swift.Error>) {
+        switch result {
+        case let .success(browserResult):
+            switch browserResult.first {
+            case let .data(itemProvider):
+                if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
+                    itemProvider.loadLivePhoto()
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveCompletion: { _ in }) { phLivePhoto in
+                            livePhoto = phLivePhoto
+                        }
+                        .store(in: &Garbage.cancellables)
+                } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                    itemProvider.loadImage()
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveCompletion: { _ in }) { uiImage in
+                            image = uiImage
+                        }
+                        .store(in: &Garbage.cancellables)
+                } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                    itemProvider.loadVideo()
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveCompletion: { _ in }) { url in
+                            playerURL = url
+                        }
+                        .store(in: &Garbage.cancellables)
+                }
             default: ()
             }
         default: ()
