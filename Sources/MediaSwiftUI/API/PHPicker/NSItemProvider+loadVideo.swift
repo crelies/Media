@@ -1,28 +1,32 @@
 //
-//  PHPickerResult+loadVideo.swift
+//  NSItemProvider+loadVideo.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 03.05.21.
 //
 
-#if !os(tvOS) && !os(macOS)
 import Combine
+import Foundation
 import PhotosUI
 
-@available(iOS 14, macCatalyst 14, *)
-extension PHPickerResult {
-    /// <#Description#>
+extension NSItemProvider {
+    /// Loads a video from the receiving item provider if one is available.
     /// 
-    /// - Returns: <#description#>
+    /// - Returns: A publisher which provides a `URL` of the video on `success`.
     public func loadVideo() -> AnyPublisher<URL, Swift.Error> {
         Future { promise in
-            let typeIdentifier = UTType.movie.identifier
-            guard itemProvider.hasItemConformingToTypeIdentifier(typeIdentifier) else {
+            let typeIdentifier: String
+            if #available(iOS 14, macCatalyst 14, macOS 11, tvOS 14, *) {
+                typeIdentifier = UTType.movie.identifier
+            } else {
+                typeIdentifier = "public.movie"
+            }
+            guard self.hasItemConformingToTypeIdentifier(typeIdentifier) else {
                 promise(.failure(Error.unknown))
                 return
             }
 
-            itemProvider.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error  in
+            self.loadFileRepresentation(forTypeIdentifier: typeIdentifier) { url, error  in
                 if let url = url {
                     let fileManager: FileManager = .default
                     let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -45,4 +49,3 @@ extension PHPickerResult {
         }.eraseToAnyPublisher()
     }
 }
-#endif

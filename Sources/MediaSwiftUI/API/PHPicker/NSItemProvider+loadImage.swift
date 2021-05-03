@@ -1,36 +1,27 @@
 //
-//  PHPickerResult+loadImage.swift
+//  NSItemProvider+loadImage.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 14.10.20.
 //
 
-#if !os(tvOS) && (!os(macOS) || targetEnvironment(macCatalyst))
+#if !os(macOS) || targetEnvironment(macCatalyst)
 import Combine
+import Foundation
 import MediaCore
-import PhotosUI
 
-@available(iOS 14, macCatalyst 14, *)
-extension PHPickerResult {
-    /// <#Description#>
-    public enum Error: Swift.Error {
-        ///
-        case couldNotLoadObject(underlying: Swift.Error)
-        ///
-        case unknown
-    }
-
-    /// <#Description#>
+extension NSItemProvider {
+    /// Loads an image from the receiving item provider if one is available.
     ///
-    /// - Returns: <#description#>
+    /// - Returns: A publisher which provides an `UniversalImage` on `success`.
     public func loadImage() -> AnyPublisher<UniversalImage, Swift.Error> {
         Future { promise in
-            guard itemProvider.canLoadObject(ofClass: UniversalImage.self) else {
+            guard self.canLoadObject(ofClass: UniversalImage.self) else {
                 promise(.failure(Error.couldNotLoadObject(underlying: Error.unknown)))
                 return
             }
 
-            itemProvider.loadObject(ofClass: UniversalImage.self) { newImage, error in
+            self.loadObject(ofClass: UniversalImage.self) { newImage, error in
                 if let error = error {
                     promise(.failure(Error.couldNotLoadObject(underlying: error)))
                 } else if let newImage = newImage {

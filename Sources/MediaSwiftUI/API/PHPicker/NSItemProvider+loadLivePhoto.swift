@@ -1,27 +1,26 @@
 //
-//  PHPickerResult+loadLivePhoto.swift
+//  NSItemProvider+loadLivePhoto.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 03.05.21.
 //
 
-#if !os(tvOS) && (!os(macOS) || targetEnvironment(macCatalyst))
 import Combine
-import PhotosUI
+import Foundation
+import Photos
 
-@available(iOS 14, macCatalyst 14, *)
-extension PHPickerResult {
-    /// <#Description#>
-    /// 
-    /// - Returns: <#description#>
+extension NSItemProvider {
+    /// Loads a live photo from the receiving item provider if one is available.
+    ///
+    /// - Returns: A publisher which provides a `PHLivePhoto` on `success`.
     public func loadLivePhoto() -> AnyPublisher<PHLivePhoto, Swift.Error> {
         Future { promise in
-            guard itemProvider.canLoadObject(ofClass: PHLivePhoto.self) else {
+            guard self.canLoadObject(ofClass: PHLivePhoto.self) else {
                 promise(.failure(Error.couldNotLoadObject(underlying: Error.unknown)))
                 return
             }
 
-            itemProvider.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
+            self.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
                 if let error = error {
                     promise(.failure(Error.couldNotLoadObject(underlying: error)))
                 } else if let livePhoto = livePhoto {
@@ -33,4 +32,3 @@ extension PHPickerResult {
         }.eraseToAnyPublisher()
     }
 }
-#endif

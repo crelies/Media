@@ -105,7 +105,7 @@ public extension Photo {
                         completion(result)
                     } else {
                         DispatchQueue.global(qos: .userInitiated).async {
-                            let loadVideos = result.map { $0.loadImage() }
+                            let loadVideos = result.map { $0.itemProvider.loadImage() }
                             Publishers.MergeMany(loadVideos)
                                 .collect()
                                 .sink { result in

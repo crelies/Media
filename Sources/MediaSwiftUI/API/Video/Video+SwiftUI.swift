@@ -121,7 +121,7 @@ public extension Video {
                         completion(browserResult)
                     } else {
                         DispatchQueue.global(qos: .userInitiated).async {
-                            let loadVideos = result.map { $0.loadVideo() }
+                            let loadVideos = result.map { $0.itemProvider.loadVideo() }
                             Publishers.MergeMany(loadVideos)
                                 .collect()
                                 .sink { result in
