@@ -38,6 +38,7 @@ public struct Media {
 
     /// Returns the current camera permission.
     ///
+    @available(tvOS, unavailable)
     public static var currentCameraPermission: AVAuthorizationStatus {
         AVCaptureDevice.authorizationStatus(for: .video)
     }

@@ -6,6 +6,7 @@
 //
 
 #if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
+import Combine
 import MediaCore
 import Photos
 import PhotosUI
@@ -60,41 +61,67 @@ public extension Photo {
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
+    /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter completion: A closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`).
     ///
     /// - Returns: some View
-    static func browser(selectionLimit: Int = 1, _ completion: @escaping ResultPhotosCompletion) -> some View {
-        browser(selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
+    static func browser(isPresented: Binding<Bool>, selectionLimit: Int = 1, _ completion: @escaping ResultPhotosCompletion) -> some View {
+        browser(isPresented: isPresented, selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
+    /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter completion: A closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`).
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPhotosCompletion) -> some View {
+    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPhotosCompletion) -> some View {
         if #available(iOS 14, macOS 11, *) {
-            PHPicker(configuration: {
-                var configuration = PHPickerConfiguration()
+            PHPicker(isPresented: isPresented, configuration: {
+                var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.filter = .images
                 configuration.selectionLimit = selectionLimit
+                configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }()) { result in
                 switch result {
                 case let .success(result):
-                    let result = Result {
-                        try result.compactMap { object -> Photo? in
-                            guard let assetIdentifier = object.assetIdentifier else {
-                                return nil
+                    if Media.currentPermission == .authorized {
+                        let result = Result {
+                            try result.compactMap { object -> BrowserResult<Photo, UniversalImage>? in
+                                guard let assetIdentifier = object.assetIdentifier else {
+                                    return nil
+                                }
+                                guard let photo = try Photo.with(identifier: .init(stringLiteral: assetIdentifier)) else {
+                                    return nil
+                                }
+                                return .media(photo)
                             }
-                            return try Photo.with(identifier: .init(stringLiteral: assetIdentifier))
+                        }
+                        completion(result)
+                    } else {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            let loadImages = result.map { $0.itemProvider.loadImage() }
+                            Publishers.MergeMany(loadImages)
+                                .collect()
+                                .receive(on: DispatchQueue.main)
+                                .sink { result in
+                                    switch result {
+                                    case let .failure(error):
+                                        completion(.failure(error))
+                                    case .finished: ()
+                                    }
+                                } receiveValue: { urls in
+                                    let browserResults = urls.map { BrowserResult<Photo, UniversalImage>.data($0) }
+                                    completion(.success(browserResults))
+                                }
+                                .store(in: &Garbage.cancellables)
                         }
                     }
-                    completion(result)
                 case let .failure(error): ()
                     completion(.failure(error))
                 }
@@ -104,7 +131,7 @@ public extension Photo {
                 try ViewCreator.browser(mediaTypes: [.image]) { (result: Result<Photo, Swift.Error>) in
                     switch result {
                     case let .success(photo):
-                        completion(.success([photo]))
+                        completion(.success([.media(photo)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }
