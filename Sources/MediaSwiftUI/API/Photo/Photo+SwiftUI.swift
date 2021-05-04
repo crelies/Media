@@ -105,22 +105,19 @@ public extension Photo {
                         completion(result)
                     } else {
                         DispatchQueue.global(qos: .userInitiated).async {
-                            let loadVideos = result.map { $0.itemProvider.loadImage() }
-                            Publishers.MergeMany(loadVideos)
+                            let loadImages = result.map { $0.itemProvider.loadImage() }
+                            Publishers.MergeMany(loadImages)
                                 .collect()
+                                .receive(on: DispatchQueue.main)
                                 .sink { result in
                                     switch result {
                                     case let .failure(error):
-                                        DispatchQueue.main.async {
-                                            completion(.failure(error))
-                                        }
+                                        completion(.failure(error))
                                     case .finished: ()
                                     }
                                 } receiveValue: { urls in
                                     let browserResults = urls.map { BrowserResult<Photo, UniversalImage>.data($0) }
-                                    DispatchQueue.main.async {
-                                        completion(.success(browserResults))
-                                    }
+                                    completion(.success(browserResults))
                                 }
                                 .store(in: &Garbage.cancellables)
                         }

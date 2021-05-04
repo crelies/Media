@@ -406,6 +406,14 @@ Use the `LazyVideos` wrapper if you want to fetch videos only on demand (request
 - **SwiftUI only**: `video.view` (*some View*)
 
   *Get a ready-to-use **SwiftUI** view for displaying the video in your UI*
+  
+- **PHPicker**: SwiftUI port of the `PHPickerViewController`
+
+  *Use the `PHPickerViewController` in your `SwiftUI` applications*
+  
+- **PhotosUILivePhotoView**: SwiftUI port of the `PHLivePhotoView`
+
+  *Use the `PHLivePhotoView` in your `SwiftUI` applications*
 
 ### 🚀 `@propertyWrapper`
 

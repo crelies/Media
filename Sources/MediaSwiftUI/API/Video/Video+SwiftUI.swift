@@ -124,19 +124,16 @@ public extension Video {
                             let loadVideos = result.map { $0.itemProvider.loadVideo() }
                             Publishers.MergeMany(loadVideos)
                                 .collect()
+                                .receive(on: DispatchQueue.main)
                                 .sink { result in
                                     switch result {
                                     case let .failure(error):
-                                        DispatchQueue.main.async {
-                                            completion(.failure(error))
-                                        }
+                                        completion(.failure(error))
                                     case .finished: ()
                                     }
                                 } receiveValue: { urls in
                                     let browserResults = urls.map { BrowserResult<Video, URL>.data($0) }
-                                    DispatchQueue.main.async {
-                                        completion(.success(browserResults))
-                                    }
+                                    completion(.success(browserResults))
                                 }
                                 .store(in: &Garbage.cancellables)
                         }

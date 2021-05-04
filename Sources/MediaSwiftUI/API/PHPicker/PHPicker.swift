@@ -11,7 +11,7 @@ import PhotosUI
 import SwiftUI
 
 @available(iOS 14, macCatalyst 14, *)
-/// `SwiftUI` port of the `PHPicker`.
+/// `SwiftUI` port of the `PHPickerViewController`.
 public struct PHPicker: UIViewControllerRepresentable {
     /// The coordinator of the view. Mainly it's the delegate of the underlying `PHPickerViewController`.
     public final class Coordinator: NSObject, PHPickerViewControllerDelegate {
