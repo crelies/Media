@@ -1,4 +1,4 @@
-name: iOS starter workflow
+name: Package workflow
 
 on:
   push:
