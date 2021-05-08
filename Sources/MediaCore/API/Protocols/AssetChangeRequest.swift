@@ -10,7 +10,7 @@ import Photos
 /// Defines the requirements for an
 /// asset change request
 ///
-public protocol AssetChangeRequest: class {
+public protocol AssetChangeRequest: AnyObject {
     /// A placeholder object for the asset that the change request creates.
     var placeholderForCreatedAsset: PHObjectPlaceholder? { get }
     /// Creates a request for adding a new image asset to the Photos library.

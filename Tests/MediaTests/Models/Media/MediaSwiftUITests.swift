@@ -6,19 +6,16 @@
 //
 
 #if canImport(UIKit) && !os(tvOS)
-@testable import MediaCore
+import MediaCore
+import MediaSwiftUI
 import Photos
 import XCTest
 
 @available(iOS 13, *)
 final class MediaSwiftUITests: XCTestCase {
     func testBrowser() {
-        do {
-            let completion: ResultPHAssetCompletion = { result in }
-            _ = try Media.browser(completion)
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
+        let completion: ResultPHAssetsCompletion = { result in }
+        _ = Media.browser(isPresented: .constant(true), completion)
     }
 }
 #endif
