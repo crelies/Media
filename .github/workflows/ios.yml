@@ -1,0 +1,25 @@
+name: Package workflow
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Test and upload coverage data
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate Xcode project
+        run: |
+          swift package generate-xcodeproj
+      - name: Test
+        run: |
+          xcodebuild clean test -destination 'name=iPhone 8' -scheme Media-Package -enableCodeCoverage YES -derivedDataPath .build/derivedData -quiet
+      - name: Upload Test coverage data
+        run: |
+          bash <(curl -s https://codecov.io/bash) -J '^MediaCore$' -D .build/derivedData
