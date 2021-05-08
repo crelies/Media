@@ -10,7 +10,7 @@ import Photos
 typealias RequestAuthorizationHandler = (PHAuthorizationStatus) -> Void
 typealias PerformChangesCompletionHandler = (Bool, Error?) -> Void
 
-protocol PhotoLibrary: class {
+protocol PhotoLibrary: AnyObject {
     static func authorizationStatus() -> PHAuthorizationStatus
     @available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)
     static func authorizationStatus(for accessLevel: PHAccessLevel) -> PHAuthorizationStatus
