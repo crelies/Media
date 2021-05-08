@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Test and upload test coverage data
+    name: Test and upload coverage data
     runs-on: macos-latest
 
     steps:
