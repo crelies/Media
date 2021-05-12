@@ -5,7 +5,7 @@ A **beautiful**, **simple**, **declarative**, **convenient**, **cross-platform (
 [![Swift 5.3](https://img.shields.io/badge/swift-5.3-green.svg?longCache=true&style=flat-square)](https://developer.apple.com/swift)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS-lightgrey.svg?longCache=true&style=flat-square)](https://www.apple.com)
 [![Current Version](https://img.shields.io/github/v/tag/crelies/Media?longCache=true&style=flat-square)](https://github.com/crelies/Media)
-[![Build status](https://travis-ci.com/crelies/Media.svg?token=THnaziKxRFFz1nKcsPgz&branch=dev)](https://travis-ci.com/crelies/Media)
+[![Build status](https://github.com/crelies/Media/actions/workflows/ios.yml/badge.svg?branch=master)](https://github.com/crelies/Media/actions/workflows/ios.yml)
 [![codecov](https://codecov.io/gh/crelies/Media/branch/dev/graph/badge.svg?token=DhJyoUKNPM)](https://codecov.io/gh/crelies/Media)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
 
