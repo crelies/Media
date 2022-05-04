@@ -8,6 +8,7 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(macCatalyst 14, *)
 @available(tvOS, unavailable)
 extension AVCaptureDevice {
     enum Error: Swift.Error {

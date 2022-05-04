@@ -10,6 +10,7 @@ import AVFoundation
 
 @available(iOS 10, *)
 @available(macOS, unavailable)
+@available(macCatalyst 14, *)
 /// Service for shooting (live) photos
 /// using `AVCapture` APIs
 ///
@@ -36,6 +37,7 @@ public final class Photograph: NSObject {
 
 @available(iOS 10, *)
 @available(macOS, unavailable)
+@available(macCatalyst 14, *)
 public extension Photograph {
     /// Tells the receiver to shoot a photo
     ///
@@ -58,6 +60,7 @@ public extension Photograph {
 
 @available(iOS 10, *)
 @available(macOS, unavailable)
+@available(macCatalyst 14, *)
 extension Photograph: CaptureProcessorDelegate {
     func didCapturePhoto(data: Data) {
         stillImageCompletion?(.success(data))

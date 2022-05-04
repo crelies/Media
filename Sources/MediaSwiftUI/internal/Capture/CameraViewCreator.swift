@@ -12,6 +12,7 @@ import SwiftUI
 
 @available(iOS 13, *)
 struct CameraViewCreator {
+    @available(macCatalyst 14, *)
     static func livePhoto(_ completion: @escaping LivePhotoDataCompletion) throws -> some View {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()

@@ -51,6 +51,7 @@ struct BrowserSection: View {
             }) {
                 LivePhoto.browser(isPresented: $isLivePhotoBrowserViewVisible, selectionLimit: 0, handleLivePhotoBrowserResult)
             }
+            #if !targetEnvironment(macCatalyst)
             .background(
                 EmptyView()
                     .sheet(item: $livePhoto, onDismiss: {
@@ -59,6 +60,7 @@ struct BrowserSection: View {
                         PhotosUILivePhotoView(phLivePhoto: livePhoto)
                     }
             )
+            #endif
 
             Button(action: {
                 isMediaBrowserViewVisible = true

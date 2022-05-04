@@ -11,6 +11,7 @@ import UIKit
 
 @available(iOS 10, *)
 @available(macOS 10.15, *)
+@available(macCatalyst 14, *)
 @available(tvOS, unavailable)
 final class AVCaptureVideoPreview: UIView {
     override static var layerClass: AnyClass {

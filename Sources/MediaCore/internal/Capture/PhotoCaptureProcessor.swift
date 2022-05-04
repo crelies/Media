@@ -19,6 +19,7 @@ final class PhotoCaptureProcessor: NSObject, CaptureProcessor {
         Image portion
      */
     @available(iOS 11, *)
+    @available(macCatalyst 14, *)
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
                      error: Error?) {

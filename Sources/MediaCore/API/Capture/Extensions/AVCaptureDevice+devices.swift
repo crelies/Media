@@ -9,6 +9,7 @@
 import AVFoundation
 
 @available(iOS 10, *)
+@available(macCatalyst 14, *)
 public extension AVCaptureDevice {
     /// Looks for a back video camera and returns it if found
     ///
