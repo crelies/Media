@@ -12,6 +12,7 @@ import SwiftUI
 import UIKit
 
 @available(iOS 13, *)
+@available(macCatalyst 14, *)
 struct CameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
     @State private var isLivePhotoAvailable = false
