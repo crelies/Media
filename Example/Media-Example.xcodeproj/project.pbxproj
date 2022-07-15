@@ -11,8 +11,8 @@
 		B97D91482388772000A617DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D91472388772000A617DC /* Assets.xcassets */; };
 		B97D914B2388772000A617DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D914A2388772000A617DC /* Preview Assets.xcassets */; };
 		B97D915D238986DD00A617DC /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97D915C238986DD00A617DC /* RootScreen.swift */; };
-		B98EA8F723F75ED3002CBCEE /* MediaSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B98EA8F623F75ED3002CBCEE /* MediaSwiftUI */; };
-		B98EA8F923F75ED3002CBCEE /* MediaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B98EA8F823F75ED3002CBCEE /* MediaCore */; };
+		B98469442881743E0013DA01 /* MediaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B98469432881743E0013DA01 /* MediaCore */; };
+		B98469462881743E0013DA01 /* MediaSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B98469452881743E0013DA01 /* MediaSwiftUI */; };
 		B995869D263CBB5C0032EF4B /* VideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995869C263CBB5C0032EF4B /* VideosView.swift */; };
 		B99586A0263CBBCB0032EF4B /* AlbumsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B995869F263CBBCB0032EF4B /* AlbumsView.swift */; };
 		B99586A6263CBC9D0032EF4B /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99586A5263CBC9D0032EF4B /* AlbumView.swift */; };
@@ -108,8 +108,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B98EA8F923F75ED3002CBCEE /* MediaCore in Frameworks */,
-				B98EA8F723F75ED3002CBCEE /* MediaSwiftUI in Frameworks */,
+				B98469442881743E0013DA01 /* MediaCore in Frameworks */,
+				B98469462881743E0013DA01 /* MediaSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,8 +285,8 @@
 			);
 			name = "Media-Example";
 			packageProductDependencies = (
-				B98EA8F623F75ED3002CBCEE /* MediaSwiftUI */,
-				B98EA8F823F75ED3002CBCEE /* MediaCore */,
+				B98469432881743E0013DA01 /* MediaCore */,
+				B98469452881743E0013DA01 /* MediaSwiftUI */,
 			);
 			productName = "Media-Example";
 			productReference = B97D913E2388771D00A617DC /* Media-Example.app */;
@@ -317,7 +317,6 @@
 			);
 			mainGroup = B97D91352388771D00A617DC;
 			packageReferences = (
-				B98EA8F523F75ED3002CBCEE /* XCRemoteSwiftPackageReference "Media" */,
 			);
 			productRefGroup = B97D913F2388771D00A617DC /* Products */;
 			projectDirPath = "";
@@ -581,27 +580,14 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		B98EA8F523F75ED3002CBCEE /* XCRemoteSwiftPackageReference "Media" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:crelies/Media.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		B98EA8F623F75ED3002CBCEE /* MediaSwiftUI */ = {
+		B98469432881743E0013DA01 /* MediaCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B98EA8F523F75ED3002CBCEE /* XCRemoteSwiftPackageReference "Media" */;
-			productName = MediaSwiftUI;
-		};
-		B98EA8F823F75ED3002CBCEE /* MediaCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B98EA8F523F75ED3002CBCEE /* XCRemoteSwiftPackageReference "Media" */;
 			productName = MediaCore;
+		};
+		B98469452881743E0013DA01 /* MediaSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MediaSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

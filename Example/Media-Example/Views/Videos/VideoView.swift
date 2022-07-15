@@ -127,10 +127,8 @@ private extension VideoView {
     }
 }
 
-#if DEBUG
 struct VideoView_Previews: PreviewProvider {
     static var previews: some View {
         VideoView(video: .init(phAsset: PHAsset()))
     }
 }
-#endif

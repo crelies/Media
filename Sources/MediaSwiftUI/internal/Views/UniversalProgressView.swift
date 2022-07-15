@@ -20,11 +20,9 @@ struct UniversalProgressView: View {
     }
 }
 
-#if DEBUG
 @available(macOS 11, *)
 struct UniversalProgressView_Previews: PreviewProvider {
     static var previews: some View {
         UniversalProgressView()
     }
 }
-#endif

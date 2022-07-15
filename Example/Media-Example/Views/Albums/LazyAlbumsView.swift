@@ -78,10 +78,8 @@ private extension LazyAlbumsView {
     }
 }
 
-#if DEBUG
 struct LazyAlbumsView_Previews: PreviewProvider {
     static var previews: some View {
         LazyAlbumsView(albums: LazyAlbums.cloud!)
     }
 }
-#endif

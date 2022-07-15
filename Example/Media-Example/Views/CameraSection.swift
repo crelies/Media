@@ -16,6 +16,10 @@ struct CameraSection: View {
     @State private var isPhotoCameraViewVisible = false
     @State private var isVideoCameraViewVisible = false
 
+    #if !targetEnvironment(macCatalyst)
+    @ObservedObject var cameraViewModel: CameraViewModel
+    #endif
+
     var body: some View {
         Section(header: Label("Camera", systemImage: "camera")) {
             Button(action: {
@@ -38,19 +42,7 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isLivePhotoCameraViewVisible, onDismiss: {
                 isLivePhotoCameraViewVisible = false
             }) {
-                LivePhoto.camera { result in
-                    guard let livePhotoData = try? result.get() else {
-                        return
-                    }
-
-                    try? LivePhoto.save(data: livePhotoData) { result in
-                        switch result {
-                        case .failure(let error):
-                            debugPrint("Live photo save error: \(error)")
-                        default: ()
-                        }
-                    }
-                }
+                LivePhoto.camera(cameraViewModel: cameraViewModel)
             }
             #endif
 

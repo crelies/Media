@@ -11,6 +11,8 @@ import AVKit
 import MediaCore
 import SwiftUI
 
+// TODO: create a view model
+
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct VideoView: View {
     @State private var state: ViewState<AVPlayerItem> = .loading

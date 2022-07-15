@@ -42,13 +42,11 @@ struct MediaPicker: UIViewControllerRepresentable {
     ) {}
 }
 
-#if DEBUG
 @available(iOS 13, macOS 10.15, *)
 struct MediaPicker_Previews: PreviewProvider {
     static var previews: some View {
         MediaPicker(sourceType: .savedPhotosAlbum, mediaTypes: [], onSelection: { _ in }, onFailure: { _ in })
     }
 }
-#endif
 
 #endif

@@ -17,30 +17,22 @@ public extension LivePhoto {
     /// Creates a ready-to-use `SwiftUI` view for capturing `LivePhoto`s
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
-    /// - Parameter completion: A closure which gets the `URL` of the captured `LivePhoto` on `success` or `Error` on `failure`.
+    /// - Parameter cameraViewModel: A view model handling all of the camera view logic.
     ///
     /// - Returns: some View
-    static func camera(_ completion: @escaping LivePhotoDataCompletion) -> some View {
-        camera(errorView: { error in Text(error.localizedDescription) }, completion)
+    static func camera(cameraViewModel: CameraViewModel) -> some View {
+        camera(cameraViewModel: cameraViewModel, errorView: { error in Text(error.localizedDescription) })
     }
 
     /// Creates a ready-to-use `SwiftUI` view for capturing `LivePhoto`s
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
+    /// - Parameter cameraViewModel: A view model handling all of the camera view logic.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure which gets the `URL` of the captured `LivePhoto` on `success` or `Error` on `failure`.
     ///
     /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping LivePhotoDataCompletion) -> some View {
-        let result = Result {
-            try CameraViewCreator.livePhoto(completion)
-        }
-        switch result {
-        case let .success(view):
-            view
-        case let .failure(error):
-            errorView(error)
-        }
+    @ViewBuilder static func camera<ErrorView: View>(cameraViewModel: CameraViewModel, @ViewBuilder errorView: (Swift.Error) -> ErrorView) -> some View {
+        CameraViewCreator.livePhoto(cameraViewModel: cameraViewModel)
     }
 }
 #endif

@@ -11,6 +11,8 @@ import Photos
 import SwiftUI
 import UIKit
 
+// TODO: create a view model
+
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct PhotoView<ImageView: View>: View {
     enum Error: Swift.Error {

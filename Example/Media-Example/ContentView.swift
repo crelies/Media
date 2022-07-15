@@ -6,16 +6,19 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+import MediaSwiftUI
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var cameraViewModel: CameraViewModel
+
     var body: some View {
-        RootScreen()
+        RootScreen(cameraViewModel: cameraViewModel)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(cameraViewModel: cameraViewModel)
     }
 }

@@ -69,13 +69,11 @@ public struct PHPicker: UIViewControllerRepresentable {
     }
 }
 
-#if DEBUG
 @available(iOS 14, macCatalyst 14, *)
 struct PHPicker_Previews: PreviewProvider {
     static var previews: some View {
         PHPicker(isPresented: .constant(true), configuration: .init(), { _ in })
     }
 }
-#endif
 
 #endif

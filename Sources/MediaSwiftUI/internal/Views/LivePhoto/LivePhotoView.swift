@@ -10,6 +10,8 @@ import MediaCore
 import Photos
 import SwiftUI
 
+// TODO: create a view model
+
 @available(iOS 13, tvOS 13, *)
 struct LivePhotoView: View {
     @State private var state: ViewState<PHLivePhoto> = .loading

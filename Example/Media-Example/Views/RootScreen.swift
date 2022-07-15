@@ -32,6 +32,8 @@ struct RootScreen: View {
     @FetchAlbums(ofType: .smart)
     private var albums: [Album]
 
+    @ObservedObject var cameraViewModel: CameraViewModel
+
     var body: some View {
         NavigationView {
             switch permissionState {
@@ -116,7 +118,7 @@ struct RootScreen: View {
 
                     VideosSection()
 
-                    CameraSection()
+                    CameraSection(cameraViewModel: cameraViewModel)
 
                     BrowserSection()
                 }
@@ -160,10 +162,8 @@ private extension RootScreen {
     }
 }
 
-#if DEBUG
 struct AlbumsOverviewView_Previews: PreviewProvider {
     static var previews: some View {
-        RootScreen()
+        RootScreen(cameraViewModel: cameraViewModel)
     }
 }
-#endif

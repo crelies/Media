@@ -26,10 +26,8 @@ struct PHPicker: UIViewControllerRepresentable {
     }
 }
 
-#if DEBUG
 struct PHPicker_Previews: PreviewProvider {
     static var previews: some View {
         PHPicker(isPresented: .constant(false))
     }
 }
-#endif

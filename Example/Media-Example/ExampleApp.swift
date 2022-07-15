@@ -7,13 +7,29 @@
 //
 
 import AVFoundation
+import MediaCore
+import MediaSwiftUI
 import SwiftUI
+
+let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
+    guard let livePhotoData = try? result.get() else {
+        return
+    }
+
+    try? LivePhoto.save(data: livePhotoData) { result in
+        switch result {
+        case .failure(let error):
+            debugPrint("Live photo save error: \(error)")
+        default: ()
+        }
+    }
+}
 
 @main
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(cameraViewModel: cameraViewModel)
         }
     }
 
