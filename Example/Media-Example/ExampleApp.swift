@@ -11,6 +11,7 @@ import MediaCore
 import MediaSwiftUI
 import SwiftUI
 
+#if !os(tvOS)
 let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
     guard let livePhotoData = try? result.get() else {
         return
@@ -24,6 +25,7 @@ let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
         }
     }
 }
+#endif
 
 @main
 struct ExampleApp: App {
