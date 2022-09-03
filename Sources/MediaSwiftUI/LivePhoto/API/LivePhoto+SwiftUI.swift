@@ -20,7 +20,7 @@ public extension LivePhoto {
     /// - Parameter cameraViewModel: A view model handling all of the camera view logic.
     ///
     /// - Returns: some View
-    static func camera(cameraViewModel: CameraViewModel) -> some View {
+    static func camera(cameraViewModel: LivePhotoCameraViewModel) -> some View {
         camera(cameraViewModel: cameraViewModel, errorView: { error in Text(error.localizedDescription) })
     }
 
@@ -31,7 +31,7 @@ public extension LivePhoto {
     /// - Parameter errorView: A closure that constructs an error view for the given error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(cameraViewModel: CameraViewModel, @ViewBuilder errorView: (Swift.Error) -> ErrorView) -> some View {
+    @ViewBuilder static func camera<ErrorView: View>(cameraViewModel: LivePhotoCameraViewModel, @ViewBuilder errorView: (Swift.Error) -> ErrorView) -> some View {
         CameraViewCreator.livePhoto(cameraViewModel: cameraViewModel)
     }
 }

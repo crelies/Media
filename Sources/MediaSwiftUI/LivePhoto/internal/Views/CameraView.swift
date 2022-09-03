@@ -16,7 +16,7 @@ import UIKit
 struct CameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
-    @ObservedObject var viewModel: CameraViewModel
+    @ObservedObject var viewModel: LivePhotoCameraViewModel
 
     var body: some View {
         GeometryReader { geometry in

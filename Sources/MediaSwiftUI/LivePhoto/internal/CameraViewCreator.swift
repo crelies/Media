@@ -14,7 +14,7 @@ import SwiftUI
 struct CameraViewCreator {
     @available(macCatalyst 14, *)
     static func livePhoto(
-        cameraViewModel: CameraViewModel
+        cameraViewModel: LivePhotoCameraViewModel
     ) -> CameraView {
         CameraView(
             viewModel: cameraViewModel

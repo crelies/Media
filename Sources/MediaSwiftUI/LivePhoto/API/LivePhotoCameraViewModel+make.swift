@@ -1,5 +1,5 @@
 //
-//  CameraViewModel+make.swift
+//  LivePhotoCameraViewModel+make.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 15/07/2022.
@@ -13,14 +13,14 @@ import MediaCore
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-extension CameraViewModel {
+extension LivePhotoCameraViewModel {
     /// Creates a camera view model instance using the given completion block.
     ///
     /// - Parameter completion: A closure which gets the `URL` of the captured `LivePhoto` on `success` or `Error` on `failure`.
     /// - Returns: A camera view model instance.
     public static func make(
         _ completion: @escaping LivePhotoDataCompletion
-    ) throws -> CameraViewModel {
+    ) throws -> LivePhotoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
 
@@ -68,7 +68,7 @@ extension CameraViewModel {
 
         captureSession.commitConfiguration()
 
-        return CameraViewModel(
+        return LivePhotoCameraViewModel(
             cameras: captureDevices,
             captureSession: captureSession,
             captureSettings: captureSettings,

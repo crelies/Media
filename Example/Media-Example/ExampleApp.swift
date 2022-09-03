@@ -12,7 +12,7 @@ import MediaSwiftUI
 import SwiftUI
 
 #if !os(tvOS)
-let rootCameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
+let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewModel.make { result in
     guard let livePhotoData: LivePhotoData = try? result.get() else {
         return
     }

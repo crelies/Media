@@ -32,7 +32,7 @@ struct RootScreen: View {
     @FetchAlbums(ofType: .smart)
     private var albums: [Album]
 
-    @ObservedObject var cameraViewModel: CameraViewModel
+    @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
 
     var body: some View {
         NavigationView {

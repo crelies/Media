@@ -17,7 +17,7 @@ struct CameraSection: View {
     @State private var isVideoCameraViewVisible = false
 
     #if !targetEnvironment(macCatalyst)
-    @ObservedObject var cameraViewModel: CameraViewModel
+    @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
     #endif
 
     var body: some View {

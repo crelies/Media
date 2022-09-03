@@ -10,7 +10,7 @@ import MediaSwiftUI
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var cameraViewModel: CameraViewModel
+    @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
 
     var body: some View {
         RootScreen(cameraViewModel: cameraViewModel)

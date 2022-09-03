@@ -1,5 +1,5 @@
 //
-//  CameraViewModel.swift
+//  LivePhotoCameraViewModel.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 04/05/2022.
@@ -15,7 +15,7 @@ import UIKit
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-public final class CameraViewModel: ObservableObject {
+public final class LivePhotoCameraViewModel: ObservableObject {
     private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCapturePhotoOutput
@@ -51,7 +51,7 @@ public final class CameraViewModel: ObservableObject {
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-extension CameraViewModel {
+extension LivePhotoCameraViewModel {
     func startVideoPreview() {
         backgroundQueue.async {
             self.captureSession.startRunning()
@@ -129,7 +129,7 @@ extension CameraViewModel {
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-private extension CameraViewModel {
+private extension LivePhotoCameraViewModel {
     func reset() {
         stillImageData = nil
         livePhotoData = nil
