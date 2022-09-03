@@ -19,11 +19,20 @@ public extension Video {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter completion: A closure wich gets `Video` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the selected videos.
     ///
     /// - Returns: some View
-    static func browser(isPresented: Binding<Bool>, selectionLimit: Int = 1, _ completion: @escaping ResultVideosCompletion) -> some View {
-        browser(isPresented: isPresented, selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
+    static func browser(
+        isPresented: Binding<Bool>,
+        selectionLimit: Int = 1,
+        selection: Binding<[BrowserResult<Video, URL>]>
+    ) -> some View {
+        browser(
+            isPresented: isPresented,
+            selectionLimit: selectionLimit,
+            errorView: { error in Text(error.localizedDescription) },
+            selection: selection
+        )
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing `Video`s in the photo library
@@ -32,10 +41,10 @@ public extension Video {
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure wich gets `Video` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the selected videos.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultVideosCompletion) -> some View {
+    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<Video, URL>]>) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(isPresented: isPresented, configuration: {
                 var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -58,7 +67,14 @@ public extension Video {
                                 return .media(video, itemProvider: object.itemProvider)
                             }
                         }
-                        completion(browserResult)
+
+                        switch browserResult {
+                        case let .success(results):
+                            selection.wrappedValue = results
+                        case let .failure(error):
+                            // TODO: error handling
+                            debugPrint(error)
+                        }
                     } else {
                         DispatchQueue.global(qos: .userInitiated).async {
                             let loadVideos = result.map { $0.itemProvider.loadVideo() }
@@ -68,18 +84,20 @@ public extension Video {
                                 .sink { result in
                                     switch result {
                                     case let .failure(error):
-                                        completion(.failure(error))
+                                        // TODO: error handling
+                                        debugPrint(error)
                                     case .finished: ()
                                     }
                                 } receiveValue: { urls in
                                     let browserResults = urls.map { BrowserResult<Video, URL>.data($0) }
-                                    completion(.success(browserResults))
+                                    selection.wrappedValue = browserResults
                                 }
                                 .store(in: &Garbage.cancellables)
                         }
                     }
-                case let .failure(error): ()
-                    completion(.failure(error))
+                case let .failure(error):
+                    // TODO: error handling
+                    debugPrint(error)
                 }
             }
         } else {
@@ -87,9 +105,10 @@ public extension Video {
                 try ViewCreator.browser(mediaTypes: [.movie]) { (result: Result<Video, Swift.Error>) in
                     switch result {
                     case let .success(video):
-                        completion(.success([.media(video, itemProvider: nil)]))
+                        selection.wrappedValue = [.media(video, itemProvider: nil)]
                     case let .failure(error):
-                        completion(.failure(error))
+                        // TODO: error handling
+                        debugPrint(error)
                     }
                 }
             }

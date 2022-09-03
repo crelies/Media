@@ -41,6 +41,7 @@ struct BrowserSection: View {
     @State private var livePhotoBrowserSelection: [BrowserResult<LivePhoto, PHLivePhoto>] = []
     @State private var mediaBrowserSelection: [BrowserResult<PHAsset, NSItemProvider>] = []
     @State private var photoBrowserSelection: [BrowserResult<Photo, UniversalImage>] = []
+    @State private var videoBrowserSelection: [BrowserResult<Video, URL>] = []
 
     var body: some View {
         Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
@@ -117,7 +118,11 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isVideoBrowserViewVisible, onDismiss: {
                 isVideoBrowserViewVisible = false
             }) {
-                Video.browser(isPresented: $isVideoBrowserViewVisible, selectionLimit: 0, handleVideoBrowserResult)
+                Video.browser(
+                    isPresented: $isVideoBrowserViewVisible,
+                    selectionLimit: 0,
+                    selection: $videoBrowserSelection.onChange(handleVideoBrowserResult)
+                )
             }
             .background(
                 EmptyView()
@@ -157,14 +162,10 @@ private extension BrowserSection {
         }
     }
 
-    func handleVideoBrowserResult(_ result: Result<[BrowserResult<Video, URL>], Swift.Error>) {
-        switch result {
-        case let .success(browserResult):
-            switch browserResult.first {
-            case let .data(url):
-                playerURL = url
-            default: ()
-            }
+    func handleVideoBrowserResult(_ results: [BrowserResult<Video, URL>]) {
+        switch results.first {
+        case let .data(url):
+            playerURL = url
         default: ()
         }
     }
