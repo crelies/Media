@@ -28,22 +28,20 @@ extension CameraViewModel {
         try captureSession.addDefaultAudioDevice()
         #endif
 
-        var cameraFound = false
+        var captureDevices: [AVCaptureDevice] = []
 
         do {
             let frontCameraDevice: AVCaptureDevice = try .videoCamera(position: .front)
+            captureDevices.append(frontCameraDevice)
             try captureSession.addDevice(device: frontCameraDevice)
-            cameraFound = true
-        } catch {
-            cameraFound = false
-        }
+        } catch {}
 
         do {
             let backCameraDevice: AVCaptureDevice = try .videoCamera(position: .back)
+            captureDevices.append(backCameraDevice)
             try captureSession.addDevice(device: backCameraDevice)
-            cameraFound = true
         } catch {
-            if !cameraFound {
+            if captureDevices.isEmpty {
                 #if !targetEnvironment(simulator)
                 throw error
                 #endif
@@ -71,6 +69,7 @@ extension CameraViewModel {
         captureSession.commitConfiguration()
 
         return CameraViewModel(
+            cameras: captureDevices,
             captureSession: captureSession,
             captureSettings: captureSettings,
             output: photoOutput,

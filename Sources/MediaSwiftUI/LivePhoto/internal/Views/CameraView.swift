@@ -29,11 +29,22 @@ struct CameraView: View {
                             .frame(width: geometry.size.width, height: geometry.size.height)
                     } else {
                         ZStack(alignment: .topLeading) {
-                            Button(action: viewModel.toggleFlashMode) {
-                                Image(systemName: viewModel.isFlashActive ? "bolt.fill" : "bolt.slash.fill")
-                                    .frame(width: 48, height: 48)
+                            HStack {
+                                Button(action: viewModel.toggleFlashMode) {
+                                    Image(systemName: viewModel.isFlashActive ? "bolt.fill" : "bolt.slash.fill")
+                                        .frame(width: 48, height: 48)
+                                }
+                                .padding([.leading, .vertical])
+
+                                Spacer()
+
+                                Button(action: viewModel.toggleCamera) {
+                                    Image(systemName: "arrow.triangle.2.circlepath")
+                                        .frame(width: 48, height: 48)
+                                }
+                                .padding([.trailing, .vertical])
                             }
-                            .padding([.leading, .vertical])
+
                             .zIndex(1)
 
                             VideoPreview(captureSession: viewModel.captureSession)
@@ -67,8 +78,12 @@ private extension CameraView {
 
                 HStack {
                     Button(action: {
-                        viewModel.finish()
-                        presentationMode.wrappedValue.dismiss()
+                        if viewModel.stillImageData == nil {
+                            viewModel.finish()
+                            presentationMode.wrappedValue.dismiss()
+                        } else {
+                            viewModel.finish()
+                        }
                     }) {
                         Text(viewModel.stillImageData == nil ? "Cancel" : "Retake")
                     }
@@ -79,7 +94,15 @@ private extension CameraView {
                         viewModel.useLivePhoto()
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Use LivePhoto")
+                        VStack {
+                            Text("Use LivePhoto")
+
+                            if viewModel.stillImageData != nil && !viewModel.isLivePhotoAvailable {
+                                Text("Processing ...")
+                                    .font(.footnote)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
                     }.disabled(!viewModel.isLivePhotoAvailable)
                 }.padding(.horizontal)
             }

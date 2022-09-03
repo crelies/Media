@@ -16,6 +16,7 @@ import UIKit
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
 public final class CameraViewModel: ObservableObject {
+    private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCapturePhotoOutput
     private let photograph: Photograph
@@ -30,11 +31,13 @@ public final class CameraViewModel: ObservableObject {
     @Published private(set) var livePhotoData: LivePhotoData?
 
     init(
+        cameras: [AVCaptureDevice],
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCapturePhotoOutput,
         _ completion: @escaping LivePhotoDataCompletion
     ) {
+        self.cameras = cameras
         self.captureSession = captureSession
         self.captureSettings = captureSettings
         self.output = output
@@ -58,6 +61,22 @@ extension CameraViewModel {
     func toggleFlashMode() {
         isFlashActive.toggle()
         captureSettings.flashMode = isFlashActive ? .on : .off
+    }
+
+    func toggleCamera() {
+        guard let lastCaptureDevice = captureSession.inputs.last as? AVCaptureDeviceInput else {
+            return
+        }
+
+        guard let nextCamera = cameras.first(where: { $0.uniqueID != lastCaptureDevice.device.uniqueID }) else {
+            return
+        }
+
+        captureSession.removeInput(lastCaptureDevice)
+        // TODO: error handling?
+        try? captureSession.addDevice(device: nextCamera)
+
+        output.isLivePhotoCaptureEnabled = output.isLivePhotoCaptureSupported
     }
 
     func capture() {
