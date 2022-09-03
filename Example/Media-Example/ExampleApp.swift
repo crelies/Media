@@ -12,7 +12,6 @@ import MediaSwiftUI
 import SwiftUI
 
 #if !os(tvOS)
-// TODO: simulator: __C.AVCaptureSession.Error.noDefaultAudioDevice
 let rootCameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
     guard let livePhotoData: LivePhotoData = try? result.get() else {
         return

@@ -24,7 +24,9 @@ extension CameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
 
+        #if !targetEnvironment(simulator)
         try captureSession.addDefaultAudioDevice()
+        #endif
 
         var cameraFound = false
 
@@ -42,7 +44,9 @@ extension CameraViewModel {
             cameraFound = true
         } catch {
             if !cameraFound {
+                #if !targetEnvironment(simulator)
                 throw error
+                #endif
             }
         }
 
