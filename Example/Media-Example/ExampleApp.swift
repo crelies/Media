@@ -12,11 +12,13 @@ import MediaSwiftUI
 import SwiftUI
 
 #if !os(tvOS)
-let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
-    guard let livePhotoData = try? result.get() else {
+// TODO: simulator: __C.AVCaptureSession.Error.noDefaultAudioDevice
+let rootCameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
+    guard let livePhotoData: LivePhotoData = try? result.get() else {
         return
     }
 
+    #if !targetEnvironment(macCatalyst)
     try? LivePhoto.save(data: livePhotoData) { result in
         switch result {
         case .failure(let error):
@@ -24,6 +26,7 @@ let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
         default: ()
         }
     }
+    #endif
 }
 #endif
 
@@ -31,7 +34,7 @@ let cameraViewModel: CameraViewModel = try! CameraViewModel.make { result in
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(cameraViewModel: cameraViewModel)
+            ContentView(cameraViewModel: rootCameraViewModel)
         }
     }
 
