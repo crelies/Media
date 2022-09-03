@@ -1,63 +1,19 @@
 //
-//  Photo+SwiftUI.swift
+//  Photo+browser.swift
 //  MediaSwiftUI
 //
-//  Created by Christian Elies on 02.12.19.
+//  Created by Christian Elies on 04/09/2022.
 //
 
 #if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
 import Combine
 import MediaCore
-import Photos
 import PhotosUI
 import SwiftUI
 
 #if !os(tvOS)
 @available (iOS 13, macOS 10.15, *)
 public extension Photo {
-    typealias ResultPhotoCameraResultCompletion = (Result<Camera.Result, Swift.Error>) -> Void
-
-    /// Creates a ready-to-use `SwiftUI` view for capturing `Photo`s
-    /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
-    ///
-    /// - Parameter completion: A closure which gets a `Result` (`Photo.Camera.Result` on `success` or `Error` on `failure`).
-    ///
-    /// - Returns: some View
-    static func camera(_ completion: @escaping ResultPhotoCameraResultCompletion) -> some View {
-        camera(errorView: { error in Text(error.localizedDescription) }, completion)
-    }
-
-    /// Creates a ready-to-use `SwiftUI` view for capturing `Photo`s
-    /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
-    ///
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure which gets a `Result` (`Photo.Camera.Result` on `success` or `Error` on `failure`).
-    ///
-    /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPhotoCameraResultCompletion) -> some View {
-        let result = Result {
-            try ViewCreator.camera(for: [.image]) { result in
-                switch result {
-                case .success(let cameraResult):
-                    switch cameraResult {
-                    case .tookPhoto(let image):
-                        completion(.success(.tookPhoto(image: image)))
-                    default:
-                        completion(.failure(Photo.Error.unsupportedCameraResult))
-                    }
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-        }
-        switch result {
-        case let .success(view):
-            view
-        case let .failure(error):
-            errorView(error)
-        }
-    }
-
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
@@ -147,19 +103,5 @@ public extension Photo {
     }
 }
 #endif
-
-@available (iOS 13, macOS 10.15, tvOS 13, *)
-public extension Photo {
-    /// Creates a ready-to-use `SwiftUI` view representation of the receiver
-    ///
-    /// - Parameter targetSize: specifies the desired size of the photo (width and height), defaults to `nil`.
-    /// - Parameter contentMode: specifies the desired content mode of the photo, defaults to `.aspectFit`.
-    /// - Parameter imageView: a post processing closure which gets the `SwiftUI` `Image` view for further modification, like applying modifiers.
-    ///
-    /// - Returns: some `View`
-    func view<ImageView: View>(targetSize: CGSize? = nil, contentMode: PHImageContentMode = .aspectFit, @ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
-        PhotoView(photo: self, targetSize: targetSize, contentMode: contentMode, imageView: imageView)
-    }
-}
 
 #endif
