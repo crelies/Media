@@ -56,8 +56,6 @@ extension LivePhotoCameraViewModel {
         photoOutput.isHighResolutionCaptureEnabled = true
         photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
 
-//        let availablePhotoFileTypes = photoOutput.availablePhotoFileTypes
-
         #if !os(macOS)
         let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
         #else
