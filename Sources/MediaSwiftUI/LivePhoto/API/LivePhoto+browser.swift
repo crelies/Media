@@ -1,8 +1,8 @@
 //
-//  LivePhoto+SwiftUI.swift
-//  
+//  LivePhoto+browser.swift
+//  MediaSwiftUI
 //
-//  Created by Christian Elies on 02.12.19.
+//  Created by Christian Elies on 03/09/2022.
 //
 
 #if canImport(SwiftUI)
@@ -10,32 +10,6 @@ import Combine
 import MediaCore
 import PhotosUI
 import SwiftUI
-
-#if !os(macOS) && !targetEnvironment(macCatalyst) && !os(tvOS)
-@available(iOS 13, *)
-public extension LivePhoto {
-    /// Creates a ready-to-use `SwiftUI` view for capturing `LivePhoto`s
-    /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
-    ///
-    /// - Parameter cameraViewModel: A view model handling all of the camera view logic.
-    ///
-    /// - Returns: some View
-    static func camera(cameraViewModel: LivePhotoCameraViewModel) -> some View {
-        camera(cameraViewModel: cameraViewModel, errorView: { error in Text(error.localizedDescription) })
-    }
-
-    /// Creates a ready-to-use `SwiftUI` view for capturing `LivePhoto`s
-    /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
-    ///
-    /// - Parameter cameraViewModel: A view model handling all of the camera view logic.
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
-    ///
-    /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(cameraViewModel: LivePhotoCameraViewModel, @ViewBuilder errorView: (Swift.Error) -> ErrorView) -> some View {
-        CameraViewCreator.livePhoto(cameraViewModel: cameraViewModel)
-    }
-}
-#endif
 
 #if !os(macOS) && !os(tvOS)
 @available(iOS 13, macOS 10.15, *)
@@ -126,19 +100,6 @@ public extension LivePhoto {
                 errorView(error)
             }
         }
-    }
-}
-#endif
-
-#if !os(macOS) && !targetEnvironment(macCatalyst)
-@available(iOS 13, tvOS 13, *)
-public extension LivePhoto {
-    /// Creates a ready-to-use `SwiftUI` view representation of the receiver
-    ///
-    /// - Parameter size: the desired size of the `LivePhoto`
-    ///
-    func view(size: CGSize) -> some View {
-        LivePhotoView(livePhoto: self, size: size)
     }
 }
 #endif
