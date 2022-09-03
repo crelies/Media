@@ -11,7 +11,7 @@ import AVKit
 import MediaCore
 import SwiftUI
 
-// TODO: create a view model
+// TODO: [view model] create a view model
 
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct VideoView: View {

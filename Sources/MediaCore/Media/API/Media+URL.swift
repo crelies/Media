@@ -12,8 +12,8 @@ extension Media {
     /// like `Photo` or `Video`
     ///
     public struct URL<T: MediaProtocol> {
-        let value: Foundation.URL
-        let fileType: T.MediaFileType
+        public let value: Foundation.URL
+        public let fileType: T.MediaFileType
 
         /// Initializes with the given URL
         /// Throws a `MediaURLError` if the path extension of the URL doesn't match the specific file type

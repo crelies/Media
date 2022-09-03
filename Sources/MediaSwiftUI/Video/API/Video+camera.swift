@@ -12,11 +12,6 @@ import SwiftUI
 #if !os(tvOS)
 @available (iOS 13, macOS 10.15, *)
 public extension Video {
-    /// Alias for a completion block getting a `Result` containing a `<Media.URL<Video>`
-    /// on success or an `Error` on failure
-    ///
-    typealias ResultMediaURLVideoCompletion = (Result<Media.URL<Video>, Swift.Error>) -> Void
-
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///

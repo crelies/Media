@@ -12,6 +12,7 @@ import SwiftUI
 @available(iOS 13, macOS 10.15, tvOS 13, *)
 struct AVPlayerView: UIViewControllerRepresentable {
     private let wrapper = WeakObjectWrapper<AVPlayer>()
+
     let avPlayerItem: AVPlayerItem
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<AVPlayerView>) -> AVPlayerViewController {
