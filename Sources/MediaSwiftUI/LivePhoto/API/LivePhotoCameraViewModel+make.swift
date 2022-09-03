@@ -5,6 +5,7 @@
 //  Created by Christian Elies on 15/07/2022.
 //
 
+#if !os(tvOS)
 import AVKit
 import Foundation
 import MediaCore
@@ -75,3 +76,4 @@ extension LivePhotoCameraViewModel {
         )
     }
 }
+#endif

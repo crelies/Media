@@ -38,7 +38,9 @@ struct AlbumsView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
+                        #if !os(tvOS)
                         .background(Color(.secondarySystemBackground))
+                        #endif
                         .cornerRadius(16)
                     }
                     .onDelete { indexSet in
@@ -47,8 +49,12 @@ struct AlbumsView: View {
                 }
                 .padding()
             }
+            #if !os(tvOS)
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(Text("Albums"), displayMode: .inline)
+            #else
+            .navigationTitle(Text("Albums"))
+            #endif
             .navigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {

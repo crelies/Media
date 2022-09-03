@@ -6,6 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
+#if !os(tvOS)
 import AVFoundation
 import MediaCore
 import Photos
@@ -62,3 +63,4 @@ private extension PermissionsSection {
         }
     }
 }
+#endif

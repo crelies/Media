@@ -6,6 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
+#if !os(tvOS)
 import AVKit
 import MediaCore
 import MediaSwiftUI
@@ -99,3 +100,4 @@ struct CameraSection: View {
         }
     }
 }
+#endif

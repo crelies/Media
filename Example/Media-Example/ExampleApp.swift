@@ -33,7 +33,11 @@ let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewMode
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
+            #if !os(tvOS)
             ContentView(cameraViewModel: rootCameraViewModel)
+            #else
+            ContentView()
+            #endif
         }
     }
 

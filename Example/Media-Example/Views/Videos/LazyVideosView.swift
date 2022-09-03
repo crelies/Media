@@ -29,7 +29,9 @@ struct LazyVideosView: View {
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding()
+                            #if !os(tvOS)
                             .background(Color(.secondarySystemBackground))
+                            #endif
                             .cornerRadius(16)
                         }
                     }
@@ -37,6 +39,10 @@ struct LazyVideosView: View {
             }
             .padding()
         }
+        #if !os(tvOS)
         .navigationBarTitle("Videos", displayMode: .inline)
+        #else
+        .navigationTitle(Text("Videos"))
+        #endif
     }
 }

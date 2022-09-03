@@ -32,7 +32,9 @@ struct RootScreen: View {
     @FetchAlbums(ofType: .smart)
     private var albums: [Album]
 
+    #if !os(tvOS)
     @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
+    #endif
 
     var body: some View {
         NavigationView {
@@ -65,7 +67,9 @@ struct RootScreen: View {
 private extension RootScreen {
     func grantedList() -> some View {
         List {
+            #if !os(tvOS)
             PermissionsSection(requestedPermission: handleRequestPermissionResult)
+            #endif
 
             Section(header: Text("Property wrapper")) {
                 NavigationLink(destination: VideosView(videos: videos)) {
@@ -97,15 +101,19 @@ private extension RootScreen {
 
             VideosSection()
 
-            #if !targetEnvironment(macCatalyst)
+            #if !targetEnvironment(macCatalyst) && !os(tvOS)
             CameraSection(cameraViewModel: cameraViewModel)
-            #else
+            #elseif !os(tvOS)
             CameraSection()
             #endif
 
+            #if !os(tvOS)
             BrowserSection()
+            #endif
         }
+        #if !os(tvOS)
         .listStyle(InsetGroupedListStyle())
+        #endif
         .navigationBarTitle("Examples")
     }
 
@@ -174,8 +182,10 @@ private extension RootScreen {
     }
 }
 
+#if !os(tvOS)
 struct AlbumsOverviewView_Previews: PreviewProvider {
     static var previews: some View {
         RootScreen(cameraViewModel: rootCameraViewModel)
     }
 }
+#endif

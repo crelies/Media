@@ -10,15 +10,23 @@ import MediaSwiftUI
 import SwiftUI
 
 struct ContentView: View {
+    #if !os(tvOS)
     @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
+    #endif
 
     var body: some View {
+        #if !os(tvOS)
         RootScreen(cameraViewModel: cameraViewModel)
+        #else
+        RootScreen()
+        #endif
     }
 }
 
+#if !os(tvOS)
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(cameraViewModel: rootCameraViewModel)
     }
 }
+#endif

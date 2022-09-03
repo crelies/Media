@@ -6,6 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
+#if !os(tvOS)
 import AVKit
 import Combine
 import Foundation
@@ -207,3 +208,4 @@ private extension BrowserSection {
         }
     }
 }
+#endif

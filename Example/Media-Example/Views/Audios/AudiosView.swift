@@ -20,12 +20,18 @@ struct AudiosView: View {
                     (Text(audio.id) + Text("\n(\(audio.id.prefix(5).map(String.init).joined()))").font(.footnote))
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
+                        #if !os(tvOS)
                         .background(Color(.secondarySystemBackground))
+                        #endif
                         .cornerRadius(16)
                 }
             }
             .padding()
         }
+        #if !os(tvOS)
         .navigationBarTitle("Audios", displayMode: .inline)
+        #else
+        .navigationTitle(Text("Audios"))
+        #endif
     }
 }

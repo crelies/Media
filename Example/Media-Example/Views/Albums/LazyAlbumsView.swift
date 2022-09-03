@@ -47,15 +47,21 @@ struct LazyAlbumsView: View {
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding()
+                            #if !os(tvOS)
                             .background(Color(.secondarySystemBackground))
+                            #endif
                             .cornerRadius(16)
                         }
                     }
                 }
                 .padding()
             }
+            #if !os(tvOS)
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(Text("Albums"), displayMode: .inline)
+            #else
+            .navigationTitle(Text("Albums"))
+            #endif
             .navigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {

@@ -6,6 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
+#if !os(tvOS)
 import PhotosUI
 import SwiftUI
 
@@ -31,3 +32,4 @@ struct PHPicker_Previews: PreviewProvider {
         PHPicker(isPresented: .constant(false))
     }
 }
+#endif

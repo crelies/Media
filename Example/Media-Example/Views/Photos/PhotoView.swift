@@ -71,6 +71,7 @@ struct PhotoView: View {
                 .alert(isPresented: $isErrorAlertVisible) { errorAlert(error) }
             }
 
+            #if !os(tvOS)
             Button(action: share) {
                 Text("Share")
             }.sheet(item: $data, onDismiss: {
@@ -80,6 +81,7 @@ struct PhotoView: View {
                     ActivityView(activityItems: [image], applicationActivities: [])
                 }
             }
+            #endif
         })
     }
 }
@@ -119,7 +121,9 @@ private extension PhotoView {
                 Text(String(describing: properties.tiff))
             }
         }
+        #if !os(tvOS)
         .listStyle(InsetGroupedListStyle())
+        #endif
     }
 
     func errorAlert(_ error: Error?) -> Alert {

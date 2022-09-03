@@ -6,6 +6,7 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+#if !os(tvOS)
 import Foundation
 import SwiftUI
 import UIKit
@@ -23,3 +24,4 @@ struct ActivityView<T: AnyObject>: UIViewControllerRepresentable {
 
     }
 }
+#endif

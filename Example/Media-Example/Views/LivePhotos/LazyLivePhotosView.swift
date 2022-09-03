@@ -29,7 +29,9 @@ struct LazyLivePhotosView: View {
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding()
+                            #if !os(tvOS)
                             .background(Color(.secondarySystemBackground))
+                            #endif
                             .cornerRadius(16)
                         }
                     }
@@ -37,6 +39,10 @@ struct LazyLivePhotosView: View {
             }
             .padding()
         }
+        #if !os(tvOS)
         .navigationBarTitle("Live Photos", displayMode: .inline)
+        #else
+        .navigationTitle(Text("Live Photos"))
+        #endif
     }
 }
