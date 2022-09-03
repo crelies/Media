@@ -23,39 +23,13 @@ struct LivePhotoCameraView: View {
             VStack {
                 ZStack(alignment: .bottom) {
                     if let stillImageData = viewModel.stillImageData, let uiImage = UIImage(data: stillImageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
+                        stillImageView(uiImage: uiImage, geometry: geometry)
                     } else {
-                        ZStack(alignment: .topLeading) {
-                            HStack {
-                                Button(action: viewModel.toggleFlashMode) {
-                                    Image(systemName: viewModel.isFlashActive ? "bolt.fill" : "bolt.slash.fill")
-                                        .frame(width: 48, height: 48)
-                                }
-                                .padding([.leading, .vertical])
-
-                                Spacer()
-
-                                Button(action: viewModel.toggleCamera) {
-                                    Image(systemName: "arrow.triangle.2.circlepath")
-                                        .frame(width: 48, height: 48)
-                                }
-                                .padding([.trailing, .vertical])
-                            }
-
-                            .zIndex(1)
-
-                            VideoPreview(captureSession: viewModel.captureSession)
-                                .onAppear {
-                                    viewModel.startVideoPreview()
-                                }
-                        }
+                        captureView()
                     }
 
-                    toolbar()
-                    .frame(width: geometry.size.width)
+                    bottomToolbar()
+                        .frame(width: geometry.size.width)
                 }
             }
             .onDisappear(perform: viewModel.onDisappear)
@@ -66,7 +40,44 @@ struct LivePhotoCameraView: View {
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
 private extension LivePhotoCameraView {
-    func toolbar() -> some View {
+    func stillImageView(uiImage: UIImage, geometry: GeometryProxy) -> some View {
+        Image(uiImage: uiImage)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: geometry.size.width, height: geometry.size.height)
+    }
+
+    func captureView() -> some View {
+        ZStack(alignment: .topLeading) {
+            topToolbar()
+
+            VideoPreview(captureSession: viewModel.captureSession)
+                .onAppear {
+                    viewModel.startVideoPreview()
+                }
+        }
+    }
+
+    func topToolbar() -> some View {
+        HStack {
+            Button(action: viewModel.toggleFlashMode) {
+                Image(systemName: viewModel.isFlashActive ? "bolt.fill" : "bolt.slash.fill")
+                    .frame(width: 48, height: 48)
+            }
+            .padding([.leading, .vertical])
+
+            Spacer()
+
+            Button(action: viewModel.toggleCamera) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .frame(width: 48, height: 48)
+            }
+            .padding([.trailing, .vertical])
+        }
+        .zIndex(1)
+    }
+
+    func bottomToolbar() -> some View {
         HStack {
             ZStack(alignment: .center) {
                 Button(action: viewModel.capture) {

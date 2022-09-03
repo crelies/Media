@@ -10,7 +10,7 @@ import MediaCore
 import Photos
 import SwiftUI
 
-// TODO: create a view model
+// TODO: [view model] create a view model
 
 @available(iOS 13, tvOS 13, *)
 struct LivePhotoView: View {
