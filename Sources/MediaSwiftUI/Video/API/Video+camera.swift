@@ -20,21 +20,24 @@ public extension Video {
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
     ///
-    /// - Parameter completion: A closure wich gets `Media.URL<Video>` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the recorded video.
     ///
     /// - Returns: some View
-    static func camera(_ completion: @escaping ResultMediaURLVideoCompletion) -> some View {
-        camera(errorView: { error in Text(error.localizedDescription) }, completion)
+    static func camera(selection: Binding<Media.URL<Video>?>) -> some View {
+        camera(
+            errorView: { error in Text(error.localizedDescription) },
+            selection: selection
+        )
     }
 
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure wich gets `Media.URL<Video>` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the recorded video.
     ///
     /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultMediaURLVideoCompletion) -> some View {
+    @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Media.URL<Video>?>) -> some View {
         let result = Result {
             try ViewCreator.camera(for: [.movie]) { result in
                 switch result {
@@ -43,15 +46,18 @@ public extension Video {
                     case .tookVideo(let url):
                         do {
                             let mediaURL = try Media.URL<Video>(url: url)
-                            completion(.success(mediaURL))
+                            selection.wrappedValue = mediaURL
                         } catch {
-                            completion(.failure(error))
+                            // TODO: error handling
+                            debugPrint(error)
                         }
                     default:
-                        completion(.failure(Video.Error.unsupportedCameraResult))
+                        // TODO: error handling
+                        debugPrint(Video.Error.unsupportedCameraResult)
                     }
                 case .failure(let error):
-                    completion(.failure(error))
+                    // TODO: error handling
+                    debugPrint(error)
                 }
             }
         }

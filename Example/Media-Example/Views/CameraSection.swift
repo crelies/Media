@@ -15,6 +15,7 @@ struct CameraSection: View {
     @State private var isLivePhotoCameraViewVisible = false
     @State private var isPhotoCameraViewVisible = false
     @State private var isVideoCameraViewVisible = false
+    @State private var recordedVideoURL: Media.URL<Video>?
 
     #if !targetEnvironment(macCatalyst)
     @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
@@ -65,7 +66,7 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isVideoCameraViewVisible, onDismiss: {
                 isVideoCameraViewVisible = false
             }) {
-                Video.camera { _ in }
+                Video.camera(selection: $recordedVideoURL)
             }
         }
     }
