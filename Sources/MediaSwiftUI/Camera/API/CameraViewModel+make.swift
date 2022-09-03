@@ -26,8 +26,25 @@ extension CameraViewModel {
 
         try captureSession.addDefaultAudioDevice()
 
-        let cameraDevice: AVCaptureDevice = try .backVideoCamera()
-        try captureSession.addDevice(device: cameraDevice)
+        var cameraFound = false
+
+        do {
+            let frontCameraDevice: AVCaptureDevice = try .videoCamera(position: .front)
+            try captureSession.addDevice(device: frontCameraDevice)
+            cameraFound = true
+        } catch {
+            cameraFound = false
+        }
+
+        do {
+            let backCameraDevice: AVCaptureDevice = try .videoCamera(position: .back)
+            try captureSession.addDevice(device: backCameraDevice)
+            cameraFound = true
+        } catch {
+            if !cameraFound {
+                throw error
+            }
+        }
 
         captureSession.sessionPreset = .photo
 

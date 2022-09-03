@@ -14,7 +14,7 @@ import XCTest
 final class AVCaptureDeviceTests: XCTestCase {
     func testBackVideoCamera() {
         do {
-            _ = try AVCaptureDevice.backVideoCamera()
+            _ = try AVCaptureDevice.videoCamera()
             XCTFail("Simulator has no camera")
         } catch {
             // "success", do nothing
