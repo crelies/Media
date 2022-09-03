@@ -115,7 +115,7 @@ public extension Video {
                                 guard let video = try Video.with(identifier: .init(stringLiteral: assetIdentifier)) else {
                                     return nil
                                 }
-                                return .media(video)
+                                return .media(video, itemProvider: object.itemProvider)
                             }
                         }
                         completion(browserResult)
@@ -147,7 +147,7 @@ public extension Video {
                 try ViewCreator.browser(mediaTypes: [.movie]) { (result: Result<Video, Swift.Error>) in
                     switch result {
                     case let .success(video):
-                        completion(.success([.media(video)]))
+                        completion(.success([.media(video, itemProvider: nil)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }

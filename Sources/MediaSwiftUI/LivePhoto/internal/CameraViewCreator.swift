@@ -15,8 +15,8 @@ struct CameraViewCreator {
     @available(macCatalyst 14, *)
     static func livePhoto(
         cameraViewModel: LivePhotoCameraViewModel
-    ) -> CameraView {
-        CameraView(
+    ) -> LivePhotoCameraView {
+        LivePhotoCameraView(
             viewModel: cameraViewModel
         )
     }

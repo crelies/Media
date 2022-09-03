@@ -99,7 +99,7 @@ public extension Photo {
                                 guard let photo = try Photo.with(identifier: .init(stringLiteral: assetIdentifier)) else {
                                     return nil
                                 }
-                                return .media(photo)
+                                return .media(photo, itemProvider: object.itemProvider)
                             }
                         }
                         completion(result)
@@ -131,7 +131,7 @@ public extension Photo {
                 try ViewCreator.browser(mediaTypes: [.image]) { (result: Result<Photo, Swift.Error>) in
                     switch result {
                     case let .success(photo):
-                        completion(.success([.media(photo)]))
+                        completion(.success([.media(photo, itemProvider: nil)]))
                     case let .failure(error):
                         completion(.failure(error))
                     }

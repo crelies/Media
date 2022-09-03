@@ -1,5 +1,5 @@
 //
-//  CameraView.swift
+//  LivePhotoCameraView.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 17.01.20.
@@ -13,7 +13,7 @@ import UIKit
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-struct CameraView: View {
+struct LivePhotoCameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
     @ObservedObject var viewModel: LivePhotoCameraViewModel
@@ -65,7 +65,7 @@ struct CameraView: View {
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-private extension CameraView {
+private extension LivePhotoCameraView {
     func toolbar() -> some View {
         HStack {
             ZStack(alignment: .center) {

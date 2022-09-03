@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B94FEDC628C3E00E008476EC /* Binding+onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94FEDC528C3E00E008476EC /* Binding+onChange.swift */; };
 		B97D91462388771D00A617DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97D91452388771D00A617DC /* ContentView.swift */; };
 		B97D91482388772000A617DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D91472388772000A617DC /* Assets.xcassets */; };
 		B97D914B2388772000A617DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D914A2388772000A617DC /* Preview Assets.xcassets */; };
@@ -60,6 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B94FEDC528C3E00E008476EC /* Binding+onChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+onChange.swift"; sourceTree = "<group>"; };
 		B97D913E2388771D00A617DC /* Media-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Media-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B97D91452388771D00A617DC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B97D91472388772000A617DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		B9B2A33A25E1347500DC3A4C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B94FEDC528C3E00E008476EC /* Binding+onChange.swift */,
 				B9B2A33B25E1348300DC3A4C /* Equatable+Hashable.swift */,
 			);
 			path = Extensions;
@@ -358,6 +361,7 @@
 				B999837C2389EFA400F74BC1 /* VideoView.swift in Sources */,
 				B99586A6263CBC9D0032EF4B /* AlbumView.swift in Sources */,
 				B9B2A34925E4600D00DC3A4C /* CameraSection.swift in Sources */,
+				B94FEDC628C3E00E008476EC /* Binding+onChange.swift in Sources */,
 				B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */,
 				B9B2A35425E850C400DC3A4C /* LazyTree.swift in Sources */,
 				B999836C2389933300F74BC1 /* LazyPhotosView.swift in Sources */,

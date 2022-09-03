@@ -51,7 +51,7 @@ public extension Media {
                         fetchResult.enumerateObjects { asset, _, _ in
                             assets.append(asset)
                         }
-                        let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0) }
+                        let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
                         completion(.success(browserResults))
                     } else {
                         let browserResults = result.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
@@ -68,7 +68,7 @@ public extension Media {
                         completion(.failure(MediaPicker.Error.unsupportedValue))
                         return
                     }
-                    completion(.success([.media(phAsset)]))
+                    completion(.success([.media(phAsset, itemProvider: nil)]))
                 }, onFailure: { error in
                     completion(.failure(error))
                 })

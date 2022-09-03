@@ -38,18 +38,46 @@ struct BrowserSection: View {
     @State private var playerURL: URL?
     @State private var image: UIImage?
     @State private var livePhoto: PHLivePhoto?
+    @State private var livePhotoBrowserSelection: [BrowserResult<LivePhoto, PHLivePhoto>] = []
 
     var body: some View {
         Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
             Button(action: {
                 isLivePhotoBrowserViewVisible = true
             }) {
-                Text("LivePhoto.browser")
+                Text("LivePhoto.browser (selected: \(livePhotoBrowserSelection.count))")
             }
             .fullScreenCover(isPresented: $isLivePhotoBrowserViewVisible, onDismiss: {
                 isLivePhotoBrowserViewVisible = false
             }) {
-                LivePhoto.browser(isPresented: $isLivePhotoBrowserViewVisible, selectionLimit: 0, handleLivePhotoBrowserResult)
+                LivePhoto.browser(
+                    isPresented: $isLivePhotoBrowserViewVisible,
+                    selectionLimit: 0,
+                    selection: $livePhotoBrowserSelection.onChange { results in
+                        switch results.first {
+                        case let .data(phLivePhoto):
+                            livePhoto = phLivePhoto
+                        case let .media(_, itemProvider):
+                            guard let itemProvider = itemProvider else {
+                                return
+                            }
+
+                            itemProvider.loadLivePhoto()
+                                .receive(on: DispatchQueue.main)
+                                .sink { result in
+                                    switch result {
+                                    case let .failure(error):
+                                        debugPrint(error)
+                                    case .finished: ()
+                                    }
+                                } receiveValue: { value in
+                                    self.livePhoto = value
+                                }
+                                .store(in: &Garbage.cancellables)
+                        default: ()
+                        }
+                    }
+                )
             }
             #if !targetEnvironment(macCatalyst)
             .background(
@@ -135,18 +163,6 @@ private extension BrowserSection {
             switch browserResult.first {
             case let .data(uiImage):
                 image = uiImage
-            default: ()
-            }
-        default: ()
-        }
-    }
-
-    func handleLivePhotoBrowserResult(_ result: Result<[BrowserResult<LivePhoto, PHLivePhoto>], Swift.Error>) {
-        switch result {
-        case let .success(browserResult):
-            switch browserResult.first {
-            case let .data(phLivePhoto):
-                livePhoto = phLivePhoto
             default: ()
             }
         default: ()

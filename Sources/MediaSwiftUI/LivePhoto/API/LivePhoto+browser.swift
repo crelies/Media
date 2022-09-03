@@ -19,11 +19,16 @@ public extension LivePhoto {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter completion: A closure which gets the selected `LivePhoto` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the selected live photos.
     ///
     /// - Returns: some View
-    static func browser(isPresented: Binding<Bool>, selectionLimit: Int = 1, _ completion: @escaping ResultLivePhotosCompletion) -> some View {
-        browser(isPresented: isPresented, selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
+    static func browser(isPresented: Binding<Bool>, selectionLimit: Int = 1, selection: Binding<[BrowserResult<LivePhoto, PHLivePhoto>]>) -> some View {
+        browser(
+            isPresented: isPresented,
+            selectionLimit: selectionLimit,
+            errorView: { error in Text(error.localizedDescription) },
+            selection: selection
+        )
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing `LivePhoto`s in the photo library
@@ -32,10 +37,15 @@ public extension LivePhoto {
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure which gets the selected `LivePhoto` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the selected live photos.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultLivePhotosCompletion) -> some View {
+    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<LivePhoto, PHLivePhoto>]>) -> some View {
+        // TODO: iOS 16 version
+//        if #available(iOS 16, macOS 13, *) {
+//            PhotosPicker(selection: <#T##Binding<[PhotosPickerItem]>#>, selectionBehavior: .ordered, maxSelectionCount: selectionLimit, photoLibrary: .shared()) {
+//                Text("Picker")
+//            }
         if #available(iOS 14, macOS 11, *) {
             PHPicker(isPresented: isPresented, configuration: {
                 var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -55,10 +65,17 @@ public extension LivePhoto {
                                 guard let livePhoto = try LivePhoto.with(identifier: .init(stringLiteral: assetIdentifier)) else {
                                     return nil
                                 }
-                                return .media(livePhoto)
+                                return .media(livePhoto, itemProvider: object.itemProvider)
                             }
                         }
-                        completion(result)
+
+                        switch result {
+                        case let .success(results):
+                            selection.wrappedValue = results
+                        case let .failure(error):
+                            // TODO: error handling
+                            debugPrint(error)
+                        }
                     } else {
                         DispatchQueue.global(qos: .userInitiated).async {
                             let loadLivePhotos = result.map { $0.itemProvider.loadLivePhoto() }
@@ -68,18 +85,20 @@ public extension LivePhoto {
                                 .sink { result in
                                     switch result {
                                     case let .failure(error):
-                                        completion(.failure(error))
+                                        // TODO: error handling
+                                        debugPrint(error)
                                     case .finished: ()
                                     }
                                 } receiveValue: { urls in
                                     let browserResults = urls.map { BrowserResult<LivePhoto, PHLivePhoto>.data($0) }
-                                    completion(.success(browserResults))
+                                    selection.wrappedValue = browserResults
                                 }
                                 .store(in: &Garbage.cancellables)
                         }
                     }
-                case let .failure(error): ()
-                    completion(.failure(error))
+                case let .failure(error):
+                    // TODO: error handling
+                    debugPrint(error)
                 }
             }
         } else {
@@ -87,9 +106,10 @@ public extension LivePhoto {
                 try ViewCreator.browser(mediaTypes: [.image, .livePhoto]) { (result: Result<LivePhoto, Error>) in
                     switch result {
                     case let .success(livePhoto):
-                        completion(.success([.media(livePhoto)]))
+                        selection.wrappedValue = [.media(livePhoto, itemProvider: nil)]
                     case let .failure(error):
-                        completion(.failure(error))
+                        // TODO: error handling
+                        debugPrint(error)
                     }
                 }
             }
