@@ -40,6 +40,7 @@ struct BrowserSection: View {
     @State private var livePhoto: PHLivePhoto?
     @State private var livePhotoBrowserSelection: [BrowserResult<LivePhoto, PHLivePhoto>] = []
     @State private var mediaBrowserSelection: [BrowserResult<PHAsset, NSItemProvider>] = []
+    @State private var photoBrowserSelection: [BrowserResult<Photo, UniversalImage>] = []
 
     var body: some View {
         Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
@@ -91,7 +92,11 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isPhotoBrowserViewVisible, onDismiss: {
                 isPhotoBrowserViewVisible = false
             }) {
-                Photo.browser(isPresented: $isPhotoBrowserViewVisible, selectionLimit: 0, handlePhotoBrowserResult)
+                Photo.browser(
+                    isPresented: $isPhotoBrowserViewVisible,
+                    selectionLimit: 0,
+                    selection: $photoBrowserSelection.onChange(handlePhotoBrowserResult)
+                )
             }
             .background(
                 EmptyView()
@@ -164,14 +169,10 @@ private extension BrowserSection {
         }
     }
 
-    func handlePhotoBrowserResult(_ result: Result<[BrowserResult<Photo, UIImage>], Swift.Error>) {
-        switch result {
-        case let .success(browserResult):
-            switch browserResult.first {
-            case let .data(uiImage):
-                image = uiImage
-            default: ()
-            }
+    func handlePhotoBrowserResult(_ results: [BrowserResult<Photo, UIImage>]) {
+        switch results.first {
+        case let .data(uiImage):
+            image = uiImage
         default: ()
         }
     }
