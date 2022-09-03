@@ -18,11 +18,20 @@ public extension Media {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter completion: A closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`.
+    /// - Parameter selection: A binding which represents the selected assets.
     ///
     /// - Returns: some View
-    static func browser(isPresented: Binding<Bool>, selectionLimit: Int = 1, _ completion: @escaping ResultPHAssetsCompletion) -> some View {
-        browser(isPresented: isPresented, selectionLimit: selectionLimit, errorView: { error in Text(error.localizedDescription) }, completion)
+    static func browser(
+        isPresented: Binding<Bool>,
+        selectionLimit: Int = 1,
+        selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>
+    ) -> some View {
+        browser(
+            isPresented: isPresented,
+            selectionLimit: selectionLimit,
+            errorView: { error in Text(error.localizedDescription) },
+            selection: selection
+        )
     }
 
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
@@ -31,10 +40,10 @@ public extension Media {
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter completion: A closure which gets the selected `PHAsset` on `success` or `Error ` on `failure`.
+    /// - Parameter selection: A binding which represents the selected assets.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, _ completion: @escaping ResultPHAssetsCompletion) -> some View {
+    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(isPresented: isPresented, configuration: {
                 var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -52,25 +61,28 @@ public extension Media {
                             assets.append(asset)
                         }
                         let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
-                        completion(.success(browserResults))
+                        selection.wrappedValue = browserResults
                     } else {
                         let browserResults = result.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
-                        completion(.success(browserResults))
+                        selection.wrappedValue = browserResults
                     }
-                case let .failure(error): ()
-                    completion(.failure(error))
+                case let .failure(error):
+                    // TODO: error handling
+                    debugPrint(error)
                 }
             }
         } else {
             if let sourceType = UIImagePickerController.availableSourceType {
                 MediaPicker(sourceType: sourceType, mediaTypes: [], onSelection: { value in
                     guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                        completion(.failure(MediaPicker.Error.unsupportedValue))
+                        // TODO: error handling
+                        debugPrint(MediaPicker.Error.unsupportedValue)
                         return
                     }
-                    completion(.success([.media(phAsset, itemProvider: nil)]))
+                    selection.wrappedValue = [.media(phAsset, itemProvider: nil)]
                 }, onFailure: { error in
-                    completion(.failure(error))
+                    // TODO: error handling
+                    debugPrint(error)
                 })
             } else {
                 errorView(MediaPicker.Error.noBrowsingSourceTypeAvailable)

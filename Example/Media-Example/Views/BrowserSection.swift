@@ -39,6 +39,7 @@ struct BrowserSection: View {
     @State private var image: UIImage?
     @State private var livePhoto: PHLivePhoto?
     @State private var livePhotoBrowserSelection: [BrowserResult<LivePhoto, PHLivePhoto>] = []
+    @State private var mediaBrowserSelection: [BrowserResult<PHAsset, NSItemProvider>] = []
 
     var body: some View {
         Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
@@ -53,30 +54,7 @@ struct BrowserSection: View {
                 LivePhoto.browser(
                     isPresented: $isLivePhotoBrowserViewVisible,
                     selectionLimit: 0,
-                    selection: $livePhotoBrowserSelection.onChange { results in
-                        switch results.first {
-                        case let .data(phLivePhoto):
-                            livePhoto = phLivePhoto
-                        case let .media(_, itemProvider):
-                            guard let itemProvider = itemProvider else {
-                                return
-                            }
-
-                            itemProvider.loadLivePhoto()
-                                .receive(on: DispatchQueue.main)
-                                .sink { result in
-                                    switch result {
-                                    case let .failure(error):
-                                        debugPrint(error)
-                                    case .finished: ()
-                                    }
-                                } receiveValue: { value in
-                                    self.livePhoto = value
-                                }
-                                .store(in: &Garbage.cancellables)
-                        default: ()
-                        }
-                    }
+                    selection: $livePhotoBrowserSelection.onChange(handleLivePhotoBrowserResult)
                 )
             }
             #if !targetEnvironment(macCatalyst)
@@ -98,7 +76,11 @@ struct BrowserSection: View {
             .fullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
                 isMediaBrowserViewVisible = false
             }) {
-                Media.browser(isPresented: $isMediaBrowserViewVisible, selectionLimit: 0, handleMediaBrowserResult)
+                Media.browser(
+                    isPresented: $isMediaBrowserViewVisible,
+                    selectionLimit: 0,
+                    selection: $mediaBrowserSelection.onChange(handleMediaBrowserResult)
+                )
             }
 
             Button(action: {
@@ -145,6 +127,31 @@ struct BrowserSection: View {
 }
 
 private extension BrowserSection {
+    func handleLivePhotoBrowserResult(_ results: [BrowserResult<LivePhoto, PHLivePhoto>]) {
+        switch results.first {
+        case let .data(phLivePhoto):
+            livePhoto = phLivePhoto
+        case let .media(_, itemProvider):
+            guard let itemProvider = itemProvider else {
+                return
+            }
+
+            itemProvider.loadLivePhoto()
+                .receive(on: DispatchQueue.main)
+                .sink { result in
+                    switch result {
+                    case let .failure(error):
+                        debugPrint(error)
+                    case .finished: ()
+                    }
+                } receiveValue: { value in
+                    self.livePhoto = value
+                }
+                .store(in: &Garbage.cancellables)
+        default: ()
+        }
+    }
+
     func handleVideoBrowserResult(_ result: Result<[BrowserResult<Video, URL>], Swift.Error>) {
         switch result {
         case let .success(browserResult):
@@ -169,34 +176,30 @@ private extension BrowserSection {
         }
     }
 
-    func handleMediaBrowserResult(_ result: Result<[BrowserResult<PHAsset, NSItemProvider>], Swift.Error>) {
-        switch result {
-        case let .success(browserResult):
-            switch browserResult.first {
-            case let .data(itemProvider):
-                if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
-                    itemProvider.loadLivePhoto()
-                        .receive(on: DispatchQueue.main)
-                        .sink(receiveCompletion: { _ in }) { phLivePhoto in
-                            livePhoto = phLivePhoto
-                        }
-                        .store(in: &Garbage.cancellables)
-                } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
-                    itemProvider.loadImage()
-                        .receive(on: DispatchQueue.main)
-                        .sink(receiveCompletion: { _ in }) { uiImage in
-                            image = uiImage
-                        }
-                        .store(in: &Garbage.cancellables)
-                } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-                    itemProvider.loadVideo()
-                        .receive(on: DispatchQueue.main)
-                        .sink(receiveCompletion: { _ in }) { url in
-                            playerURL = url
-                        }
-                        .store(in: &Garbage.cancellables)
-                }
-            default: ()
+    func handleMediaBrowserResult(_ results: [BrowserResult<PHAsset, NSItemProvider>]) {
+        switch results.first {
+        case let .data(itemProvider):
+            if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
+                itemProvider.loadLivePhoto()
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { _ in }) { phLivePhoto in
+                        livePhoto = phLivePhoto
+                    }
+                    .store(in: &Garbage.cancellables)
+            } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
+                itemProvider.loadImage()
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { _ in }) { uiImage in
+                        image = uiImage
+                    }
+                    .store(in: &Garbage.cancellables)
+            } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+                itemProvider.loadVideo()
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveCompletion: { _ in }) { url in
+                        playerURL = url
+                    }
+                    .store(in: &Garbage.cancellables)
             }
         default: ()
         }
