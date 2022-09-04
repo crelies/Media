@@ -20,7 +20,7 @@ public final class LivePhotoCameraViewModel: ObservableObject {
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCapturePhotoOutput
     private let photograph: Photograph
-    private let completion: LivePhotoDataCompletion
+    private let selection: Binding<Result<LivePhotoData, Error>?>
     private let backgroundQueue: DispatchQueue
 
     let captureSession: AVCaptureSession
@@ -35,14 +35,14 @@ public final class LivePhotoCameraViewModel: ObservableObject {
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCapturePhotoOutput,
-        _ completion: @escaping LivePhotoDataCompletion
+        selection: Binding<Result<LivePhotoData, Error>?>
     ) {
         self.cameras = cameras
         self.captureSession = captureSession
         self.captureSettings = captureSettings
         self.output = output
         self.photograph = Photograph(photoOutput: output, photoSettings: captureSettings)
-        self.completion = completion
+        self.selection = selection
         backgroundQueue = DispatchQueue.global(qos: .userInitiated)
     }
 }
@@ -112,7 +112,7 @@ extension LivePhotoCameraViewModel {
 
     func useLivePhoto() {
         if let livePhotoData = livePhotoData {
-            completion(.success(livePhotoData))
+            selection.wrappedValue = .success(livePhotoData)
             finish()
         }
     }

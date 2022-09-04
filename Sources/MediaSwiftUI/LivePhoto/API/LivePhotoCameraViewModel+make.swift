@@ -9,6 +9,7 @@
 import AVKit
 import Foundation
 import MediaCore
+import SwiftUI
 
 // MARK: - API
 
@@ -17,10 +18,11 @@ import MediaCore
 extension LivePhotoCameraViewModel {
     /// Creates a camera view model instance using the given completion block.
     ///
-    /// - Parameter completion: A closure which gets the `URL` of the captured `LivePhoto` on `success` or `Error` on `failure`.
+    /// - Parameter selection: A binding which represents the live photo camera result.
+    ///
     /// - Returns: A camera view model instance.
     public static func make(
-        _ completion: @escaping LivePhotoDataCompletion
+        selection: Binding<Result<LivePhotoData, Error>?>
     ) throws -> LivePhotoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
@@ -72,7 +74,7 @@ extension LivePhotoCameraViewModel {
             captureSession: captureSession,
             captureSettings: captureSettings,
             output: photoOutput,
-            completion
+            selection: selection
         )
     }
 }

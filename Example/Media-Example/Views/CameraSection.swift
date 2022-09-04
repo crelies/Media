@@ -37,7 +37,15 @@ struct CameraSection: View {
             .fullScreenCover(isPresented: $isCameraViewVisible, onDismiss: {
                 isCameraViewVisible = false
             }) {
-                Camera.view(selection: $capturedMedia)
+                Camera.view(selection: $capturedMedia.onChange({ cameraResult in
+                    switch cameraResult {
+                    case let .tookPhoto(image: image):
+                        self.image = image
+                    case let .tookVideo(url):
+                        self.playerURL = url
+                    default: ()
+                    }
+                }))
             }
 
             #if !targetEnvironment(macCatalyst)

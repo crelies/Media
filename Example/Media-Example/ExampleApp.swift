@@ -12,8 +12,13 @@ import MediaSwiftUI
 import SwiftUI
 
 #if !os(tvOS)
-let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewModel.make { result in
-    guard let livePhotoData: LivePhotoData = try? result.get() else {
+var livePhotoCaptureResult: Result<LivePhotoData, Error>?
+
+var livePhotoCaptureBinding: Binding<Result<LivePhotoData, Error>?> = .init(
+    get: { livePhotoCaptureResult },
+    set: { livePhotoCaptureResult = $0 }
+).onChange { result in
+    guard let livePhotoData: LivePhotoData = try? result?.get() else {
         return
     }
 
@@ -27,6 +32,10 @@ let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewMode
     }
     #endif
 }
+
+let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewModel.make(
+    selection: livePhotoCaptureBinding
+)
 #endif
 
 @main
