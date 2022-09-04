@@ -16,7 +16,7 @@ import SwiftUI
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
 extension LivePhotoCameraViewModel {
-    /// Creates a camera view model instance using the given completion block.
+    /// Creates a camera view model instance using the given selection binding.
     ///
     /// - Parameter selection: A binding which represents the live photo camera result.
     ///

@@ -1,6 +1,6 @@
 //
 //  MediaPicker.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 26.11.19.
 //  Copyright © 2019 Christian Elies. All rights reserved.
@@ -16,6 +16,7 @@ struct MediaPicker: UIViewControllerRepresentable {
 
     let sourceType: UIImagePickerController.SourceType
     let mediaTypes: Set<UIImagePickerController.MediaType>
+    // TODO: [binding] use binding
     let onSelection: (MediaPickerValue) -> Void
     let onFailure: (MediaPicker.Error) -> Void
 

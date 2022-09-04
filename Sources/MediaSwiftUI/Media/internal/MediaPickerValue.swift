@@ -1,6 +1,6 @@
 //
 //  MediaPickerValue.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 26.11.19.
 //

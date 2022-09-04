@@ -30,6 +30,7 @@ public struct PHPicker: UIViewControllerRepresentable {
 
     @Binding var isPresented: Bool
     let configuration: PHPickerConfiguration
+    // TODO: [binding] use binding
     let completion: ResultGenericCompletion<[PHPickerResult]>
 
     /// Initializes the picker.
