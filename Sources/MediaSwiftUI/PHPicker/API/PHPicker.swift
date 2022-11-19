@@ -22,7 +22,7 @@ public struct PHPicker: UIViewControllerRepresentable {
         }
 
         public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            self.picker.completion(.success(results))
+            self.picker.selection.wrappedValue = results
             picker.dismiss(animated: true, completion: nil)
             self.picker.isPresented = false
         }
@@ -30,23 +30,22 @@ public struct PHPicker: UIViewControllerRepresentable {
 
     @Binding var isPresented: Bool
     let configuration: PHPickerConfiguration
-    // TODO: [binding] use binding
-    let completion: ResultGenericCompletion<[PHPickerResult]>
+    let selection: Binding<[PHPickerResult]>
 
     /// Initializes the picker.
     ///
     /// - Parameters:
     ///   - isPresented: A binding to whether the picker is presented.
     ///   - configuration: The configuration for the picker.
-    ///   - completion: A closure called on completion with a result - an array of `PHPickerResult` on `success` or an `Error` on `failure`.
+    ///   - selection: A binding which represents the picker results.
     public init(
         isPresented: Binding<Bool>,
         configuration: PHPickerConfiguration,
-        _ completion: @escaping ResultGenericCompletion<[PHPickerResult]>
+        selection: Binding<[PHPickerResult]>
     ) {
         _isPresented = isPresented
         self.configuration = configuration
-        self.completion = completion
+        self.selection = selection
     }
 
     public func makeUIViewController(context: Context) -> PHPickerViewController {
@@ -73,7 +72,7 @@ public struct PHPicker: UIViewControllerRepresentable {
 @available(iOS 14, macCatalyst 14, *)
 struct PHPicker_Previews: PreviewProvider {
     static var previews: some View {
-        PHPicker(isPresented: .constant(true), configuration: .init(), { _ in })
+        PHPicker(isPresented: .constant(true), configuration: .init(), selection: .constant([]))
     }
 }
 
