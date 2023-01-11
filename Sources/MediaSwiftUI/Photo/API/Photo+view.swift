@@ -10,7 +10,7 @@ import MediaCore
 import PhotosUI
 import SwiftUI
 
-@available (iOS 13, macOS 10.15, tvOS 13, *)
+@available (iOS 14, macOS 11, tvOS 14, *)
 public extension Photo {
     /// Creates a ready-to-use `SwiftUI` view representation of the receiver
     ///
@@ -19,8 +19,10 @@ public extension Photo {
     /// - Parameter imageView: a post processing closure which gets the `SwiftUI` `Image` view for further modification, like applying modifiers.
     ///
     /// - Returns: some `View`
+    @ViewBuilder
     func view<ImageView: View>(targetSize: CGSize? = nil, contentMode: PHImageContentMode = .aspectFit, @ViewBuilder imageView: @escaping (Image) -> ImageView) -> some View {
-        PhotoView(photo: self, targetSize: targetSize, contentMode: contentMode, imageView: imageView)
+        let viewModel = PhotoViewModel(photo: self, targetSize: targetSize, contentMode: contentMode)
+        PhotoView(viewModel: viewModel, imageView: imageView)
     }
 }
 
