@@ -11,14 +11,16 @@ import MediaCore
 import SwiftUI
 
 #if !os(macOS) && !targetEnvironment(macCatalyst)
-@available(iOS 13, tvOS 13, *)
+@available(iOS 14, tvOS 14, *)
 public extension LivePhoto {
     /// Creates a ready-to-use `SwiftUI` view representation of the receiver
     ///
     /// - Parameter size: the desired size of the `LivePhoto`
     ///
+    @ViewBuilder
     func view(size: CGSize) -> some View {
-        LivePhotoView(livePhoto: self, size: size)
+        let viewModel = LivePhotoViewModel(livePhoto: self, size: size)
+        LivePhotoView(viewModel: viewModel)
     }
 }
 #endif
