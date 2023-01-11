@@ -8,11 +8,10 @@
 #if canImport(SwiftUI) && canImport(UIKit)
 import SwiftUI
 
-@available(iOS 13, macOS 10.15, tvOS 13, *)
+@available(iOS 14, macOS 11, tvOS 14, *)
 struct PhotoView<ImageView: View>: View {
-    private let imageView: (Image) -> ImageView
-
-    @ObservedObject var viewModel: PhotoViewModel
+    @StateObject var viewModel: PhotoViewModel
+    var imageView: (Image) -> ImageView
 
     var body: some View {
         switch viewModel.state {
@@ -30,11 +29,6 @@ struct PhotoView<ImageView: View>: View {
                     viewModel.state = .loading
                 }
         }
-    }
-
-    init(viewModel: PhotoViewModel, @ViewBuilder imageView: @escaping (Image) -> ImageView) {
-        self.viewModel = viewModel
-        self.imageView = imageView
     }
 }
 #endif

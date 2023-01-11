@@ -9,12 +9,14 @@
 import MediaCore
 import SwiftUI
 
-@available (iOS 13, macOS 10.15, tvOS 13, *)
+@available (iOS 14, macOS 11, tvOS 14, *)
 public extension Video {
     /// Creates a ready-to-use `SwiftUI` view representation of the receiver
     ///
+    @ViewBuilder
     var view: some View {
-        VideoView(video: self)
+        let viewModel = VideoViewModel(video: self)
+        VideoView(viewModel: viewModel)
     }
 }
 #endif
