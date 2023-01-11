@@ -52,54 +52,50 @@ public extension Video {
                 configuration.selectionLimit = selectionLimit
                 configuration.preferredAssetRepresentationMode = .current
                 return configuration
-            }()) { result in
-                switch result {
-                case let .success(result):
-                    if Media.currentPermission == .authorized {
-                        let browserResult = Result {
-                            try result.compactMap { object -> BrowserResult<Video, URL>? in
-                                guard let assetIdentifier = object.assetIdentifier else {
-                                    return nil
-                                }
-                                guard let video = try Video.with(identifier: .init(stringLiteral: assetIdentifier)) else {
-                                    return nil
-                                }
-                                return .media(video, itemProvider: object.itemProvider)
+            }(), selection: .init(get: {
+                []
+            }, set: { result in
+                if Media.currentPermission == .authorized {
+                    let browserResult = Result {
+                        try result.compactMap { object -> BrowserResult<Video, URL>? in
+                            guard let assetIdentifier = object.assetIdentifier else {
+                                return nil
                             }
-                        }
-
-                        switch browserResult {
-                        case let .success(results):
-                            selection.wrappedValue = results
-                        case let .failure(error):
-                            // TODO: error handling
-                            debugPrint(error)
-                        }
-                    } else {
-                        DispatchQueue.global(qos: .userInitiated).async {
-                            let loadVideos = result.map { $0.itemProvider.loadVideo() }
-                            Publishers.MergeMany(loadVideos)
-                                .collect()
-                                .receive(on: DispatchQueue.main)
-                                .sink { result in
-                                    switch result {
-                                    case let .failure(error):
-                                        // TODO: error handling
-                                        debugPrint(error)
-                                    case .finished: ()
-                                    }
-                                } receiveValue: { urls in
-                                    let browserResults = urls.map { BrowserResult<Video, URL>.data($0) }
-                                    selection.wrappedValue = browserResults
-                                }
-                                .store(in: &Garbage.cancellables)
+                            guard let video = try Video.with(identifier: .init(stringLiteral: assetIdentifier)) else {
+                                return nil
+                            }
+                            return .media(video, itemProvider: object.itemProvider)
                         }
                     }
-                case let .failure(error):
-                    // TODO: error handling
-                    debugPrint(error)
+
+                    switch browserResult {
+                    case let .success(results):
+                        selection.wrappedValue = results
+                    case let .failure(error):
+                        // TODO: error handling
+                        debugPrint(error)
+                    }
+                } else {
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let loadVideos = result.map { $0.itemProvider.loadVideo() }
+                        Publishers.MergeMany(loadVideos)
+                            .collect()
+                            .receive(on: DispatchQueue.main)
+                            .sink { result in
+                                switch result {
+                                case let .failure(error):
+                                    // TODO: error handling
+                                    debugPrint(error)
+                                case .finished: ()
+                                }
+                            } receiveValue: { urls in
+                                let browserResults = urls.map { BrowserResult<Video, URL>.data($0) }
+                                selection.wrappedValue = browserResults
+                            }
+                            .store(in: &Garbage.cancellables)
+                    }
                 }
-            }
+            }))
         } else {
             let result = Result {
                 try ViewCreator.browser(mediaTypes: [.movie]) { (result: Result<Video, Swift.Error>) in

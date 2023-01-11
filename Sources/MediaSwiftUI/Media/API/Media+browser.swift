@@ -50,27 +50,23 @@ public extension Media {
                 configuration.selectionLimit = selectionLimit
                 configuration.preferredAssetRepresentationMode = .current
                 return configuration
-            }()) { result in
-                switch result {
-                case let .success(result):
-                    if Media.currentPermission == .authorized {
-                        let identifiers = result.compactMap { $0.assetIdentifier }
-                        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-                        var assets: [PHAsset] = []
-                        fetchResult.enumerateObjects { asset, _, _ in
-                            assets.append(asset)
-                        }
-                        let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
-                        selection.wrappedValue = browserResults
-                    } else {
-                        let browserResults = result.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
-                        selection.wrappedValue = browserResults
+            }(), selection: .init(get: {
+                []
+            }, set: { browserResult in
+                if Media.currentPermission == .authorized {
+                    let identifiers = browserResult.compactMap { $0.assetIdentifier }
+                    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+                    var assets: [PHAsset] = []
+                    fetchResult.enumerateObjects { asset, _, _ in
+                        assets.append(asset)
                     }
-                case let .failure(error):
-                    // TODO: error handling
-                    debugPrint(error)
+                    let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
+                    selection.wrappedValue = browserResults
+                } else {
+                    let browserResults = browserResult.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
+                    selection.wrappedValue = browserResults
                 }
-            }
+            }))
         } else {
             if let sourceType = UIImagePickerController.availableSourceType {
                 MediaPicker(sourceType: sourceType, mediaTypes: [], onSelection: { value in
