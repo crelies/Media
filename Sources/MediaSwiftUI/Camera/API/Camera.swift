@@ -23,8 +23,8 @@ public struct Camera {
     /// - Returns: some View
     public static func view(selection: Binding<Camera.Result?>) -> some View {
         view(
-            errorView: { error in Text(error.localizedDescription) },
-            selection: selection
+            selection: selection,
+            catchedError: nil
         )
     }
 
@@ -32,12 +32,15 @@ public struct Camera {
     /// captured media on `success`
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter selection: A binding which represents the camera result.
+    /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
     @ViewBuilder
-    public static func view<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Camera.Result?>) -> some View {
+    public static func view(
+        selection: Binding<Camera.Result?>,
+        catchedError: Binding<Swift.Error?>? = nil
+    ) -> some View {
         let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
         let result = Swift.Result {
             try availableMediaTypes.map( { try UIImagePickerController.MediaType(string: $0) })
@@ -51,14 +54,14 @@ public struct Camera {
                     case let .success(cameraResult):
                         selection.wrappedValue = cameraResult
                     case let .failure(error):
-                        // TODO: error handling
-                        debugPrint(error)
+                        catchedError?.wrappedValue = error
                     case .none: ()
                     }
                 })
             )
         case let .failure(error):
-            errorView(error)
+            Text(error.localizedDescription)
+                .foregroundColor(Color(UIColor.systemRed))
         }
     }
 }

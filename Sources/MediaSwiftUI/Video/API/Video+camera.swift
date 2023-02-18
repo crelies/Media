@@ -20,8 +20,8 @@ public extension Video {
     /// - Returns: some View
     static func camera(selection: Binding<Media.URL<Video>?>) -> some View {
         camera(
-            errorView: { error in Text(error.localizedDescription) },
-            selection: selection
+            selection: selection,
+            catchedError: nil
         )
     }
 
@@ -29,10 +29,13 @@ public extension Video {
     /// If an error occurs during initialization the provided `errorView` closure is used to construct the view to be displayed.
     ///
     /// - Parameter errorView: A closure that constructs an error view for the given error.
-    /// - Parameter selection: A binding which represents the recorded video.
+    /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Media.URL<Video>?>) -> some View {
+    @ViewBuilder static func camera(
+        selection: Binding<Media.URL<Video>?>,
+        catchedError: Binding<Swift.Error?>? = nil
+    ) -> some View {
         ViewCreator.camera(
             for: [.movie],
             selection: .writeOnly({ result in
@@ -44,16 +47,14 @@ public extension Video {
                             let mediaURL = try Media.URL<Video>(url: url)
                             selection.wrappedValue = mediaURL
                         } catch {
-                            // TODO: error handling (use error view)
-                            debugPrint(error)
+                            catchedError?.wrappedValue = error
                         }
                     default:
                         // This should never happen
                         assertionFailure(Video.Error.unsupportedCameraResult.localizedDescription)
                     }
                 case .failure(let error):
-                    // TODO: error handling (use error view)
-                    debugPrint(error)
+                    catchedError?.wrappedValue = error
                 case .none: ()
                 }
             })

@@ -12,6 +12,14 @@ import MediaCore
 import MediaSwiftUI
 import SwiftUI
 
+struct IdentifiableError {
+    let error: Swift.Error
+}
+
+extension IdentifiableError: Identifiable {
+    var id: String { error.localizedDescription }
+}
+
 struct CameraSection: View {
     @State private var isCameraViewVisible = false
     @State private var isLivePhotoCameraViewVisible = false
@@ -22,6 +30,7 @@ struct CameraSection: View {
     @State private var image: UIImage?
     @State private var recordedVideoURL: Media.URL<Video>?
     @State private var playerURL: URL?
+    @State private var catchedError: IdentifiableError?
 
     #if !targetEnvironment(macCatalyst)
     @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
@@ -45,6 +54,11 @@ struct CameraSection: View {
                         self.playerURL = url
                     default: ()
                     }
+                }), catchedError: .init(get: { nil }, set: { error in
+                    guard let error = error else {
+                        return
+                    }
+                    self.catchedError = .init(error: error)
                 }))
             }
 
@@ -75,7 +89,18 @@ struct CameraSection: View {
                         self.image = image
                     default: ()
                     }
+                }), catchedError: .init(get: { nil }, set: { error in
+                    guard let error = error else {
+                        return
+                    }
+                    self.catchedError = .init(error: error)
                 }))
+            }
+            .alert(item: $catchedError) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text($0.error.localizedDescription)
+                )
             }
             .sheet(item: $image, onDismiss: {
                 image = nil
@@ -98,6 +123,11 @@ struct CameraSection: View {
                         return
                     }
                     self.playerURL = result.value
+                }), catchedError: .init(get: { nil }, set: { error in
+                    guard let error = error else {
+                        return
+                    }
+                    self.catchedError = .init(error: error)
                 }))
             }
             .sheet(item: $playerURL, onDismiss: {
