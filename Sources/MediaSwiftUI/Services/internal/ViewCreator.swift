@@ -44,10 +44,9 @@ struct ViewCreator {
     }
 
     @ViewBuilder
-    // TODO: refactor to binding
     static func browser<T: MediaProtocol>(
         mediaTypes: Set<UIImagePickerController.MediaType>,
-        _ completion: @escaping ResultGenericCompletion<T>
+        selection: Binding<Result<T, Swift.Error>?>
     ) -> some View {
         if let sourceType = UIImagePickerController.availableSourceType {
             MediaPicker(
@@ -57,13 +56,14 @@ struct ViewCreator {
                     switch result {
                     case let .success(value):
                         guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                            completion(.failure(MediaPicker.Error.unsupportedValue))
+                            // This should never happen.
+                            assertionFailure(MediaPicker.Error.unsupportedValue.localizedDescription)
                             return
                         }
                         let media = T.init(phAsset: phAsset)
-                        completion(.success(media))
+                        selection.wrappedValue = .success(media)
                     case let .failure(error):
-                        completion(.failure(error))
+                        selection.wrappedValue = .failure(error)
                     case .none: ()
                     }
                 })

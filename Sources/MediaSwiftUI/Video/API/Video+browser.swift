@@ -101,14 +101,18 @@ public extension Video {
                 }
             }))
         } else {
-            ViewCreator.browser(mediaTypes: [.movie]) { (result: Result<Video, Swift.Error>) in
-                switch result {
-                case let .success(video):
-                    selection.wrappedValue = [.media(video, itemProvider: nil)]
-                case let .failure(error):
-                    catchedError?.wrappedValue = error
-                }
-            }
+            ViewCreator.browser(
+                mediaTypes: [.movie],
+                selection: .writeOnly({(result: Result<Video, Swift.Error>?) in
+                    switch result {
+                    case let .success(video):
+                        selection.wrappedValue = [.media(video, itemProvider: nil)]
+                    case let .failure(error):
+                        catchedError?.wrappedValue = error
+                    case .none: ()
+                    }
+                })
+            )
         }
     }
 }
