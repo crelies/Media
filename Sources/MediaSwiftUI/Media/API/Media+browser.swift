@@ -29,8 +29,8 @@ public extension Media {
         browser(
             isPresented: isPresented,
             selectionLimit: selectionLimit,
-            errorView: { error in Text(error.localizedDescription) },
-            selection: selection
+            selection: selection,
+            catchedError: nil
         )
     }
 
@@ -39,11 +39,16 @@ public extension Media {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter selection: A binding which represents the selected assets.
+    /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>) -> some View {
+    @ViewBuilder static func browser(
+        isPresented: Binding<Bool
+        >, selectionLimit: Int = 1,
+        selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>,
+        catchedError: Binding<Swift.Error?>? = nil
+    ) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(
                 isPresented: isPresented,
@@ -84,20 +89,20 @@ public extension Media {
                         switch result {
                         case let .success(value):
                             guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                                // TODO: error handling
-                                debugPrint(MediaPicker.Error.unsupportedValue)
+                                // This should never happen
+                                assertionFailure(MediaPicker.Error.unsupportedValue.localizedDescription)
                                 return
                             }
                             selection.wrappedValue = [.media(phAsset, itemProvider: nil)]
                         case let .failure(error):
-                            // TODO: error handling
-                            debugPrint(error)
+                            catchedError?.wrappedValue = error
                         case .none: ()
                         }
                     })
                 )
             } else {
-                errorView(MediaPicker.Error.noBrowsingSourceTypeAvailable)
+                Text(MediaPicker.Error.noBrowsingSourceTypeAvailable.localizedDescription)
+                    .foregroundColor(Color(UIColor.systemRed))
             }
         }
     }

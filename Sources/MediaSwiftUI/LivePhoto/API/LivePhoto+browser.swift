@@ -26,8 +26,8 @@ public extension LivePhoto {
         browser(
             isPresented: isPresented,
             selectionLimit: selectionLimit,
-            errorView: { error in Text(error.localizedDescription) },
-            selection: selection
+            selection: selection,
+            catchedError: nil
         )
     }
 
@@ -36,11 +36,16 @@ public extension LivePhoto {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter selection: A binding which represents the selected live photos.
+    /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<LivePhoto, PHLivePhoto>]>) -> some View {
+    @ViewBuilder static func browser(
+        isPresented: Binding<Bool>,
+        selectionLimit: Int = 1,
+        selection: Binding<[BrowserResult<LivePhoto, PHLivePhoto>]>,
+        catchedError: Binding<Swift.Error?>? = nil
+    ) -> some View {
         // TODO: iOS 16 version
 //        if #available(iOS 16, macOS 13, *) {
 //            PhotosPicker(selection: <#T##Binding<[PhotosPickerItem]>#>, selectionBehavior: .ordered, maxSelectionCount: selectionLimit, photoLibrary: .shared()) {
@@ -74,8 +79,7 @@ public extension LivePhoto {
                     case let .success(results):
                         selection.wrappedValue = results
                     case let .failure(error):
-                        // TODO: error handling
-                        debugPrint(error)
+                        catchedError?.wrappedValue = error
                     }
                 } else {
                     DispatchQueue.global(qos: .userInitiated).async {
@@ -86,8 +90,7 @@ public extension LivePhoto {
                             .sink { result in
                                 switch result {
                                 case let .failure(error):
-                                    // TODO: error handling
-                                    debugPrint(error)
+                                    catchedError?.wrappedValue = error
                                 case .finished: ()
                                 }
                             } receiveValue: { urls in
@@ -104,8 +107,7 @@ public extension LivePhoto {
                 case let .success(livePhoto):
                     selection.wrappedValue = [.media(livePhoto, itemProvider: nil)]
                 case let .failure(error):
-                    // TODO: error handling (use error view)
-                    debugPrint(error)
+                    catchedError?.wrappedValue = error
                 }
             }
         }

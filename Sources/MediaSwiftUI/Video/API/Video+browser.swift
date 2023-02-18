@@ -30,8 +30,8 @@ public extension Video {
         browser(
             isPresented: isPresented,
             selectionLimit: selectionLimit,
-            errorView: { error in Text(error.localizedDescription) },
-            selection: selection
+            selection: selection,
+            catchedError: nil
         )
     }
 
@@ -40,11 +40,16 @@ public extension Video {
     ///
     /// - Parameter isPresented: A binding to whether the underlying picker is presented.
     /// - Parameter selectionLimit: Specifies the number of items which can be selected. Works only on iOS 14 and macOS 11 where the `PHPicker` is used under the hood. Defaults to `1`.
-    /// - Parameter errorView: A closure that constructs an error view for the given error.
     /// - Parameter selection: A binding which represents the selected videos.
+    /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<Video, URL>]>) -> some View {
+    @ViewBuilder static func browser(
+        isPresented: Binding<Bool>,
+        selectionLimit: Int = 1,
+        selection: Binding<[BrowserResult<Video, URL>]>,
+        catchedError: Binding<Swift.Error?>? = nil
+    ) -> some View {
         if #available(iOS 14, macOS 11, *) {
             PHPicker(isPresented: isPresented, configuration: {
                 var configuration = PHPickerConfiguration(photoLibrary: .shared())
@@ -53,6 +58,7 @@ public extension Video {
                 configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }(), selection: .init(get: {
+                // This is a write-only binding.
                 []
             }, set: { result in
                 if Media.currentPermission == .authorized {
@@ -72,8 +78,7 @@ public extension Video {
                     case let .success(results):
                         selection.wrappedValue = results
                     case let .failure(error):
-                        // TODO: error handling
-                        debugPrint(error)
+                        catchedError?.wrappedValue = error
                     }
                 } else {
                     DispatchQueue.global(qos: .userInitiated).async {
@@ -84,8 +89,7 @@ public extension Video {
                             .sink { result in
                                 switch result {
                                 case let .failure(error):
-                                    // TODO: error handling
-                                    debugPrint(error)
+                                    catchedError?.wrappedValue = error
                                 case .finished: ()
                                 }
                             } receiveValue: { urls in
@@ -102,8 +106,7 @@ public extension Video {
                 case let .success(video):
                     selection.wrappedValue = [.media(video, itemProvider: nil)]
                 case let .failure(error):
-                    // TODO: error handling (use error view)
-                    debugPrint(error)
+                    catchedError?.wrappedValue = error
                 }
             }
         }

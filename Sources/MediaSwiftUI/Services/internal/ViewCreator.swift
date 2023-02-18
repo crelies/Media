@@ -44,6 +44,7 @@ struct ViewCreator {
     }
 
     @ViewBuilder
+    // TODO: refactor to binding
     static func browser<T: MediaProtocol>(
         mediaTypes: Set<UIImagePickerController.MediaType>,
         _ completion: @escaping ResultGenericCompletion<T>
