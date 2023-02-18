@@ -6,7 +6,7 @@ extension Binding {
     ) -> Binding<Optional<T>> {
         Binding<Optional<T>>(
             get: { nil },
-            set: { value in }
+            set: set
         )
     }
 }
