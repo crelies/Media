@@ -5,10 +5,26 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-#if canImport(SwiftUI) && canImport(UIKit)
+import MediaCore
 import SwiftUI
 
-@available(iOS 14, macOS 11, tvOS 14, *)
+// TODO: outsource
+extension Image {
+    init(universalImage: UniversalImage) {
+        #if os(macOS)
+        self = .init(nsImage: universalImage)
+        #elseif canImport(UIKit)
+        self = .init(uiImage: universalImage)
+        #else
+        assertionFailure("This should never happen")
+        #endif
+    }
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+@available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)
 struct PhotoView<ImageView: View>: View {
     @StateObject var viewModel: PhotoViewModel
     var imageView: (Image) -> ImageView
@@ -18,8 +34,8 @@ struct PhotoView<ImageView: View>: View {
         case .loading:
             UniversalProgressView()
                 .onAppear(perform: viewModel.load)
-        case .loaded(let uiImage):
-            imageView(Image(uiImage: uiImage))
+        case .loaded(let universalImage):
+            imageView(Image(universalImage: universalImage))
                 .onDisappear {
                     viewModel.state = .loading
                 }

@@ -5,12 +5,17 @@
 //  Created by Christian Elies on 14.10.20.
 //
 
-#if !os(macOS) || targetEnvironment(macCatalyst)
+#if os(iOS) || os(macOS) || targetEnvironment(macCatalyst)
 import Combine
 import Foundation
 import MediaCore
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
+@available(macOS 13, *)
 extension NSItemProvider {
     /// Loads an image from the receiving item provider if one is available.
     ///

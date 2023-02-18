@@ -5,10 +5,10 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-#if canImport(SwiftUI) && !os(macOS) && !targetEnvironment(macCatalyst)
+#if canImport(SwiftUI) && !targetEnvironment(macCatalyst)
 import SwiftUI
 
-@available(iOS 14, tvOS 14, *)
+@available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)
 struct LivePhotoView: View {
     @StateObject var viewModel: LivePhotoViewModel
 

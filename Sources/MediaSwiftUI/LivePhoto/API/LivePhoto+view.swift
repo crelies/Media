@@ -10,8 +10,8 @@ import CoreGraphics
 import MediaCore
 import SwiftUI
 
-#if !os(macOS) && !targetEnvironment(macCatalyst)
-@available(iOS 14, tvOS 14, *)
+#if !targetEnvironment(macCatalyst)
+@available(iOS 14, macOS 11, tvOS 14, *)
 public extension LivePhoto {
     /// Creates a ready-to-use `SwiftUI` view representation of the receiver
     ///

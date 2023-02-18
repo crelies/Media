@@ -5,18 +5,22 @@
 //  Created by Christian Elies on 11/01/2023.
 //
 
-#if canImport(SwiftUI) && canImport(UIKit)
+#if canImport(SwiftUI)
 import Combine
 import MediaCore
 import Photos
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 final class PhotoViewModel: ObservableObject {
     enum Error: Swift.Error {
         case invalidData
     }
 
-    @Published var state: ViewState<UIImage> = .loading
+    @Published var state: ViewState<UniversalImage> = .loading
 
     let photo: Photo
     var targetSize: CGSize?
@@ -41,6 +45,7 @@ private extension PhotoViewModel {
 
         DispatchQueue.global(qos: .userInitiated).async {
             if let targetSize = self.targetSize {
+                #if !os(macOS)
                 self.photo.uiImage(targetSize: targetSize, contentMode: self.contentMode) { result in
                     DispatchQueue.main.async {
                         switch result {
@@ -51,12 +56,28 @@ private extension PhotoViewModel {
                         }
                     }
                 }
+                #else
+                self.photo.data { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let data):
+                            if let image = UniversalImage(data: data) {
+                                self.state = .loaded(value: image)
+                            } else {
+                                self.state = .failed(error: Error.invalidData)
+                            }
+                        case .failure(let error):
+                            self.state = .failed(error: error)
+                        }
+                    }
+                }
+                #endif
             } else {
                 self.photo.data { result in
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let data):
-                            if let uiImage = UIImage(data: data) {
+                            if let uiImage = UniversalImage(data: data) {
                                 self.state = .loaded(value: uiImage)
                             } else {
                                 self.state = .failed(error: Error.invalidData)

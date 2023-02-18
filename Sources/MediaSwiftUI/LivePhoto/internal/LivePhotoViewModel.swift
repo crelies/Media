@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 11/01/2023.
 //
 
-#if canImport(SwiftUI) && !os(macOS) && !targetEnvironment(macCatalyst)
+#if canImport(SwiftUI) && !targetEnvironment(macCatalyst)
 import Combine
 import MediaCore
 import Photos
