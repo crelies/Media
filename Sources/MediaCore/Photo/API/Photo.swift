@@ -8,6 +8,8 @@
 
 #if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
 #endif
 import Photos
 
@@ -223,9 +225,11 @@ public extension Photo {
     ///   - contentMode: specifies the desired content mode
     ///   - completion: a closure which gets a `Result` (`UIImage` on `success` or `Error` on `failure`)
     ///
-    func uiImage(targetSize: CGSize,
-                 contentMode: PHImageContentMode,
-                 _ completion: @escaping UIImageCompletion) {
+    func uiImage(
+        targetSize: CGSize,
+        contentMode: PHImageContentMode,
+        _ completion: @escaping UIImageCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return

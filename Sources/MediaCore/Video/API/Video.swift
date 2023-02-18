@@ -7,7 +7,11 @@
 //
 
 import Photos
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 /// Wrapper type around `PHAsset`s of type
 /// `video`

@@ -14,6 +14,7 @@ extension NSItemProvider {
     ///
     /// - Returns: A publisher which provides a `PHLivePhoto` on `success`.
     @available(iOS 14, macCatalyst 14, *)
+    @available(macOS, unavailable)
     @available(tvOS, unavailable)
     public func loadLivePhoto() -> AnyPublisher<PHLivePhoto, Swift.Error> {
         Future { promise in
