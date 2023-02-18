@@ -72,9 +72,13 @@ extension LivePhotoCameraViewModel {
             return
         }
 
-        captureSession.removeInput(lastCaptureDevice)
-        // TODO: error handling?
-        try? captureSession.addDevice(device: nextCamera)
+        do {
+            captureSession.removeInput(lastCaptureDevice)
+            try captureSession.addDevice(device: nextCamera)
+        } catch {
+            // Readd the last capture device as input on failure
+            captureSession.addInput(lastCaptureDevice)
+        }
 
         output.isLivePhotoCaptureEnabled = output.isLivePhotoCaptureSupported
     }
