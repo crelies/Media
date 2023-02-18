@@ -30,7 +30,7 @@ let package = Package(
     ]
 )
 
-if #available(iOS 13, tvOS 13, *) {
+if #available(iOS 13, macCatalyst 13, macOS 10.15, tvOS 13, *) {
     package.platforms = [
         .iOS(.v13),
         .macOS(.v10_15),

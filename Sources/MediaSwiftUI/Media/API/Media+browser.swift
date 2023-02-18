@@ -11,7 +11,7 @@ import Photos
 import PhotosUI
 import SwiftUI
 
-@available(iOS 13, macOS 10.15, *)
+@available(iOS 13, macCatalyst 13, *)
 public extension Media {
     /// Creates a ready-to-use `SwiftUI` view for browsing the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
@@ -21,6 +21,8 @@ public extension Media {
     /// - Parameter selection: A binding which represents the selected assets.
     ///
     /// - Returns: some View
+    @available(iOS, deprecated: 16.0, message: "Use PhotosPicker")
+    @available(macCatalyst, deprecated: 16.0, message: "Use PhotosPicker")
     static func browser(
         isPresented: Binding<Bool>,
         selectionLimit: Int = 1,
@@ -43,14 +45,15 @@ public extension Media {
     /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
+    @available(iOS, deprecated: 16.0, message: "Use PhotosPicker instead")
+    @available(macCatalyst, deprecated: 16.0, message: "Use PhotosPicker instead")
     @ViewBuilder static func browser(
         isPresented: Binding<Bool
         >, selectionLimit: Int = 1,
         selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>,
         catchedError: Binding<Swift.Error?>? = nil
     ) -> some View {
-        // TODO: iOS 16 version
-        if #available(iOS 14, macOS 11, *) {
+        if #available(iOS 14, macCatalyst 14, *) {
             PHPicker(
                 isPresented: isPresented,
                 configuration: {

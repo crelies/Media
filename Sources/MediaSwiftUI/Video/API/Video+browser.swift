@@ -12,7 +12,7 @@ import PhotosUI
 import SwiftUI
 
 #if !os(tvOS)
-@available (iOS 13, macOS 10.15, *)
+@available (iOS 13, macCatalyst 13, *)
 public extension Video {
     /// Creates a ready-to-use `SwiftUI` view for browsing `Video`s in the photo library
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
@@ -22,6 +22,8 @@ public extension Video {
     /// - Parameter selection: A binding which represents the selected videos.
     ///
     /// - Returns: some View
+    @available(iOS, deprecated: 16.0, message: "Use PhotosPicker instead")
+    @available(macCatalyst, deprecated: 16.0, message: "Use PhotosPicker instead")
     static func browser(
         isPresented: Binding<Bool>,
         selectionLimit: Int = 1,
@@ -44,14 +46,15 @@ public extension Video {
     /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
+    @available(iOS, deprecated: 16.0, message: "Use PhotosPicker instead")
+    @available(macCatalyst, deprecated: 16.0, message: "Use PhotosPicker instead")
     @ViewBuilder static func browser(
         isPresented: Binding<Bool>,
         selectionLimit: Int = 1,
         selection: Binding<[BrowserResult<Video, URL>]>,
         catchedError: Binding<Swift.Error?>? = nil
     ) -> some View {
-        // TODO: iOS 16 version
-        if #available(iOS 14, macOS 11, *) {
+        if #available(iOS 14, macCatalyst 14, *) {
             PHPicker(isPresented: isPresented, configuration: {
                 var configuration = PHPickerConfiguration(photoLibrary: .shared())
                 configuration.filter = .videos
