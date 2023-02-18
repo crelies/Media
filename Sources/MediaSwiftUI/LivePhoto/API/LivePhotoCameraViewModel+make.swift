@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 15/07/2022.
 //
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 import AVKit
 import Foundation
 import MediaCore
