@@ -15,7 +15,7 @@ struct ViewCreator {
     @ViewBuilder
     static func camera(
         for mediaTypes: Set<UIImagePickerController.MediaType>,
-        _ completion: @escaping (Result<Camera.Result, Swift.Error>) -> Void
+        selection: Binding<Result<Camera.Result, Swift.Error>?>
     ) -> some View {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             MediaPicker(
@@ -26,14 +26,14 @@ struct ViewCreator {
                     case let .success(value):
                         switch value {
                         case .tookPhoto(let image):
-                            completion(.success(.tookPhoto(image: image)))
+                            selection.wrappedValue = .success(.tookPhoto(image: image))
                         case .tookVideo(let url):
-                            completion(.success(.tookVideo(url: url)))
+                            selection.wrappedValue = .success(.tookVideo(url: url))
                         default:
-                            completion(.failure(MediaPicker.Error.unsupportedValue))
+                            selection.wrappedValue = .failure(MediaPicker.Error.unsupportedValue)
                         }
                     case let .failure(error):
-                        completion(.failure(error))
+                        selection.wrappedValue = .failure(error)
                     case .none: ()
                     }
                 })

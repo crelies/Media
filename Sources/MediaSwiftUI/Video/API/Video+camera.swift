@@ -33,27 +33,31 @@ public extension Video {
     ///
     /// - Returns: some View
     @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Media.URL<Video>?>) -> some View {
-        ViewCreator.camera(for: [.movie]) { result in
-            switch result {
-            case .success(let cameraResult):
-                switch cameraResult {
-                case .tookVideo(let url):
-                    do {
-                        let mediaURL = try Media.URL<Video>(url: url)
-                        selection.wrappedValue = mediaURL
-                    } catch {
-                        // TODO: error handling (use error view)
-                        debugPrint(error)
+        ViewCreator.camera(
+            for: [.movie],
+            selection: .writeOnly({ result in
+                switch result {
+                case .success(let cameraResult):
+                    switch cameraResult {
+                    case .tookVideo(let url):
+                        do {
+                            let mediaURL = try Media.URL<Video>(url: url)
+                            selection.wrappedValue = mediaURL
+                        } catch {
+                            // TODO: error handling (use error view)
+                            debugPrint(error)
+                        }
+                    default:
+                        // This should never happen
+                        assertionFailure(Video.Error.unsupportedCameraResult.localizedDescription)
                     }
-                default:
+                case .failure(let error):
                     // TODO: error handling (use error view)
-                    debugPrint(Video.Error.unsupportedCameraResult)
+                    debugPrint(error)
+                case .none: ()
                 }
-            case .failure(let error):
-                // TODO: error handling (use error view)
-                debugPrint(error)
-            }
-        }
+            })
+        )
     }
 }
 #endif

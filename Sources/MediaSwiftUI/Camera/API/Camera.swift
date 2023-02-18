@@ -45,16 +45,18 @@ public struct Camera {
         switch result {
         case let .success(mediaTypes):
             ViewCreator.camera(
-                for: Set(mediaTypes)
-            ) { result in
-                switch result {
-                case let .success(cameraResult):
-                    selection.wrappedValue = cameraResult
-                case let .failure(error):
-                    // TODO: error handling
-                    debugPrint(error)
-                }
-            }
+                for: Set(mediaTypes),
+                selection: .writeOnly({ result in
+                    switch result {
+                    case let .success(cameraResult):
+                        selection.wrappedValue = cameraResult
+                    case let .failure(error):
+                        // TODO: error handling
+                        debugPrint(error)
+                    case .none: ()
+                    }
+                })
+            )
         case let .failure(error):
             Text(error.localizedDescription)
         }
