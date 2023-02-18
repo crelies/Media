@@ -98,22 +98,14 @@ public extension LivePhoto {
                 }
             }))
         } else {
-            let result = Result {
-                try ViewCreator.browser(mediaTypes: [.image, .livePhoto]) { (result: Result<LivePhoto, Error>) in
-                    switch result {
-                    case let .success(livePhoto):
-                        selection.wrappedValue = [.media(livePhoto, itemProvider: nil)]
-                    case let .failure(error):
-                        // TODO: error handling
-                        debugPrint(error)
-                    }
+            ViewCreator.browser(mediaTypes: [.image, .livePhoto]) { (result: Result<LivePhoto, Error>) in
+                switch result {
+                case let .success(livePhoto):
+                    selection.wrappedValue = [.media(livePhoto, itemProvider: nil)]
+                case let .failure(error):
+                    // TODO: error handling (use error view)
+                    debugPrint(error)
                 }
-            }
-            switch result {
-            case let .success(view):
-                view
-            case let .failure(error):
-                errorView(error)
             }
         }
     }

@@ -33,28 +33,20 @@ public extension Photo {
     ///
     /// - Returns: some View
     @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Camera.Result?>) -> some View {
-        let result = Result {
-            try ViewCreator.camera(for: [.image]) { result in
-                switch result {
-                case .success(let cameraResult):
-                    switch cameraResult {
-                    case .tookPhoto(let image):
-                        selection.wrappedValue = .tookPhoto(image: image)
-                    default:
-                        // TODO: error handling
-                        debugPrint(Photo.Error.unsupportedCameraResult)
-                    }
-                case .failure(let error):
-                    // TODO: error handling
-                    debugPrint(error)
+        ViewCreator.camera(for: [.image]) { result in
+            switch result {
+            case .success(let cameraResult):
+                switch cameraResult {
+                case .tookPhoto(let image):
+                    selection.wrappedValue = .tookPhoto(image: image)
+                default:
+                    // TODO: error handling (use error view)
+                    debugPrint(Photo.Error.unsupportedCameraResult)
                 }
+            case .failure(let error):
+                // TODO: error handling (use error view)
+                debugPrint(error)
             }
-        }
-        switch result {
-        case let .success(view):
-            view
-        case let .failure(error):
-            errorView(error)
         }
     }
 }

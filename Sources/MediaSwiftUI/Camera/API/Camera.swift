@@ -36,12 +36,11 @@ public struct Camera {
     /// - Parameter selection: A binding which represents the camera result.
     ///
     /// - Returns: some View
-    @ViewBuilder public static func view<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Camera.Result?>) -> some View {
-        let result = Swift.Result<MediaPicker, Swift.Error> {
-            let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
-            let mediaTypes = try availableMediaTypes.map { try UIImagePickerController.MediaType(string: $0) }
-            
-            return try ViewCreator.camera(
+    @ViewBuilder
+    public static func view<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Camera.Result?>) -> some View {
+        let availableMediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) ?? []
+        if let mediaTypes = try? availableMediaTypes.map( { try UIImagePickerController.MediaType(string: $0) }) {
+            ViewCreator.camera(
                 for: Set(mediaTypes)
             ) { result in
                 switch result {
@@ -52,13 +51,9 @@ public struct Camera {
                     debugPrint(error)
                 }
             }
-        }
-
-        switch result {
-        case let .success(view):
-            view
-        case let .failure(error):
-            errorView(error)
+        } else {
+            // TODO: improve this?
+            Text("No media types available")
         }
     }
 }

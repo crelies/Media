@@ -97,22 +97,14 @@ public extension Photo {
                 }
             }))
         } else {
-            let result = Result {
-                try ViewCreator.browser(mediaTypes: [.image]) { (result: Result<Photo, Swift.Error>) in
-                    switch result {
-                    case let .success(photo):
-                        selection.wrappedValue = [.media(photo, itemProvider: nil)]
-                    case let .failure(error):
-                        // TODO: error handling
-                        debugPrint(error)
-                    }
+            ViewCreator.browser(mediaTypes: [.image]) { (result: Result<Photo, Swift.Error>) in
+                switch result {
+                case let .success(photo):
+                    selection.wrappedValue = [.media(photo, itemProvider: nil)]
+                case let .failure(error):
+                    // TODO: error handling (use error view)
+                    debugPrint(error)
                 }
-            }
-            switch result {
-            case let .success(view):
-                view
-            case let .failure(error):
-                errorView(error)
             }
         }
     }

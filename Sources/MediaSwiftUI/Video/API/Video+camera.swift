@@ -33,34 +33,26 @@ public extension Video {
     ///
     /// - Returns: some View
     @ViewBuilder static func camera<ErrorView: View>(@ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<Media.URL<Video>?>) -> some View {
-        let result = Result {
-            try ViewCreator.camera(for: [.movie]) { result in
-                switch result {
-                case .success(let cameraResult):
-                    switch cameraResult {
-                    case .tookVideo(let url):
-                        do {
-                            let mediaURL = try Media.URL<Video>(url: url)
-                            selection.wrappedValue = mediaURL
-                        } catch {
-                            // TODO: error handling
-                            debugPrint(error)
-                        }
-                    default:
-                        // TODO: error handling
-                        debugPrint(Video.Error.unsupportedCameraResult)
+        ViewCreator.camera(for: [.movie]) { result in
+            switch result {
+            case .success(let cameraResult):
+                switch cameraResult {
+                case .tookVideo(let url):
+                    do {
+                        let mediaURL = try Media.URL<Video>(url: url)
+                        selection.wrappedValue = mediaURL
+                    } catch {
+                        // TODO: error handling (use error view)
+                        debugPrint(error)
                     }
-                case .failure(let error):
-                    // TODO: error handling
-                    debugPrint(error)
+                default:
+                    // TODO: error handling (use error view)
+                    debugPrint(Video.Error.unsupportedCameraResult)
                 }
+            case .failure(let error):
+                // TODO: error handling (use error view)
+                debugPrint(error)
             }
-        }
-        switch result {
-        case let .success(view):
-            view
-        case let .failure(error):
-            errorView(error)
         }
     }
 }
