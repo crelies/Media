@@ -19,18 +19,26 @@ struct ViewCreator {
             throw Camera.Error.noCameraAvailable
         }
 
-        return MediaPicker(sourceType: .camera, mediaTypes: mediaTypes, onSelection: { value in
-            switch value {
-            case .tookPhoto(let image):
-                completion(.success(.tookPhoto(image: image)))
-            case .tookVideo(let url):
-                completion(.success(.tookVideo(url: url)))
-            default:
-                completion(.failure(MediaPicker.Error.unsupportedValue))
-            }
-        }, onFailure: { error in
-            completion(.failure(error))
-        })
+        return MediaPicker(
+            sourceType: .camera,
+            mediaTypes: mediaTypes,
+            selection: .writeOnly({ result in
+                switch result {
+                case let .success(value):
+                    switch value {
+                    case .tookPhoto(let image):
+                        completion(.success(.tookPhoto(image: image)))
+                    case .tookVideo(let url):
+                        completion(.success(.tookVideo(url: url)))
+                    default:
+                        completion(.failure(MediaPicker.Error.unsupportedValue))
+                    }
+                case let .failure(error):
+                    completion(.failure(error))
+                case .none: ()
+                }
+            })
+        )
     }
 
     static func browser<T: MediaProtocol>(
@@ -41,16 +49,24 @@ struct ViewCreator {
             throw MediaPicker.Error.noBrowsingSourceTypeAvailable
         }
 
-        return MediaPicker(sourceType: sourceType, mediaTypes: mediaTypes, onSelection: { value in
-            guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                completion(.failure(MediaPicker.Error.unsupportedValue))
-                return
-            }
-            let media = T.init(phAsset: phAsset)
-            completion(.success(media))
-        }, onFailure: { error in
-            completion(.failure(error))
-        })
+        return MediaPicker(
+            sourceType: sourceType,
+            mediaTypes: mediaTypes,
+            selection: .writeOnly({ result in
+                switch result {
+                case let .success(value):
+                    guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
+                        completion(.failure(MediaPicker.Error.unsupportedValue))
+                        return
+                    }
+                    let media = T.init(phAsset: phAsset)
+                    completion(.success(media))
+                case let .failure(error):
+                    completion(.failure(error))
+                case .none: ()
+                }
+            })
+        )
     }
 }
 #endif

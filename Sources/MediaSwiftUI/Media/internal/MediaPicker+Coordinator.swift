@@ -34,9 +34,9 @@ extension MediaPicker {
             }
 
             if let mediaPickerValue = Self.mediaPickerValue(forSourceType: picker.sourceType, mediaType: mediaType, info: info) {
-                mediaPicker.onSelection(mediaPickerValue)
+                mediaPicker.selection = .success(mediaPickerValue)
             } else {
-                mediaPicker.onFailure(.missingValue)
+                mediaPicker.selection = .failure(.missingValue)
             }
 
             picker.dismiss(animated: true, completion: nil)

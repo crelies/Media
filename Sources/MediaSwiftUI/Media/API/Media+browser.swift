@@ -45,41 +45,57 @@ public extension Media {
     /// - Returns: some View
     @ViewBuilder static func browser<ErrorView: View>(isPresented: Binding<Bool>, selectionLimit: Int = 1, @ViewBuilder errorView: (Swift.Error) -> ErrorView, selection: Binding<[BrowserResult<PHAsset, NSItemProvider>]>) -> some View {
         if #available(iOS 14, macOS 11, *) {
-            PHPicker(isPresented: isPresented, configuration: {
-                var configuration = PHPickerConfiguration(photoLibrary: .shared())
-                configuration.selectionLimit = selectionLimit
-                configuration.preferredAssetRepresentationMode = .current
-                return configuration
-            }(), selection: .init(get: {
-                []
-            }, set: { browserResult in
-                if Media.currentPermission == .authorized {
-                    let identifiers = browserResult.compactMap { $0.assetIdentifier }
-                    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-                    var assets: [PHAsset] = []
-                    fetchResult.enumerateObjects { asset, _, _ in
-                        assets.append(asset)
+            PHPicker(
+                isPresented: isPresented,
+                configuration: {
+                    var configuration = PHPickerConfiguration(photoLibrary: .shared())
+                    configuration.selectionLimit = selectionLimit
+                    configuration.preferredAssetRepresentationMode = .current
+                    return configuration
+                }(),
+                selection: .init(
+                    get: {
+                        // Value is never read
+                        []
+                    },
+                    set: { browserResult in
+                        if Media.currentPermission == .authorized {
+                            let identifiers = browserResult.compactMap { $0.assetIdentifier }
+                            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+                            var assets: [PHAsset] = []
+                            fetchResult.enumerateObjects { asset, _, _ in
+                                assets.append(asset)
+                            }
+                            let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
+                            selection.wrappedValue = browserResults
+                        } else {
+                            let browserResults = browserResult.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
+                            selection.wrappedValue = browserResults
+                        }
                     }
-                    let browserResults = assets.map { BrowserResult<PHAsset, NSItemProvider>.media($0, itemProvider: nil) }
-                    selection.wrappedValue = browserResults
-                } else {
-                    let browserResults = browserResult.map { BrowserResult<PHAsset, NSItemProvider>.data($0.itemProvider) }
-                    selection.wrappedValue = browserResults
-                }
-            }))
+                )
+            )
         } else {
             if let sourceType = UIImagePickerController.availableSourceType {
-                MediaPicker(sourceType: sourceType, mediaTypes: [], onSelection: { value in
-                    guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
-                        // TODO: error handling
-                        debugPrint(MediaPicker.Error.unsupportedValue)
-                        return
-                    }
-                    selection.wrappedValue = [.media(phAsset, itemProvider: nil)]
-                }, onFailure: { error in
-                    // TODO: error handling
-                    debugPrint(error)
-                })
+                MediaPicker(
+                    sourceType: sourceType,
+                    mediaTypes: [],
+                    selection: .writeOnly({ result in
+                        switch result {
+                        case let .success(value):
+                            guard case let MediaPickerValue.selectedMedia(phAsset) = value else {
+                                // TODO: error handling
+                                debugPrint(MediaPicker.Error.unsupportedValue)
+                                return
+                            }
+                            selection.wrappedValue = [.media(phAsset, itemProvider: nil)]
+                        case let .failure(error):
+                            // TODO: error handling
+                            debugPrint(error)
+                        case .none: ()
+                        }
+                    })
+                )
             } else {
                 errorView(MediaPicker.Error.noBrowsingSourceTypeAvailable)
             }
