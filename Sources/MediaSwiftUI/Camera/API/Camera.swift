@@ -58,7 +58,7 @@ public struct Camera {
                 })
             )
         case let .failure(error):
-            Text(error.localizedDescription)
+            errorView(error)
         }
     }
 }

@@ -53,6 +53,7 @@ public extension Photo {
                 configuration.preferredAssetRepresentationMode = .current
                 return configuration
             }(), selection: .init(get: {
+                // This is a write only binding
                 []
             }, set: { browserResult in
                 if Media.currentPermission == .authorized {
