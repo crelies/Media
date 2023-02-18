@@ -9,6 +9,7 @@
 import Combine
 import Foundation
 import MediaCore
+import UIKit
 
 extension NSItemProvider {
     /// Loads an image from the receiving item provider if one is available.

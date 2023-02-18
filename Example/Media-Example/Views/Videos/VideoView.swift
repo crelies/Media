@@ -51,9 +51,7 @@ struct VideoView: View {
                 }
         case let .loaded(previewImage):
             VStack {
-                if let videoSubtypes = video.subtypes {
-                    Text(videoSubtypes.map { String(describing: $0) }.joined(separator: ", ")).font(.headline)
-                }
+                Text(video.subtypes.map { String(describing: $0) }.joined(separator: ", ")).font(.headline)
 
                 ZStack {
                     if let previewImage = previewImage {

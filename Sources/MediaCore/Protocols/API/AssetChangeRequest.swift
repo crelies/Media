@@ -6,6 +6,7 @@
 //
 
 import Photos
+import UIKit
 
 /// Defines the requirements for an
 /// asset change request

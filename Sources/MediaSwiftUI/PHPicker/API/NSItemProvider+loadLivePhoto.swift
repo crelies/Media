@@ -13,6 +13,8 @@ extension NSItemProvider {
     /// Loads a live photo from the receiving item provider if one is available.
     ///
     /// - Returns: A publisher which provides a `PHLivePhoto` on `success`.
+    @available(iOS 14, macCatalyst 14, *)
+    @available(tvOS, unavailable)
     public func loadLivePhoto() -> AnyPublisher<PHLivePhoto, Swift.Error> {
         Future { promise in
             guard self.canLoadObject(ofClass: PHLivePhoto.self) else {

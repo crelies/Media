@@ -7,6 +7,7 @@
 //
 
 import Photos
+import UIKit
 
 /// Wrapper type around `PHAsset`s of type
 /// `video`

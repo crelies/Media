@@ -5,6 +5,8 @@
 //  Created by Christian Elies on 04.12.19.
 //
 
+import Photos
+
 extension LivePhoto {
     /// Convenience type representing the
     /// available subtypes of a live photo

@@ -17,34 +17,34 @@ struct AlbumView: View {
             Text("\(album.allMedia.count) media items").font(.footnote).padding(.vertical)
 
             List {
-                if let audios = album.audios, audios.count > 0 {
+                if album.audios.count > 0 {
                     Section {
-                        NavigationLink(destination: AudiosView(audios: audios)) {
-                            Text("Audios (\(audios.count))")
+                        NavigationLink(destination: AudiosView(audios: album.audios)) {
+                            Text("Audios (\(album.audios.count))")
                         }
                     }
                 }
 
-                if let livePhotos = album.livePhotos, livePhotos.count > 0 {
+                if album.livePhotos.count > 0 {
                     Section {
-                        NavigationLink(destination: LivePhotosView(livePhotos: livePhotos)) {
-                            Text("Live Photos (\(livePhotos.count))")
+                        NavigationLink(destination: LivePhotosView(livePhotos: album.livePhotos)) {
+                            Text("Live Photos (\(album.livePhotos.count))")
                         }
                     }
                 }
 
-                if let photos = album.photos, photos.count > 0 {
+                if album.photos.count > 0 {
                     Section {
-                        NavigationLink(destination: PhotosView(photos: photos)) {
-                            Text("Photos (\(photos.count))")
+                        NavigationLink(destination: PhotosView(photos: album.photos)) {
+                            Text("Photos (\(album.photos.count))")
                         }
                     }
                 }
 
-                if let videos = album.videos, videos.count > 0 {
+                if album.videos.count > 0 {
                     Section {
-                        NavigationLink(destination: VideosView(videos: videos)) {
-                            Text("Videos (\(videos.count))")
+                        NavigationLink(destination: VideosView(videos: album.videos)) {
+                            Text("Videos (\(album.videos.count))")
                         }
                     }
                 }

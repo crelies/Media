@@ -6,6 +6,8 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+import Photos
+
 extension Photo {
     /// Subtypes describing a `Photo`
     ///
