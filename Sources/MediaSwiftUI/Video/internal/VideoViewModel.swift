@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 11/01/2023.
 //
 
-#if canImport(SwiftUI) && !os(macOS)
+#if canImport(SwiftUI)
 import AVKit
 import Combine
 import MediaCore
