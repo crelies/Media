@@ -1,26 +1,28 @@
 //
-//  LivePhotoCameraViewModel.swift
+//  PhotoCameraViewModel.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 04/05/2022.
 //
 
-#if canImport(UIKit) && !os(tvOS)
+#if !os(tvOS)
 import AVFoundation
 import Combine
 import Foundation
 import MediaCore
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-public final class LivePhotoCameraViewModel: ObservableObject {
+public final class PhotoCameraViewModel: ObservableObject {
     private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCapturePhotoOutput
     private let photograph: Photograph
-    private let selection: Binding<Result<LivePhotoData, Error>?>
+    private let selection: Binding<Result<CapturedPhotoData, Error>?>
     private let backgroundQueue: DispatchQueue
 
     let captureSession: AVCaptureSession
@@ -28,14 +30,14 @@ public final class LivePhotoCameraViewModel: ObservableObject {
     @Published private(set) var isLivePhotoAvailable = false
     @Published private(set) var isFlashActive: Bool = false
     @Published private(set) var stillImageData: Data?
-    @Published private(set) var livePhotoData: LivePhotoData?
+    @Published private(set) var capturedPhotoData: CapturedPhotoData?
 
     init(
         cameras: [AVCaptureDevice],
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCapturePhotoOutput,
-        selection: Binding<Result<LivePhotoData, Error>?>
+        selection: Binding<Result<CapturedPhotoData, Error>?>
     ) {
         self.cameras = cameras
         self.captureSession = captureSession
@@ -51,13 +53,14 @@ public final class LivePhotoCameraViewModel: ObservableObject {
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-extension LivePhotoCameraViewModel {
+extension PhotoCameraViewModel {
     func startVideoPreview() {
         backgroundQueue.async {
             self.captureSession.startRunning()
         }
     }
 
+    @available(macOS 13, *)
     func toggleFlashMode() {
         isFlashActive.toggle()
         captureSettings.flashMode = isFlashActive ? .on : .off
@@ -80,7 +83,9 @@ extension LivePhotoCameraViewModel {
             captureSession.addInput(lastCaptureDevice)
         }
 
+        #if !os(macOS)
         output.isLivePhotoCaptureEnabled = output.isLivePhotoCaptureSupported
+        #endif
     }
 
     func capture() {
@@ -90,18 +95,23 @@ extension LivePhotoCameraViewModel {
             switch stillImageResult {
             case .success(let data):
                 self.stillImageData = data
+                #if os(macOS)
+                self.capturedPhotoData = CapturedPhotoData(stillImageData: data)
+                #endif
             case .failure:
                 self.stillImageData = nil
             }
         }) { livePhotoResult in
+            #if !os(macOS)
             switch livePhotoResult {
             case .success(let data):
-                self.livePhotoData = data
+                self.capturedPhotoData = data
                 self.isLivePhotoAvailable = true
             case .failure:
-                self.livePhotoData = nil
+                self.capturedPhotoData = nil
                 self.isLivePhotoAvailable = false
             }
+            #endif
         }
     }
 
@@ -114,9 +124,9 @@ extension LivePhotoCameraViewModel {
         }
     }
 
-    func useLivePhoto() {
-        if let livePhotoData = livePhotoData {
-            selection.wrappedValue = .success(livePhotoData)
+    func useCapturedPhoto() {
+        if let capturedPhotoData = capturedPhotoData {
+            selection.wrappedValue = .success(capturedPhotoData)
             finish()
         }
     }
@@ -133,10 +143,10 @@ extension LivePhotoCameraViewModel {
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-private extension LivePhotoCameraViewModel {
+private extension PhotoCameraViewModel {
     func reset() {
         stillImageData = nil
-        livePhotoData = nil
+        capturedPhotoData = nil
         isLivePhotoAvailable = false
     }
 

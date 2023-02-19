@@ -1,6 +1,6 @@
 //
 //  CameraViewCreator.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 16.01.20.
 //
@@ -14,9 +14,9 @@ import SwiftUI
 struct CameraViewCreator {
     @available(macCatalyst 14, *)
     static func livePhoto(
-        cameraViewModel: LivePhotoCameraViewModel
-    ) -> LivePhotoCameraView {
-        LivePhotoCameraView(
+        cameraViewModel: PhotoCameraViewModel
+    ) -> CustomPhotoCameraView {
+        CustomPhotoCameraView(
             viewModel: cameraViewModel
         )
     }

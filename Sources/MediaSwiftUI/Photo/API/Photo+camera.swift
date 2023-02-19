@@ -5,12 +5,12 @@
 //  Created by Christian Elies on 04/09/2022.
 //
 
-#if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
+#if canImport(SwiftUI)
 import MediaCore
 import SwiftUI
 
-#if !os(tvOS)
-@available (iOS 13, macOS 10.15, *)
+#if !os(tvOS) && !os(macOS)
+@available (iOS 13, *)
 public extension Photo {
     /// Creates a ready-to-use `SwiftUI` view for capturing `Photo`s
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
@@ -18,7 +18,6 @@ public extension Photo {
     /// - Parameter selection: A binding which represents the captured photo.
     ///
     /// - Returns: some View
-    @ViewBuilder
     static func camera(selection: Binding<Camera.Result?>) -> some View {
         camera(selection: selection, catchedError: nil)
     }
@@ -52,6 +51,15 @@ public extension Photo {
                 }
             })
         )
+    }
+}
+#elseif os(macOS)
+@available(macOS 11, *)
+public extension Photo {
+    static func camera(
+        viewModel: PhotoCameraViewModel
+    ) -> some View {
+        CustomPhotoCameraView(viewModel: viewModel)
     }
 }
 #endif

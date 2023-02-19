@@ -14,7 +14,7 @@ final class MockCaptureProcessorDelegate: CaptureProcessorDelegate {
     private(set) var didCaptureLivePhotoCalled: Bool = false
     private(set) var didCapturePhotoCalled: Bool = false
 
-    func didCaptureLivePhoto(data: LivePhotoData) {
+    func didCaptureLivePhoto(data: CapturedPhotoData) {
         didCaptureLivePhotoCalled = true
     }
 

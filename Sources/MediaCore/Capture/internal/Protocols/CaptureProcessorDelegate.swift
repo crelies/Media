@@ -8,9 +8,10 @@
 import Foundation
 
 @available(iOS 10, *)
-@available(macOS, unavailable)
 @available(tvOS, unavailable)
 protocol CaptureProcessorDelegate: AnyObject {
     func didCapturePhoto(data: Data)
-    func didCaptureLivePhoto(data: LivePhotoData)
+    #if !os(macOS)
+    func didCaptureLivePhoto(data: CapturedPhotoData)
+    #endif
 }

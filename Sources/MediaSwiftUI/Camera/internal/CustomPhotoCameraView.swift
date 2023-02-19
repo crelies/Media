@@ -1,28 +1,31 @@
 //
-//  LivePhotoCameraView.swift
+//  CustomPhotoCameraView.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 17.01.20.
 //
 
-#if canImport(UIKit) && !os(tvOS)
+#if !os(tvOS)
 import AVFoundation
 import MediaCore
 import SwiftUI
+#if canImport(UIKit)
 import UIKit
+#endif
 
 @available(iOS 13, *)
+@available(macOS 11, *)
 @available(macCatalyst 14, *)
-struct LivePhotoCameraView: View {
+struct CustomPhotoCameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
-    @ObservedObject var viewModel: LivePhotoCameraViewModel
+    @ObservedObject var viewModel: PhotoCameraViewModel
 
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 ZStack(alignment: .bottom) {
-                    if let stillImageData = viewModel.stillImageData, let uiImage = UIImage(data: stillImageData) {
+                    if let stillImageData = viewModel.stillImageData, let uiImage = UniversalImage(data: stillImageData) {
                         stillImageView(uiImage: uiImage, geometry: geometry)
                     } else {
                         captureView()
@@ -38,10 +41,11 @@ struct LivePhotoCameraView: View {
 }
 
 @available(iOS 13, *)
+@available(macOS 11, *)
 @available(macCatalyst 14, *)
-private extension LivePhotoCameraView {
-    func stillImageView(uiImage: UIImage, geometry: GeometryProxy) -> some View {
-        Image(uiImage: uiImage)
+private extension CustomPhotoCameraView {
+    func stillImageView(uiImage: UniversalImage, geometry: GeometryProxy) -> some View {
+        Image(universalImage: uiImage)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -49,15 +53,21 @@ private extension LivePhotoCameraView {
 
     func captureView() -> some View {
         ZStack(alignment: .topLeading) {
-            topToolbar()
+            // TODO: iOS 13?
+            if #available(iOS 14, macOS 13, *) {
+                topToolbar()
+            }
 
+            #if !os(macOS)
             VideoPreview(captureSession: viewModel.captureSession)
                 .onAppear {
                     viewModel.startVideoPreview()
                 }
+            #endif
         }
     }
 
+    @available(macOS 13, *)
     func topToolbar() -> some View {
         HStack {
             Button(action: viewModel.toggleFlashMode) {
@@ -102,7 +112,7 @@ private extension LivePhotoCameraView {
                     Spacer()
 
                     Button(action: {
-                        viewModel.useLivePhoto()
+                        viewModel.useCapturedPhoto()
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         VStack {

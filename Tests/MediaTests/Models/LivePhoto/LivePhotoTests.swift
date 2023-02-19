@@ -219,7 +219,7 @@ final class LivePhotoTests: XCTestCase {
             let movieURL = URL(fileURLWithPath: "file://test.mov")
             let stillImageData = Data()
             let mediaURL = try Media.URL<LivePhoto>(url: movieURL)
-            let data = LivePhotoData(stillImageData: stillImageData, movieURL: mediaURL)
+            let data = CapturedPhotoData(stillImageData: stillImageData, movieURL: mediaURL)
 
             var result: Result<LivePhoto, Error>?
             try LivePhoto.save(data: data) { res in

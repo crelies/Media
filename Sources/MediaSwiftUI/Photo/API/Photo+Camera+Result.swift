@@ -5,9 +5,12 @@
 //  Created by Christian Elies on 22.03.20.
 //
 
-#if canImport(UIKit)
 import MediaCore
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 extension Photo {
     /// Namespace for Photo camera related types
@@ -20,7 +23,6 @@ extension Photo.Camera {
     ///
     public enum `Result` {
         /// Camera captured a photo in the format of a `UIImage`
-        case tookPhoto(image: UIImage)
+        case tookPhoto(image: UniversalImage)
     }
 }
-#endif

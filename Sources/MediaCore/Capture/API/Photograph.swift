@@ -9,7 +9,6 @@
 import AVFoundation
 
 @available(iOS 10, *)
-@available(macOS, unavailable)
 @available(macCatalyst 14, *)
 /// Service for shooting (live) photos
 /// using `AVCapture` APIs
@@ -36,7 +35,6 @@ public final class Photograph: NSObject {
 }
 
 @available(iOS 10, *)
-@available(macOS, unavailable)
 @available(macCatalyst 14, *)
 public extension Photograph {
     /// Tells the receiver to shoot a photo
@@ -45,8 +43,10 @@ public extension Photograph {
     ///   - stillImageCompletion: block which should be called if a still image was taken
     ///   - livePhotoCompletion: block which should be called if a live photo was taken
     ///
-    func shootPhoto(stillImageCompletion: @escaping ResultDataCompletion,
-                    livePhotoCompletion: LivePhotoDataCompletion?) {
+    func shootPhoto(
+        stillImageCompletion: @escaping ResultDataCompletion,
+        livePhotoCompletion: LivePhotoDataCompletion?
+    ) {
         self.stillImageCompletion = stillImageCompletion
         self.livePhotoCompletion = livePhotoCompletion
 
@@ -59,15 +59,16 @@ public extension Photograph {
 }
 
 @available(iOS 10, *)
-@available(macOS, unavailable)
 @available(macCatalyst 14, *)
 extension Photograph: CaptureProcessorDelegate {
     func didCapturePhoto(data: Data) {
         stillImageCompletion?(.success(data))
     }
 
-    func didCaptureLivePhoto(data: LivePhotoData) {
+    #if !os(macOS)
+    func didCaptureLivePhoto(data: CapturedPhotoData) {
         livePhotoCompletion?(.success(data))
     }
+    #endif
 }
 #endif

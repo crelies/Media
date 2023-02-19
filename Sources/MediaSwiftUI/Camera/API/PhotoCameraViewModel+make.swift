@@ -1,11 +1,11 @@
 //
-//  LivePhotoCameraViewModel+make.swift
+//  PhotoCameraViewModel+make.swift
 //  MediaSwiftUI
 //
 //  Created by Christian Elies on 15/07/2022.
 //
 
-#if !os(tvOS) && !os(macOS)
+#if !os(tvOS)
 import AVKit
 import Foundation
 import MediaCore
@@ -15,15 +15,15 @@ import SwiftUI
 
 @available(iOS 13, *)
 @available(macCatalyst 14, *)
-extension LivePhotoCameraViewModel {
+extension PhotoCameraViewModel {
     /// Creates a camera view model instance using the given selection binding.
     ///
     /// - Parameter selection: A binding which represents the live photo camera result.
     ///
     /// - Returns: A camera view model instance.
     public static func make(
-        selection: Binding<Result<LivePhotoData, Error>?>
-    ) throws -> LivePhotoCameraViewModel {
+        selection: Binding<Result<CapturedPhotoData, Error>?>
+    ) throws -> PhotoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
 
@@ -57,19 +57,21 @@ extension LivePhotoCameraViewModel {
         try captureSession.addOutput(output: photoOutput)
 
         photoOutput.isHighResolutionCaptureEnabled = true
+        #if !os(macOS)
         photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
+        #endif
 
         #if !os(macOS)
         let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
-        #else
-        let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hvc1])
-        #endif
         let outputDirectory = FileManager.default.cachesDirectory
         captureSettings.livePhotoMovieFileURL = outputDirectory.appendingPathComponent("\(UUID().uuidString).mov")
+        #else
+        let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
+        #endif
 
         captureSession.commitConfiguration()
 
-        return LivePhotoCameraViewModel(
+        return PhotoCameraViewModel(
             cameras: captureDevices,
             captureSession: captureSession,
             captureSettings: captureSettings,

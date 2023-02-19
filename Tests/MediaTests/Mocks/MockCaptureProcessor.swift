@@ -13,7 +13,7 @@ import Foundation
 @available(iOS 10, *)
 final class MockCaptureProcessor: NSObject, CaptureProcessor {
     static var photoOutputDataToReturn: Data?
-    static var livePhotoDataToReturn: LivePhotoData?
+    static var livePhotoDataToReturn: CapturedPhotoData?
 
     weak var delegate: CaptureProcessorDelegate?
 

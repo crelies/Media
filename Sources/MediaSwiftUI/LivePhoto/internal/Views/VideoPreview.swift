@@ -1,6 +1,6 @@
 //
 //  VideoPreview.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 17.01.20.
 //

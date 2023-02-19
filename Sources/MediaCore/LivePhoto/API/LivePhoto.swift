@@ -112,7 +112,7 @@ public extension LivePhoto {
     ///   - data: the data object holding the image and video portion of the `LivePhoto`
     ///   - completion: a closure wich gets the `Result` (`LivePhoto` on `success` and `Error` on `failure`)
     ///
-    static func save(data: LivePhotoData, _ completion: @escaping ResultLivePhotoCompletion) throws {
+    static func save(data: CapturedPhotoData, _ completion: @escaping ResultLivePhotoCompletion) throws {
         PHAssetChanger.createRequest({
             let creationRequest = PHAssetCreationRequest.forAsset()
             creationRequest.addResource(with: .photo, data: data.stillImageData, options: nil)
