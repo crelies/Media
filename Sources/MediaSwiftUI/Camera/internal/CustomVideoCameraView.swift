@@ -20,16 +20,14 @@ struct CustomVideoCameraView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-//                ZStack(alignment: .bottom) {
-                    if let videoURL = viewModel.videoURL {
-                        VideoPlayer(player: .init(url: videoURL))
-                    } else {
-                        captureView()
-                    }
+                if let videoURL = viewModel.videoURL {
+                    VideoPlayer(player: .init(url: videoURL))
+                } else {
+                    captureView()
+                }
 
-                    bottomToolbar()
-                        .frame(width: geometry.size.width)
-//                }
+                bottomToolbar()
+                    .frame(width: geometry.size.width)
             }
         }
         // Attach the disappear modifier here instead on the VStack (macOS issue)

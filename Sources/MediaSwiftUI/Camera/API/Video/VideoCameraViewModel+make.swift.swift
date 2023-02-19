@@ -20,7 +20,7 @@ extension VideoCameraViewModel {
     ///
     /// - Returns: A camera view model instance.
     public static func make(
-        selection: Binding<Result<CapturedPhotoData, Error>?>
+        selection: Binding<Result<URL, Error>?>
     ) throws -> VideoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()

@@ -17,7 +17,7 @@ public final class VideoCameraViewModel: ObservableObject {
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCaptureMovieFileOutput
     private let videoRecorder: VideoRecorder
-    private let selection: Binding<Result<CapturedPhotoData, Error>?>
+    private let selection: Binding<Result<URL, Error>?>
     private let backgroundQueue: DispatchQueue
 
     let captureSession: AVCaptureSession
@@ -26,14 +26,13 @@ public final class VideoCameraViewModel: ObservableObject {
     @Published private(set) var isCapturedVideoAvailable = false
     @Published private(set) var isFlashActive: Bool = false
     @Published private(set) var videoURL: URL?
-    @Published private(set) var capturedPhotoData: CapturedPhotoData?
 
     init(
         cameras: [AVCaptureDevice],
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCaptureMovieFileOutput,
-        selection: Binding<Result<CapturedPhotoData, Error>?>
+        selection: Binding<Result<URL, Error>?>
     ) {
         self.cameras = cameras
         self.captureSession = captureSession
@@ -128,8 +127,8 @@ extension VideoCameraViewModel {
     }
 
     func useCapturedVideo() {
-        if let capturedPhotoData = capturedPhotoData {
-            selection.wrappedValue = .success(capturedPhotoData)
+        if let videoURL = videoURL {
+            selection.wrappedValue = .success(videoURL)
             finish()
         }
     }
@@ -147,7 +146,6 @@ extension VideoCameraViewModel {
 private extension VideoCameraViewModel {
     func reset() {
         videoURL = nil
-        capturedPhotoData = nil
         isCapturedVideoAvailable = false
     }
 

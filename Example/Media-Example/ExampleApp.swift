@@ -38,8 +38,32 @@ let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
 )
 
 #if os(macOS)
+var videoURLResult: Result<URL, Error>?
+var videoCaptureBinding: Binding<Result<URL, Error>?> = .init(
+    get: { videoURLResult },
+    set: { videoURLResult = $0 }
+).onChange { result in
+    guard let videoURL: URL = try? result?.get() else {
+        return
+    }
+
+    guard let mediaURL = try? Media.URL<Video>(url: videoURL) else {
+        assertionFailure("This should not happen")
+        return
+    }
+
+    // TODO: this is currently not working
+    Video.save(mediaURL) { result in
+        switch result {
+        case .failure(let error):
+            debugPrint("Video save error: \(error)")
+        default: ()
+        }
+    }
+}
+
 let rootVideoCameraViewModel: VideoCameraViewModel = try! VideoCameraViewModel.make(
-    selection: livePhotoCaptureBinding
+    selection: videoCaptureBinding
 )
 #endif
 
