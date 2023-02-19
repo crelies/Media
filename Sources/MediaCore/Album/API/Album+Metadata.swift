@@ -1,6 +1,6 @@
 //
 //  Album+Metadata.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 25.01.20.
 //

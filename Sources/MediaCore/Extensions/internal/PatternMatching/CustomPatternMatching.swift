@@ -1,6 +1,6 @@
 //
 //  CustomPatternMatching.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 29.11.19.
 //  Hint: https://www.swiftbysundell.com/articles/defining-custom-patterns-in-swift/

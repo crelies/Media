@@ -1,6 +1,6 @@
 //
 //  Media+SwiftUI.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 02.12.19.
 //

@@ -1,6 +1,6 @@
 //
 //  OptionalString+compare.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 28.11.19.
 //

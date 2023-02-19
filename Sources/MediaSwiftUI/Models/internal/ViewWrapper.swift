@@ -1,6 +1,6 @@
 //
 //  ViewWrapper.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 15.02.20.
 //

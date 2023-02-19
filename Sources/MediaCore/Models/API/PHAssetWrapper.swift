@@ -1,6 +1,6 @@
 //
 //  PHAssetWrapper.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 27.01.20.
 //

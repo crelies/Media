@@ -1,6 +1,6 @@
 //
 //  CaptureProcessorDelegate.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 17.01.20.
 //

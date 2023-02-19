@@ -1,6 +1,6 @@
 //
 //  Video+FileType.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 29.11.19.
 //

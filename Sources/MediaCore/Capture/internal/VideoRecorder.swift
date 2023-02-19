@@ -1,6 +1,6 @@
 //
 //  VideoRecorder.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 19.01.20.
 //
@@ -38,9 +38,12 @@ extension VideoRecorder {
 @available(macCatalyst 14, *)
 @available(tvOS, unavailable)
 extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
-    func fileOutput(_ output: AVCaptureFileOutput,
-                    didFinishRecordingTo outputFileURL: URL,
-                    from connections: [AVCaptureConnection], error: Error?) {
+    func fileOutput(
+        _ output: AVCaptureFileOutput,
+        didFinishRecordingTo outputFileURL: URL,
+        from connections: [AVCaptureConnection],
+        error: Error?
+    ) {
         completion?(.success(outputFileURL))
     }
 }

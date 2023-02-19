@@ -1,6 +1,6 @@
 //
 //  Album+Error.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 25.11.19.
 //

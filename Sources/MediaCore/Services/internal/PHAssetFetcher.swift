@@ -1,6 +1,6 @@
 //
 //  PHAssetFetcher.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 30.11.19.
 //

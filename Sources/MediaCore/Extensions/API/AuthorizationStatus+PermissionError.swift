@@ -1,6 +1,6 @@
 //
 //  Authorization+PermissionError.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 24.11.19.
 //

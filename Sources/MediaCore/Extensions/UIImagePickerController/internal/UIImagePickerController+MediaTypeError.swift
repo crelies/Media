@@ -1,6 +1,6 @@
 //
 //  MediaTypeError.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 26.11.19.
 //

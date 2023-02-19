@@ -1,6 +1,6 @@
 //
 //  FetchAlbums.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 03.12.19.
 //

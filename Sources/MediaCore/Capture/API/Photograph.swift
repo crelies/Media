@@ -1,6 +1,6 @@
 //
 //  Photograph.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 18.01.20.
 //

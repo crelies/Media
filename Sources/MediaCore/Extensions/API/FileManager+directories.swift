@@ -1,6 +1,6 @@
 //
 //  FileManager+directories.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 16.01.20.
 //

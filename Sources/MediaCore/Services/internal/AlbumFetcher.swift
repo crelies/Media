@@ -1,6 +1,6 @@
 //
 //  AlbumFetcher.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 01.12.19.
 //

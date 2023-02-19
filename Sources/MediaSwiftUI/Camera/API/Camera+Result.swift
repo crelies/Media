@@ -1,6 +1,6 @@
 //
 //  Camera+Result.swift
-//  
+//  MediaSwiftUI
 //
 //  Created by Christian Elies on 22.03.20.
 //

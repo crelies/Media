@@ -1,6 +1,6 @@
 //
 //  LivePhotos.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 22.11.19.
 //

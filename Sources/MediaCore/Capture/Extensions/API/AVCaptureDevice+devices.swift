@@ -1,6 +1,6 @@
 //
 //  AVCaptureDevice+devices.swift
-//  
+//  MediaCore
 //
 //  Created by Christian Elies on 19.01.20.
 //
