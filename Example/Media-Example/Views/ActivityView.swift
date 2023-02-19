@@ -6,7 +6,7 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 import Foundation
 import SwiftUI
 import UIKit

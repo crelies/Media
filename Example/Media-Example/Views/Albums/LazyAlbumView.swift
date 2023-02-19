@@ -33,6 +33,8 @@ struct LazyAlbumView: View {
                     }
                 }
 
+                // TODO: macOS
+                #if !os(macOS)
                 if let photos = album.photos, photos.count > 0 {
                     Section {
                         NavigationLink(destination: LazyPhotosView(photos: photos)) {
@@ -46,6 +48,7 @@ struct LazyAlbumView: View {
                         }
                     }
                 }
+                #endif
 
                 if let videos = album.videos, videos.count > 0 {
                     Section {
@@ -55,11 +58,11 @@ struct LazyAlbumView: View {
                     }
                 }
             }
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             .listStyle(InsetGroupedListStyle())
             #endif
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .navigationBarTitle(Text(album.localizedTitle ?? ""), displayMode: .inline)
         #else
         .navigationTitle(Text(album.localizedTitle ?? ""))

@@ -9,9 +9,11 @@
 import MediaCore
 import SwiftUI
 
+// TODO: macOS
 struct PhotosSection: View {
     var body: some View {
         Section(header: Label("Photos", systemImage: "photo")) {
+            #if !os(macOS)
             Group {
                 let allPhotos = Media.Photos.all
                 NavigationLink(destination: PhotosView(photos: allPhotos)) {
@@ -43,13 +45,16 @@ struct PhotosSection: View {
                     Text("Media.Photos.screenshot (\(screenshotPhotos.count))")
                 }
             }
+            #endif
 
             Group {
+                #if !os(macOS)
                 if let lazyAllPhotos = Media.LazyPhotos.all {
                     NavigationLink(destination: LazyPhotosView(photos: lazyAllPhotos)) {
                         Text("Media.LazyPhotos.all (\(lazyAllPhotos.count))")
                     }
                 }
+                #endif
 
                 if let lazyLivePhotos = Media.LazyPhotos.live {
                     NavigationLink(destination: LazyLivePhotosView(livePhotos: lazyLivePhotos)) {
@@ -57,6 +62,7 @@ struct PhotosSection: View {
                     }
                 }
 
+                #if !os(macOS)
                 if let lazyDepthEffectPhotos = Media.LazyPhotos.depthEffect {
                     NavigationLink(destination: LazyPhotosView(photos: lazyDepthEffectPhotos)) {
                         Text("Media.LazyPhotos.depthEffect (\(lazyDepthEffectPhotos.count))")
@@ -80,6 +86,7 @@ struct PhotosSection: View {
                         Text("Media.LazyPhotos.screenshot (\(lazyScreenshotPhotos.count))")
                     }
                 }
+                #endif
             }
         }
     }

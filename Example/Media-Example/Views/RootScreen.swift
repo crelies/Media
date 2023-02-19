@@ -33,7 +33,7 @@ struct RootScreen: View {
     private var albums: [Album]
 
     #if !os(tvOS)
-    @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
+    @ObservedObject var cameraViewModel: PhotoCameraViewModel
     #endif
 
     var body: some View {
@@ -103,18 +103,20 @@ private extension RootScreen {
 
             #if !targetEnvironment(macCatalyst) && !os(tvOS)
             CameraSection(cameraViewModel: cameraViewModel)
-            #elseif !os(tvOS)
+            #elseif !os(tvOS) && !os(macOS)
             CameraSection()
             #endif
 
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             BrowserSection()
             #endif
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .listStyle(InsetGroupedListStyle())
         #endif
+        #if !os(macOS)
         .navigationBarTitle("Examples")
+        #endif
     }
 
     func albumsSection() -> some View {
@@ -182,7 +184,7 @@ private extension RootScreen {
     }
 }
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 struct AlbumsOverviewView_Previews: PreviewProvider {
     static var previews: some View {
         RootScreen(cameraViewModel: rootCameraViewModel)

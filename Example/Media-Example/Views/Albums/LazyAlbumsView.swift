@@ -9,16 +9,6 @@
 import MediaCore
 import SwiftUI
 
-extension IndexSet: Identifiable {
-    public var id: Self { self }
-}
-
-enum ViewState<T: Hashable> {
-    case loading
-    case loaded(value: T)
-    case failed(error: Swift.Error)
-}
-
 struct LazyAlbumsView: View {
     @State private var viewState: ViewState<LazyAlbums> = .loading
     @State private var isAddViewVisible = false
@@ -47,7 +37,7 @@ struct LazyAlbumsView: View {
                             }
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding()
-                            #if !os(tvOS)
+                            #if !os(tvOS) && !os(macOS)
                             .background(Color(.secondarySystemBackground))
                             #endif
                             .cornerRadius(16)
@@ -56,12 +46,14 @@ struct LazyAlbumsView: View {
                 }
                 .padding()
             }
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(Text("Albums"), displayMode: .inline)
             #else
             .navigationTitle(Text("Albums"))
             #endif
+            #if !os(macOS)
+            // TODO: macOS
             .navigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {
@@ -72,6 +64,7 @@ struct LazyAlbumsView: View {
             }) {
                 AddAlbumScreen()
             })
+            #endif
         case let .failed(error):
             Text(error.localizedDescription)
         }

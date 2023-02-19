@@ -1,5 +1,5 @@
 //
-//  Extensions.swift
+//  IdentifiableExtensions.swift
 //  Media-Example
 //
 //  Created by Christian Elies on 23.11.19.

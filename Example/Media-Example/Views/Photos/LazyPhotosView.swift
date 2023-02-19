@@ -6,6 +6,8 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+// TODO: macOS
+#if !os(macOS)
 import MediaCore
 import SwiftUI
 
@@ -46,3 +48,4 @@ struct LazyPhotosView: View {
         #endif
     }
 }
+#endif

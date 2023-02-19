@@ -49,12 +49,14 @@ struct AlbumsView: View {
                 }
                 .padding()
             }
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             .listStyle(InsetGroupedListStyle())
             .navigationBarTitle(Text("Albums"), displayMode: .inline)
             #else
             .navigationTitle(Text("Albums"))
             #endif
+            // TODO: macOS
+            #if !os(macOS)
             .navigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {
@@ -65,6 +67,7 @@ struct AlbumsView: View {
             }) {
                 AddAlbumScreen()
             })
+            #endif
             .alert(item: $indexSetToDelete) { indexSet in
                 deleteConfirmationAlert(indexSetToDelete: indexSet)
             }

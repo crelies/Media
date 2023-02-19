@@ -33,6 +33,8 @@ struct PermissionsSection: View {
                 }
             }
 
+            // TODO: macOS
+            #if !os(macOS)
             Button(action: {
                 if Media.currentPermission == .limited {
                     isLimitedLibraryPickerPresented = true
@@ -47,6 +49,7 @@ struct PermissionsSection: View {
                 }
             }
             .background(PHPicker(isPresented: $isLimitedLibraryPickerPresented))
+            #endif
         }
         .onAppear {
             cameraPermission = Media.currentCameraPermission

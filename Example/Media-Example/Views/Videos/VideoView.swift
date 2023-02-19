@@ -8,8 +8,11 @@
 
 import AVFoundation
 import MediaCore
+import MediaSwiftUI
 import Photos
 import SwiftUI
+
+#if canImport(UIKit)
 import UIKit
 
 private struct ActivityIndicatorView: UIViewRepresentable {
@@ -19,6 +22,7 @@ private struct ActivityIndicatorView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIActivityIndicatorView, context: Context) {}
 }
+#endif
 
 struct VideoView: View {
     private enum PreviewImageState {
@@ -37,12 +41,21 @@ struct VideoView: View {
     @State private var progress: Float = 0
     @State private var isPlayerPresented = false
 
+    private var progressView: some View {
+        #if !os(macOS)
+        ActivityIndicatorView()
+        #else
+        // TODO: macOS
+        Text("Loading ...")
+        #endif
+    }
+
     let video: Video
 
     var body: some View {
         switch previewImageState {
         case .loading:
-            ActivityIndicatorView()
+            progressView
                 .onAppear {
                     video.previewImage { result in
                         let previewImage = try? result.get()
@@ -55,7 +68,7 @@ struct VideoView: View {
 
                 ZStack {
                     if let previewImage = previewImage {
-                        Image(uiImage: previewImage)
+                        Image(universalImage: previewImage)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     }
@@ -66,12 +79,18 @@ struct VideoView: View {
                         Image(systemName: "play.circle.fill")
                             .resizable()
                             .frame(width: 60, height: 60)
+                            #if !os(macOS)
                             .foregroundColor(Color(.secondaryLabel))
+                            #endif
                     }
                     .sheet(isPresented: $isPlayerPresented) {
                         isPlayerPresented = false
                     } content: {
-                        video.view
+                        let videoView = video.view
+
+                        // TODO: macOS
+                        #if !os(macOS)
+                        videoView
                             .navigationBarItems(trailing: VStack(spacing: 8) {
                                 Button(action: export) {
                                     Text("Export")
@@ -82,6 +101,9 @@ struct VideoView: View {
                                     ProgressView(value: progress, total: 1)
                                 }
                             })
+                        #else
+                        videoView
+                        #endif
                     }
                 }
             }
@@ -91,6 +113,14 @@ struct VideoView: View {
 }
 
 private extension VideoView {
+    var videoExportQuality: VideoExportQualityType {
+        #if os(macOS)
+        return .cellular
+        #else
+        return .low
+        #endif
+    }
+
     func export() {
         guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
@@ -101,7 +131,7 @@ private extension VideoView {
             return
         }
 
-        let exportOptions = Video.ExportOptions(url: outputURL, quality: .low)
+        let exportOptions = Video.ExportOptions(url: outputURL, quality: videoExportQuality)
 
         exportSuccessful = nil
         progress = 0

@@ -6,21 +6,11 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
+// TODO: macOS
+#if !os(macOS)
 import MapKit
 import MediaCore
 import SwiftUI
-
-extension Photo.Properties: Identifiable {
-    public var id: String { "\(exif.dateTimeOriginal ?? "")_\(UUID().uuidString)" }
-}
-
-extension Data: Identifiable {
-    public var id: Self { self }
-}
-
-extension CLLocationCoordinate2D: Identifiable {
-    public var id: Double { latitude + longitude }
-}
 
 struct PhotoView: View {
     let photo: Photo
@@ -77,7 +67,7 @@ struct PhotoView: View {
             }.sheet(item: $data, onDismiss: {
                 data = nil
             }) { data in
-                if let image = UIImage(data: data) {
+                if let image = UniversalImage(data: data) {
                     ActivityView(activityItems: [image], applicationActivities: [])
                 }
             }
@@ -88,7 +78,7 @@ struct PhotoView: View {
 
 private extension PhotoView {
     @ViewBuilder func propertiesScreen(_ properties: Photo.Properties) -> some View {
-        if #available(iOS 14.0, *) {
+        if #available(iOS 14, *) {
             if let location = properties.gps.location {
                 Map(
                     coordinateRegion: .constant(
@@ -157,3 +147,4 @@ private extension PhotoView {
         }
     }
 }
+#endif

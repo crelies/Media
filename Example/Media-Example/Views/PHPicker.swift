@@ -6,7 +6,7 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 import PhotosUI
 import SwiftUI
 

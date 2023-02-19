@@ -12,18 +12,18 @@ import MediaSwiftUI
 import SwiftUI
 
 #if !os(tvOS)
-var livePhotoCaptureResult: Result<LivePhotoData, Error>?
+var livePhotoCaptureResult: Result<CapturedPhotoData, Error>?
 
-var livePhotoCaptureBinding: Binding<Result<LivePhotoData, Error>?> = .init(
+var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
     get: { livePhotoCaptureResult },
     set: { livePhotoCaptureResult = $0 }
 ).onChange { result in
-    guard let livePhotoData: LivePhotoData = try? result?.get() else {
+    guard let capturedPhotoData: CapturedPhotoData = try? result?.get() else {
         return
     }
 
-    #if !targetEnvironment(macCatalyst)
-    try? LivePhoto.save(data: livePhotoData) { result in
+    #if !targetEnvironment(macCatalyst) && !os(macOS)
+    try? LivePhoto.save(data: capturedPhotoData) { result in
         switch result {
         case .failure(let error):
             debugPrint("Live photo save error: \(error)")
@@ -33,7 +33,7 @@ var livePhotoCaptureBinding: Binding<Result<LivePhotoData, Error>?> = .init(
     #endif
 }
 
-let rootCameraViewModel: LivePhotoCameraViewModel = try! LivePhotoCameraViewModel.make(
+let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
     selection: livePhotoCaptureBinding
 )
 #endif
@@ -50,6 +50,7 @@ struct ExampleApp: App {
         }
     }
 
+    #if !os(macOS)
     init() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
@@ -58,4 +59,5 @@ struct ExampleApp: App {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
     }
+    #endif
 }

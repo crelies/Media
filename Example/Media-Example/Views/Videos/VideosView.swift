@@ -38,7 +38,7 @@ struct VideosView: View {
             }
             .padding()
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .navigationBarTitle("Videos", displayMode: .inline)
         #else
         .navigationTitle(Text("Videos"))

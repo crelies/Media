@@ -33,6 +33,8 @@ struct AlbumView: View {
                     }
                 }
 
+                // TODO: macOS
+                #if !os(macOS)
                 if album.photos.count > 0 {
                     Section {
                         NavigationLink(destination: PhotosView(photos: album.photos)) {
@@ -40,6 +42,7 @@ struct AlbumView: View {
                         }
                     }
                 }
+                #endif
 
                 if album.videos.count > 0 {
                     Section {
@@ -49,11 +52,11 @@ struct AlbumView: View {
                     }
                 }
             }
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             .listStyle(InsetGroupedListStyle())
             #endif
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .navigationBarTitle(Text(album.localizedTitle ?? ""), displayMode: .inline)
         #else
         .navigationTitle(Text(album.localizedTitle ?? ""))

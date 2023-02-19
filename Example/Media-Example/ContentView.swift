@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     #if !os(tvOS)
-    @ObservedObject var cameraViewModel: LivePhotoCameraViewModel
+    @ObservedObject var cameraViewModel: PhotoCameraViewModel
     #endif
 
     var body: some View {
@@ -23,7 +23,7 @@ struct ContentView: View {
     }
 }
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(cameraViewModel: rootCameraViewModel)

@@ -38,7 +38,7 @@ struct LivePhotosView: View {
             }
             .padding()
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .navigationBarTitle("Live Photos", displayMode: .inline)
         #else
         .navigationTitle(Text("Live Photos"))

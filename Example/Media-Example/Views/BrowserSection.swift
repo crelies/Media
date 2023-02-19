@@ -6,26 +6,16 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
-#if !os(tvOS)
-import AVKit
-import Combine
 import Foundation
 import MediaCore
+
+// TODO: macOS
+#if !os(tvOS) && !os(macOS)
+import AVKit
+import Combine
 import MediaSwiftUI
 import Photos
 import SwiftUI
-
-extension URL: Identifiable {
-    public var id: String { absoluteString }
-}
-
-extension UIImage: Identifiable {
-    public var id: UIImage { self }
-}
-
-extension PHLivePhoto: Identifiable {
-    public var id: PHLivePhoto { self }
-}
 
 struct Garbage {
     static var cancellables: [AnyCancellable] = []
@@ -37,7 +27,7 @@ struct BrowserSection: View {
     @State private var isPhotoBrowserViewVisible = false
     @State private var isVideoBrowserViewVisible = false
     @State private var playerURL: URL?
-    @State private var image: UIImage?
+    @State private var image: UniversalImage?
     @State private var livePhoto: PHLivePhoto?
     @State private var livePhotoBrowserSelection: [BrowserResult<LivePhoto, PHLivePhoto>] = []
     @State private var mediaBrowserSelection: [BrowserResult<PHAsset, NSItemProvider>] = []
@@ -60,7 +50,7 @@ struct BrowserSection: View {
                     selection: $livePhotoBrowserSelection.onChange(handleLivePhotoBrowserResult)
                 )
             }
-            #if !targetEnvironment(macCatalyst)
+            #if !targetEnvironment(macCatalyst) && !os(macOS)
             .background(
                 EmptyView()
                     .sheet(item: $livePhoto, onDismiss: {
@@ -171,7 +161,7 @@ private extension BrowserSection {
         }
     }
 
-    func handlePhotoBrowserResult(_ results: [BrowserResult<Photo, UIImage>]) {
+    func handlePhotoBrowserResult(_ results: [BrowserResult<Photo, UniversalImage>]) {
         switch results.first {
         case let .data(uiImage):
             image = uiImage

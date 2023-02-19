@@ -133,6 +133,8 @@ extension Item: Node {
             }
         case let .photo(photos, index):
             LazyView(data: { photos[index] }) { photo in
+                // TODO: macOS
+                #if !os(macOS)
                 if let photo = photos[index] {
                     NavigationLink(destination: PhotoView(photo: photo)) {
                         if let creationDate = photo.metadata?.creationDate {
@@ -142,6 +144,7 @@ extension Item: Node {
                         }
                     }
                 }
+                #endif
             }
         case let .videos(album):
             if let album = album, let videos = album.videos, videos.count > 0 {
