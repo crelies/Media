@@ -37,7 +37,7 @@ struct RootScreen: View {
     #endif
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             switch permissionState {
             case .loading:
                 ProgressView()
