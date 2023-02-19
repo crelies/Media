@@ -31,7 +31,8 @@ struct PhotoView: View {
             .onAppear {
                 isFavorite = photo.metadata?.isFavorite ?? false
             }
-            #if !os(macOS)
+            // TODO: [example] tvOS 16 example
+            #if !os(tvOS) && !os(macOS)
             .onTapGesture {
                 photo.properties { result in
                     switch result {

@@ -17,7 +17,11 @@ struct UniversalSection<Header: View, Content: View>: View {
         #if !os(macOS)
         Section(header: header, content: content)
         #else
-        Section(title, content: content)
+        if #available(macOS 12, *) {
+            Section(title, content: content)
+        } else {
+            Section(header: Text(title), content: content)
+        }
         #endif
     }
 }
