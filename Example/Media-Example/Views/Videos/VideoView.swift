@@ -45,8 +45,7 @@ struct VideoView: View {
         #if !os(macOS)
         ActivityIndicatorView()
         #else
-        // TODO: macOS
-        Text("Loading ...")
+        ProgressView()
         #endif
     }
 

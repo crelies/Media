@@ -33,8 +33,6 @@ struct AlbumView: View {
                     }
                 }
 
-                // TODO: macOS
-                #if !os(macOS)
                 if album.photos.count > 0 {
                     Section {
                         NavigationLink(destination: PhotosView(photos: album.photos)) {
@@ -42,7 +40,6 @@ struct AlbumView: View {
                         }
                     }
                 }
-                #endif
 
                 if album.videos.count > 0 {
                     Section {

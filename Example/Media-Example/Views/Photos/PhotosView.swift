@@ -6,8 +6,6 @@
 //  Copyright © 2021 Christian Elies. All rights reserved.
 //
 
-// TODO: macOS
-#if !os(macOS)
 import MediaCore
 import SwiftUI
 
@@ -31,7 +29,7 @@ struct PhotosView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        #if !os(tvOS)
+                        #if !os(tvOS) && !os(macOS)
                         .background(Color(.secondarySystemBackground))
                         #endif
                         .cornerRadius(16)
@@ -40,11 +38,10 @@ struct PhotosView: View {
             }
             .padding()
         }
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         .navigationBarTitle("Photos", displayMode: .inline)
         #else
         .navigationTitle(Text("Photos"))
         #endif
     }
 }
-#endif

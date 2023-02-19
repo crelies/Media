@@ -6,8 +6,6 @@
 //  Copyright © 2019 Christian Elies. All rights reserved.
 //
 
-// TODO: macOS
-#if !os(macOS)
 import MapKit
 import MediaCore
 import SwiftUI
@@ -19,7 +17,9 @@ struct PhotoView: View {
     @State private var error: Error?
     @State private var isErrorAlertVisible = false
     @State private var isFavorite = false
+    #if !os(macOS)
     @State private var properties: Photo.Properties?
+    #endif
 
     var body: some View {
         VStack(spacing: 16) {
@@ -31,6 +31,7 @@ struct PhotoView: View {
             .onAppear {
                 isFavorite = photo.metadata?.isFavorite ?? false
             }
+            #if !os(macOS)
             .onTapGesture {
                 photo.properties { result in
                     switch result {
@@ -48,10 +49,11 @@ struct PhotoView: View {
                 },
                 content: propertiesScreen
             )
+            #endif
 
             Text(photo.subtypes.map { String(describing: $0) }.joined(separator: ", "))
         }
-        .navigationBarItems(trailing: HStack {
+        .universalNavigationBarItems(trailing: HStack {
             if let metadata = photo.metadata {
                 Button(action: {
                     toggleFavoriteState(isFavorite: metadata.isFavorite)
@@ -61,7 +63,7 @@ struct PhotoView: View {
                 .alert(isPresented: $isErrorAlertVisible) { errorAlert(error) }
             }
 
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             Button(action: share) {
                 Text("Share")
             }.sheet(item: $data, onDismiss: {
@@ -77,7 +79,9 @@ struct PhotoView: View {
 }
 
 private extension PhotoView {
-    @ViewBuilder func propertiesScreen(_ properties: Photo.Properties) -> some View {
+    #if !os(macOS)
+    @ViewBuilder
+    func propertiesScreen(_ properties: Photo.Properties) -> some View {
         if #available(iOS 14, *) {
             if let location = properties.gps.location {
                 Map(
@@ -115,6 +119,7 @@ private extension PhotoView {
         .listStyle(InsetGroupedListStyle())
         #endif
     }
+    #endif
 
     func errorAlert(_ error: Error?) -> Alert {
         Alert(title: Text("Error"), message: Text(error?.localizedDescription ?? "An unknown error occurred"), dismissButton: .cancel {
@@ -147,4 +152,3 @@ private extension PhotoView {
         }
     }
 }
-#endif

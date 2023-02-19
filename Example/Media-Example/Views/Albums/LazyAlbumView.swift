@@ -33,8 +33,6 @@ struct LazyAlbumView: View {
                     }
                 }
 
-                // TODO: macOS
-                #if !os(macOS)
                 if let photos = album.photos, photos.count > 0 {
                     Section {
                         NavigationLink(destination: LazyPhotosView(photos: photos)) {
@@ -48,7 +46,6 @@ struct LazyAlbumView: View {
                         }
                     }
                 }
-                #endif
 
                 if let videos = album.videos, videos.count > 0 {
                     Section {

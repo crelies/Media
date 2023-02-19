@@ -33,7 +33,7 @@ struct CameraSection: View {
     var body: some View {
         UniversalSection(header: Label("Camera", systemImage: "camera"), title: "Camera") {
             VStack {
-                // TODO: macOS?
+                // TODO: [macOS] reuse existing custom photo camera view
                 #if !os(macOS)
                 Button(action: {
                     isCameraViewVisible = true
@@ -113,7 +113,7 @@ struct CameraSection: View {
                         .aspectRatio(contentMode: .fit)
                 }
 
-                // TODO: macOS
+                // TODO: [macOS] implement video camera (reuse existing custom photo camera view)
                 #if !os(macOS)
                 Button(action: {
                     isVideoCameraViewVisible = true
