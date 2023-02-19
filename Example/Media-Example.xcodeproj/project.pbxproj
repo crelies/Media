@@ -14,7 +14,6 @@
 		B97D915D238986DD00A617DC /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97D915C238986DD00A617DC /* RootScreen.swift */; };
 		B98469442881743E0013DA01 /* MediaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B98469432881743E0013DA01 /* MediaCore */; };
 		B98469462881743E0013DA01 /* MediaSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B98469452881743E0013DA01 /* MediaSwiftUI */; };
-		B992717129A293A10040CEE6 /* UniversalSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B992717029A293A10040CEE6 /* UniversalSection.swift */; };
 		B992717329A293B80040CEE6 /* View+universalFullScreenCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */; };
 		B992717529A293C80040CEE6 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B992717429A293C80040CEE6 /* IdentifiableError.swift */; };
 		B992717729A294710040CEE6 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B992717629A294710040CEE6 /* ViewState.swift */; };
@@ -81,7 +80,6 @@
 		B97D914F2388772000A617DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B97D91552388775400A617DC /* Media-Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Media-Example.entitlements"; sourceTree = "<group>"; };
 		B97D915C238986DD00A617DC /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
-		B992717029A293A10040CEE6 /* UniversalSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalSection.swift; sourceTree = "<group>"; };
 		B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+universalFullScreenCover.swift"; sourceTree = "<group>"; };
 		B992717429A293C80040CEE6 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		B992717629A294710040CEE6 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
@@ -204,7 +202,6 @@
 				B9B2A34225E45FF500DC3A4C /* PhotosSection.swift */,
 				B99586BC263E03F90032EF4B /* PHPicker.swift */,
 				B97D915C238986DD00A617DC /* RootScreen.swift */,
-				B992717029A293A10040CEE6 /* UniversalSection.swift */,
 				B9B2A34525E4600600DC3A4C /* VideosSection.swift */,
 				B9B2A31525E0470400DC3A4C /* Albums */,
 				B9B2A31925E0474500DC3A4C /* Audios */,
@@ -400,7 +397,6 @@
 				B9B2A34925E4600D00DC3A4C /* CameraSection.swift in Sources */,
 				B992717B29A294A90040CEE6 /* Data+Identifiable.swift in Sources */,
 				B94FEDC628C3E00E008476EC /* Binding+onChange.swift in Sources */,
-				B992717129A293A10040CEE6 /* UniversalSection.swift in Sources */,
 				B992717F29A2951B0040CEE6 /* Photo.Properties+Identifiable.swift in Sources */,
 				B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */,
 				B9B2A35425E850C400DC3A4C /* LazyTree.swift in Sources */,

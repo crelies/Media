@@ -31,7 +31,7 @@ struct CameraSection: View {
     #endif
 
     var body: some View {
-        UniversalSection(header: Label("Camera", systemImage: "camera"), title: "Camera") {
+        Section(header: Label("Camera", systemImage: "camera")) {
             VStack {
                 // TODO: [macOS] reuse existing custom photo camera view
                 #if !os(macOS)
