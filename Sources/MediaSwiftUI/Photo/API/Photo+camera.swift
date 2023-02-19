@@ -56,6 +56,11 @@ public extension Photo {
 #elseif os(macOS)
 @available(macOS 11, *)
 public extension Photo {
+    /// <#Description#>
+    ///
+    /// - Parameter viewModel: <#viewModel description#>
+    /// 
+    /// - Returns: <#description#>
     static func camera(
         viewModel: PhotoCameraViewModel
     ) -> some View {

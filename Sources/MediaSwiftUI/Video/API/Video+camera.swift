@@ -5,11 +5,11 @@
 //  Created by Christian Elies on 04/09/2022.
 //
 
-#if canImport(SwiftUI) && (!os(macOS) || targetEnvironment(macCatalyst))
+#if canImport(SwiftUI)
 import MediaCore
 import SwiftUI
 
-#if !os(tvOS)
+#if !os(tvOS) && !os(macOS)
 @available (iOS 13, macOS 10.15, *)
 public extension Video {
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
@@ -59,6 +59,20 @@ public extension Video {
                 }
             })
         )
+    }
+}
+#elseif os(macOS)
+@available(macOS 11, *)
+public extension Video {
+    /// <#Description#>
+    ///
+    /// - Parameter viewModel: <#viewModel description#>
+    ///
+    /// - Returns: <#description#>
+    static func camera(
+        viewModel: VideoCameraViewModel
+    ) -> some View {
+        CustomVideoCameraView(viewModel: viewModel)
     }
 }
 #endif

@@ -10,11 +10,11 @@ import AVFoundation
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
 @available(tvOS, unavailable)
-final class VideoRecorder: NSObject {
+public final class VideoRecorder: NSObject {
     private let videoOutput: AVCaptureMovieFileOutput
     private var completion: ResultURLCompletion?
 
-    init(videoOutput: AVCaptureMovieFileOutput) {
+    public init(videoOutput: AVCaptureMovieFileOutput) {
         self.videoOutput = videoOutput
     }
 }
@@ -23,13 +23,13 @@ final class VideoRecorder: NSObject {
 @available(macCatalyst 14, *)
 @available(tvOS, unavailable)
 extension VideoRecorder {
-    func start(recordTo url: URL, completion: @escaping ResultURLCompletion) {
+    public func start(recordTo url: URL, completion: @escaping ResultURLCompletion) {
         self.completion = completion
         videoOutput.stopRecording()
         videoOutput.startRecording(to: url, recordingDelegate: self)
     }
 
-    func stop() {
+    public func stop() {
         videoOutput.stopRecording()
     }
 }
@@ -38,7 +38,7 @@ extension VideoRecorder {
 @available(macCatalyst 14, *)
 @available(tvOS, unavailable)
 extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
-    func fileOutput(
+    public func fileOutput(
         _ output: AVCaptureFileOutput,
         didFinishRecordingTo outputFileURL: URL,
         from connections: [AVCaptureConnection],
