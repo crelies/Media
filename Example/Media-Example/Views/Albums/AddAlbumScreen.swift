@@ -26,14 +26,11 @@ struct AddAlbumScreen: View {
                 }
                 .disabled(albumName.count <= 3)
             }
-            // TODO: macOS
-            #if !os(macOS)
-            .navigationBarItems(trailing: Button(action: {
+            .universalNavigationBarItems(trailing: Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "xmark")
             })
-            #endif
             .alert(isPresented: $isAddConfirmationAlertPresented) {
                 switch addResult {
                 case .success:

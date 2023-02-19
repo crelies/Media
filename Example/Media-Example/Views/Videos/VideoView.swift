@@ -86,12 +86,8 @@ struct VideoView: View {
                     .sheet(isPresented: $isPlayerPresented) {
                         isPlayerPresented = false
                     } content: {
-                        let videoView = video.view
-
-                        // TODO: macOS
-                        #if !os(macOS)
-                        videoView
-                            .navigationBarItems(trailing: VStack(spacing: 8) {
+                        video.view
+                            .universalNavigationBarItems(trailing: VStack(spacing: 8) {
                                 Button(action: export) {
                                     Text("Export")
                                         .foregroundColor(exportSuccessful == nil ? Color(.systemBlue) : ((exportSuccessful ?? true) ? Color(.systemGreen) : Color(.systemRed)))
@@ -101,9 +97,6 @@ struct VideoView: View {
                                     ProgressView(value: progress, total: 1)
                                 }
                             })
-                        #else
-                        videoView
-                        #endif
                     }
                 }
             }

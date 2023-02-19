@@ -52,9 +52,7 @@ struct LazyAlbumsView: View {
             #else
             .navigationTitle(Text("Albums"))
             #endif
-            #if !os(macOS)
-            // TODO: macOS
-            .navigationBarItems(trailing: Button(action: {
+            .universalNavigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {
                 Text("Add")
@@ -64,7 +62,6 @@ struct LazyAlbumsView: View {
             }) {
                 AddAlbumScreen()
             })
-            #endif
         case let .failed(error):
             Text(error.localizedDescription)
         }

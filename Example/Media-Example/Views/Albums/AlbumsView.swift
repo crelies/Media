@@ -55,9 +55,7 @@ struct AlbumsView: View {
             #else
             .navigationTitle(Text("Albums"))
             #endif
-            // TODO: macOS
-            #if !os(macOS)
-            .navigationBarItems(trailing: Button(action: {
+            .universalNavigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {
                 Text("Add")
@@ -67,7 +65,6 @@ struct AlbumsView: View {
             }) {
                 AddAlbumScreen()
             })
-            #endif
             .alert(item: $indexSetToDelete) { indexSet in
                 deleteConfirmationAlert(indexSetToDelete: indexSet)
             }
