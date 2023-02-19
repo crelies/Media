@@ -36,14 +36,23 @@ var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
 let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
     selection: livePhotoCaptureBinding
 )
+
+#if os(macOS)
+let rootVideoCameraViewModel: VideoCameraViewModel = try! VideoCameraViewModel.make(
+    selection: livePhotoCaptureBinding
+)
+#endif
+
 #endif
 
 @main
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            #if !os(tvOS)
+            #if !os(tvOS) && !os(macOS)
             ContentView(cameraViewModel: rootCameraViewModel)
+            #elseif os(macOS) && !targetEnvironment(macCatalyst)
+            ContentView(cameraViewModel: rootCameraViewModel, videoCameraViewModel: rootVideoCameraViewModel)
             #else
             ContentView()
             #endif

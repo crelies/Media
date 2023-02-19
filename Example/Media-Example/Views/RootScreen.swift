@@ -36,6 +36,10 @@ struct RootScreen: View {
     @ObservedObject var cameraViewModel: PhotoCameraViewModel
     #endif
 
+    #if os(macOS)
+    @ObservedObject var videoCameraViewModel: VideoCameraViewModel
+    #endif
+
     var body: some View {
         NavigationStack {
             switch permissionState {
@@ -101,9 +105,11 @@ private extension RootScreen {
 
             VideosSection()
 
-            #if !targetEnvironment(macCatalyst) && !os(tvOS)
+            #if !targetEnvironment(macCatalyst) && os(iOS)
             CameraSection(cameraViewModel: cameraViewModel)
-            #elseif !os(tvOS) && !os(macOS)
+            #elseif os(macOS)
+            CameraSection(cameraViewModel: cameraViewModel, videoCameraViewModel: videoCameraViewModel)
+            #elseif targetEnvironment(macCatalyst) 
             CameraSection()
             #endif
 

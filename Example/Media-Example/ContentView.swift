@@ -14,9 +14,15 @@ struct ContentView: View {
     @ObservedObject var cameraViewModel: PhotoCameraViewModel
     #endif
 
+    #if os(macOS)
+    @ObservedObject var videoCameraViewModel: VideoCameraViewModel
+    #endif
+
     var body: some View {
-        #if !os(tvOS)
+        #if !os(tvOS) && !os(macOS)
         RootScreen(cameraViewModel: cameraViewModel)
+        #elseif os(macOS)
+        RootScreen(cameraViewModel: cameraViewModel, videoCameraViewModel: videoCameraViewModel)
         #else
         RootScreen()
         #endif

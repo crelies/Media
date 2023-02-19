@@ -30,6 +30,10 @@ struct CameraSection: View {
     @ObservedObject var cameraViewModel: PhotoCameraViewModel
     #endif
 
+    #if os(macOS)
+    @ObservedObject var videoCameraViewModel: VideoCameraViewModel
+    #endif
+
     var body: some View {
         Section(header: Label("Camera", systemImage: "camera")) {
             // TODO: [macOS] reuse existing custom photo camera view
@@ -112,16 +116,15 @@ struct CameraSection: View {
                     .aspectRatio(contentMode: .fit)
             }
 
-            // TODO: [macOS] implement video camera (reuse existing custom photo camera view)
-            #if !os(macOS)
             Button(action: {
                 isVideoCameraViewVisible = true
             }) {
                 Text("Video.camera")
             }
-            .fullScreenCover(isPresented: $isVideoCameraViewVisible, onDismiss: {
+            .universalFullScreenCover(isPresented: $isVideoCameraViewVisible, onDismiss: {
                 isVideoCameraViewVisible = false
             }) {
+                #if !os(macOS)
                 Video.camera(selection: $recordedVideoURL.onChange({ result in
                     guard let result = result else {
                         return
@@ -133,13 +136,16 @@ struct CameraSection: View {
                     }
                     self.catchedError = .init(error: error)
                 }))
+                #else
+                Video.camera(viewModel: videoCameraViewModel)
+                    .frame(minWidth: 400, minHeight: 400)
+                #endif
             }
             .sheet(item: $playerURL, onDismiss: {
                 playerURL = nil
             }) { url in
                 VideoPlayer(player: .init(url: url))
             }
-            #endif
         }
     }
 }
