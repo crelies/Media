@@ -5,9 +5,10 @@
 //  Created by Christian Elies on 17.01.20.
 //
 
-#if canImport(UIKit) && !os(tvOS)
 import AVFoundation
 import SwiftUI
+
+#if canImport(UIKit) && !os(tvOS)
 import UIKit
 
 @available(iOS 13, *)
@@ -24,5 +25,21 @@ struct VideoPreview: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: AVCaptureVideoPreview, context: UIViewRepresentableContext<VideoPreview>) {}
+}
+#elseif os(macOS)
+import AppKit
+
+struct VideoPreview: NSViewRepresentable {
+    let captureSession: AVCaptureSession
+
+    func makeNSView(context: NSViewRepresentableContext<VideoPreview>) -> AVCaptureVideoPreview {
+        let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        videoPreviewLayer.session = captureSession
+        videoPreviewLayer.videoGravity = .resizeAspect
+        videoPreviewLayer.connection?.videoOrientation = .portrait
+        return AVCaptureVideoPreview(layer: videoPreviewLayer)
+    }
+
+    func updateNSView(_ nsView: AVCaptureVideoPreview, context: NSViewRepresentableContext<VideoPreview>) {}
 }
 #endif

@@ -27,7 +27,7 @@ public final class PhotoCameraViewModel: ObservableObject {
 
     let captureSession: AVCaptureSession
 
-    @Published private(set) var isLivePhotoAvailable = false
+    @Published private(set) var isCapturedPhotoAvailable = false
     @Published private(set) var isFlashActive: Bool = false
     @Published private(set) var stillImageData: Data?
     @Published private(set) var capturedPhotoData: CapturedPhotoData?
@@ -95,25 +95,35 @@ extension PhotoCameraViewModel {
             switch stillImageResult {
             case .success(let data):
                 self.stillImageData = data
+
+                // With mac cameras currently (2023) only still images can be captured.
                 #if os(macOS)
                 self.capturedPhotoData = CapturedPhotoData(stillImageData: data)
+                self.isCapturedPhotoAvailable = true
                 #endif
+
             case .failure:
                 self.stillImageData = nil
             }
-        }) { livePhotoResult in
-            #if !os(macOS)
-            switch livePhotoResult {
-            case .success(let data):
-                self.capturedPhotoData = data
-                self.isLivePhotoAvailable = true
-            case .failure:
-                self.capturedPhotoData = nil
-                self.isLivePhotoAvailable = false
-            }
-            #endif
+        }, livePhotoCompletion: handleLivePhotoResult)
+    }
+
+    #if !os(macOS)
+    func handleLivePhotoResult(_ result: Result<CapturedPhotoData, Error>) {
+        switch result {
+        case .success(let data):
+            self.capturedPhotoData = data
+            self.isCapturedPhotoAvailable = true
+        case .failure:
+            self.capturedPhotoData = nil
+            self.isCapturedPhotoAvailable = false
         }
     }
+    #else
+    func handleLivePhotoResult(_ result: Result<Void, Error>) {
+        // This is never called.
+    }
+    #endif
 
     func finish() {
         if stillImageData == nil {
@@ -147,7 +157,7 @@ private extension PhotoCameraViewModel {
     func reset() {
         stillImageData = nil
         capturedPhotoData = nil
-        isLivePhotoAvailable = false
+        isCapturedPhotoAvailable = false
     }
 
     func dismiss() {

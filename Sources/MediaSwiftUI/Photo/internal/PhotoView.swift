@@ -5,23 +5,8 @@
 //  Created by Christian Elies on 28.11.19.
 //
 
-import MediaCore
-import SwiftUI
-
-// TODO: outsource
-extension Image {
-    init(universalImage: UniversalImage) {
-        #if os(macOS)
-        self = .init(nsImage: universalImage)
-        #elseif canImport(UIKit)
-        self = .init(uiImage: universalImage)
-        #else
-        assertionFailure("This should never happen")
-        #endif
-    }
-}
-
 #if canImport(SwiftUI)
+import MediaCore
 import SwiftUI
 
 @available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)

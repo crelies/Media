@@ -35,8 +35,9 @@ struct CustomPhotoCameraView: View {
                         .frame(width: geometry.size.width)
                 }
             }
-            .onDisappear(perform: viewModel.onDisappear)
         }
+        // Attach the disappear modifier here instead on the VStack (macOS issue)
+        .onDisappear(perform: viewModel.onDisappear)
     }
 }
 
@@ -53,17 +54,18 @@ private extension CustomPhotoCameraView {
 
     func captureView() -> some View {
         ZStack(alignment: .topLeading) {
-            // TODO: iOS 13?
-            if #available(iOS 14, macOS 13, *) {
+            #if !os(macOS)
+            topToolbar()
+            #elseif os(macOS)
+            if #available(macOS 13, *) {
                 topToolbar()
             }
+            #endif
 
-            #if !os(macOS)
             VideoPreview(captureSession: viewModel.captureSession)
                 .onAppear {
                     viewModel.startVideoPreview()
                 }
-            #endif
         }
     }
 
@@ -116,15 +118,15 @@ private extension CustomPhotoCameraView {
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         VStack {
-                            Text("Use LivePhoto")
+                            Text("Use")
 
-                            if viewModel.stillImageData != nil && !viewModel.isLivePhotoAvailable {
+                            if viewModel.stillImageData != nil && !viewModel.isCapturedPhotoAvailable {
                                 Text("Processing ...")
                                     .font(.footnote)
                                     .foregroundColor(.secondary)
                             }
                         }
-                    }.disabled(!viewModel.isLivePhotoAvailable)
+                    }.disabled(!viewModel.isCapturedPhotoAvailable)
                 }.padding(.horizontal)
             }
         }
