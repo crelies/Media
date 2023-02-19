@@ -96,7 +96,9 @@ private extension CustomPhotoCameraView {
                     Image(systemName: "arrow.up.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        #if !os(macOS)
                         .frame(width: 60, height: 60)
+                        #endif
                 }
 
                 HStack {
