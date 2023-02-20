@@ -5,13 +5,14 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if os(macOS)
+#if !os(tvOS)
 import AVFoundation
 import Combine
 import Foundation
 import MediaCore
 import SwiftUI
 
+@available(macCatalyst 14, *)
 public final class VideoCameraViewModel: ObservableObject {
     private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
@@ -46,6 +47,7 @@ public final class VideoCameraViewModel: ObservableObject {
 
 // MARK: - Internal API
 
+@available(macCatalyst 14, *)
 extension VideoCameraViewModel {
     func startVideoPreview() {
         backgroundQueue.async {
@@ -143,6 +145,7 @@ extension VideoCameraViewModel {
 
 // MARK: - Private
 
+@available(macCatalyst 14, *)
 private extension VideoCameraViewModel {
     func reset() {
         videoURL = nil

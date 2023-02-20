@@ -5,13 +5,15 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if os(macOS)
+#if !os(tvOS)
 import AVFoundation
 import AVKit
 import MediaCore
 import SwiftUI
 
+@available(iOS 14, *)
 @available(macOS 11, *)
+@available(macCatalyst 14, *)
 struct CustomVideoCameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
@@ -35,7 +37,9 @@ struct CustomVideoCameraView: View {
     }
 }
 
+@available(iOS 14, *)
 @available(macOS 11, *)
+@available(macCatalyst 14, *)
 private extension CustomVideoCameraView {
     func captureView() -> some View {
         ZStack(alignment: .topLeading) {

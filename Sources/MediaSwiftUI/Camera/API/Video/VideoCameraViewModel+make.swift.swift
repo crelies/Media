@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if os(macOS)
+#if !os(tvOS)
 import AVKit
 import Foundation
 import MediaCore
@@ -13,6 +13,7 @@ import SwiftUI
 
 // MARK: - API
 
+@available(macCatalyst 14, *)
 extension VideoCameraViewModel {
     /// Creates a camera view model instance using the given selection binding.
     ///

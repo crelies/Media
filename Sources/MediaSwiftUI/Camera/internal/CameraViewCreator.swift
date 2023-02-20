@@ -5,13 +5,13 @@
 //  Created by Christian Elies on 16.01.20.
 //
 
-#if os(iOS)
 import AVFoundation
 import MediaCore
 import SwiftUI
 
-@available(iOS 13, *)
 struct CameraViewCreator {
+    #if os(iOS)
+    @available(iOS 13, *)
     @available(macCatalyst 14, *)
     static func livePhoto(
         cameraViewModel: PhotoCameraViewModel
@@ -20,5 +20,16 @@ struct CameraViewCreator {
             viewModel: cameraViewModel
         )
     }
+    #endif
+
+    #if !os(tvOS)
+    @available(iOS 14, *)
+    @available(macOS 11, *)
+    @available(macCatalyst 14, *)
+    static func video(
+        viewModel: VideoCameraViewModel
+    ) -> CustomVideoCameraView {
+        CustomVideoCameraView(viewModel: viewModel)
+    }
+    #endif
 }
-#endif

@@ -10,7 +10,7 @@ import MediaCore
 import SwiftUI
 
 #if !os(tvOS) && !os(macOS)
-@available (iOS 13, macOS 10.15, *)
+@available (iOS 13, macCatalyst 13, *)
 public extension Video {
     /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     /// If an error occurs during initialization a `SwiftUI.Text` with the `localizedDescription` is shown.
@@ -32,7 +32,8 @@ public extension Video {
     /// - Parameter catchedError: An optional write-only binding which represents a catched error.
     ///
     /// - Returns: some View
-    @ViewBuilder static func camera(
+    @ViewBuilder
+    static func camera(
         selection: Binding<Media.URL<Video>?>,
         catchedError: Binding<Swift.Error?>? = nil
     ) -> some View {
@@ -61,8 +62,12 @@ public extension Video {
         )
     }
 }
-#elseif os(macOS)
+#endif
+
+#if !os(tvOS)
+@available(iOS 14, *)
 @available(macOS 11, *)
+@available(macCatalyst 14, *)
 public extension Video {
     /// <#Description#>
     ///
@@ -72,7 +77,7 @@ public extension Video {
     static func camera(
         viewModel: VideoCameraViewModel
     ) -> some View {
-        CustomVideoCameraView(viewModel: viewModel)
+        CameraViewCreator.video(viewModel: viewModel)
     }
 }
 #endif
