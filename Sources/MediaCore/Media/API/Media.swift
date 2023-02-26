@@ -90,3 +90,21 @@ public struct Media {
         }
     }
 }
+
+// MARK: Async
+
+extension Media {
+    @available(iOS 14, macOS 11, macCatalyst 14, tvOS 14, *)
+    public static func requestPermission() async -> PHAuthorizationStatus {
+        await photoLibrary.requestAuthorization(for: .readWrite)
+    }
+
+    /// Requests the user's permission to access the camera.
+    ///
+    @available(macOS 10.15, *)
+    @available(macCatalyst 14, *)
+    @available(tvOS, unavailable)
+    public static func requestCameraPermission() async -> Bool {
+        await AVCaptureDevice.requestAccess(for: .video)
+    }
+}
