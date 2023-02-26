@@ -64,11 +64,11 @@ public extension Video {
 #elseif os(macOS)
 @available(macOS 11, *)
 public extension Video {
-    /// <#Description#>
+    /// Creates a ready-to-use `SwiftUI` view for capturing `Video`s
     ///
-    /// - Parameter viewModel: <#viewModel description#>
+    /// - Parameter viewModel: The view model for the underlying view.
     ///
-    /// - Returns: <#description#>
+    /// - Returns: A `CustomVideoCameraView`.
     static func camera(
         viewModel: VideoCameraViewModel
     ) -> some View {

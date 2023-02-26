@@ -56,11 +56,11 @@ public extension Photo {
 #elseif os(macOS)
 @available(macOS 11, *)
 public extension Photo {
-    /// <#Description#>
+    /// Creates a ready-to-use `SwiftUI` view for capturing `Photo`s
     ///
-    /// - Parameter viewModel: <#viewModel description#>
+    /// - Parameter viewModel: The view model for the underlying view.
     /// 
-    /// - Returns: <#description#>
+    /// - Returns: A `CustomPhotoCameraView`.
     static func camera(
         viewModel: PhotoCameraViewModel
     ) -> some View {
