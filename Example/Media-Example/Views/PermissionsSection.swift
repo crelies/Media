@@ -33,7 +33,7 @@ struct PermissionsSection: View {
                 }
             }
 
-            // TODO: macOS
+            // TODO: [macOS] request permission
             #if !os(macOS)
             Button(action: {
                 if Media.currentPermission == .limited {
