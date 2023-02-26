@@ -13,11 +13,12 @@ import MediaCore
 import SwiftUI
 
 public final class VideoCameraViewModel: ObservableObject {
+    private let fileManager: FileManager
     private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCaptureMovieFileOutput
     private let videoRecorder: VideoRecorder
-    private let selection: Binding<Result<CapturedPhotoData, Error>?>
+    private let selection: Binding<Result<Media.URL<Video>, Error>?>
     private let backgroundQueue: DispatchQueue
 
     let captureSession: AVCaptureSession
@@ -26,15 +27,17 @@ public final class VideoCameraViewModel: ObservableObject {
     @Published private(set) var isCapturedVideoAvailable = false
     @Published private(set) var isFlashActive: Bool = false
     @Published private(set) var videoURL: URL?
-    @Published private(set) var capturedPhotoData: CapturedPhotoData?
+    @Published private(set) var capturedVideoURL: Media.URL<Video>?
 
     init(
+        fileManager: FileManager = .default,
         cameras: [AVCaptureDevice],
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCaptureMovieFileOutput,
-        selection: Binding<Result<CapturedPhotoData, Error>?>
+        selection: Binding<Result<Media.URL<Video>, Error>?>
     ) {
+        self.fileManager = fileManager
         self.cameras = cameras
         self.captureSession = captureSession
         self.captureSettings = captureSettings
@@ -83,8 +86,8 @@ extension VideoCameraViewModel {
             return
         }
 
-        // TODO: improve this
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        // TODO: improve this (which location should be used to store the video?)
+        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return
         }
 
@@ -95,23 +98,17 @@ extension VideoCameraViewModel {
         reset()
 
         videoRecorder.start(recordTo: recordToURL) { result in
-            // TODO:
             switch result {
             case .success(let url):
                 self.videoURL = url
-//                self.capturedPhotoData = CapturedPhotoData(stillImageData: data)
-                self.isCapturedVideoAvailable = true
+                self.capturedVideoURL = try? Media.URL(url: url)
+                self.isCapturedVideoAvailable = self.capturedVideoURL != nil
             case .failure:
                 self.videoURL = nil
             }
 
             self.isRecording = false
         }
-    }
-
-    // TODO:
-    func pause() {
-
     }
 
     func stop() {
@@ -128,8 +125,8 @@ extension VideoCameraViewModel {
     }
 
     func useCapturedVideo() {
-        if let capturedPhotoData = capturedPhotoData {
-            selection.wrappedValue = .success(capturedPhotoData)
+        if let capturedVideoURL = capturedVideoURL {
+            selection.wrappedValue = .success(capturedVideoURL)
             finish()
         }
     }
@@ -147,7 +144,7 @@ extension VideoCameraViewModel {
 private extension VideoCameraViewModel {
     func reset() {
         videoURL = nil
-        capturedPhotoData = nil
+        capturedVideoURL = nil
         isCapturedVideoAvailable = false
     }
 

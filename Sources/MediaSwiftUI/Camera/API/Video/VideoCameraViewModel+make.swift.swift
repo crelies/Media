@@ -16,11 +16,13 @@ import SwiftUI
 extension VideoCameraViewModel {
     /// Creates a camera view model instance using the given selection binding.
     ///
+    /// - Parameter fileManager: The file manager which should be used, defaults to `default`.
     /// - Parameter selection: A binding which represents the live photo camera result.
     ///
     /// - Returns: A camera view model instance.
     public static func make(
-        selection: Binding<Result<CapturedPhotoData, Error>?>
+        fileManager: FileManager = .default,
+        selection: Binding<Result<Media.URL<Video>, Error>?>
     ) throws -> VideoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
@@ -49,7 +51,7 @@ extension VideoCameraViewModel {
             }
         }
 
-        // TODO:
+        // TODO: allow customization of session preset from the outside
         captureSession.sessionPreset = AVCaptureSession.Preset.hd1920x1080
 
         let videoOutput = AVCaptureMovieFileOutput()
@@ -57,13 +59,14 @@ extension VideoCameraViewModel {
 
 //        videoOutput.isHighResolutionCaptureEnabled = true
 
-        // TODO: [macOS] allow customization of codec
-        let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+        // TODO: allow customization of video codec from the outside
+        let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.h264])
         // Error: settings.processedFileType must be present in self.availablePhotoFileTypes
 
         captureSession.commitConfiguration()
 
         return VideoCameraViewModel(
+            fileManager: fileManager,
             cameras: captureDevices,
             captureSession: captureSession,
             captureSettings: captureSettings,

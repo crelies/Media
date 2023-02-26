@@ -66,7 +66,7 @@ extension PhotoCameraViewModel {
         let outputDirectory = FileManager.default.cachesDirectory
         captureSettings.livePhotoMovieFileURL = outputDirectory.appendingPathComponent("\(UUID().uuidString).mov")
         #else
-        // TODO: [macOS] allow customization of codec
+        // TODO: [macOS] allow customization of codec for photo capture
         let captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
         // Error: settings.processedFileType must be present in self.availablePhotoFileTypes
         #endif
