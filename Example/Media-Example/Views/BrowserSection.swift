@@ -42,150 +42,179 @@ struct BrowserSection: View {
 
     var body: some View {
         Section(header: Label("Browser", systemImage: "photo.on.rectangle.angled")) {
-            Button(action: {
-                isLivePhotoBrowserViewVisible = true
-            }) {
-                Text("LivePhoto.browser (selected: \(livePhotoBrowserSelection.count))")
-            }
-            .universalFullScreenCover(isPresented: $isLivePhotoBrowserViewVisible, onDismiss: {
-                isLivePhotoBrowserViewVisible = false
-            }) {
-                #if !os(macOS)
-                LivePhoto.browser(
-                    isPresented: $isLivePhotoBrowserViewVisible,
-                    selectionLimit: 0,
-                    selection: $livePhotoBrowserSelection.onChange(handleLivePhotoBrowserResult)
-                )
-                #else
-                PhotosPicker(
-                    selection: $livePhotoSelection,
-                    maxSelectionCount: nil,
-                    selectionBehavior: .ordered,
-                    matching: .livePhotos,
-                    preferredItemEncoding: .compatible,
-                    label: {
-                        Text("LivePhoto browser")
-                    }
-                )
-                #endif
-            }
-            #if !targetEnvironment(macCatalyst)
-            .background(
-                EmptyView()
-                    .sheet(item: $livePhoto, onDismiss: {
-                        livePhoto = nil
-                    }) { livePhoto in
-                        PhotosUILivePhotoView(phLivePhoto: livePhoto)
-                    }
-            )
-            #endif
-
-            Button(action: {
-                isMediaBrowserViewVisible = true
-            }) {
-                Text("Media.browser")
-            }
-            .universalFullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
-                isMediaBrowserViewVisible = false
-            }) {
-                #if !os(macOS)
-                Media.browser(
-                    isPresented: $isMediaBrowserViewVisible,
-                    selectionLimit: 0,
-                    selection: $mediaBrowserSelection.onChange(handleMediaBrowserResult)
-                )
-                #else
-                PhotosPicker(
-                    selection: $mediaSelection,
-                    maxSelectionCount: nil,
-                    selectionBehavior: .ordered,
-                    matching: nil,
-                    preferredItemEncoding: .compatible,
-                    label: {
-                        Text("Media browser")
-                    }
-                )
-                #endif
-            }
-
-            Button(action: {
-                isPhotoBrowserViewVisible = true
-            }) {
-                Text("Photo.browser")
-            }
-            .universalFullScreenCover(isPresented: $isPhotoBrowserViewVisible, onDismiss: {
-                isPhotoBrowserViewVisible = false
-            }) {
-                #if !os(macOS)
-                Photo.browser(
-                    isPresented: $isPhotoBrowserViewVisible,
-                    selectionLimit: 0,
-                    selection: $photoBrowserSelection.onChange(handlePhotoBrowserResult)
-                )
-                #else
-                PhotosPicker(
-                    selection: $photoSelection,
-                    maxSelectionCount: nil,
-                    selectionBehavior: .ordered,
-                    matching: .any(of: [.images, .not(.livePhotos)]),
-                    preferredItemEncoding: .compatible,
-                    label: {
-                        Text("Photo browser")
-                    }
-                )
-                #endif
-            }
-            .background(
-                EmptyView()
-                    .sheet(item: $image, onDismiss: {
-                        image = nil
-                    }) { universalImage in
-                        Image(universalImage: universalImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    }
-            )
-
-            Button(action: {
-                isVideoBrowserViewVisible = true
-            }) {
-                Text("Video.browser")
-            }
-            .universalFullScreenCover(isPresented: $isVideoBrowserViewVisible, onDismiss: {
-                isVideoBrowserViewVisible = false
-            }) {
-                #if !os(macOS)
-                Video.browser(
-                    isPresented: $isVideoBrowserViewVisible,
-                    selectionLimit: 0,
-                    selection: $videoBrowserSelection.onChange(handleVideoBrowserResult)
-                )
-                #else
-                PhotosPicker(
-                    selection: $videoSelection,
-                    maxSelectionCount: nil,
-                    selectionBehavior: .ordered,
-                    matching: .videos,
-                    preferredItemEncoding: .compatible,
-                    label: {
-                        Text("Video browser")
-                    }
-                )
-                #endif
-            }
-            .background(
-                EmptyView()
-                    .sheet(item: $playerURL, onDismiss: {
-                        playerURL = nil
-                    }) { url in
-                        VideoPlayer(player: .init(url: url))
-                    }
-            )
+            livePhotoBrowser()
+            mediaBrowser()
+            photoBrowser()
+            videoBrowser()
         }
     }
 }
 
 private extension BrowserSection {
+    @ViewBuilder
+    func livePhotoBrowserTrigger() -> some View {
+        #if !os(macOS)
+        Button(action: {
+            isLivePhotoBrowserViewVisible = true
+        }) {
+            Text("LivePhoto.browser (selected: \(livePhotoBrowserSelection.count))")
+        }
+        .universalFullScreenCover(isPresented: $isLivePhotoBrowserViewVisible, onDismiss: {
+            isLivePhotoBrowserViewVisible = false
+        }) {
+            LivePhoto.browser(
+                isPresented: $isLivePhotoBrowserViewVisible,
+                selectionLimit: 0,
+                selection: $livePhotoBrowserSelection.onChange(handleLivePhotoBrowserResult)
+            )
+        }
+        #else
+        PhotosPicker(
+            selection: $livePhotoSelection,
+            maxSelectionCount: nil,
+            selectionBehavior: .ordered,
+            matching: .livePhotos,
+            preferredItemEncoding: .compatible,
+            label: {
+                Text("LivePhoto browser")
+            }
+        )
+        #endif
+    }
+
+    func livePhotoBrowser() -> some View {
+        livePhotoBrowserTrigger()
+        #if !targetEnvironment(macCatalyst)
+        .background(
+            EmptyView()
+                .sheet(item: $livePhoto, onDismiss: {
+                    livePhoto = nil
+                }) { livePhoto in
+                    PhotosUILivePhotoView(phLivePhoto: livePhoto)
+                }
+        )
+        #endif
+    }
+
+    @ViewBuilder
+    func mediaBrowser() -> some View {
+        #if !os(macOS)
+        Button(action: {
+            isMediaBrowserViewVisible = true
+        }) {
+            Text("Media.browser")
+        }
+        .universalFullScreenCover(isPresented: $isMediaBrowserViewVisible, onDismiss: {
+            isMediaBrowserViewVisible = false
+        }) {
+            Media.browser(
+                isPresented: $isMediaBrowserViewVisible,
+                selectionLimit: 0,
+                selection: $mediaBrowserSelection.onChange(handleMediaBrowserResult)
+            )
+        }
+        #else
+        PhotosPicker(
+            selection: $mediaSelection,
+            maxSelectionCount: nil,
+            selectionBehavior: .ordered,
+            matching: nil,
+            preferredItemEncoding: .compatible,
+            label: {
+                Text("Media browser")
+            }
+        )
+        #endif
+    }
+
+    @ViewBuilder
+    func photoBrowserTrigger() -> some View {
+        #if !os(macOS)
+        Button(action: {
+            isPhotoBrowserViewVisible = true
+        }) {
+            Text("Photo.browser")
+        }
+        .universalFullScreenCover(isPresented: $isPhotoBrowserViewVisible, onDismiss: {
+            isPhotoBrowserViewVisible = false
+        }) {
+            Photo.browser(
+                isPresented: $isPhotoBrowserViewVisible,
+                selectionLimit: 0,
+                selection: $photoBrowserSelection.onChange(handlePhotoBrowserResult)
+            )
+        }
+        #else
+        PhotosPicker(
+            selection: $photoSelection,
+            maxSelectionCount: nil,
+            selectionBehavior: .ordered,
+            matching: .any(of: [.images, .not(.livePhotos)]),
+            preferredItemEncoding: .compatible,
+            label: {
+                Text("Photo browser")
+            }
+        )
+        #endif
+    }
+
+    func photoBrowser() -> some View {
+        photoBrowserTrigger()
+        .background(
+            EmptyView()
+                .sheet(item: $image, onDismiss: {
+                    image = nil
+                }) { universalImage in
+                    Image(universalImage: universalImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+        )
+    }
+
+    func videoBrowserTrigger() -> some View {
+        #if !os(macOS)
+        Button(action: {
+            isVideoBrowserViewVisible = true
+        }) {
+            Text("Video.browser")
+        }
+        .universalFullScreenCover(isPresented: $isVideoBrowserViewVisible, onDismiss: {
+            isVideoBrowserViewVisible = false
+        }) {
+
+            Video.browser(
+                isPresented: $isVideoBrowserViewVisible,
+                selectionLimit: 0,
+                selection: $videoBrowserSelection.onChange(handleVideoBrowserResult)
+            )
+        }
+        #else
+        PhotosPicker(
+            selection: $videoSelection,
+            maxSelectionCount: nil,
+            selectionBehavior: .ordered,
+            matching: .videos,
+            preferredItemEncoding: .compatible,
+            label: {
+                Text("Video browser")
+            }
+        )
+        #endif
+    }
+
+    func videoBrowser() -> some View {
+        videoBrowserTrigger()
+        .background(
+            EmptyView()
+                .sheet(item: $playerURL, onDismiss: {
+                    playerURL = nil
+                }) { url in
+                    VideoPlayer(player: .init(url: url))
+                }
+        )
+    }
+
     #if !os(macOS)
     func handleLivePhotoBrowserResult(_ results: [BrowserResult<LivePhoto, PHLivePhoto>]) {
         switch results.first {

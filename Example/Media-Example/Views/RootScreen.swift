@@ -113,7 +113,7 @@ private extension RootScreen {
             CameraSection()
             #endif
 
-            #if !os(tvOS) && !os(macOS)
+            #if !os(tvOS)
             BrowserSection()
             #endif
         }
