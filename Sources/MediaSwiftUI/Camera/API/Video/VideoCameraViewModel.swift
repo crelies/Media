@@ -5,15 +5,22 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if os(macOS)
+#if os(macOS) || os(iOS)
 import AVFoundation
 import Combine
 import Foundation
 import MediaCore
 import SwiftUI
 
+@available(macCatalyst 14, *)
 public final class VideoCameraViewModel: ObservableObject {
-    private let fileManager: FileManager
+    public enum CaptureState {
+        case recording
+        case paused
+        case idle
+    }
+
+    private let outputDirectory: URL
     private let cameras: [AVCaptureDevice]
     private let captureSettings: AVCapturePhotoSettings
     private let output: AVCaptureMovieFileOutput
@@ -23,21 +30,21 @@ public final class VideoCameraViewModel: ObservableObject {
 
     let captureSession: AVCaptureSession
 
-    @Published private(set) var isRecording = false
+    @Published private(set) var state: CaptureState = .idle
     @Published private(set) var isCapturedVideoAvailable = false
     @Published private(set) var isFlashActive: Bool = false
     @Published private(set) var videoURL: URL?
     @Published private(set) var capturedVideoURL: Media.URL<Video>?
 
     init(
-        fileManager: FileManager = .default,
+        outputDirectory: URL,
         cameras: [AVCaptureDevice],
         captureSession: AVCaptureSession,
         captureSettings: AVCapturePhotoSettings,
         output: AVCaptureMovieFileOutput,
         selection: Binding<Result<Media.URL<Video>, Error>?>
     ) {
-        self.fileManager = fileManager
+        self.outputDirectory = outputDirectory
         self.cameras = cameras
         self.captureSession = captureSession
         self.captureSettings = captureSettings
@@ -50,6 +57,7 @@ public final class VideoCameraViewModel: ObservableObject {
 
 // MARK: - Internal API
 
+@available(macCatalyst 14, *)
 extension VideoCameraViewModel {
     func startVideoPreview() {
         backgroundQueue.async {
@@ -82,18 +90,13 @@ extension VideoCameraViewModel {
     }
 
     func record() {
-        guard !isRecording else {
+        guard state == .idle else {
             return
         }
 
-        // TODO: improve this (which location should be used to store the video?)
-        guard let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
-        }
+        state = .recording
 
-        isRecording = true
-
-        let recordToURL = url.appendingPathComponent("\(UUID().uuidString).mov")
+        let recordToURL = outputDirectory.appendingPathComponent("\(UUID().uuidString).mov")
 
         reset()
 
@@ -107,8 +110,30 @@ extension VideoCameraViewModel {
                 self.videoURL = nil
             }
 
-            self.isRecording = false
+            self.state = .idle
         }
+    }
+
+    @available(iOS, unavailable)
+    func pause() {
+        guard state == .recording else {
+            return
+        }
+
+        videoRecorder.pause()
+
+        state = .paused
+    }
+
+    @available(iOS, unavailable)
+    func resume() {
+        guard state == .paused else {
+            return
+        }
+
+        videoRecorder.resume()
+
+        state = .recording
     }
 
     func stop() {
@@ -141,6 +166,7 @@ extension VideoCameraViewModel {
 
 // MARK: - Private
 
+@available(macCatalyst 14, *)
 private extension VideoCameraViewModel {
     func reset() {
         videoURL = nil

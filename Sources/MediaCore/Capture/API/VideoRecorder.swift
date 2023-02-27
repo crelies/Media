@@ -29,6 +29,18 @@ extension VideoRecorder {
         videoOutput.startRecording(to: url, recordingDelegate: self)
     }
 
+    @available(iOS, unavailable)
+    @available(macCatalyst, unavailable)
+    public func pause() {
+        videoOutput.pauseRecording()
+    }
+
+    @available(iOS, unavailable)
+    @available(macCatalyst, unavailable)
+    public func resume() {
+        videoOutput.resumeRecording()
+    }
+
     public func stop() {
         videoOutput.stopRecording()
     }
@@ -40,10 +52,35 @@ extension VideoRecorder {
 extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(
         _ output: AVCaptureFileOutput,
+        didStartRecordingTo fileURL: URL,
+        from connections: [AVCaptureConnection]
+    ) {
+        // TODO: ?
+    }
+    public func fileOutput(
+        _ output: AVCaptureFileOutput,
         didFinishRecordingTo outputFileURL: URL,
         from connections: [AVCaptureConnection],
         error: Error?
     ) {
         completion?(.success(outputFileURL))
     }
+
+    #if os(macOS)
+    public func fileOutput(
+        _ output: AVCaptureFileOutput,
+        didPauseRecordingTo fileURL: URL,
+        from connections: [AVCaptureConnection]
+    ) {
+        // TODO: ?
+    }
+
+    public func fileOutput(
+        _ output: AVCaptureFileOutput,
+        didResumeRecordingTo fileURL: URL,
+        from connections: [AVCaptureConnection]
+    ) {
+        // TODO: ?
+    }
+    #endif
 }

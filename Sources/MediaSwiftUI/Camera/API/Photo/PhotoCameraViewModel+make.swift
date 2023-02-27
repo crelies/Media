@@ -33,25 +33,7 @@ extension PhotoCameraViewModel {
         try captureSession.addDefaultAudioDevice()
         #endif
 
-        var captureDevices: [AVCaptureDevice] = []
-
-        do {
-            let frontCameraDevice: AVCaptureDevice = try .videoCamera(position: .front)
-            captureDevices.append(frontCameraDevice)
-            try captureSession.addDevice(device: frontCameraDevice)
-        } catch {}
-
-        do {
-            let backCameraDevice: AVCaptureDevice = try .videoCamera(position: .back)
-            captureDevices.append(backCameraDevice)
-            try captureSession.addDevice(device: backCameraDevice)
-        } catch {
-            if captureDevices.isEmpty {
-                #if !targetEnvironment(simulator)
-                throw error
-                #endif
-            }
-        }
+        let captureDevices = try captureSession.addAvailableCaptureDevices()
 
         captureSession.sessionPreset = .photo
 
