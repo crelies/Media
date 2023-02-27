@@ -14,7 +14,7 @@ import SwiftUI
 
 @available(macCatalyst 14, *)
 public final class VideoCameraViewModel: ObservableObject {
-    public enum CaptureState {
+    enum CaptureState {
         case recording
         case paused
         case idle

@@ -11,6 +11,8 @@ import Combine
 import MediaCore
 
 final class VideoViewModel: ObservableObject {
+    private(set) var player = AVPlayer()
+
     @Published var state: ViewState<AVPlayerItem> = .loading
 
     let video: Video
@@ -21,6 +23,12 @@ final class VideoViewModel: ObservableObject {
 
     func load() {
         fetchPlayerItem()
+    }
+}
+
+extension VideoViewModel {
+    func pause() {
+        player.pause()
     }
 }
 
@@ -35,6 +43,7 @@ private extension VideoViewModel {
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let avPlayerItem):
+                        self.setPlayerItem(avPlayerItem)
                         self.state = .loaded(value: avPlayerItem)
                     case .failure(let error):
                         self.state = .failed(error: error)
@@ -42,6 +51,14 @@ private extension VideoViewModel {
                 }
             }
         }
+    }
+
+    func setPlayerItem(_ item: AVPlayerItem) {
+        guard player.currentItem == nil || player.currentItem != item else {
+            return
+        }
+
+        player.replaceCurrentItem(with: item)
     }
 }
 #endif

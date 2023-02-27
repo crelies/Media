@@ -11,8 +11,6 @@ import SwiftUI
 
 @available(iOS 14, macOS 11, tvOS 14, *)
 struct VideoView: View {
-    @State private var player = AVPlayer()
-
     @StateObject var viewModel: VideoViewModel
 
     var body: some View {
@@ -20,10 +18,10 @@ struct VideoView: View {
         case .loading:
             UniversalProgressView()
                 .onAppear(perform: viewModel.load)
-        case .loaded(let avPlayerItem):
-            VideoPlayer(player: player(for: avPlayerItem))
+        case .loaded:
+            VideoPlayer(player: viewModel.player)
                 .onDisappear {
-                    player.pause()
+                    viewModel.pause()
                     viewModel.state = .loading
                 }
         case .failed(let error):
@@ -32,16 +30,6 @@ struct VideoView: View {
                     viewModel.state = .loading
                 }
         }
-    }
-}
-
-@available(iOS 14, macOS 11, tvOS 14, *)
-private extension VideoView {
-    func player(for item: AVPlayerItem) -> AVPlayer {
-        if player.currentItem == nil || player.currentItem != item {
-            player.replaceCurrentItem(with: item)
-        }
-        return player
     }
 }
 #endif
