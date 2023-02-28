@@ -55,10 +55,12 @@ struct VideoView: View {
         switch previewImageState {
         case .loading:
             progressView
-                .onAppear {
-                    video.previewImage { result in
-                        let previewImage = try? result.get()
+                .task {
+                    do {
+                        let previewImage = try await video.previewImage()
                         previewImageState = .loaded(image: previewImage)
+                    } catch {
+                        
                     }
                 }
         case let .loaded(previewImage):

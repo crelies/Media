@@ -34,13 +34,9 @@ struct PhotoView: View {
             // TODO: [example] tvOS 16 example
             #if !os(tvOS) && !os(macOS)
             .onTapGesture {
-                photo.properties { result in
-                    switch result {
-                    case .success(let properties):
-                        self.properties = properties
-                    case .failure:
-                        properties = nil
-                    }
+                Task { @MainActor in
+                    let properties = try? await photo.properties()
+                    self.properties = properties
                 }
             }
             .sheet(
@@ -131,22 +127,23 @@ private extension PhotoView {
 
 private extension PhotoView {
     func share() {
-        photo.data { result in
-            switch result {
-            case .success(let data):
+        Task { @MainActor in
+            do {
+                let data = try await self.photo.data()
                 self.data = data
-            case .failure(let error):
+            } catch {
                 self.error = error
+                isErrorAlertVisible = true
             }
         }
     }
 
     func toggleFavoriteState(isFavorite: Bool) {
-        photo.favorite(!isFavorite) { result in
-            switch result {
-            case .success:
+        Task { @MainActor in
+            do {
+                try await photo.favorite(!isFavorite)
                 self.isFavorite = photo.metadata?.isFavorite ?? false
-            case .failure(let error):
+            } catch {
                 self.error = error
                 isErrorAlertVisible = true
             }

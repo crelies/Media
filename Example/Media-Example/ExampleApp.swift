@@ -23,7 +23,7 @@ var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
     }
 
     #if !targetEnvironment(macCatalyst) && !os(macOS)
-    try? LivePhoto.save(data: capturedPhotoData) { result in
+    LivePhoto.save(data: capturedPhotoData) { result in
         switch result {
         case .failure(let error):
             debugPrint("Live photo save error: \(error)")
