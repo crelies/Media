@@ -46,49 +46,45 @@ private extension PhotoViewModel {
         DispatchQueue.global(qos: .userInitiated).async {
             if let targetSize = self.targetSize {
                 #if !os(macOS)
-                self.photo.uiImage(targetSize: targetSize, contentMode: self.contentMode) { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let representation):
-                            self.state = .loaded(value: representation.value)
-                        case .failure(let error):
-                            self.state = .failed(error: error)
-                        }
+                Task {
+                    do {
+                        let representation = try await self.photo.uiImage(
+                            targetSize: targetSize,
+                            contentMode: self.contentMode
+                        )
+                        await self.setState(.loaded(value: representation.value))
+                    } catch {
+                        await self.setState(.failed(error: error))
                     }
                 }
                 #else
-                self.photo.data { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let data):
-                            if let image = UniversalImage(data: data) {
-                                self.state = .loaded(value: image)
-                            } else {
-                                self.state = .failed(error: Error.invalidData)
-                            }
-                        case .failure(let error):
-                            self.state = .failed(error: error)
-                        }
-                    }
-                }
+                self.dataTask()
                 #endif
             } else {
-                self.photo.data { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let data):
-                            if let uiImage = UniversalImage(data: data) {
-                                self.state = .loaded(value: uiImage)
-                            } else {
-                                self.state = .failed(error: Error.invalidData)
-                            }
-                        case .failure(let error):
-                            self.state = .failed(error: error)
-                        }
-                    }
-                }
+                self.dataTask()
             }
         }
+    }
+
+    func dataTask() {
+        Task {
+            do {
+                let data = try await self.photo.data()
+
+                if let image = UniversalImage(data: data) {
+                    await self.setState(.loaded(value: image))
+                } else {
+                    await self.setState(.failed(error: Error.invalidData))
+                }
+            } catch {
+                await self.setState(.failed(error: error))
+            }
+        }
+    }
+
+    @MainActor
+    func setState(_ state: ViewState<UniversalImage>) {
+        self.state = state
     }
 }
 #endif

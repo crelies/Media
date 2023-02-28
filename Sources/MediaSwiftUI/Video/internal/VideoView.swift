@@ -21,13 +21,12 @@ struct VideoView: View {
         case .loaded:
             VideoPlayer(player: viewModel.player)
                 .onDisappear {
-                    viewModel.pause()
-                    viewModel.state = .loading
+                    viewModel.disappear()
                 }
         case .failed(let error):
             Text(error.localizedDescription)
                 .onDisappear {
-                    viewModel.state = .loading
+                    viewModel.disappear()
                 }
         }
     }
