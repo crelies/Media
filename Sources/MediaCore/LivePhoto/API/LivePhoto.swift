@@ -79,9 +79,12 @@ public extension LivePhoto {
     ///   - contentMode: the content mode for the representation
     ///   - completion: a closure wich gets the `Result` (`DisplayRepresentation` on `success` and `Error` on `failure`)
     ///
-    func displayRepresentation(targetSize: CGSize,
-                               contentMode: PHImageContentMode = .default,
-                               _ completion: @escaping ResultDisplayRepresentationCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func displayRepresentation(
+        targetSize: CGSize,
+        contentMode: PHImageContentMode = .default,
+        _ completion: @escaping ResultDisplayRepresentationCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -90,12 +93,38 @@ public extension LivePhoto {
         let options = PHLivePhotoRequestOptions()
         options.isNetworkAccessAllowed = true
 
-        Self.livePhotoManager.customRequestLivePhoto(for: phAsset,
-                                                     targetSize: targetSize,
-                                                     contentMode: contentMode,
-                                                     options: options)
-        { livePhoto, info in
+        Self.livePhotoManager.customRequestLivePhoto(
+            for: phAsset,
+            targetSize: targetSize,
+            contentMode: contentMode,
+            options: options
+        ) { livePhoto, info in
             PHImageManager.handlePotentialDegradedResult((livePhoto, info), completion)
+        }
+    }
+
+    /// Fetches a display representation of the receiver
+    ///
+    /// - Parameters:
+    ///   - targetSize: the desired size (width and height) of the representation
+    ///   - contentMode: the content mode for the representation
+    ///
+    func displayRepresentation(
+        targetSize: CGSize,
+        contentMode: PHImageContentMode = .default
+    ) async throws -> Media.DisplayRepresentation<PHLivePhotoProtocol> {
+        try await withCheckedThrowingContinuation { continuation in
+            self.displayRepresentation(
+                targetSize: targetSize,
+                contentMode: contentMode
+            ) { result in
+                switch result {
+                case let .success(value):
+                    continuation.resume(with: .success(value))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 }
@@ -112,7 +141,11 @@ public extension LivePhoto {
     ///   - data: the data object holding the image and video portion of the `LivePhoto`
     ///   - completion: a closure wich gets the `Result` (`LivePhoto` on `success` and `Error` on `failure`)
     ///
-    static func save(data: CapturedPhotoData, _ completion: @escaping ResultLivePhotoCompletion) throws {
+    @available(*, deprecated, message: "Use async method instead")
+    static func save(
+        data: CapturedPhotoData,
+        _ completion: @escaping ResultLivePhotoCompletion
+    ) {
         PHAssetChanger.createRequest({
             let creationRequest = PHAssetCreationRequest.forAsset()
             creationRequest.addResource(with: .photo, data: data.stillImageData, options: nil)
@@ -128,6 +161,27 @@ public extension LivePhoto {
 
             return creationRequest
         }, completion)
+    }
+
+    /// Saves the given still image data and the movie at the given URL as a `LivePhoto`
+    /// if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - data: the data object holding the image and video portion of the `LivePhoto`
+    ///
+    static func save(
+        data: CapturedPhotoData
+    ) async throws -> LivePhoto {
+        try await withCheckedThrowingContinuation { continuation in
+            self.save(data: data) { result in
+                switch result {
+                case let .success(value):
+                    continuation.resume(with: .success(value))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 }
 
@@ -162,7 +216,11 @@ public extension LivePhoto {
     ///   - favorite: a boolean which indicates the new favorite state
     ///   - completion: a closure wich gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func favorite(
+        _ favorite: Bool,
+        _ completion: @escaping ResultVoidCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -174,6 +232,26 @@ public extension LivePhoto {
                 completion(.success(()))
             } catch {
                 completion(.failure(error))
+            }
+        }
+    }
+
+    /// Updates the favorite state of the receiver if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean which indicates the new favorite state
+    ///
+    func favorite(
+        _ favorite: Bool
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.favorite(favorite) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
