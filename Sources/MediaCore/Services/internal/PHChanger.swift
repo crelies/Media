@@ -10,8 +10,10 @@ import Photos
 struct PHChanger {
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
-    static func request(_ request: @escaping () -> PHAssetCollectionChangeRequest?,
-                        _ completion: @escaping ResultVoidCompletion) {
+    static func request(
+        _ request: @escaping () -> PHAssetCollectionChangeRequest?,
+        _ completion: @escaping ResultVoidCompletion
+    ) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return

@@ -10,7 +10,10 @@ import Photos
 struct PHAssetFetcher {
     static var asset: PHAsset.Type = PHAsset.self
 
-    static func fetchAssets<T: MediaProtocol>(in assetCollection: PHAssetCollection, options: PHFetchOptions) throws -> [T] {
+    static func fetchAssets<T: MediaProtocol>(
+        in assetCollection: PHAssetCollection,
+        options: PHFetchOptions
+    ) throws -> [T] {
         guard Media.isAccessAllowed else {
             throw Media.currentPermission.permissionError ?? PermissionError.unknown
         }
@@ -25,7 +28,10 @@ struct PHAssetFetcher {
         return items
     }
 
-    static func fetchAssets(in assetCollection: PHAssetCollection, options: PHFetchOptions) throws -> PHFetchResult<PHAsset> {
+    static func fetchAssets(
+        in assetCollection: PHAssetCollection,
+        options: PHFetchOptions
+    ) throws -> PHFetchResult<PHAsset> {
         guard Media.isAccessAllowed else {
             throw Media.currentPermission.permissionError ?? PermissionError.unknown
         }
@@ -35,7 +41,9 @@ struct PHAssetFetcher {
 }
 
 extension PHAssetFetcher {
-    static func fetchAssets<T: MediaProtocol>(options: PHFetchOptions) throws -> [T] {
+    static func fetchAssets<T: MediaProtocol>(
+        options: PHFetchOptions
+    ) throws -> [T] {
         guard Media.isAccessAllowed else {
             throw Media.currentPermission.permissionError ?? PermissionError.unknown
         }
@@ -50,7 +58,9 @@ extension PHAssetFetcher {
         return items
     }
 
-    static func fetchAssets(options: PHFetchOptions) throws -> PHFetchResult<PHAsset> {
+    static func fetchAssets(
+        options: PHFetchOptions
+    ) throws -> PHFetchResult<PHAsset> {
         guard Media.isAccessAllowed else {
             throw Media.currentPermission.permissionError ?? PermissionError.unknown
         }

@@ -110,7 +110,14 @@ public extension LazyAlbum {
     /// Deletes the receiver if access to the photo library is allowed.
     ///
     /// - Parameter completion: A closure which gets the Result (`Void` on success and `Error` on failure).
+    @available(*, deprecated, message: "Use async method instead")
     func delete(completion: @escaping ResultVoidCompletion) {
         album?.delete(completion: completion)
+    }
+
+    /// Deletes the receiver if access to the photo library is allowed.
+    ///
+    func delete() async throws {
+        try await album?.delete()
     }
 }

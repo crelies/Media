@@ -13,8 +13,10 @@ struct PHAssetChanger {
     static var photoLibraryChangeObserver: PhotoLibraryChangeObserver.Type = CustomPhotoLibraryChangeObserver.self
     static var photoLibrary: PhotoLibrary = PHPhotoLibrary.shared()
 
-    static func createRequest<T: MediaProtocol>(_ request: @escaping () -> AssetChangeRequest?,
-                                                _ completion: @escaping ResultGenericCompletion<T>) {
+    static func createRequest<T: MediaProtocol>(
+        _ request: @escaping () -> AssetChangeRequest?,
+        _ completion: @escaping ResultGenericCompletion<T>
+    ) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
@@ -43,7 +45,11 @@ struct PHAssetChanger {
         })
     }
 
-    static func favorite(phAsset: PHAsset, favorite: Bool, _ completion: @escaping ResultPHAssetCompletion) {
+    static func favorite(
+        phAsset: PHAsset,
+        favorite: Bool,
+        _ completion: @escaping ResultPHAssetCompletion
+    ) {
         guard Media.isAccessAllowed else {
             completion(.failure(Media.currentPermission.permissionError ?? PermissionError.unknown))
             return
@@ -76,8 +82,8 @@ struct PHAssetChanger {
     }
 }
 
-extension PHAssetChanger {
-    private static func unregisterChangeObserver() {
+private extension PHAssetChanger {
+    static func unregisterChangeObserver() {
         if let observer = changeObserver {
             photoLibrary.unregisterChangeObserver(observer)
             changeObserver = nil
