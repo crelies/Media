@@ -17,13 +17,12 @@ struct PermissionsSection: View {
     @State private var cameraPermission: AVAuthorizationStatus = .notDetermined
     @State private var mediaPermission: PHAuthorizationStatus = .notDetermined
 
-    var requestedPermission: (Result<Void, PermissionError>) -> Void
-
     var body: some View {
         Section(header: Text("Permissions")) {
             Button(action: {
-                Media.requestCameraPermission { _ in
-                    cameraPermission = Media.currentCameraPermission
+                Task { @MainActor in
+                    _ = await Media.requestCameraPermission()
+                    self.cameraPermission = Media.currentCameraPermission
                 }
             }) {
                 HStack {
@@ -33,8 +32,6 @@ struct PermissionsSection: View {
                 }
             }
 
-            // TODO: [macOS] request permission
-            #if !os(macOS)
             Button(action: {
                 if Media.currentPermission == .limited {
                     isLimitedLibraryPickerPresented = true
@@ -48,6 +45,7 @@ struct PermissionsSection: View {
                         .disabled(true)
                 }
             }
+            #if !os(macOS)
             .background(PHPicker(isPresented: $isLimitedLibraryPickerPresented))
             #endif
         }
@@ -60,9 +58,9 @@ struct PermissionsSection: View {
 
 private extension PermissionsSection {
     func requestPermission() {
-        Media.requestPermission { result in
+        Task { @MainActor in
+            _ = await Media.requestPermission()
             mediaPermission = Media.currentPermission
-            requestedPermission(result)
         }
     }
 }

@@ -51,10 +51,8 @@ struct AlbumsView: View {
             }
             #if !os(tvOS) && !os(macOS)
             .listStyle(InsetGroupedListStyle())
-            .navigationBarTitle(Text("Albums"), displayMode: .inline)
-            #else
-            .navigationTitle(Text("Albums"))
             #endif
+            .universalInlineNavigationTitle("Albums")
             .universalNavigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true
             }) {
@@ -79,28 +77,38 @@ private extension AlbumsView {
         viewState = .loaded(value: albums)
     }
 
-    func deleteConfirmationAlert(indexSetToDelete: IndexSet) -> Alert {
-        var albumsToDelete: [Album] = []
-        for index in indexSetToDelete {
+    func albums(at indexSet: IndexSet) -> [Album] {
+        var result: [Album] = []
+        for index in indexSet {
             guard index >= 0, index < albums.count else {
                 continue
             }
 
             let album = albums[index]
-            albumsToDelete.append(album)
+            result.append(album)
         }
+        return result
+    }
 
+    func deleteConfirmationAlert(indexSetToDelete: IndexSet) -> Alert {
+        let albumsToDelete = albums(at: indexSetToDelete)
         let albumsToDeleteSummary = albumsToDelete.map { $0.localizedTitle ?? "Unknown title" }.joined(separator: ", ")
 
         return Alert(title: Text("Are you sure?"), message: Text("[\(albumsToDeleteSummary)] will be deleted"), primaryButton: .default(Text("Yes")) {
-            guard !albumsToDelete.isEmpty else {
+            Task { @MainActor in
+                let albumsToDelete = albums(at: indexSetToDelete)
+
+                guard !albumsToDelete.isEmpty else {
+                    self.indexSetToDelete = nil
+                    return
+                }
+
+                for album in albumsToDelete {
+                    try await album.delete()
+                }
+
                 self.indexSetToDelete = nil
-                return
             }
-
-            albumsToDelete.forEach { $0.delete { _ in } }
-
-            self.indexSetToDelete = nil
         }, secondaryButton: .cancel() {
             self.indexSetToDelete = nil
         })

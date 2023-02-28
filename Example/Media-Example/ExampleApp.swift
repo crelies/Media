@@ -18,16 +18,16 @@ var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
     get: { livePhotoCaptureResult },
     set: { livePhotoCaptureResult = $0 }
 ).onChange { result in
-    guard let capturedPhotoData: CapturedPhotoData = try? result?.get() else {
-        return
-    }
-
     #if !targetEnvironment(macCatalyst) && !os(macOS)
-    LivePhoto.save(data: capturedPhotoData) { result in
-        switch result {
-        case .failure(let error):
+    Task { @MainActor in
+        guard let capturedPhotoData: CapturedPhotoData = try? result?.get() else {
+            return
+        }
+
+        do {
+            _ = try await LivePhoto.save(data: capturedPhotoData)
+        } catch {
             debugPrint("Live photo save error: \(error)")
-        default: ()
         }
     }
     #endif

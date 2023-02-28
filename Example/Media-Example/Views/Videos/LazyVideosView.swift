@@ -39,10 +39,6 @@ struct LazyVideosView: View {
             }
             .padding()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle("Videos", displayMode: .inline)
-        #else
-        .navigationTitle(Text("Videos"))
-        #endif
+        .universalInlineNavigationTitle("Videos")
     }
 }

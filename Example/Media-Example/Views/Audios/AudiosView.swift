@@ -28,10 +28,6 @@ struct AudiosView: View {
             }
             .padding()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle("Audios", displayMode: .inline)
-        #else
-        .navigationTitle(Text("Audios"))
-        #endif
+        .universalInlineNavigationTitle("Audios")
     }
 }

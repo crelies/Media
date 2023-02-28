@@ -14,7 +14,7 @@ struct LivePhotoView: View {
     let livePhoto: LivePhoto
 
     var body: some View {
-        #if os(macOS) || targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst)
         Text("Live Photo objects are available only when editing Live Photo content in a photo editing extension that runs in the Photos app.")
             .padding(.horizontal)
         #else

@@ -59,10 +59,6 @@ struct LazyAlbumView: View {
             .listStyle(InsetGroupedListStyle())
             #endif
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle(Text(album.localizedTitle ?? ""), displayMode: .inline)
-        #else
-        .navigationTitle(Text(album.localizedTitle ?? ""))
-        #endif
+        .universalInlineNavigationTitle(album.localizedTitle ?? "")
     }
 }

@@ -38,10 +38,6 @@ struct PhotosView: View {
             }
             .padding()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle("Photos", displayMode: .inline)
-        #else
-        .navigationTitle(Text("Photos"))
-        #endif
+        .universalInlineNavigationTitle("Photos")
     }
 }
