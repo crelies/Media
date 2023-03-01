@@ -58,6 +58,7 @@
 		B9B2A35C25E8633E00DC3A4C /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2A35B25E8633E00DC3A4C /* LazyView.swift */; };
 		CE6C53F229AE83B5001578F5 /* View+universalNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */; };
 		CE6C53F429AF6AFE001578F5 /* View+insetGroupedListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */; };
+		CE6C53F629AF6BE2001578F5 /* View+secondarySystemBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -129,6 +130,7 @@
 		B9B7EC052630C3D000235722 /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ..; sourceTree = "<group>"; };
 		CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+universalNavigationTitle.swift"; sourceTree = "<group>"; };
 		CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+insetGroupedListStyle.swift"; sourceTree = "<group>"; };
+		CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+secondarySystemBackground.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +298,7 @@
 				B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */,
 				B992718629A2B1A50040CEE6 /* View+universalNavigationBarItems.swift */,
 				CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */,
+				CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				B9B2A30F25D9D0AD00DC3A4C /* LazyPhotoGridView.swift in Sources */,
 				B9B2A33C25E1348300DC3A4C /* Equatable+Hashable.swift in Sources */,
 				B9B2A33225E05E1C00DC3A4C /* AddAlbumScreen.swift in Sources */,
+				CE6C53F629AF6BE2001578F5 /* View+secondarySystemBackground.swift in Sources */,
 				B992717329A293B80040CEE6 /* View+universalFullScreenCover.swift in Sources */,
 				B9A3D28C238ACDE900648070 /* ActivityView.swift in Sources */,
 				B992717529A293C80040CEE6 /* IdentifiableError.swift in Sources */,

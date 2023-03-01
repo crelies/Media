@@ -29,9 +29,7 @@ struct LivePhotosView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        #if !os(tvOS) && !os(macOS)
-                        .background(Color(.secondarySystemBackground))
-                        #endif
+                        .secondarySystemBackground()
                         .cornerRadius(16)
                     }
                 }

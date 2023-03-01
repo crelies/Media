@@ -20,9 +20,7 @@ struct LazyAudiosView: View {
                         (Text(audio.id) + Text("\n(\(audio.id.prefix(5).map(String.init).joined()))").font(.footnote))
                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding()
-                            #if !os(tvOS) && !os(macOS)
-                            .background(Color(.secondarySystemBackground))
-                            #endif
+                            .secondarySystemBackground()
                             .cornerRadius(16)
                     }
                 }
