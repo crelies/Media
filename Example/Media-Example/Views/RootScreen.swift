@@ -121,9 +121,7 @@ private extension RootScreen {
             BrowserSection()
             #endif
         }
-        #if !os(tvOS) && !os(macOS)
-        .listStyle(InsetGroupedListStyle())
-        #endif
+        .insetGroupedListStyle()
         #if !os(macOS)
         .navigationBarTitle("Examples")
         #endif

@@ -46,9 +46,7 @@ struct LazyAlbumsView: View {
                 }
                 .padding()
             }
-            #if !os(tvOS) && !os(macOS)
-            .listStyle(InsetGroupedListStyle())
-            #endif
+            .insetGroupedListStyle()
             .universalInlineNavigationTitle("Albums")
             .universalNavigationBarItems(trailing: Button(action: {
                 isAddViewVisible = true

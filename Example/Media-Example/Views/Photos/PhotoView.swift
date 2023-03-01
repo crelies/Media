@@ -112,9 +112,7 @@ private extension PhotoView {
                 Text(String(describing: properties.tiff))
             }
         }
-        #if !os(tvOS)
-        .listStyle(InsetGroupedListStyle())
-        #endif
+        .insetGroupedListStyle()
     }
     #endif
 

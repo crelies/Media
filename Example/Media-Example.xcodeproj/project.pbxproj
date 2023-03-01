@@ -57,6 +57,7 @@
 		B9B2A35925E85A3100DC3A4C /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2A35825E85A3100DC3A4C /* Node.swift */; };
 		B9B2A35C25E8633E00DC3A4C /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B2A35B25E8633E00DC3A4C /* LazyView.swift */; };
 		CE6C53F229AE83B5001578F5 /* View+universalNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */; };
+		CE6C53F429AF6AFE001578F5 /* View+insetGroupedListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -127,6 +128,7 @@
 		B9B2A35B25E8633E00DC3A4C /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		B9B7EC052630C3D000235722 /* Media */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Media; path = ..; sourceTree = "<group>"; };
 		CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+universalNavigationTitle.swift"; sourceTree = "<group>"; };
+		CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+insetGroupedListStyle.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -290,6 +292,7 @@
 				B992717E29A2951B0040CEE6 /* Photo.Properties+Identifiable.swift */,
 				B992718029A295470040CEE6 /* UniversalImage+Identifiable.swift */,
 				B992718229A295720040CEE6 /* URL+Identifiable.swift */,
+				CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */,
 				B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */,
 				B992718629A2B1A50040CEE6 /* View+universalNavigationBarItems.swift */,
 				CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */,
@@ -400,6 +403,7 @@
 				B9B2A34925E4600D00DC3A4C /* CameraSection.swift in Sources */,
 				B992717B29A294A90040CEE6 /* Data+Identifiable.swift in Sources */,
 				B94FEDC628C3E00E008476EC /* Binding+onChange.swift in Sources */,
+				CE6C53F429AF6AFE001578F5 /* View+insetGroupedListStyle.swift in Sources */,
 				CE6C53F229AE83B5001578F5 /* View+universalNavigationTitle.swift in Sources */,
 				B992717F29A2951B0040CEE6 /* Photo.Properties+Identifiable.swift in Sources */,
 				B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */,

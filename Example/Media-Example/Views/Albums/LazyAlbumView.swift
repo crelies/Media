@@ -55,9 +55,7 @@ struct LazyAlbumView: View {
                     }
                 }
             }
-            #if !os(tvOS) && !os(macOS)
-            .listStyle(InsetGroupedListStyle())
-            #endif
+            .insetGroupedListStyle()
         }
         .universalInlineNavigationTitle(album.localizedTitle ?? "")
     }
