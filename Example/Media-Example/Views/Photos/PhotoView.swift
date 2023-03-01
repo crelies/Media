@@ -76,43 +76,9 @@ struct PhotoView: View {
 }
 
 private extension PhotoView {
-    #if !os(macOS)
-    @ViewBuilder
+    #if canImport(UIKit)
     func propertiesScreen(_ properties: Photo.Properties) -> some View {
-        if #available(iOS 14, *) {
-            if let location = properties.gps.location {
-                Map(
-                    coordinateRegion: .constant(
-                        .init(
-                            center: .init(
-                                latitude: location.coordinate.latitude,
-                                longitude: location.coordinate.longitude
-                            ),
-                            latitudinalMeters: 5000,
-                            longitudinalMeters: 5000
-                        )
-                    ),
-                    annotationItems: [location.coordinate]
-                ) { item in
-                    MapMarker(coordinate: item)
-                }
-            }
-        }
-
-        List {
-            Section {
-                Text(String(describing: properties.exif))
-            }
-
-            Section {
-                Text(String(describing: properties.gps))
-            }
-
-            Section {
-                Text(String(describing: properties.tiff))
-            }
-        }
-        .insetGroupedListStyle()
+        PhotoPropertiesView(properties: properties)
     }
     #endif
 

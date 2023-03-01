@@ -59,6 +59,7 @@
 		CE6C53F229AE83B5001578F5 /* View+universalNavigationTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */; };
 		CE6C53F429AF6AFE001578F5 /* View+insetGroupedListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */; };
 		CE6C53F629AF6BE2001578F5 /* View+secondarySystemBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */; };
+		CE6C53F829AF82AB001578F5 /* PhotoPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F729AF82AB001578F5 /* PhotoPropertiesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -131,6 +132,7 @@
 		CE6C53F129AE83B5001578F5 /* View+universalNavigationTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+universalNavigationTitle.swift"; sourceTree = "<group>"; };
 		CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+insetGroupedListStyle.swift"; sourceTree = "<group>"; };
 		CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+secondarySystemBackground.swift"; sourceTree = "<group>"; };
+		CE6C53F729AF82AB001578F5 /* PhotoPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPropertiesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -236,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				B999836B2389933300F74BC1 /* LazyPhotosView.swift */,
+				CE6C53F729AF82AB001578F5 /* PhotoPropertiesView.swift */,
 				B99586AD263CBD3C0032EF4B /* PhotosView.swift */,
 				B99983792389EDA000F74BC1 /* PhotoView.swift */,
 			);
@@ -390,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B995869D263CBB5C0032EF4B /* VideosView.swift in Sources */,
+				CE6C53F829AF82AB001578F5 /* PhotoPropertiesView.swift in Sources */,
 				B999836A2389908900F74BC1 /* LazyAlbumView.swift in Sources */,
 				B9B2A34625E4600600DC3A4C /* VideosSection.swift in Sources */,
 				B99586AA263CBD020032EF4B /* AudiosView.swift in Sources */,
