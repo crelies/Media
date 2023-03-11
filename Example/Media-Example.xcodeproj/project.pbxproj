@@ -12,6 +12,7 @@
 		B97D91482388772000A617DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D91472388772000A617DC /* Assets.xcassets */; };
 		B97D914B2388772000A617DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B97D914A2388772000A617DC /* Preview Assets.xcassets */; };
 		B97D915D238986DD00A617DC /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97D915C238986DD00A617DC /* RootScreen.swift */; };
+		B983764D29A35F920092575A /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = B983764C29A35F920092575A /* Dependencies.swift */; };
 		B98469442881743E0013DA01 /* MediaCore in Frameworks */ = {isa = PBXBuildFile; productRef = B98469432881743E0013DA01 /* MediaCore */; };
 		B98469462881743E0013DA01 /* MediaSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B98469452881743E0013DA01 /* MediaSwiftUI */; };
 		B992717329A293B80040CEE6 /* View+universalFullScreenCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */; };
@@ -80,6 +81,7 @@
 		B97D914F2388772000A617DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B97D91552388775400A617DC /* Media-Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Media-Example.entitlements"; sourceTree = "<group>"; };
 		B97D915C238986DD00A617DC /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
+		B983764C29A35F920092575A /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		B992717229A293B80040CEE6 /* View+universalFullScreenCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+universalFullScreenCover.swift"; sourceTree = "<group>"; };
 		B992717429A293C80040CEE6 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		B992717629A294710040CEE6 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				B97D91552388775400A617DC /* Media-Example.entitlements */,
 				B97D914F2388772000A617DC /* Info.plist */,
 				B97D91452388771D00A617DC /* ContentView.swift */,
+				B983764C29A35F920092575A /* Dependencies.swift */,
 				B9B2A31E25E0487E00DC3A4C /* ExampleApp.swift */,
 				B97D91472388772000A617DC /* Assets.xcassets */,
 				B9B2A33A25E1347500DC3A4C /* Extensions */,
@@ -400,6 +403,7 @@
 				B992717F29A2951B0040CEE6 /* Photo.Properties+Identifiable.swift in Sources */,
 				B99586B3263CBD9C0032EF4B /* LivePhotosView.swift in Sources */,
 				B9B2A35425E850C400DC3A4C /* LazyTree.swift in Sources */,
+				B983764D29A35F920092575A /* Dependencies.swift in Sources */,
 				B992718729A2B1A50040CEE6 /* View+universalNavigationBarItems.swift in Sources */,
 				B999836C2389933300F74BC1 /* LazyPhotosView.swift in Sources */,
 				B992718129A295470040CEE6 /* UniversalImage+Identifiable.swift in Sources */,

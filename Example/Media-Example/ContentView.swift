@@ -32,7 +32,7 @@ struct ContentView: View {
 #if !os(tvOS) && !os(macOS)
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(cameraViewModel: rootCameraViewModel)
+        ContentView(cameraViewModel: dependencies.photoCameraViewModel)
     }
 }
 #endif

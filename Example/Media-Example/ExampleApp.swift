@@ -7,76 +7,21 @@
 //
 
 import AVFoundation
-import MediaCore
-import MediaSwiftUI
 import SwiftUI
 
-#if !os(tvOS)
-var livePhotoCaptureResult: Result<CapturedPhotoData, Error>?
-
-var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
-    get: { livePhotoCaptureResult },
-    set: { livePhotoCaptureResult = $0 }
-).onChange { result in
-    guard let capturedPhotoData: CapturedPhotoData = try? result?.get() else {
-        return
-    }
-
-    #if !targetEnvironment(macCatalyst) && !os(macOS)
-    try? LivePhoto.save(data: capturedPhotoData) { result in
-        switch result {
-        case .failure(let error):
-            debugPrint("Live photo save error: \(error)")
-        default: ()
-        }
-    }
-    #endif
-}
-
-let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
-    selection: livePhotoCaptureBinding
-)
-
-#if os(macOS)
-var videoURLResult: Result<URL, Error>?
-var videoCaptureBinding: Binding<Result<URL, Error>?> = .init(
-    get: { videoURLResult },
-    set: { videoURLResult = $0 }
-).onChange { result in
-    guard let videoURL: URL = try? result?.get() else {
-        return
-    }
-
-    guard let mediaURL = try? Media.URL<Video>(url: videoURL) else {
-        assertionFailure("This should not happen")
-        return
-    }
-
-    // TODO: this is currently not working
-    Video.save(mediaURL) { result in
-        switch result {
-        case .failure(let error):
-            debugPrint("Video save error: \(error)")
-        default: ()
-        }
-    }
-}
-
-let rootVideoCameraViewModel: VideoCameraViewModel = try! VideoCameraViewModel.make(
-    selection: videoCaptureBinding
-)
-#endif
-
-#endif
+let dependencies = Dependencies()
 
 @main
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
             #if !os(tvOS) && !os(macOS)
-            ContentView(cameraViewModel: rootCameraViewModel)
+            ContentView(cameraViewModel: dependencies.photoCameraViewModel)
             #elseif os(macOS) && !targetEnvironment(macCatalyst)
-            ContentView(cameraViewModel: rootCameraViewModel, videoCameraViewModel: rootVideoCameraViewModel)
+            ContentView(
+                cameraViewModel: dependencies.photoCameraViewModel,
+                videoCameraViewModel: dependencies.videoCameraViewModel
+            )
             #else
             ContentView()
             #endif
