@@ -49,14 +49,8 @@ struct AlbumView: View {
                     }
                 }
             }
-            #if !os(tvOS) && !os(macOS)
-            .listStyle(InsetGroupedListStyle())
-            #endif
+            .insetGroupedListStyle()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle(Text(album.localizedTitle ?? ""), displayMode: .inline)
-        #else
-        .navigationTitle(Text(album.localizedTitle ?? ""))
-        #endif
+        .universalInlineNavigationTitle(album.localizedTitle ?? "")
     }
 }

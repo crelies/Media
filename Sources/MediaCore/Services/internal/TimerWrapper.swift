@@ -15,24 +15,29 @@ final class TimerWrapper {
     private let timerFiredClosure: TimerFiredClosure
 
     private(set) lazy var timer: Timer = {
-        Timer(timeInterval: timeInterval,
-              target: self,
-              selector: #selector(timerFired(_:)),
-              userInfo: nil,
-              repeats: repeats)
+        Timer(
+            timeInterval: timeInterval,
+            target: self,
+            selector: #selector(timerFired(_:)),
+            userInfo: nil,
+            repeats: repeats
+        )
     }()
 
-    init(timeInterval: TimeInterval,
-         repeats: Bool,
-         _ timerFiredClosure: @escaping TimerFiredClosure) {
+    init(
+        timeInterval: TimeInterval,
+        repeats: Bool,
+        _ timerFiredClosure: @escaping TimerFiredClosure
+    ) {
         self.timeInterval = timeInterval
         self.repeats = repeats
         self.timerFiredClosure = timerFiredClosure
     }
 }
 
-extension TimerWrapper {
-    @objc private func timerFired(_ timer: Timer) {
+private extension TimerWrapper {
+    @objc
+    func timerFired(_ timer: Timer) {
         timerFiredClosure(timer)
     }
 }

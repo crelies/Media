@@ -29,19 +29,13 @@ struct LivePhotosView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        #if !os(tvOS) && !os(macOS)
-                        .background(Color(.secondarySystemBackground))
-                        #endif
+                        .secondarySystemBackground()
                         .cornerRadius(16)
                     }
                 }
             }
             .padding()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle("Live Photos", displayMode: .inline)
-        #else
-        .navigationTitle(Text("Live Photos"))
-        #endif
+        .universalInlineNavigationTitle("Live Photos")
     }
 }

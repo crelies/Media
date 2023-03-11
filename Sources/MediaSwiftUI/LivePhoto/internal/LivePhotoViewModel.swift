@@ -33,23 +33,29 @@ private extension LivePhotoViewModel {
         }
 
         DispatchQueue.global(qos: .userInitiated).async {
-            self.livePhoto.displayRepresentation(targetSize: self.size) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let livePhotoDisplayRepresentation):
-                        guard livePhotoDisplayRepresentation.quality == .high else {
-                            return
-                        }
-                        guard let phLivePhoto = livePhotoDisplayRepresentation.value as? PHLivePhoto else {
-                            return
-                        }
-                        self.state = .loaded(value: phLivePhoto)
-                    case .failure(let error):
-                        self.state = .failed(error: error)
+            Task {
+                do {
+                    let livePhotoDisplayRepresentation = try await self.livePhoto.displayRepresentation(targetSize: self.size)
+
+                    guard livePhotoDisplayRepresentation.quality == .high else {
+                        return
                     }
+
+                    guard let phLivePhoto = livePhotoDisplayRepresentation.value as? PHLivePhoto else {
+                        return
+                    }
+
+                    await self.setState(.loaded(value: phLivePhoto))
+                } catch {
+                    await self.setState(.failed(error: error))
                 }
             }
         }
+    }
+
+    @MainActor
+    func setState(_ state: ViewState<PHLivePhoto>) {
+        self.state = state
     }
 }
 #endif

@@ -58,8 +58,13 @@ private extension AddAlbumScreen {
             return
         }
 
-        Album.create(title: albumName) { result in
-            addResult = result
+        Task { @MainActor in
+            do {
+                try await Album.create(title: albumName)
+                addResult = .success(())
+            } catch {
+                addResult = .failure(error)
+            }
             isAddConfirmationAlertPresented = true
         }
     }

@@ -96,7 +96,11 @@ public extension Album {
     ///   - title: title for the album
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    static func create(title: String, completion: @escaping ResultVoidCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    static func create(
+        title: String,
+        completion: @escaping ResultVoidCompletion
+    ) {
         do {
             guard try Album.with(localizedTitle: title) == nil else {
                 completion(.failure(Album.Error.albumWithTitleExists(title)))
@@ -110,10 +114,31 @@ public extension Album {
         PHChanger.request({ PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: title) }, completion)
     }
 
+    /// Creates an album with the given title
+    ///
+    /// - Parameters:
+    ///   - title: title for the album
+    ///
+    static func create(
+        title: String
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.create(title: title) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Deletes the receiver if access to the photo library is allowed
     ///
     /// - Parameter completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func delete(completion: @escaping ResultVoidCompletion) {
         guard let phAssetCollection = phAssetCollection else {
             completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
@@ -131,6 +156,21 @@ public extension Album {
                 completion(.success(()))
             case .failure(let error):
                 completion(.failure(error))
+            }
+        }
+    }
+
+    /// Deletes the receiver if access to the photo library is allowed
+    ///
+    func delete() async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.delete() { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }
@@ -179,7 +219,11 @@ public extension Album {
     ///   - media: an object conforming to the `MediaProtocol`
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func add<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func add<T: MediaProtocol>(
+        _ media: T,
+        completion: @escaping ResultVoidCompletion
+    ) {
         guard let phAssetCollection = phAssetCollection else {
             completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
             return
@@ -203,6 +247,28 @@ public extension Album {
         }, completion)
     }
 
+    /// Adds the given `Media`to the receiver if
+    ///  - the acess to the photo library is allowed
+    ///  - the receiver doesn't contain it
+    ///
+    /// - Parameters:
+    ///   - media: an object conforming to the `MediaProtocol`
+    ///
+    func add<T: MediaProtocol>(
+        _ media: T
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.add(media) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Deletes the given `Media` from the receiver if
     /// - the access to the photo library is allowed
     /// - the receiver contains it
@@ -211,7 +277,11 @@ public extension Album {
     ///   - media: an object conforming to the `MediaProtocol`
     ///   - completion: a closure which gets the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    func delete<T: MediaProtocol>(_ media: T, completion: @escaping ResultVoidCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func delete<T: MediaProtocol>(
+        _ media: T,
+        completion: @escaping ResultVoidCompletion
+    ) {
         guard let phAssetCollection = phAssetCollection else {
             completion(.failure(Media.Error.noUnderlyingPHAssetCollectionFound))
             return
@@ -233,5 +303,27 @@ public extension Album {
             assetRequest?.removeAssets(assets)
             return assetRequest
         }, completion)
+    }
+
+    /// Deletes the given `Media` from the receiver if
+    /// - the access to the photo library is allowed
+    /// - the receiver contains it
+    ///
+    /// - Parameters:
+    ///   - media: an object conforming to the `MediaProtocol`
+    ///
+    func delete<T: MediaProtocol>(
+        _ media: T
+    ) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.delete(media) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 }

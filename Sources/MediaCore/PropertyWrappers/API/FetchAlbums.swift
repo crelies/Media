@@ -18,9 +18,11 @@ public struct FetchAlbums {
 
     /// Wrapped album array
     public var wrappedValue: [Album] {
-        (try? AlbumFetcher.fetchAlbums(with: (albumType?.assetCollectionType) ?? .album,
-                                 subtype: .any,
-                                 options: options) { collection in
+        (try? AlbumFetcher.fetchAlbums(
+            with: (albumType?.assetCollectionType) ?? .album,
+            subtype: .any,
+            options: options
+        ) { collection in
             self.albumType?.subtypes.contains(collection.assetCollectionSubtype) ?? true
         }) ?? []
     }
@@ -42,10 +44,12 @@ public struct FetchAlbums {
     ///   - sort: a set of `Sort<AlbumSortKey>` for the fetch, defaults to empty
     ///   - fetchLimit: a maximum number of results to fetch, defaults to 0 (no limit)
     ///
-    public init(ofType type: AlbumType? = nil,
-                filter: Set<Album.Filter> = [],
-                sort: Set<Media.Sort<Album.SortKey>> = [],
-                fetchLimit: Int = 0) {
+    public init(
+        ofType type: AlbumType? = nil,
+        filter: Set<Album.Filter> = [],
+        sort: Set<Media.Sort<Album.SortKey>> = [],
+        fetchLimit: Int = 0
+    ) {
         albumType = type
 
         if !filter.isEmpty {

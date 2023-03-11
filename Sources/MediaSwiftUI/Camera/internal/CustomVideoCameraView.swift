@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if !os(tvOS)
+#if os(macOS) || os(iOS)
 import AVFoundation
 import AVKit
 import MediaCore
@@ -75,23 +75,60 @@ private extension CustomVideoCameraView {
         .zIndex(1)
     }
 
+    func recordButton() -> some View {
+        Button(action: {
+            switch viewModel.state {
+            case .idle:
+                viewModel.record()
+            case .recording:
+                viewModel.stop()
+            default: ()
+            }
+        }) {
+            Image(systemName: viewModel.state == .recording ? "stop.circle" : "record.circle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                #if !os(macOS)
+                .frame(width: 60, height: 60)
+                #endif
+                .foregroundColor(viewModel.state != .recording ? Color(.systemRed) : .accentColor)
+        }
+    }
+
+    @available(iOS, unavailable)
+    func pauseButton() -> some View {
+        Button(action: {
+            switch viewModel.state {
+            case .recording:
+                viewModel.pause()
+            case .paused:
+                viewModel.resume()
+            default: ()
+            }
+        }) {
+            Image(systemName: viewModel.state == .recording ? "pause.circle" : "play.circle")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                #if !os(macOS)
+                .frame(width: 60, height: 60)
+                #endif
+                .foregroundColor(viewModel.state != .recording ? Color(.systemRed) : .accentColor)
+        }
+    }
+
     func bottomToolbar() -> some View {
         HStack {
             ZStack(alignment: .center) {
-                Button(action: {
-                    if !viewModel.isRecording {
-                        viewModel.record()
-                    } else {
-                        viewModel.stop()
+                HStack {
+                    if viewModel.state != .paused {
+                        recordButton()
                     }
-                }) {
-                    Image(systemName: viewModel.isRecording ? "stop.circle" : "record.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        #if !os(macOS)
-                        .frame(width: 60, height: 60)
-                        #endif
-                        .foregroundColor(!viewModel.isRecording ? Color(.systemRed) : .accentColor)
+
+                    #if !os(iOS)
+                    if viewModel.state != .idle {
+                        pauseButton()
+                    }
+                    #endif
                 }
 
                 HStack {

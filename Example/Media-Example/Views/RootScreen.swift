@@ -44,15 +44,19 @@ struct RootScreen: View {
         NavigationStack {
             switch permissionState {
             case .loading:
-                ProgressView()
-                    .onAppear {
-                        if !Media.isAccessAllowed {
-                            requestPermission()
-                        } else {
+                if !Media.isAccessAllowed {
+                    Button {
+                        requestPermission()
+                    } label: {
+                        Text("Request permission")
+                    }
+                } else {
+                    ProgressView()
+                        .onAppear {
                             permissionState = .granted
                             fetchAlbums()
                         }
-                    }
+                }
             case .granted:
                 grantedList()
             case let .failed(error):
@@ -72,7 +76,7 @@ private extension RootScreen {
     func grantedList() -> some View {
         List {
             #if !os(tvOS)
-            PermissionsSection(requestedPermission: handleRequestPermissionResult)
+            PermissionsSection()
             #endif
 
             Section(header: Text("Property wrapper")) {
@@ -113,13 +117,11 @@ private extension RootScreen {
             CameraSection()
             #endif
 
-            #if !os(tvOS) && !os(macOS)
+            #if !os(tvOS)
             BrowserSection()
             #endif
         }
-        #if !os(tvOS) && !os(macOS)
-        .listStyle(InsetGroupedListStyle())
-        #endif
+        .insetGroupedListStyle()
         #if !os(macOS)
         .navigationBarTitle("Examples")
         #endif
@@ -167,16 +169,15 @@ private extension RootScreen {
     }
 
     func requestPermission() {
-        Media.requestPermission(handleRequestPermissionResult)
-    }
-
-    func handleRequestPermissionResult(_ result: Result<Void, PermissionError>) {
-        switch result {
-        case .success:
-            permissionState = .granted
-            fetchAlbums()
-        case .failure(let error):
-            permissionState = .failed(error as NSError)
+        Task { @MainActor in
+            let permission = await Media.requestPermission()
+            switch permission {
+            case .authorized, .limited:
+                permissionState = .granted
+                fetchAlbums()
+            default:
+                permissionState = .failed(PermissionError.unknown as NSError)
+            }
         }
     }
 

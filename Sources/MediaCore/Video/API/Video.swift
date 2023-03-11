@@ -116,6 +116,7 @@ public extension Video {
     ///
     /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func properties(_ completion: @escaping ResultVideoPropertiesCompletion) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
@@ -137,6 +138,23 @@ public extension Video {
             }
         }
     }
+
+    /// Get all metadata of the `Video` (locally + remotely available)
+    /// Keep in mind that this method might download a copy
+    /// of the `Video` from the cloud to get the information
+    ///
+    func properties() async throws -> Properties {
+        try await withCheckedThrowingContinuation { continuation in
+            properties { result in
+                switch result {
+                case let .success(properties):
+                    continuation.resume(with: .success(properties))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 
 public extension Video {
@@ -148,7 +166,11 @@ public extension Video {
     ///
     /// - Parameter requestedTime: The time at which the image of the asset is to be created, defaults to `.init(seconds: 1, preferredTimescale: 60)`.
     /// - Parameter completion: a closure which gets an `UniversalImage` on `success` and `Error` on `failure`.
-    func previewImage(at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60), _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void) {
+    @available(*, deprecated, message: "Use async method instead")
+    func previewImage(
+        at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60),
+        _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void
+    ) {
         DispatchQueue.global(qos: .userInitiated).async {
             avAsset { avAssetResult in
                 switch avAssetResult {
@@ -177,11 +199,35 @@ public extension Video {
         }
     }
 
+    /// Generates a preview image for the receiving video.
+    /// The process runs on a background thread.
+    ///
+    /// - Parameter requestedTime: The time at which the image of the asset is to be created, defaults to `.init(seconds: 1, preferredTimescale: 60)`.
+    ///
+    func previewImage(
+        at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60)
+    ) async throws -> UniversalImage {
+        try await withCheckedThrowingContinuation { continuation in
+            previewImage(at: requestedTime) { result in
+                switch result {
+                case let .success(image):
+                    continuation.resume(with: .success(image))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Creates a `AVPlayerItem` representation of the receiver
     ///
     /// - Parameter completion: a closure which gets an `AVPlayerItem` on `success` and `Error` on `failure`
     ///
-    func playerItem(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping ResultAVPlayerItemCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func playerItem(
+        deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
+        _ completion: @escaping ResultAVPlayerItemCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -196,11 +242,32 @@ public extension Video {
         }
     }
 
+    /// Creates a `AVPlayerItem` representation of the receiver
+    ///
+    func playerItem(
+        deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic
+    ) async throws -> AVPlayerItem {
+        try await withCheckedThrowingContinuation { continuation in
+            playerItem(deliveryMode: deliveryMode) { result in
+                switch result {
+                case let .success(playerItem):
+                    continuation.resume(with: .success(playerItem))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Creates a `AVAsset` representation of the receiver
     ///
     /// - Parameter completion: a closure which gets an `AVAsset` on `success` and `Error` on `failure`
     ///
-    func avAsset(deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic, _ completion: @escaping ResultAVAssetCompletion) {
+    @available(*, deprecated, message: "Use async method instead")
+    func avAsset(
+        deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic,
+        _ completion: @escaping ResultAVAssetCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -215,6 +282,23 @@ public extension Video {
         }
     }
 
+    /// Creates a `AVAsset` representation of the receiver
+    ///
+    func avAsset(
+        deliveryMode: PHVideoRequestOptionsDeliveryMode = .automatic
+    ) async throws -> AVAsset {
+        try await withCheckedThrowingContinuation { continuation in
+            avAsset(deliveryMode: deliveryMode) { result in
+                switch result {
+                case let .success(asset):
+                    continuation.resume(with: .success(asset))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Exports the receiver using the given options
     /// Notifies about the `progress` through the given closure
     ///
@@ -223,7 +307,11 @@ public extension Video {
     ///   - progress: a closure which gets the current `Video.ExportProgress`
     ///   - completion: a closure which gets a `Void` on `success` and `Error` on `failure`
     ///
-    func export(_ exportOptions: Video.ExportOptions, progress: @escaping ProgressHandler, _ completion: @escaping ResultVoidCompletion) {
+    func export(
+        _ exportOptions: Video.ExportOptions,
+        progress: @escaping ProgressHandler,
+        _ completion: @escaping ResultVoidCompletion
+    ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
@@ -238,10 +326,11 @@ public extension Video {
         requestOptions.isNetworkAccessAllowed = true
         requestOptions.deliveryMode = exportOptions.deliveryMode
 
-        Self.videoManager.requestExportSession(forVideo: phAsset,
-                                               options: requestOptions,
-                                               exportPreset: exportPreset)
-        { exportSession, info in
+        Self.videoManager.requestExportSession(
+            forVideo: phAsset,
+            options: requestOptions,
+            exportPreset: exportPreset
+        ) { exportSession, info in
             if let error = info?[PHImageErrorKey] as? Swift.Error {
                 completion(.failure(error))
             } else if let exportSession = exportSession {
@@ -310,8 +399,29 @@ public extension Video {
     ///   - url: URL to the media
     ///   - completion: a closure which gets `Video` on `success` and `Error` on `failure`
     ///
+    @available(*, deprecated, message: "Use async method instead")
     static func save(_ mediaURL: Media.URL<Self>, _ completion: @escaping ResultVideoCompletion) {
         PHAssetChanger.createRequest({ PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: mediaURL.value) }, completion)
+    }
+
+    /// Saves the video media at the given URL if
+    /// - the access to the photo library is allowed
+    /// - the path extension of the URL matches a `Video.FileType` path extension
+    ///
+    /// - Parameters:
+    ///   - url: URL to the media
+    ///
+    static func save(_ mediaURL: Media.URL<Self>) async throws -> Video {
+        try await withCheckedThrowingContinuation { continuation in
+            Self.save(mediaURL) { result in
+                switch result {
+                case let .success(video):
+                    continuation.resume(with: .success(video))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     /// Updates the `favorite` state of the receiver if the access to the photo library is allowed
@@ -320,6 +430,7 @@ public extension Video {
     ///   - favorite: a boolean indicating the new `favorite` state
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
@@ -335,12 +446,32 @@ public extension Video {
             }
         }
     }
+
+    /// Updates the `favorite` state of the receiver if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean indicating the new `favorite` state
+    ///
+    func favorite(_ favorite: Bool) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.favorite(favorite) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 
-extension Video {
-    private func handleProgressTimerFired(exportSession: AVAssetExportSession,
-                                          timer: Timer,
-                                          progress: @escaping ProgressHandler) {
+private extension Video {
+    func handleProgressTimerFired(
+        exportSession: AVAssetExportSession,
+        timer: Timer,
+        progress: @escaping ProgressHandler
+    ) {
         guard exportSession.progress < 1 else {
             let exportProgress: ExportProgress = .completed
             progress(exportProgress)
@@ -351,21 +482,27 @@ extension Video {
         progress(exportProgress)
     }
 
-    private func createTimer(for exportSession: AVAssetExportSession,
-                             progress: @escaping ProgressHandler) -> Timer {
+    func createTimer(
+        for exportSession: AVAssetExportSession,
+        progress: @escaping ProgressHandler
+    ) -> Timer {
         var timer: Timer
 
         if #available(iOS 10, macOS 10.13, tvOS 10, *) {
             timer = Timer(timeInterval: 1, repeats: true) { timer in
-                self.handleProgressTimerFired(exportSession: exportSession,
-                                              timer: timer,
-                                              progress: progress)
+                self.handleProgressTimerFired(
+                    exportSession: exportSession,
+                    timer: timer,
+                    progress: progress
+                )
             }
         } else {
             let timerWrapper = TimerWrapper(timeInterval: 1, repeats: true) { timer in
-                self.handleProgressTimerFired(exportSession: exportSession,
-                                              timer: timer,
-                                              progress: progress)
+                self.handleProgressTimerFired(
+                    exportSession: exportSession,
+                    timer: timer,
+                    progress: progress
+                )
             }
             timer = timerWrapper.timer
         }

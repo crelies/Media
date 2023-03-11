@@ -29,19 +29,13 @@ struct VideosView: View {
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                         .padding()
-                        #if !os(tvOS) && !os(macOS)
-                        .background(Color(.secondarySystemBackground))
-                        #endif
+                        .secondarySystemBackground()
                         .cornerRadius(16)
                     }
                 }
             }
             .padding()
         }
-        #if !os(tvOS) && !os(macOS)
-        .navigationBarTitle("Videos", displayMode: .inline)
-        #else
-        .navigationTitle(Text("Videos"))
-        #endif
+        .universalInlineNavigationTitle("Videos")
     }
 }

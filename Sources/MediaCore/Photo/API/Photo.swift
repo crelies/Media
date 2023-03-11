@@ -150,6 +150,7 @@ public extension Photo {
     ///
     /// - Parameter completion: `Result` containing a `Properties` object on `success` or an error on `failure`
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func properties(_ completion: @escaping ResultPhotoPropertiesCompletion) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
@@ -174,6 +175,23 @@ public extension Photo {
             completion(.success(properties))
         }
     }
+
+    /// Get `EXIF`, `GPS` and `TIFF` information of the `Photo`
+    /// Keep in mind that this method might download a full size copy
+    /// of the `Photo` from the cloud to get the information
+    ///
+    func properties() async throws -> Photo.Properties {
+        try await withCheckedThrowingContinuation { continuation in
+            properties { result in
+                switch result {
+                case let .success(properties):
+                    continuation.resume(with: .success(properties))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 #endif
 
@@ -182,6 +200,7 @@ public extension Photo {
     ///
     /// - Parameter completion: a closure which gets a `Result` (`Data` on `success` or `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func data(_ completion: @escaping ResultDataCompletion) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
@@ -212,6 +231,21 @@ public extension Photo {
             }
         }
     }
+
+    /// Data representation of the receiver
+    ///
+    func data() async throws -> Data {
+        try await withCheckedThrowingContinuation { continuation in
+            data { result in
+                switch result {
+                case let .success(data):
+                    continuation.resume(with: .success(data))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 
 #if canImport(UIKit)
@@ -225,6 +259,7 @@ public extension Photo {
     ///   - contentMode: specifies the desired content mode
     ///   - completion: a closure which gets a `Result` (`UIImage` on `success` or `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func uiImage(
         targetSize: CGSize,
         contentMode: PHImageContentMode,
@@ -238,12 +273,35 @@ public extension Photo {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
 
-        Self.imageManager.requestImage(for: phAsset,
-                                       targetSize: targetSize,
-                                       contentMode: contentMode,
-                                       options: options)
-        { image, info in
+        Self.imageManager.requestImage(
+            for: phAsset,
+            targetSize: targetSize,
+            contentMode: contentMode,
+            options: options
+        ) { image, info in
             PHImageManager.handlePotentialDegradedResult((image, info), completion)
+        }
+    }
+
+    /// `UIImage` representation of the receiver
+    ///
+    /// - Parameters:
+    ///   - targetSize: defines the desired size (width and height)
+    ///   - contentMode: specifies the desired content mode
+    ///
+    func uiImage(
+        targetSize: CGSize,
+        contentMode: PHImageContentMode
+    ) async throws -> Media.DisplayRepresentation<UIImage> {
+        try await withCheckedThrowingContinuation { continuation in
+            uiImage(targetSize: targetSize, contentMode: contentMode) { result in
+                switch result {
+                case let .success(image):
+                    continuation.resume(with: .success(image))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 }
@@ -258,10 +316,32 @@ public extension Photo {
     ///   - url: the URL to the media object
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     @available(iOS 11, macOS 10.15, tvOS 11, *)
     static func save(_ mediaURL: Media.URL<Self>, _ completion: @escaping ResultPhotoCompletion) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAssetFromImage(atFileURL: mediaURL.value) },
                                      completion)
+    }
+
+    /// Saves the photo media at the given `URL` if
+    /// - the access to the photo library is allowed
+    /// - the path extension of the URL is a valid `Photo.FileType` path extension
+    ///
+    /// - Parameters:
+    ///   - url: the URL to the media object
+    ///
+    @available(iOS 11, macOS 10.15, tvOS 11, *)
+    static func save(_ mediaURL: Media.URL<Self>) async throws -> Photo {
+        try await withCheckedThrowingContinuation { continuation in
+            Self.save(mediaURL) { result in
+                switch result {
+                case let .success(photo):
+                    continuation.resume(with: .success(photo))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     /// Saves the given `UIImage` / `NSImage` if the access to the photo library is allowed
@@ -270,9 +350,28 @@ public extension Photo {
     ///   - image: the `UIImage` which should be saved
     ///   - completion: a closure which gets a `Result` (`Photo` on `success` or `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     static func save(_ image: UniversalImage, completion: @escaping ResultPhotoCompletion) {
         PHAssetChanger.createRequest({ assetChangeRequest.creationRequestForAsset(from: image) },
                                      completion)
+    }
+
+    /// Saves the given `UIImage` / `NSImage` if the access to the photo library is allowed
+    ///
+    /// - Parameters:
+    ///   - image: the `UIImage` which should be saved
+    ///
+    static func save(_ image: UniversalImage) async throws -> Photo {
+        try await withCheckedThrowingContinuation { continuation in
+            Self.save(image) { result in
+                switch result {
+                case let .success(photo):
+                    continuation.resume(with: .success(photo))
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     /// Updates the `favorite` state of the receiver
@@ -281,6 +380,7 @@ public extension Photo {
     ///   - favorite: a boolean indicating the new `favorite` state
     ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
     ///
+    @available(*, deprecated, message: "Use async method instead")
     func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
@@ -293,6 +393,24 @@ public extension Photo {
                 completion(.success(()))
             } catch {
                 completion(.failure(error))
+            }
+        }
+    }
+
+    /// Updates the `favorite` state of the receiver
+    ///
+    /// - Parameters:
+    ///   - favorite: a boolean indicating the new `favorite` state
+    ///
+    func favorite(_ favorite: Bool) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            self.favorite(favorite) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
             }
         }
     }

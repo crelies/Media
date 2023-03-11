@@ -34,13 +34,9 @@ struct PhotoView: View {
             // TODO: [example] tvOS 16 example
             #if !os(tvOS) && !os(macOS)
             .onTapGesture {
-                photo.properties { result in
-                    switch result {
-                    case .success(let properties):
-                        self.properties = properties
-                    case .failure:
-                        properties = nil
-                    }
+                Task { @MainActor in
+                    let properties = try? await photo.properties()
+                    self.properties = properties
                 }
             }
             .sheet(
@@ -80,45 +76,9 @@ struct PhotoView: View {
 }
 
 private extension PhotoView {
-    #if !os(macOS)
-    @ViewBuilder
+    #if canImport(UIKit)
     func propertiesScreen(_ properties: Photo.Properties) -> some View {
-        if #available(iOS 14, *) {
-            if let location = properties.gps.location {
-                Map(
-                    coordinateRegion: .constant(
-                        .init(
-                            center: .init(
-                                latitude: location.coordinate.latitude,
-                                longitude: location.coordinate.longitude
-                            ),
-                            latitudinalMeters: 5000,
-                            longitudinalMeters: 5000
-                        )
-                    ),
-                    annotationItems: [location.coordinate]
-                ) { item in
-                    MapMarker(coordinate: item)
-                }
-            }
-        }
-
-        List {
-            Section {
-                Text(String(describing: properties.exif))
-            }
-
-            Section {
-                Text(String(describing: properties.gps))
-            }
-
-            Section {
-                Text(String(describing: properties.tiff))
-            }
-        }
-        #if !os(tvOS)
-        .listStyle(InsetGroupedListStyle())
-        #endif
+        PhotoPropertiesView(properties: properties)
     }
     #endif
 
@@ -131,22 +91,23 @@ private extension PhotoView {
 
 private extension PhotoView {
     func share() {
-        photo.data { result in
-            switch result {
-            case .success(let data):
+        Task { @MainActor in
+            do {
+                let data = try await self.photo.data()
                 self.data = data
-            case .failure(let error):
+            } catch {
                 self.error = error
+                isErrorAlertVisible = true
             }
         }
     }
 
     func toggleFavoriteState(isFavorite: Bool) {
-        photo.favorite(!isFavorite) { result in
-            switch result {
-            case .success:
+        Task { @MainActor in
+            do {
+                try await photo.favorite(!isFavorite)
                 self.isFavorite = photo.metadata?.isFavorite ?? false
-            case .failure(let error):
+            } catch {
                 self.error = error
                 isErrorAlertVisible = true
             }
