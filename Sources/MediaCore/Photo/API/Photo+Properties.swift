@@ -13,7 +13,7 @@ extension Photo {
     /// Represents properties / metadata of the underlying
     /// image file, including EXIF, GPS and TIFF data
     ///
-    public struct Properties {
+    public struct Properties: Sendable {
         /// The resolution, in dots per inch, in the y dimension.
         /// If present, this key is a CFNumber value.
         ///
@@ -47,7 +47,7 @@ extension Photo {
 
         /// Keys for an image that uses Exchangeable Image File Format (EXIF).
         ///
-        public struct EXIF {
+        public struct EXIF: Sendable {
             /// The aperture value.
             public let apertureValue: Double?
             /// The brightness value.
@@ -131,7 +131,7 @@ extension Photo {
 
         /// Keys for an image that has Global Positioning System (GPS) information.
         ///
-        public struct GPS {
+        public struct GPS: Sendable {
             /// The altitude.
             public let altitude: Double?
             /// The reference altitude.
@@ -171,7 +171,7 @@ extension Photo {
 
         /// Keys for an image that uses Tagged Image File Format (TIFF).
         ///
-        public struct TIFF {
+        public struct TIFF: Sendable {
             /// The date and time that the image was created.
             public let dateTime: String?
             /// The name of the manufacturer of the camera or input device.

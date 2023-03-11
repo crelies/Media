@@ -57,6 +57,7 @@ struct VideoView: View {
             progressView
                 .task {
                     do {
+                        // TODO: concurrency
                         let previewImage = try await video.previewImage()
                         previewImageState = .loaded(image: previewImage)
                     } catch {

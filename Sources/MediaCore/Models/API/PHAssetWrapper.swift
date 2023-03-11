@@ -10,7 +10,8 @@ import Photos
 /// Box type for storing a reference to
 /// a `PHAsset` instance
 ///
-public final class PHAssetWrapper {
+// TODO: Concurrency
+public final class PHAssetWrapper: Sendable {
     var value: PHAsset?
 
     init(value: PHAsset) {

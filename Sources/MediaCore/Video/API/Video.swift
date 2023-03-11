@@ -10,13 +10,14 @@ import Photos
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
-import AppKit
+// TODO: concurrency
+@preconcurrency import AppKit
 #endif
 
 /// Wrapper type around `PHAsset`s of type
 /// `video`
 ///
-public struct Video: MediaProtocol {
+public struct Video: MediaProtocol, Sendable {
     public typealias ProgressHandler = (Video.ExportProgress) -> Void
 
     static var videoManager: VideoManager = PHImageManager.default()
@@ -169,12 +170,13 @@ public extension Video {
     @available(*, deprecated, message: "Use async method instead")
     func previewImage(
         at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60),
-        _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void
+        _ completion: @MainActor @Sendable @escaping (Result<UniversalImage, Swift.Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
-            avAsset { avAssetResult in
-                switch avAssetResult {
-                case let .success(asset):
+            Task {
+                do {
+                    let asset = try await avAsset()
+
                     let generator = AVAssetImageGenerator(asset: asset)
                     generator.appliesPreferredTrackTransform = true
 
@@ -187,13 +189,9 @@ public extension Video {
                         #endif
                     }
 
-                    DispatchQueue.main.async {
-                        completion(copyCGImageResult)
-                    }
-                case let .failure(error):
-                    DispatchQueue.main.async {
-                        completion(.failure(error))
-                    }
+                    await completion(copyCGImageResult)
+                } catch {
+                    await completion(.failure(error))
                 }
             }
         }

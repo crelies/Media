@@ -29,11 +29,12 @@ struct Dependencies {
             }
 
             #if !targetEnvironment(macCatalyst) && !os(macOS)
-            try? LivePhoto.save(data: capturedPhotoData) { result in
-                switch result {
-                case .failure(let error):
+            Task {
+                do {
+                    let livePhoto = try await LivePhoto.save(data: capturedPhotoData)
+                    debugPrint("Live photo identifier: \(livePhoto.identifier)")
+                } catch {
                     debugPrint("Live photo save error: \(error)")
-                default: ()
                 }
             }
             #endif
@@ -44,26 +45,22 @@ struct Dependencies {
         )
         self.photoCameraViewModel = rootCameraViewModel
 
-        var videoURLResult: Result<URL, Error>?
-        let videoCaptureBinding: Binding<Result<URL, Error>?> = .init(
+        var videoURLResult: Result<Media.URL<Video>, Error>?
+        let videoCaptureBinding: Binding<Result<Media.URL<Video>, Error>?> = .init(
             get: { videoURLResult },
             set: { videoURLResult = $0 }
         ).onChange { result in
-            guard let videoURL: URL = try? result?.get() else {
+            guard let mediaURL = try? result?.get() else {
                 return
             }
 
-            guard let mediaURL = try? Media.URL<Video>(url: videoURL) else {
-                assertionFailure("This should not happen")
-                return
-            }
-
-            // TODO: this is currently not working
-            Video.save(mediaURL) { result in
-                switch result {
-                case .failure(let error):
+            Task {
+                do {
+                    // TODO: this is currently not working
+                    let video = try await Video.save(mediaURL)
+                    debugPrint("Video identifier: \(video.identifier)")
+                } catch {
                     debugPrint("Video save error: \(error)")
-                default: ()
                 }
             }
         }

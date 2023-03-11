@@ -6,11 +6,13 @@
 //
 
 #if canImport(SwiftUI)
-import AVKit
+// TODO: @preconcurrency
+@preconcurrency import AVKit
 import Combine
 import MediaCore
 
-final class VideoViewModel: ObservableObject {
+final class VideoViewModel: ObservableObject, Sendable {
+    // TODO: concurrency
     private(set) var player = AVPlayer()
 
     @Published
@@ -54,7 +56,8 @@ private extension VideoViewModel {
         DispatchQueue.global(qos: .userInitiated).async {
             Task {
                 do {
-                    let avPlayerItem = try await self.video.playerItem()
+                    let video = self.video
+                    let avPlayerItem = try await video.playerItem()
                     await self.setPlayerItem(avPlayerItem)
                     await self.setState(.loaded(value: avPlayerItem))
                 } catch {
