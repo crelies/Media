@@ -80,6 +80,22 @@ struct PHAssetChanger {
             }
         }
     }
+
+    static func favorite(
+        phAsset: PHAsset,
+        favorite: Bool
+    ) async throws -> PHAsset {
+        try await withCheckedThrowingContinuation({ continuation in
+            Self.favorite(phAsset: phAsset, favorite: favorite) { result in
+                switch result {
+                case let .success(asset):
+                    continuation.resume(returning: asset)
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
 }
 
 private extension PHAssetChanger {

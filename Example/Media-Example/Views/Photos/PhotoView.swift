@@ -105,6 +105,7 @@ private extension PhotoView {
     func toggleFavoriteState(isFavorite: Bool) {
         Task { @MainActor in
             do {
+                var photo = photo
                 try await photo.favorite(!isFavorite)
                 self.isFavorite = photo.metadata?.isFavorite ?? false
             } catch {

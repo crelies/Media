@@ -11,10 +11,10 @@ import Photos
 /// a `PHAsset` instance
 ///
 // TODO: Concurrency
-public final class PHAssetWrapper: Sendable {
-    var value: PHAsset?
+public struct PHAssetWrapper: Sendable {
+    let value: PHAsset?
 
-    init(value: PHAsset) {
+    init(value: PHAsset?) {
         self.value = value
     }
 }

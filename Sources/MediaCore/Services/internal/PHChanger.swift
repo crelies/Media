@@ -29,4 +29,19 @@ struct PHChanger {
             }
         })
     }
+
+    static func request(
+        _ request: @escaping () -> PHAssetCollectionChangeRequest?
+    ) async throws {
+        try await withCheckedThrowingContinuation({ continuation in
+            Self.request(request) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case let .failure(error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
 }

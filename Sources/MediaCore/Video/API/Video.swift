@@ -10,14 +10,13 @@ import Photos
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
-// TODO: concurrency
-@preconcurrency import AppKit
+import AppKit
 #endif
 
 /// Wrapper type around `PHAsset`s of type
 /// `video`
 ///
-public struct Video: MediaProtocol, Sendable {
+public struct Video: MediaProtocol {
     public typealias ProgressHandler = (Video.ExportProgress) -> Void
 
     static var videoManager: VideoManager = PHImageManager.default()
@@ -30,7 +29,7 @@ public struct Video: MediaProtocol, Sendable {
     /// Box type internally used to store
     /// a reference to the underlying `PHAsset` instance
     ///
-    public let phAssetWrapper: PHAssetWrapper
+    public var phAssetWrapper: PHAssetWrapper
 
     /// Represents the `PHAssetMediaType` of the `Video` type
     /// Used for the implementation of some generic property
@@ -429,16 +428,18 @@ public extension Video {
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
     @available(*, deprecated, message: "Use async method instead")
-    func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+    func favorite(_ favorite: Bool, _ completion: @escaping ResultGenericCompletion<Self>) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
         }
-        
+
+        var video = self
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
-                self.phAssetWrapper.value = try result.get()
-                completion(.success(()))
+                video.phAssetWrapper = .init(value: try result.get())
+                completion(.success(video))
             } catch {
                 completion(.failure(error))
             }
@@ -450,17 +451,13 @@ public extension Video {
     /// - Parameters:
     ///   - favorite: a boolean indicating the new `favorite` state
     ///
-    func favorite(_ favorite: Bool) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            self.favorite(favorite) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case let .failure(error):
-                    continuation.resume(throwing: error)
-                }
-            }
+    mutating func favorite(_ favorite: Bool) async throws {
+        guard let phAsset = phAsset else {
+            throw Media.Error.noUnderlyingPHAssetFound
         }
+
+        let updatedAsset = try await PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite)
+        self.phAssetWrapper = .init(value: updatedAsset)
     }
 }
 
