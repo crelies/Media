@@ -57,7 +57,7 @@ struct VideoView: View {
             progressView
                 .task {
                     do {
-                        // TODO: concurrency
+                        // TODO: concurrency (Non-sendable type 'UniversalImage' (aka 'NSImage') returned by call from main actor-isolated context to non-isolated instance method 'previewImage(at:)' cannot cross actor boundary)
                         let previewImage = try await video.previewImage()
                         previewImageState = .loaded(image: previewImage)
                     } catch {

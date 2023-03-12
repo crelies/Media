@@ -56,7 +56,7 @@ struct Dependencies {
 
             Task {
                 do {
-                    // TODO: this is currently not working
+                    /// **Attention:** This is working but will not automatically upload the video to the iCloud. You have to open the photos app on your mac first.
                     let video = try await Video.save(mediaURL)
                     debugPrint("Video identifier: \(video.identifier)")
                 } catch {
