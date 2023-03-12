@@ -10,7 +10,6 @@ import Photos
 /// Box type for storing a reference to
 /// a `PHAsset` instance
 ///
-// TODO: Concurrency
 public struct PHAssetWrapper: Sendable {
     let value: PHAsset?
 
