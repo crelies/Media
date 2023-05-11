@@ -12,18 +12,6 @@ import MediaSwiftUI
 import Photos
 import SwiftUI
 
-#if canImport(UIKit)
-import UIKit
-
-private struct ActivityIndicatorView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIActivityIndicatorView {
-        UIActivityIndicatorView()
-    }
-
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: Context) {}
-}
-#endif
-
 struct VideoView: View {
     private enum PreviewImageState {
         case loading
@@ -40,6 +28,26 @@ struct VideoView: View {
     @State private var exportSuccessful: Bool?
     @State private var progress: Float = 0
     @State private var isPlayerPresented = false
+
+    private var playButton: some View {
+        Button {
+            isPlayerPresented = true
+        } label: {
+            Image(systemName: "play.circle.fill")
+                .resizable()
+                .frame(width: 60, height: 60)
+                #if !os(macOS)
+                .foregroundColor(Color(.secondaryLabel))
+                #endif
+        }
+    }
+
+    private var exportButton: some View {
+        Button(action: export) {
+            Text("Export")
+                .foregroundColor(exportSuccessful == nil ? Color(.systemBlue) : ((exportSuccessful ?? true) ? Color(.systemGreen) : Color(.systemRed)))
+        }
+    }
 
     private var progressView: some View {
         #if !os(macOS)
@@ -60,7 +68,7 @@ struct VideoView: View {
                         let previewImage = try await video.previewImage()
                         previewImageState = .loaded(image: previewImage)
                     } catch {
-                        
+
                     }
                 }
         case let .loaded(previewImage):
@@ -74,25 +82,13 @@ struct VideoView: View {
                             .aspectRatio(contentMode: .fit)
                     }
 
-                    Button {
-                        isPlayerPresented = true
-                    } label: {
-                        Image(systemName: "play.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            #if !os(macOS)
-                            .foregroundColor(Color(.secondaryLabel))
-                            #endif
-                    }
+                    playButton
                     .sheet(isPresented: $isPlayerPresented) {
                         isPlayerPresented = false
                     } content: {
                         video.view
                             .universalNavigationBarItems(trailing: VStack(spacing: 8) {
-                                Button(action: export) {
-                                    Text("Export")
-                                        .foregroundColor(exportSuccessful == nil ? Color(.systemBlue) : ((exportSuccessful ?? true) ? Color(.systemGreen) : Color(.systemRed)))
-                                }
+                                exportButton
 
                                 if progress > 0 {
                                     ProgressView(value: progress, total: 1)
@@ -115,33 +111,37 @@ private extension VideoView {
         #endif
     }
 
-    func export() {
+    func exportURL() -> Media.URL<Video>? {
         guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            return
+            return nil
         }
 
         let fileURL = url.appendingPathComponent("\(UUID().uuidString).mov")
-        guard let outputURL = try? Media.URL<Video>(url: fileURL) else {
+        return try? Media.URL<Video>(url: fileURL)
+    }
+
+    func export() {
+        guard let outputURL = self.exportURL() else {
             return
         }
 
-        let exportOptions = Video.ExportOptions(url: outputURL, quality: videoExportQuality)
+        Task {
+            do {
+                exportSuccessful = nil
+                progress = 0
 
-        exportSuccessful = nil
-        progress = 0
-        video.export(exportOptions, progress: { progress in
-            switch progress {
-            case .completed:
-                self.progress = 0
-            case .pending(let value):
-                self.progress = value
-            }
-        }) { result in
-            switch result {
-            case .success:
+                let exportOptions = Video.ExportOptions(url: outputURL, quality: videoExportQuality)
+                try await video.export(exportOptions, progress: { progress in
+                    switch progress {
+                    case .completed:
+                        self.progress = 0
+                    case .pending(let value):
+                        self.progress = value
+                    }
+                })
                 progress = 0
                 exportSuccessful = true
-            case .failure:
+            } catch {
                 progress = 0
                 exportSuccessful = false
             }
