@@ -36,7 +36,6 @@ struct CameraSection: View {
 
     var body: some View {
         Section(header: Label("Camera", systemImage: "camera")) {
-            // TODO: [macOS] reuse existing custom photo camera view
             #if !os(macOS)
             Button(action: {
                 isCameraViewVisible = true
