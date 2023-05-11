@@ -69,7 +69,7 @@ extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
         didStartRecordingTo fileURL: URL,
         from connections: [AVCaptureConnection]
     ) {
-        // TODO: ?
+
     }
     public func fileOutput(
         _ output: AVCaptureFileOutput,
@@ -86,7 +86,7 @@ extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
         didPauseRecordingTo fileURL: URL,
         from connections: [AVCaptureConnection]
     ) {
-        // TODO: ?
+
     }
 
     public func fileOutput(
@@ -94,7 +94,7 @@ extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
         didResumeRecordingTo fileURL: URL,
         from connections: [AVCaptureConnection]
     ) {
-        // TODO: ?
+
     }
     #endif
 }

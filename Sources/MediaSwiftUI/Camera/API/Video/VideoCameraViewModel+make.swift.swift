@@ -83,6 +83,7 @@ extension VideoCameraViewModel {
     /// Creates a camera view model instance using the given selection binding.
     ///
     /// - Parameter fileManager: The file manager which should be used, defaults to `default`.
+    /// - Parameter customOutputDirectory: Specifies the output directory for the captured videos, defaults to `nil` which leads to the `FileManager.SearchPathDirectory.documentDirectory`.
     /// - Parameter selection: A binding which represents the live photo camera result.
     /// - Parameter preset: A preset value that indicates the quality level or bit rate of the video output, defaults to `.hd1920x1080`.
     /// - Parameter videoCodec: The codec to use for video capture, defaults to `.h264`.
@@ -90,6 +91,7 @@ extension VideoCameraViewModel {
     /// - Returns: A camera view model instance.
     public static func make(
         fileManager: FileManager = .default,
+        customOutputDirectory: URL? = nil,
         selection: Binding<Result<Media.URL<Video>, Error>?>,
         preset: Preset = .hd1920x1080,
         videoCodec: AVVideoCodecType = .h264
@@ -113,8 +115,7 @@ extension VideoCameraViewModel {
 
         captureSession.commitConfiguration()
 
-        // TODO: custom directory from the outside?
-        guard let outputDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let outputDirectory = customOutputDirectory ?? fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw CocoaError(.fileNoSuchFile)
         }
 

@@ -20,11 +20,13 @@ extension PhotoCameraViewModel {
     ///
     /// - Parameter fileManager: The file manager which should be used, defaults to `default`.
     /// - Parameter selection: A binding which represents the live photo camera result.
+    /// - Parameter videoCodecType: Specifies a custom video codec type which should be used, defaults to `nil` which leads to the `hevc` codec on !macOS and `jpeg` on macOS.
     ///
     /// - Returns: A camera view model instance.
     public static func make(
         fileManager: FileManager = .default,
-        selection: Binding<Result<CapturedPhotoData, Error>?>
+        selection: Binding<Result<CapturedPhotoData, Error>?>,
+        videoCodecType: AVVideoCodecType? = nil
     ) throws -> PhotoCameraViewModel {
         let captureSession = AVCaptureSession()
         captureSession.beginConfiguration()
@@ -42,18 +44,14 @@ extension PhotoCameraViewModel {
 
         photoOutput.isHighResolutionCaptureEnabled = true
 
-        let videoCodec: AVVideoCodecType? = videoCodec(
+        let videoCodec: AVVideoCodecType = videoCodecType ?? videoCodec(
             // Read the property `availablePhotoCodecTypes` only after adding the photo capture output
             // to an AVCaptureSession object containing a video source.
             // If the photo capture output isn’t connected to
             // a session with a video source, this array is empty.
             availablePhotoCodecTypes: photoOutput.availablePhotoCodecTypes
         )
-        var format: [String: Any] = [:]
-        if let videoCodec = videoCodec {
-            format = [AVVideoCodecKey: videoCodec]
-        }
-
+        let format: [String: Any] = [AVVideoCodecKey: videoCodec]
         let captureSettings = AVCapturePhotoSettings(format: format)
 
         #if !os(macOS)
@@ -76,11 +74,10 @@ extension PhotoCameraViewModel {
         )
     }
 
-    private static func videoCodec(availablePhotoCodecTypes: [AVVideoCodecType]) -> AVVideoCodecType? {
+    private static func videoCodec(availablePhotoCodecTypes: [AVVideoCodecType]) -> AVVideoCodecType {
         #if !os(macOS)
         return .hevc
         #else
-        // TODO: [macOS] allow customization of codec for photo capture
         return .jpeg
         #endif
     }
