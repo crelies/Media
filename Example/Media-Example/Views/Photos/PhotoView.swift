@@ -11,6 +11,33 @@ import MediaCore
 import SwiftUI
 
 struct PhotoView: View {
+    @ViewBuilder
+    private var favoriteButton: some View {
+        if let metadata = photo.metadata {
+            Button(action: {
+                toggleFavoriteState(isFavorite: metadata.isFavorite)
+            }) {
+                Image(systemName: isFavorite ? "heart.fill" : "heart")
+            }
+            .alert(isPresented: $isErrorAlertVisible) { errorAlert(error) }
+        }
+    }
+
+    @ViewBuilder
+    private var shareButton: some View {
+        #if !os(tvOS) && !os(macOS)
+        Button(action: share) {
+            Text("Share")
+        }.sheet(item: $data, onDismiss: {
+            data = nil
+        }) { data in
+            if let image = UniversalImage(data: data) {
+                ActivityView(activityItems: [image], applicationActivities: [])
+            }
+        }
+        #endif
+    }
+
     let photo: Photo
 
     @State private var data: Data?
@@ -51,26 +78,8 @@ struct PhotoView: View {
             Text(photo.subtypes.map { String(describing: $0) }.joined(separator: ", "))
         }
         .universalNavigationBarItems(trailing: HStack {
-            if let metadata = photo.metadata {
-                Button(action: {
-                    toggleFavoriteState(isFavorite: metadata.isFavorite)
-                }) {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                }
-                .alert(isPresented: $isErrorAlertVisible) { errorAlert(error) }
-            }
-
-            #if !os(tvOS) && !os(macOS)
-            Button(action: share) {
-                Text("Share")
-            }.sheet(item: $data, onDismiss: {
-                data = nil
-            }) { data in
-                if let image = UniversalImage(data: data) {
-                    ActivityView(activityItems: [image], applicationActivities: [])
-                }
-            }
-            #endif
+            favoriteButton
+            shareButton
         })
     }
 }
