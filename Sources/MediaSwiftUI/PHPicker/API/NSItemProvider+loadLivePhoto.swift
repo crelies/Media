@@ -23,7 +23,7 @@ extension NSItemProvider {
                 return
             }
 
-            self.loadObject(ofClass: PHLivePhoto.self) { provider, error in
+            let progress = self.loadObject(ofClass: PHLivePhoto.self) { provider, error in
                 if let error = error {
                     promise(.failure(Error.couldNotLoadObject(underlying: error)))
                 } else if let provider = provider, let livePhoto = provider as? PHLivePhoto {

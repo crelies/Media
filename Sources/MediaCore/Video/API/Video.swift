@@ -366,6 +366,76 @@ public extension Video {
             }
         }
     }
+
+    /// Exports the receiver using the given options
+    /// Notifies about the `progress` through the given closure
+    ///
+    /// - Parameters:
+    ///   - exportOptions: options specifying destination, file type and quality
+    ///   - progress: a closure which gets the current `Video.ExportProgress`
+    ///
+    func export(
+        _ exportOptions: Video.ExportOptions,
+        progress: @escaping ProgressHandler
+    ) async throws {
+        guard let phAsset = phAsset else {
+            throw Media.Error.noUnderlyingPHAssetFound
+        }
+
+        guard let exportPreset = exportOptions.quality.avAssetExportPreset else {
+            throw Error.unsupportedExportPreset
+        }
+
+        let requestOptions = PHVideoRequestOptions()
+        requestOptions.isNetworkAccessAllowed = true
+        requestOptions.deliveryMode = exportOptions.deliveryMode
+
+        try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Swift.Error>) in
+            Self.videoManager.requestExportSession(
+                forVideo: phAsset,
+                options: requestOptions,
+                exportPreset: exportPreset
+            ) { exportSession, info in
+                if let error = info?[PHImageErrorKey] as? Swift.Error {
+                    continuation.resume(throwing: error)
+                } else if let exportSession = exportSession {
+                    Task {
+                        let compatibleFileTypes = await exportSession.compatibleFileTypes
+
+                        guard compatibleFileTypes.contains(exportOptions.outputURL.fileType.avFileType) else {
+                            continuation.resume(throwing: Error.unsupportedFileType)
+                            return
+                        }
+
+                        exportSession.outputURL = exportOptions.outputURL.value
+                        exportSession.outputFileType = exportOptions.outputURL.fileType.avFileType
+
+                        let timer = self.createTimer(for: exportSession, progress: progress)
+                        RunLoop.main.add(timer, forMode: .common)
+
+                        await exportSession.export()
+
+                        timer.invalidate()
+
+                        switch exportSession.status {
+                        case .completed:
+                            continuation.resume()
+                        case .failed:
+                            continuation.resume(throwing: exportSession.error ?? Media.Error.unknown)
+                        case .unknown:
+                            continuation.resume(throwing: Media.Error.unknown)
+                        case .cancelled:
+                            continuation.resume(throwing: Media.Error.cancelled)
+                        case .exporting, .waiting: ()
+                        @unknown default: ()
+                        }
+                    }
+                } else {
+                    continuation.resume(throwing: Media.Error.unknown)
+                }
+            }
+        })
+    }
 }
 
 public extension Video {
