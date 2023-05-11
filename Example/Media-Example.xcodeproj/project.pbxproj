@@ -60,6 +60,7 @@
 		CE6C53F429AF6AFE001578F5 /* View+insetGroupedListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */; };
 		CE6C53F629AF6BE2001578F5 /* View+secondarySystemBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */; };
 		CE6C53F829AF82AB001578F5 /* PhotoPropertiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F729AF82AB001578F5 /* PhotoPropertiesView.swift */; };
+		CE6C53FA29B2243A001578F5 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6C53F929B2243A001578F5 /* ActivityIndicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -133,6 +134,7 @@
 		CE6C53F329AF6AFE001578F5 /* View+insetGroupedListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+insetGroupedListStyle.swift"; sourceTree = "<group>"; };
 		CE6C53F529AF6BE2001578F5 /* View+secondarySystemBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+secondarySystemBackground.swift"; sourceTree = "<group>"; };
 		CE6C53F729AF82AB001578F5 /* PhotoPropertiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPropertiesView.swift; sourceTree = "<group>"; };
+		CE6C53F929B2243A001578F5 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 		B97D915B238986CC00A617DC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CE6C53F929B2243A001578F5 /* ActivityIndicatorView.swift */,
 				B9A3D28B238ACDE900648070 /* ActivityView.swift */,
 				B9B2A34D25E460B400DC3A4C /* BrowserSection.swift */,
 				B9B2A34825E4600D00DC3A4C /* CameraSection.swift */,
@@ -433,6 +436,7 @@
 				B992717529A293C80040CEE6 /* IdentifiableError.swift in Sources */,
 				B992718529A295840040CEE6 /* PHLivePhoto+Identifiable.swift in Sources */,
 				B99586A0263CBBCB0032EF4B /* AlbumsView.swift in Sources */,
+				CE6C53FA29B2243A001578F5 /* ActivityIndicatorView.swift in Sources */,
 				B992717D29A294D80040CEE6 /* CLLocationCoordinate2D+Identifiable.swift in Sources */,
 				B97D915D238986DD00A617DC /* RootScreen.swift in Sources */,
 				B999837A2389EDA000F74BC1 /* PhotoView.swift in Sources */,
