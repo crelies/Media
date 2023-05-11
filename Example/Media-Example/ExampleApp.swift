@@ -39,7 +39,8 @@ let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
 
 #if os(macOS)
 let rootVideoCameraViewModel: VideoCameraViewModel = try! VideoCameraViewModel.make(
-    selection: livePhotoCaptureBinding
+    // TODO: [macOS] proper binding to recorded video
+    selection: .constant(nil)
 )
 #endif
 
