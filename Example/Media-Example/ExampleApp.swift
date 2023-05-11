@@ -7,53 +7,21 @@
 //
 
 import AVFoundation
-import MediaCore
-import MediaSwiftUI
 import SwiftUI
 
-#if !os(tvOS)
-var livePhotoCaptureResult: Result<CapturedPhotoData, Error>?
-
-var livePhotoCaptureBinding: Binding<Result<CapturedPhotoData, Error>?> = .init(
-    get: { livePhotoCaptureResult },
-    set: { livePhotoCaptureResult = $0 }
-).onChange { result in
-    #if !targetEnvironment(macCatalyst) && !os(macOS)
-    Task { @MainActor in
-        guard let capturedPhotoData: CapturedPhotoData = try? result?.get() else {
-            return
-        }
-
-        do {
-            _ = try await LivePhoto.save(data: capturedPhotoData)
-        } catch {
-            debugPrint("Live photo save error: \(error)")
-        }
-    }
-    #endif
-}
-
-let rootCameraViewModel: PhotoCameraViewModel = try! PhotoCameraViewModel.make(
-    selection: livePhotoCaptureBinding
-)
-
-#if os(macOS)
-let rootVideoCameraViewModel: VideoCameraViewModel = try! VideoCameraViewModel.make(
-    // TODO: [macOS] proper binding to recorded video
-    selection: .constant(nil)
-)
-#endif
-
-#endif
+let dependencies = Dependencies()
 
 @main
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
             #if !os(tvOS) && !os(macOS)
-            ContentView(cameraViewModel: rootCameraViewModel)
+            ContentView(cameraViewModel: dependencies.photoCameraViewModel)
             #elseif os(macOS) && !targetEnvironment(macCatalyst)
-            ContentView(cameraViewModel: rootCameraViewModel, videoCameraViewModel: rootVideoCameraViewModel)
+            ContentView(
+                cameraViewModel: dependencies.photoCameraViewModel,
+                videoCameraViewModel: dependencies.videoCameraViewModel
+            )
             #else
             ContentView()
             #endif

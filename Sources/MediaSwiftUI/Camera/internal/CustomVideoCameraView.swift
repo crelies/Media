@@ -13,6 +13,7 @@ import SwiftUI
 
 @available(iOS 14, *)
 @available(macOS 11, *)
+@available(macCatalyst 14, *)
 struct CustomVideoCameraView: View {
     @Environment(\.presentationMode) private var presentationMode: Binding<PresentationMode>
 
@@ -21,16 +22,14 @@ struct CustomVideoCameraView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-//                ZStack(alignment: .bottom) {
-                    if let videoURL = viewModel.videoURL {
-                        VideoPlayer(player: .init(url: videoURL))
-                    } else {
-                        captureView()
-                    }
+                if let videoURL = viewModel.videoURL {
+                    VideoPlayer(player: .init(url: videoURL))
+                } else {
+                    captureView()
+                }
 
-                    bottomToolbar()
-                        .frame(width: geometry.size.width)
-//                }
+                bottomToolbar()
+                    .frame(width: geometry.size.width)
             }
         }
         // Attach the disappear modifier here instead on the VStack (macOS issue)
@@ -40,6 +39,7 @@ struct CustomVideoCameraView: View {
 
 @available(iOS 14, *)
 @available(macOS 11, *)
+@available(macCatalyst 14, *)
 private extension CustomVideoCameraView {
     func captureView() -> some View {
         ZStack(alignment: .topLeading) {

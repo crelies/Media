@@ -25,7 +25,7 @@ public struct LivePhoto: MediaProtocol {
     /// underlying `PHAsset`
     /// Only used internally
     ///
-    public let phAssetWrapper: PHAssetWrapper
+    public var phAssetWrapper: PHAssetWrapper
 
     /// Related `PHAssetMediaType` for this live photo
     /// wrapper
@@ -219,17 +219,19 @@ public extension LivePhoto {
     @available(*, deprecated, message: "Use async method instead")
     func favorite(
         _ favorite: Bool,
-        _ completion: @escaping ResultVoidCompletion
+        _ completion: @escaping ResultGenericCompletion<Self>
     ) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
         }
 
+        var livePhoto = self
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
-                self.phAssetWrapper.value = try result.get()
-                completion(.success(()))
+                livePhoto.phAssetWrapper = .init(value: try result.get())
+                completion(.success(livePhoto))
             } catch {
                 completion(.failure(error))
             }
@@ -241,18 +243,14 @@ public extension LivePhoto {
     /// - Parameters:
     ///   - favorite: a boolean which indicates the new favorite state
     ///
-    func favorite(
+    mutating func favorite(
         _ favorite: Bool
     ) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            self.favorite(favorite) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case let .failure(error):
-                    continuation.resume(throwing: error)
-                }
-            }
+        guard let phAsset = phAsset else {
+            throw Media.Error.noUnderlyingPHAssetFound
         }
+
+        let updatedAsset = try await PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite)
+        self.phAssetWrapper = .init(value: updatedAsset)
     }
 }

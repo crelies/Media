@@ -5,7 +5,7 @@
 //  Created by Christian Elies on 19/02/2023.
 //
 
-#if os(macOS)
+#if !os(tvOS)
 import AVKit
 import Foundation
 import MediaCore
@@ -13,6 +13,7 @@ import SwiftUI
 
 // MARK: - API
 
+@available(macCatalyst 14, *)
 extension VideoCameraViewModel {
     /// Presets that define standard configurations for a video capture session.
     public enum Preset {
@@ -22,16 +23,20 @@ extension VideoCameraViewModel {
         case medium
         /// A preset suitable for capturing low-quality output.
         case low
+        #if !targetEnvironment(macCatalyst) && !os(iOS)
         /// A preset suitable for capturing quarter HD quality (960 x 540 pixel) video output.
         case qHD960x540
+        #endif
         /// A preset suitable for capturing 720p quality (1280 x 720 pixel) video output.
         case hd1280x720
         /// A preset suitable for capturing 1080p-quality (1920 x 1080 pixels) video output.
         case hd1920x1080
         /// A preset suitable for capturing 2160p-quality (3840 x 2160 pixels) video output.
         case hd4K3840x2160
+        #if !targetEnvironment(macCatalyst) && !os(iOS)
         /// A preset suitable for capturing 320 x 240 pixel video output.
         case qvga320x240
+        #endif
         /// A preset suitable for capturing VGA quality (640 x 480 pixel) video output.
         case vga640x480
         /// A preset suitable for capturing 960 x 540 quality iFrame H.264 video at about 30 Mbits/sec with AAC audio.
@@ -49,16 +54,20 @@ extension VideoCameraViewModel {
                 return .medium
             case .low:
                 return .low
+            #if !targetEnvironment(macCatalyst) && !os(iOS)
             case .qHD960x540:
                 return .qHD960x540
+            #endif
             case .hd1280x720:
                 return .hd1280x720
             case .hd1920x1080:
                 return .hd1920x1080
             case .hd4K3840x2160:
                 return .hd4K3840x2160
+            #if !targetEnvironment(macCatalyst) && !os(iOS)
             case .qvga320x240:
                 return .qvga320x240
+            #endif
             case .vga640x480:
                 return .vga640x480
             case .iFrame960x540:

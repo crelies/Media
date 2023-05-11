@@ -113,7 +113,7 @@ private extension RootScreen {
             CameraSection(cameraViewModel: cameraViewModel)
             #elseif os(macOS)
             CameraSection(cameraViewModel: cameraViewModel, videoCameraViewModel: videoCameraViewModel)
-            #elseif targetEnvironment(macCatalyst) 
+            #elseif targetEnvironment(macCatalyst)
             CameraSection()
             #endif
 
@@ -194,7 +194,7 @@ private extension RootScreen {
 #if !os(tvOS) && !os(macOS)
 struct AlbumsOverviewView_Previews: PreviewProvider {
     static var previews: some View {
-        RootScreen(cameraViewModel: rootCameraViewModel)
+        RootScreen(cameraViewModel: dependencies.photoCameraViewModel)
     }
 }
 #endif

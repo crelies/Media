@@ -18,7 +18,7 @@ public struct Audio: MediaProtocol {
 
     /// Box type internally used to store a reference
     /// to the underlying `PHAsset`
-    public let phAssetWrapper: PHAssetWrapper
+    public var phAssetWrapper: PHAssetWrapper
 
     /// `PHAssetMediaType` for the `Audio` type
     ///

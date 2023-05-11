@@ -10,6 +10,11 @@ import AVKit
 import Combine
 import MediaCore
 
+// Box-type to enable concurrency
+private struct AVPlayerItemWrapper {
+    let value: AVPlayerItem
+}
+
 final class VideoViewModel: ObservableObject {
     private(set) var player = AVPlayer()
 
@@ -27,7 +32,15 @@ final class VideoViewModel: ObservableObject {
 extension VideoViewModel {
     func load() {
         Task {
-            await fetchPlayerItem()
+            do {
+                guard let avPlayerItem = try await fetchPlayerItem() else {
+                    return
+                }
+                await setPlayerItem(.init(value: avPlayerItem))
+                await setState(.loaded(value: avPlayerItem))
+            } catch {
+                await setState(.failed(error: error))
+            }
         }
     }
 
@@ -45,23 +58,13 @@ extension VideoViewModel {
 }
 
 private extension VideoViewModel {
-    @MainActor
-    func fetchPlayerItem() {
-        guard state == .loading else {
-            return
+    func fetchPlayerItem() async throws -> AVPlayerItem? {
+        guard await state == .loading else {
+            return nil
         }
 
-        DispatchQueue.global(qos: .userInitiated).async {
-            Task {
-                do {
-                    let avPlayerItem = try await self.video.playerItem()
-                    await self.setPlayerItem(avPlayerItem)
-                    await self.setState(.loaded(value: avPlayerItem))
-                } catch {
-                    await self.setState(.failed(error: error))
-                }
-            }
-        }
+        let video = self.video
+        return try await video.playerItem()
     }
 
     @MainActor
@@ -70,12 +73,12 @@ private extension VideoViewModel {
     }
 
     @MainActor
-    func setPlayerItem(_ item: AVPlayerItem) {
-        guard player.currentItem == nil || player.currentItem != item else {
+    func setPlayerItem(_ item: AVPlayerItemWrapper) {
+        guard player.currentItem == nil || player.currentItem != item.value else {
             return
         }
 
-        player.replaceCurrentItem(with: item)
+        player.replaceCurrentItem(with: item.value)
     }
 }
 #endif

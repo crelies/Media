@@ -30,7 +30,7 @@ public struct Photo: MediaProtocol {
     ///
     /// Only used internally
     ///
-    public let phAssetWrapper: PHAssetWrapper
+    public var phAssetWrapper: PHAssetWrapper
 
     /// `PHAssetMediaType` represented by a `Photo`
     ///
@@ -381,16 +381,18 @@ public extension Photo {
     ///   - completion: a closure which gets a `Result` (`Void` on `success` or `Error` on `failure`)
     ///
     @available(*, deprecated, message: "Use async method instead")
-    func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+    func favorite(_ favorite: Bool, _ completion: @escaping ResultGenericCompletion<Self>) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
         }
 
+        var photo = self
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
-                self.phAssetWrapper.value = try result.get()
-                completion(.success(()))
+                photo.phAssetWrapper = .init(value: try result.get())
+                completion(.success(photo))
             } catch {
                 completion(.failure(error))
             }
@@ -402,17 +404,13 @@ public extension Photo {
     /// - Parameters:
     ///   - favorite: a boolean indicating the new `favorite` state
     ///
-    func favorite(_ favorite: Bool) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            self.favorite(favorite) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case let .failure(error):
-                    continuation.resume(throwing: error)
-                }
-            }
+    mutating func favorite(_ favorite: Bool) async throws {
+        guard let phAsset = phAsset else {
+            throw Media.Error.noUnderlyingPHAssetFound
         }
+
+        let updatedAsset = try await PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite)
+        self.phAssetWrapper = .init(value: updatedAsset)
     }
 
     /// Fetches the `Photo` with the given identifier if it exists

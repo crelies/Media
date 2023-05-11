@@ -21,7 +21,7 @@ public protocol MediaProtocol {
     /// Among others it's used to implement a default `delete` method
     /// for objects conforming to this protocol
     ///
-    var phAssetWrapper: PHAssetWrapper { get }
+    var phAssetWrapper: PHAssetWrapper { get set }
 
     /// Identifier resolves to the local identifier of the underlying
     /// `PHAsset`
@@ -52,7 +52,11 @@ public protocol MediaProtocol {
     ///
     /// - Parameter completion: returns `Void` on `success` or an `Error` on `failure`
     ///
-    func delete(completion: @escaping ResultVoidCompletion)
+    func delete(completion: @escaping ResultGenericCompletion<Self>)
+
+    /// Deletes the receiving media object from the photo library
+    ///
+    mutating func delete() async throws
 }
 
 extension MediaProtocol {
@@ -72,11 +76,14 @@ extension MediaProtocol {
     /// Hint: asynchronously
     /// - Parameter completion: a closure which get's the `Result` (`Void` on `success` and `Error` on `failure`)
     ///
-    public func delete(completion: @escaping ResultVoidCompletion) {
+    public func delete(completion: @escaping ResultGenericCompletion<Self>) {
         guard let phAsset = phAssetWrapper.value else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
         }
+
+        var value = self
+
         PHChanger.request({
             let phAssets: NSArray = [phAsset]
             Self.assetChangeRequest.deleteAssets(phAssets)
@@ -84,11 +91,27 @@ extension MediaProtocol {
         }) { result in
             switch result {
             case .success:
-                self.phAssetWrapper.value = nil
-                completion(.success(()))
+                value.phAssetWrapper = .init(value: nil)
+                completion(.success(value))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
+    }
+
+    /// Deletes the receiver if the access to the photo library is allowed
+    ///
+    public mutating func delete() async throws {
+        guard let phAsset = phAssetWrapper.value else {
+            throw Media.Error.noUnderlyingPHAssetFound
+        }
+
+        try await PHChanger.request({
+            let phAssets: NSArray = [phAsset]
+            Self.assetChangeRequest.deleteAssets(phAssets)
+            return nil
+        })
+
+        self.phAssetWrapper = .init(value: nil)
     }
 }

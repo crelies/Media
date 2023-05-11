@@ -29,7 +29,7 @@ public struct Video: MediaProtocol {
     /// Box type internally used to store
     /// a reference to the underlying `PHAsset` instance
     ///
-    public let phAssetWrapper: PHAssetWrapper
+    public var phAssetWrapper: PHAssetWrapper
 
     /// Represents the `PHAssetMediaType` of the `Video` type
     /// Used for the implementation of some generic property
@@ -169,12 +169,13 @@ public extension Video {
     @available(*, deprecated, message: "Use async method instead")
     func previewImage(
         at requestedTime: CMTime = .init(seconds: 1, preferredTimescale: 60),
-        _ completion: @escaping (Result<UniversalImage, Swift.Error>) -> Void
+        _ completion: @MainActor @Sendable @escaping (Result<UniversalImage, Swift.Error>) -> Void
     ) {
         DispatchQueue.global(qos: .userInitiated).async {
-            avAsset { avAssetResult in
-                switch avAssetResult {
-                case let .success(asset):
+            Task {
+                do {
+                    let asset = try await avAsset()
+
                     let generator = AVAssetImageGenerator(asset: asset)
                     generator.appliesPreferredTrackTransform = true
 
@@ -187,13 +188,9 @@ public extension Video {
                         #endif
                     }
 
-                    DispatchQueue.main.async {
-                        completion(copyCGImageResult)
-                    }
-                case let .failure(error):
-                    DispatchQueue.main.async {
-                        completion(.failure(error))
-                    }
+                    await completion(copyCGImageResult)
+                } catch {
+                    await completion(.failure(error))
                 }
             }
         }
@@ -501,16 +498,18 @@ public extension Video {
     ///   - completion: a closure which gets `Void` on `success` and `Error` on `failure`
     ///
     @available(*, deprecated, message: "Use async method instead")
-    func favorite(_ favorite: Bool, _ completion: @escaping ResultVoidCompletion) {
+    func favorite(_ favorite: Bool, _ completion: @escaping ResultGenericCompletion<Self>) {
         guard let phAsset = phAsset else {
             completion(.failure(Media.Error.noUnderlyingPHAssetFound))
             return
         }
-        
+
+        var video = self
+
         PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite) { result in
             do {
-                self.phAssetWrapper.value = try result.get()
-                completion(.success(()))
+                video.phAssetWrapper = .init(value: try result.get())
+                completion(.success(video))
             } catch {
                 completion(.failure(error))
             }
@@ -522,17 +521,13 @@ public extension Video {
     /// - Parameters:
     ///   - favorite: a boolean indicating the new `favorite` state
     ///
-    func favorite(_ favorite: Bool) async throws {
-        try await withCheckedThrowingContinuation { continuation in
-            self.favorite(favorite) { result in
-                switch result {
-                case .success:
-                    continuation.resume()
-                case let .failure(error):
-                    continuation.resume(throwing: error)
-                }
-            }
+    mutating func favorite(_ favorite: Bool) async throws {
+        guard let phAsset = phAsset else {
+            throw Media.Error.noUnderlyingPHAssetFound
         }
+
+        let updatedAsset = try await PHAssetChanger.favorite(phAsset: phAsset, favorite: favorite)
+        self.phAssetWrapper = .init(value: updatedAsset)
     }
 }
 

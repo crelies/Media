@@ -10,10 +10,10 @@ import Photos
 /// Box type for storing a reference to
 /// a `PHAsset` instance
 ///
-public final class PHAssetWrapper {
-    var value: PHAsset?
+public struct PHAssetWrapper: Sendable {
+    let value: PHAsset?
 
-    init(value: PHAsset) {
+    init(value: PHAsset?) {
         self.value = value
     }
 }
