@@ -32,7 +32,7 @@ struct Dependencies {
             Task {
                 do {
                     let livePhoto = try await LivePhoto.save(data: capturedPhotoData)
-                    debugPrint("Live photo identifier: \(livePhoto.identifier)")
+                    debugPrint("Live photo identifier: \(livePhoto.identifier ?? "LivePhoto has no identifier")")
                 } catch {
                     debugPrint("Live photo save error: \(error)")
                 }
@@ -58,7 +58,7 @@ struct Dependencies {
                 do {
                     /// **Attention:** This is working but will not automatically upload the video to the iCloud. You have to open the photos app on your mac first.
                     let video = try await Video.save(mediaURL)
-                    debugPrint("Video identifier: \(video.identifier)")
+                    debugPrint("Video identifier: \(video.identifier ?? "Video has no identifier")")
                 } catch {
                     debugPrint("Video save error: \(error)")
                 }
