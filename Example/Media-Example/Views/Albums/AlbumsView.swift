@@ -22,35 +22,30 @@ struct AlbumsView: View {
             ProgressView("Fetching media from \(albums.count) albums ...")
                 .onAppear(perform: load)
         case let .loaded(albums):
-            ScrollView {
-                LazyVStack(alignment: .leading) {
-                    ForEach(0..<albums.count, id: \.self) { index in
-                        let album = albums[index]
-                        NavigationLink(destination: AlbumView(album: album)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("\(album.localizedTitle ?? album.id)")
-                                    Text("(asset count: \(album.allMedia.count))").font(.footnote)
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.right")
+            List {
+                ForEach(0..<albums.count, id: \.self) { index in
+                    let album = albums[index]
+                    NavigationLink(destination: AlbumView(album: album)) {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("\(album.localizedTitle ?? album.id)")
+                                Text("(asset count: \(album.allMedia.count))").font(.footnote)
                             }
+                            Spacer()
+                            Image(systemName: "chevron.right")
                         }
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        #if !os(tvOS) && !os(macOS)
-                        .background(Color(.secondarySystemBackground))
-                        #endif
-                        .cornerRadius(16)
                     }
-                    .onDelete { indexSet in
-                        indexSetToDelete = indexSet
-                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .secondarySystemBackground()
+                    .cornerRadius(16)
                 }
-                .padding()
+                .onDelete { indexSet in
+                    indexSetToDelete = indexSet
+                }
             }
             #if !os(tvOS) && !os(macOS)
-            .listStyle(InsetGroupedListStyle())
+            .listStyle(.plain)
             #endif
             .universalInlineNavigationTitle("Albums")
             .universalNavigationBarItems(trailing: Button(action: {
