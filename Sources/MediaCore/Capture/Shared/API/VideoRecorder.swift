@@ -40,14 +40,14 @@ extension VideoRecorder {
         videoOutput.startRecording(to: url, recordingDelegate: self)
     }
 
-    @available(iOS, unavailable)
+    @available(iOS 18, *)
     @available(macCatalyst, unavailable)
     /// Pauses recording to the current output file.
     public func pause() {
         videoOutput.pauseRecording()
     }
 
-    @available(iOS, unavailable)
+    @available(iOS 18, *)
     @available(macCatalyst, unavailable)
     /// Resumes recording to the current output file after it was previously paused using `pause()`.
     public func resume() {

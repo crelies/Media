@@ -114,7 +114,7 @@ extension VideoCameraViewModel {
         }
     }
 
-    @available(iOS, unavailable)
+    @available(iOS 18, *)
     func pause() {
         guard state == .recording else {
             return
@@ -125,7 +125,7 @@ extension VideoCameraViewModel {
         state = .paused
     }
 
-    @available(iOS, unavailable)
+    @available(iOS 18, *)
     func resume() {
         guard state == .paused else {
             return

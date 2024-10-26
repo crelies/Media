@@ -95,7 +95,7 @@ private extension CustomVideoCameraView {
         }
     }
 
-    @available(iOS, unavailable)
+    @available(iOS 18, *)
     func pauseButton() -> some View {
         Button(action: {
             switch viewModel.state {
