@@ -12,7 +12,7 @@ import UIKit
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 17, *)
 final class AVCaptureVideoPreview: UIView {
     override static var layerClass: AnyClass {
         return AVCaptureVideoPreviewLayer.self

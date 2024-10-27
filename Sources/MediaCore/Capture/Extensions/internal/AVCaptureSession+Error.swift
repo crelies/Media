@@ -9,7 +9,7 @@ import AVFoundation
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 17, *)
 extension AVCaptureSession {
     enum Error: Swift.Error {
         /// Thrown if the given input could not be added

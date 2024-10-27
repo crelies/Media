@@ -9,7 +9,7 @@ import AVFoundation
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 17, *)
 /// A service for recording video.
 public final class VideoRecorder: NSObject {
     private let videoOutput: AVCaptureMovieFileOutput
@@ -25,7 +25,7 @@ public final class VideoRecorder: NSObject {
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 18, *)
 extension VideoRecorder {
     /// Starts the recording. Executes the given completion closure if finished.
     ///
@@ -62,7 +62,7 @@ extension VideoRecorder {
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 17, *)
 extension VideoRecorder: AVCaptureFileOutputRecordingDelegate {
     public func fileOutput(
         _ output: AVCaptureFileOutput,

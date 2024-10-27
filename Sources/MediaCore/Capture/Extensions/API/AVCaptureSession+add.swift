@@ -9,7 +9,7 @@ import AVFoundation
 
 @available(iOS 10, *)
 @available(macCatalyst 14, *)
-@available(tvOS, unavailable)
+@available(tvOS 17, *)
 public extension AVCaptureSession {
     /// Adds the given device as an input to the receiver
     /// if `canAddInput` returns true
